@@ -27,6 +27,3 @@ git add {files}
 git commit -m "{comment}"
 git push {origin} {new_branch}
 ```
-
-```
-
