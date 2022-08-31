@@ -35,6 +35,8 @@ test_candidateTerms = [span.text for span in test_terms_spans]
 for term in test_candidateTerms:
     test_candidate_terms_by_size[len(term.split())].append(term)
 
+# we manually set the candidate terms and their frequences otherwise the process considers all
+# the ngrams extracted from the terms. This is not done like this in the paper.
 my_c_val.candidateTerms, my_c_val.candidateTermsCounter = my_c_val._order_count_candidate_terms(
     test_candidate_terms_by_size)
 my_c_val._compute_c_values()
@@ -43,6 +45,9 @@ c_values = my_c_val()
 
 
 class TestCvalue(unittest.TestCase):
+    """Test the C-value computation according to the examples in <https://doi.org/10.1007/s007999900023> (section 2.3.1, page 5).
+    """
+
     def test_Cvalue_results(self):
         self.assertEqual(len(c_values), len(set(test_terms)))
 
