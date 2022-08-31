@@ -24,11 +24,15 @@ class Cvalue:
         self.tokenSequences = tokenSequences
         self.max_size_gram = max_size_gram
 
+        self._computes_c_values()
+
     def __call__(self) -> Tuple[Tuple[float, str]]:
+        print("__call__")
         if self.c_values:
             return self.c_values
         else:
             self._computes_c_values()
+            print(self.c_values)
             return self.c_values
 
     def _count_token_sequences(self) -> Counter:
@@ -56,9 +60,9 @@ class Cvalue:
         return candidateTerms, candidateTermsCounter
 
     def _extract_candidate_terms(self) -> None:
-
+        print("_extract_candidate_terms")
         tokenSeqCounter = self._count_token_sequences()
-        tokenSeqStrings = tokenSeqCounter.values()
+        tokenSeqStrings = tokenSeqCounter.keys()
 
         candidate_terms_by_size = defaultdict(list)
 
@@ -109,7 +113,7 @@ class Cvalue:
                 substring, stat_triples, candidate_term, term_frequences)
 
     def _computes_c_values(self) -> None:
-
+        print("_computes_c_values")
         self._extract_candidate_terms()
 
         c_values = []
@@ -141,37 +145,35 @@ class Cvalue:
                     candidate_term, stat_triples, self.candidateTermsCounter)
 
         self.c_values = c_values.sort(
-            key=lambda term: self.candidateTermsCounter[term], reverse=True)
+            key=lambda c_val: c_val[0], reverse=True)
 
 
 if __name__ == "__main__":
 
-    test_texts = [
-        'Toothed lock washers - Type V, countersunk',
-        'Taper pin - conicity 1/50',
-        'T-head bolts with double nib',
-        'Handwheels, DIN 950, case-iron, d2 small, without keyway, without handle, form B-F/A',
-        'Dog point hexagon socket set screw',
-        'Butterfly valve SV04 DIN BF, actuator PAMS93-size 1/2 NC + TOP',
-        'Splined Shafts acc. to DIN 5463 / ISO 14',
-        'Grooved pins - Half-length reverse-taper grooved',
-        'Rod ends DIN ISO 12240-4 (DIN 648) E series stainless version with female thread, maintenance-free',
-        'Palm Grips, DIN 6335, light metal, with smooth blind hole, form C, DIN 6335-AL-63-20-C-PL',
-        'Hexagon socket set screws with dog point, DIN EN ISO 4028-M5x12 - 45H',
-        'Rivet DIN 661  - Type A - 1,6 x 6',
-        'Welding neck flange - PN 400 - DIN 2627 - NPS 150',
-        'Step Blocks, DIN 6326, adjustable, with spiral gearing, upper part, DIN 6326-K',
-        'Loose Slot Tenons, DIN 6323, form C, DIN 6323-20x28-C',
-        'Hexagon nut DIN EN 24036 - M3.5 - St'
-    ]
+    test_terms = []
+    test_terms.extend(["ADENOID CYSTIC BASAL CELL CARCINOMA"] * 5)
+    test_terms.extend(["CYSTIC BASAL CELL CARCINOMA"] * 11)
+    test_terms.extend(["ULCERATED BASAL CELL CARCINOMA"] * 7)
+    test_terms.extend(["RECURRENT BASAL CELL CARCINOMA"] * 5)
+    test_terms.extend(["CIRCUMSCRIBED BASAL CELL CARCINOMA"] * 3)
+    test_terms.extend(["BASAL CELL CARCINOMA"] * 984)
 
-    nlp = spacy.load("en_core_web_sm")
-    nlp.tokenizer = c_value_tokenizer(nlp)
+    vocab_strings = []
+    for term in test_terms:
+        vocab_strings.extend(term.split())
 
-    for text in test_texts:
-        doc = nlp(text)
-        print(doc.text)
-        print([t.text for t in doc])
-        print([t.shape_ for t in doc])
-        print(extract_text_sequences_from_corpus([doc]))
-        print()
+    vocab = spacy.vocab.Vocab(strings=vocab_strings)
+
+    test_terms_spans = []
+
+    for term in test_terms:
+        words = term.split()
+        spaces = [True] * len(words)
+        doc = spacy.tokens.Doc(vocab, words=words, spaces=spaces)
+        span = spacy.tokens.Span(doc, doc[0].i, doc[-1].i + 1)
+        test_terms_spans.append(span)
+
+    my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
+    c_values = my_c_val()
+
+    print(c_values)
