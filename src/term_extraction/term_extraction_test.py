@@ -1,3 +1,4 @@
+from collections import defaultdict
 import unittest
 
 import spacy
@@ -27,14 +28,25 @@ for term in test_terms:
     span = spacy.tokens.Span(doc, doc[0].i, doc[-1].i + 1)
     test_terms_spans.append(span)
 
+my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
+
+test_candidate_terms_by_size = defaultdict(list)
+test_candidateTerms = [span.text for span in test_terms_spans]
+for term in test_candidateTerms:
+    test_candidate_terms_by_size[len(term.split())].append(term)
+
+my_c_val.candidateTerms, my_c_val.candidateTermsCounter = my_c_val._order_count_candidate_terms(
+    test_candidate_terms_by_size)
+my_c_val._compute_c_values()
+
+c_values = my_c_val()
+
 
 class TestCvalue(unittest.TestCase):
     def test_Cvalue_results(self):
-        my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
-        c_values = my_c_val()
         self.assertEqual(len(c_values), len(set(test_terms)))
 
-        self.assertEqual(round(c_values[0][0]), 1551.36)
+        self.assertEqual(round(c_values[0][0], 2), 1551.36)
         self.assertEqual(c_values[0][1], "BASAL CELL CARCINOMA")
 
         self.assertEqual(round(c_values[1][0]), 14.0)
@@ -43,7 +55,7 @@ class TestCvalue(unittest.TestCase):
         self.assertEqual(round(c_values[2][0]), 12.0)
         self.assertEqual(c_values[2][1], "CYSTIC BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(c_values[3][0]), 11.6096)
+        self.assertEqual(round(c_values[3][0], 4), 11.6096)
         self.assertEqual(c_values[3][1], "ADENOID CYSTIC BASAL CELL CARCINOMA")
 
         self.assertEqual(round(c_values[4][0]), 10.0)

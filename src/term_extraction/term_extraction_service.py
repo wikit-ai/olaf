@@ -1,13 +1,11 @@
 from collections import Counter, defaultdict
 import math
-from typing import Any, Callable, Dict, Iterable, Iterator, List, Tuple
-import re
+from typing import Any, Callable, Dict, Iterable, List, Tuple
 
 import spacy.tokens
 import spacy.tokenizer
 import spacy.language
 from nltk.util import ngrams
-from data_preprocessing.data_preprocessing_service import c_value_tokenizer, extract_text_sequences_from_corpus
 
 TokenSequenceFilter = Callable[[List[Any]], List[List[str]]]
 
@@ -23,22 +21,20 @@ class Cvalue:
     def __init__(self, tokenSequences: Iterable[spacy.tokens.span.Span], max_size_gram: int) -> None:
         self.tokenSequences = tokenSequences
         self.max_size_gram = max_size_gram
+        self.candidateTerms = None
+        self.candidateTermsCounter = None
+        self.c_values = None
 
-        self._computes_c_values()
+        self._extract_candidate_terms()
+        self._compute_c_values()
 
-    def __call__(self) -> Tuple[Tuple[float, str]]:
-        print("__call__")
-        if self.c_values:
-            return self.c_values
-        else:
-            self._computes_c_values()
-            print(self.c_values)
-            return self.c_values
+    def __call__(self) -> List[Tuple[float, str]]:
+        return self.c_values
 
     def _count_token_sequences(self) -> Counter:
         return Counter([span.text for span in self.tokenSequences])
 
-    def _order_candidate_terms(self, candidate_terms_by_size: Dict[str, int]) -> Tuple[List[str], Counter]:
+    def _order_count_candidate_terms(self, candidate_terms_by_size: Dict[int, str]) -> Tuple[List[str], Counter]:
 
         all_candidate_terms = []
 
@@ -60,7 +56,7 @@ class Cvalue:
         return candidateTerms, candidateTermsCounter
 
     def _extract_candidate_terms(self) -> None:
-        print("_extract_candidate_terms")
+
         tokenSeqCounter = self._count_token_sequences()
         tokenSeqStrings = tokenSeqCounter.keys()
 
@@ -72,7 +68,7 @@ class Cvalue:
                 candidate_terms_by_size[size].extend(
                     [" ".join(gram) for gram in ngrams(tokens, size)] * tokenSeqCounter[tokenSeqStr])
 
-        self.candidateTerms, self.candidateTermsCounter = self._order_candidate_terms(
+        self.candidateTerms, self.candidateTermsCounter = self._order_count_candidate_terms(
             candidate_terms_by_size)
 
     def _get_substrings(self, term: str) -> List[str]:
@@ -112,9 +108,7 @@ class Cvalue:
             self._update_stat_triple(
                 substring, stat_triples, candidate_term, term_frequences)
 
-    def _computes_c_values(self) -> None:
-        print("_computes_c_values")
-        self._extract_candidate_terms()
+    def _compute_c_values(self) -> None:
 
         c_values = []
         stat_triples = dict()
@@ -144,36 +138,5 @@ class Cvalue:
                 self._process_substrings(
                     candidate_term, stat_triples, self.candidateTermsCounter)
 
-        self.c_values = c_values.sort(
-            key=lambda c_val: c_val[0], reverse=True)
-
-
-if __name__ == "__main__":
-
-    test_terms = []
-    test_terms.extend(["ADENOID CYSTIC BASAL CELL CARCINOMA"] * 5)
-    test_terms.extend(["CYSTIC BASAL CELL CARCINOMA"] * 11)
-    test_terms.extend(["ULCERATED BASAL CELL CARCINOMA"] * 7)
-    test_terms.extend(["RECURRENT BASAL CELL CARCINOMA"] * 5)
-    test_terms.extend(["CIRCUMSCRIBED BASAL CELL CARCINOMA"] * 3)
-    test_terms.extend(["BASAL CELL CARCINOMA"] * 984)
-
-    vocab_strings = []
-    for term in test_terms:
-        vocab_strings.extend(term.split())
-
-    vocab = spacy.vocab.Vocab(strings=vocab_strings)
-
-    test_terms_spans = []
-
-    for term in test_terms:
-        words = term.split()
-        spaces = [True] * len(words)
-        doc = spacy.tokens.Doc(vocab, words=words, spaces=spaces)
-        span = spacy.tokens.Span(doc, doc[0].i, doc[-1].i + 1)
-        test_terms_spans.append(span)
-
-    my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
-    c_values = my_c_val()
-
-    print(c_values)
+        c_values.sort(key=lambda c_val: c_val[0], reverse=True)
+        self.c_values = c_values
