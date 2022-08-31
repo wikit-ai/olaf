@@ -7,9 +7,9 @@ import spacy.tokens.span
 import spacy.language
 
 
-def c_value_tokenizer(nlp: spacy.language.Language) -> spacy.tokenizer.Tokenizer:
+def c_value_tokenizer(nlp_model: spacy.language.Language) -> spacy.tokenizer.Tokenizer:
     """Build a tokenizer based on Spacy Language model specifically to be able to extract ngrams for the C-value computation.
-        In particular, the tokenizer does not split on dashes ('-').
+        In particular, the tokenizer does not split on dashes ('-') in words.
 
     Parameters
     ----------
@@ -28,7 +28,7 @@ def c_value_tokenizer(nlp: spacy.language.Language) -> spacy.tokenizer.Tokenizer
     infix_re = re.compile(r'''(?<=[0-9])[+\-\*^](?=[0-9-])''')
     simple_url_re = re.compile(r'''^https?://''')
 
-    return spacy.tokenizer.Tokenizer(nlp.vocab, rules=special_cases,
+    return spacy.tokenizer.Tokenizer(nlp_model.vocab, rules=special_cases,
                                      prefix_search=prefix_re.search,
                                      suffix_search=suffix_re.search,
                                      infix_finditer=infix_re.finditer,
@@ -49,17 +49,24 @@ def extract_text_sequences_from_corpus(docs: Iterable[spacy.tokens.doc.Doc]) -> 
         The list of token sequences (Span) contained in the corpus.
     """
     some_num_pattern = re.compile(r'''^[xX]+-?[xX]*$''')
+    str_token_sequences = []
 
     for doc in docs:
-        str_token_sequences = []
         str_token_seq = []
+
         for token in doc:
-            if (some_num_pattern.fullmatch(token.shape_)):
-                str_token_seq.append(token.lower_)
+
+            # we rely on the token.shape_ attribute to check that the token contains only letters and dashes
+            if (some_num_pattern.match(token.shape_)):
+                str_token_seq.append(token)
+
             elif len(str_token_seq) > 0:
-                str_token_sequences.append(str_token_seq)
+                str_token_sequences.append(
+                    spacy.tokens.span.Span(doc, str_token_seq[0].i, str_token_seq[-1].i + 1))
                 str_token_seq = []
+
         if len(str_token_seq) > 0:
-            str_token_sequences.append(str_token_seq)
+            str_token_sequences.append(spacy.tokens.span.Span(
+                doc, str_token_seq[0].i, str_token_seq[-1].i + 1))
 
     return str_token_sequences

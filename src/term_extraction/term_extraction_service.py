@@ -3,29 +3,36 @@ import math
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Tuple
 import re
 
-from spacy.tokens import doc
+import spacy.tokens
 import spacy.tokenizer
 import spacy.language
 from nltk.util import ngrams
+from data_preprocessing.data_preprocessing_service import c_value_tokenizer, extract_text_sequences_from_corpus
 
 TokenSequenceFilter = Callable[[List[Any]], List[List[str]]]
 
 
 class Cvalue:
     """A class to compute the C-value of each term (token sequence) in a corpus of texts.
+
+       Notes:
+         - Potential pitfall: when extracting terms we extract the span texts (required to get span frequences). 
+           In the rest of the process we "retokenize" the spans by splitting the span text on spaces.
     """
 
-    def __init__(self, corpus: Iterator[str], nlp: spacy.language.Language, tokenSeqFilter: TokenSequenceFilter, max_size_gram: int) -> None:
-        self.corpus = corpus
-        self.nlp = nlp
-        self.tokenSeqFilter = tokenSeqFilter
+    def __init__(self, tokenSequences: Iterable[spacy.tokens.span.Span], max_size_gram: int) -> None:
+        self.tokenSequences = tokenSequences
         self.max_size_gram = max_size_gram
 
-    def _filter_token_sequences(self) -> List[List[str]]:
-        return self.tokenSeqFilter(self.nlp.pipe(self.corpus))
+    def __call__(self) -> Tuple[Tuple[float, str]]:
+        if self.c_values:
+            return self.c_values
+        else:
+            self._computes_c_values()
+            return self.c_values
 
     def _count_token_sequences(self) -> Counter:
-        return Counter([" ".join(tokens for tokens in self._filter_token_sequences())])
+        return Counter([span.text for span in self.tokenSequences])
 
     def _order_candidate_terms(self, candidate_terms_by_size: Dict[str, int]) -> Tuple[List[str], Counter]:
 
@@ -60,9 +67,6 @@ class Cvalue:
                 tokens = tokenSeqStr.split()
                 candidate_terms_by_size[size].extend(
                     [" ".join(gram) for gram in ngrams(tokens, size)] * tokenSeqCounter[tokenSeqStr])
-
-            # we need all ngrams (with duplicates) only to extract the frequence
-            # for the we will keep a list of unique ngram instances
 
         self.candidateTerms, self.candidateTermsCounter = self._order_candidate_terms(
             candidate_terms_by_size)
@@ -137,7 +141,7 @@ class Cvalue:
                     candidate_term, stat_triples, self.candidateTermsCounter)
 
         self.c_values = c_values.sort(
-            key=lambda term: candidateTermsCounter[term], reverse=True)
+            key=lambda term: self.candidateTermsCounter[term], reverse=True)
 
 
 if __name__ == "__main__":
