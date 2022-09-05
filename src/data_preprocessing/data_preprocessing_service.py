@@ -1,38 +1,13 @@
 import re
 
 from typing import Iterable, List
+
 import spacy.tokens.doc
 import spacy.tokenizer
 import spacy.tokens.span
 import spacy.language
 
-
-def c_value_tokenizer(nlp_model: spacy.language.Language) -> spacy.tokenizer.Tokenizer:
-    """Build a tokenizer based on Spacy Language model specifically to be able to extract ngrams for the C-value computation.
-        In particular, the tokenizer does not split on dashes ('-') in words.
-
-    Parameters
-    ----------
-    nlp : spacy.language.Language
-        The Spacy Language model the tokenizer will be set on.
-
-    Returns
-    -------
-    spacy.tokenizer.Tokenizer
-        The tokenizer
-    """
-
-    special_cases = {}
-    prefix_re = re.compile(r'''^[\[\("'!#$%&\\\*+,\-./:;<=>?@\^_`\{|~]''')
-    suffix_re = re.compile(r'''[\]\)"'!#$%&\\\*+,\-./:;<=>?@\^_`\}|~]$''')
-    infix_re = re.compile(r'''(?<=[0-9])[+\-\*^](?=[0-9-])''')
-    simple_url_re = re.compile(r'''^https?://''')
-
-    return spacy.tokenizer.Tokenizer(nlp_model.vocab, rules=special_cases,
-                                     prefix_search=prefix_re.search,
-                                     suffix_search=suffix_re.search,
-                                     infix_finditer=infix_re.finditer,
-                                     url_match=simple_url_re.match)
+from nltk.util import ngrams as nltk_ngrams
 
 
 def extract_text_sequences_from_corpus(docs: Iterable[spacy.tokens.doc.Doc]) -> List[spacy.tokens.span.Span]:
@@ -70,3 +45,11 @@ def extract_text_sequences_from_corpus(docs: Iterable[spacy.tokens.doc.Doc]) -> 
                 doc, str_token_seq[0].i, str_token_seq[-1].i + 1))
 
     return str_token_sequences
+
+
+def spacy_span_ngrams(span: spacy.tokens.span.Span, gram_size: int) -> List[spacy.tokens.span.Span]:
+    grams = nltk_ngrams(span, gram_size)
+    doc = span.doc
+    gram_spans = [spacy.tokens.span.Span(
+        doc, gram[0].i, gram[-1].i + 1) for gram in grams]
+    return gram_spans

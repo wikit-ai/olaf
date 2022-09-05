@@ -39,7 +39,7 @@ for term in test_candidateTerms:
 # the ngrams extracted from the terms. This is not done like this in the paper.
 my_c_val.candidateTerms, my_c_val.candidateTermsCounter = my_c_val._order_count_candidate_terms(
     test_candidate_terms_by_size)
-my_c_val._compute_c_values()
+my_c_val.compute_c_values()
 
 c_values = my_c_val()
 
@@ -51,23 +51,29 @@ class TestCvalue(unittest.TestCase):
     def test_Cvalue_results(self):
         self.assertEqual(len(c_values), len(set(test_terms)))
 
-        self.assertEqual(round(c_values[0][0], 2), 1551.36)
-        self.assertEqual(c_values[0][1], "BASAL CELL CARCINOMA")
+        self.assertEqual(round(c_values[0].c_value, 2), 1551.36)
+        self.assertEqual(
+            c_values[0].candidate_term, "BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(c_values[1][0]), 14.0)
-        self.assertEqual(c_values[1][1], "ULCERATED BASAL CELL CARCINOMA")
+        self.assertEqual(round(c_values[1].c_value), 14.0)
+        self.assertEqual(
+            c_values[1].candidate_term, "ULCERATED BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(c_values[2][0]), 12.0)
-        self.assertEqual(c_values[2][1], "CYSTIC BASAL CELL CARCINOMA")
+        self.assertEqual(round(c_values[2].c_value), 12.0)
+        self.assertEqual(
+            c_values[2].candidate_term, "CYSTIC BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(c_values[3][0], 4), 11.6096)
-        self.assertEqual(c_values[3][1], "ADENOID CYSTIC BASAL CELL CARCINOMA")
+        self.assertEqual(round(c_values[3].c_value, 4), 11.6096)
+        self.assertEqual(c_values[3].candidate_term,
+                         "ADENOID CYSTIC BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(c_values[4][0]), 10.0)
-        self.assertEqual(c_values[4][1], "RECURRENT BASAL CELL CARCINOMA")
+        self.assertEqual(round(c_values[4].c_value), 10.0)
+        self.assertEqual(
+            c_values[4].candidate_term, "RECURRENT BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(c_values[5][0]), 6.0)
-        self.assertEqual(c_values[5][1], "CIRCUMSCRIBED BASAL CELL CARCINOMA")
+        self.assertEqual(round(c_values[5].c_value), 6.0)
+        self.assertEqual(c_values[5].candidate_term,
+                         "CIRCUMSCRIBED BASAL CELL CARCINOMA")
 
 
 if __name__ == '__main__':

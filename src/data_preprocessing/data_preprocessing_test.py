@@ -2,7 +2,8 @@ import unittest
 
 import spacy
 
-from data_preprocessing.data_preprocessing_service import c_value_tokenizer, extract_text_sequences_from_corpus
+from data_preprocessing.data_preprocessing_service import extract_text_sequences_from_corpus
+from data_preprocessing.data_preprocessing_repository import no_split_on_dash_in_words_sapcy_tokenizer
 
 test_texts_tokens = [
     ('Toothed lock washers - Type V, countersunk',
@@ -71,17 +72,15 @@ test_texts_text_sequences = [
 
 nlp = spacy.load("en_core_web_sm", disable=[
                  'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
-nlp.tokenizer = c_value_tokenizer(nlp)
+nlp.tokenizer = no_split_on_dash_in_words_sapcy_tokenizer(nlp)
 
 
-class TestCvalueTokenize(unittest.TestCase):
+class TestDataPreprocessing(unittest.TestCase):
     def test_c_value_tokenizer(self):
         for idx, doc in enumerate([nlp(e[0]) for e in test_texts_tokens]):
             self.assertEqual([token.text for token in doc],
                              test_texts_tokens[idx][1])
 
-
-class TestExtractTextSequencesFromCorpus(unittest.TestCase):
     def test_extract_text_sequences_from_corpus(self):
         for idx, doc in enumerate([nlp(e[0]) for e in test_texts_text_sequences]):
             selected_sequences = [
