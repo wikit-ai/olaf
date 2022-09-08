@@ -1,45 +1,19 @@
-from collections import Counter, defaultdict
+from collections import defaultdict
 from dataclasses import dataclass
 import math
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Iterable, List
 
 import spacy.tokens
 import spacy.tokenizer
 import spacy.language
-from nltk.util import ngrams
 
 from data_preprocessing.data_preprocessing_service import spacy_span_ngrams
-
-
-@dataclass
-class CValueResults:
-    c_value: float
-    candidate_term: str
-
-
-@dataclass
-class CandidateTermStatTriple:
-    """From the algorithm in <https://doi.org/10.1007/s007999900023> (section 2.3, page 4):
-    For every string a, that is extracted as a candidate term, we create for each of its substrings b, a triple (f(b), t(b), c(b)), 
-    where f(b) is the total frequency of b in the corpus, t(b) is the frequency of b as a nested string of candidate terms, c(b) is the 
-    number of these longer candidate terms.
-
-    When an instance is created, the count of longer candidate term is initialized to 1 according to the algorithm.
-    """
-    candidate_term: str
-    substring: str
-    substring_corpus_frequency: int = 0
-    substring_nested_frequency: int = 0
-    count_longer_terms: int = 1
+from term_extraction.term_extraction_schema import CandidateTermStatTriple, CValueResults
 
 
 class Cvalue:
     """A class to compute the C-value of each term (token sequence) in a corpus of texts.
        The C-values are computed based on <https://doi.org/10.1007/s007999900023>.
-
-       Notes:
-         - Potential pitfall: when extracting terms we extract the span texts (required to get span frequences). 
-           In the rest of the process we "retokenize" the spans by splitting the span text on spaces.
     """
 
     def __init__(self, tokenSequences: Iterable[spacy.tokens.span.Span], max_size_gram: int) -> None:
@@ -50,12 +24,32 @@ class Cvalue:
               - The maximum length of a token sequence should be equal to max_size_gram. 
                 If not, we will add ngrams of max_size_gram extracted from the longer sequence of tokens.
 
+            TODO:
+              - Add an attribute to store the list of spacy Spans associated with each candidate term string.
+                So we can keep track of the relation between candidate terms and the documents that contains them.
+
         Parameters
         ----------
         tokenSequences : Iterable[spacy.tokens.span.Span]
-            The token sequences to compute the C-value from
+            The token sequences extracted from the document in the corpus. 
+            We will extract candidate terms from those sequences by computing ngrams.
         max_size_gram : int
             The maximum size for ngrams to consider.
+
+        Class instance attributes
+        ----------
+        candidateTermsSpans : Iterable[spacy.tokens.span.Span]
+            The spacy Spans corresponding to the candidate terms extracted form the tokenSequences. 
+            This attribute will be set by the private method _extract_candidate_terms.
+        candidateTermsCounter : collection.Counter
+            A counter of the candidate terms appearance in the corpus
+            This attribute will be set by the private method _extract_candidate_terms. 
+        CandidateTermStatTriples : Dict[str, CandidateTermStatTriple]
+            An attribute updated and used during the C-value computation process
+            This attribute will be set by the private method compute_c_values.
+        c_values : List[CValueResults]
+            An attribute that will contained the candidate terms and their C-values ordered by descending C-values.
+            This attribute will be set by the private method compute_c_values.
         """
         self.tokenSequences = tokenSequences
         self.max_size_gram = max_size_gram
@@ -82,10 +76,13 @@ class Cvalue:
         candidateTerms = []
         candidate_terms_by_size = defaultdict(set)
 
+        # an inner function to not duplicate code
         def update_term_containers(span) -> None:
             for size in range(1, self.max_size_gram + 1):  # for each gram size
+
                 size_candidate_terms_spans = spacy_span_ngrams(
                     span, size)  # generate ngrams
+
                 for size_candidate_terms_span in size_candidate_terms_spans:  # update variables for each ngram
 
                     candidate_terms_by_size[size].add(
@@ -120,41 +117,36 @@ class Cvalue:
                                     for term in candidateTerms]
         self.candidateTermsCounter = candidateTermsCounter
 
-    def _get_substrings_spans(self, term_span: str) -> List[str]:
-        """Extract the list of substrings (string of token sequence) contained in a term.
-           Substrings are extracted from unigram to term size-gram.
+    def _get_substrings_spans(self, term_span: spacy.tokens.span.Span) -> List[spacy.tokens.span.Span]:
+        """Extract the ngrams contained in the term. The result is returned as a list of spacy Spans.
 
         Parameters
         ----------
-        term : str
-            The term to extract the substrings from.
+        term_span : spacy.tokens.span.Span
+            The spacy Span of the term to extract the ngrams from
 
         Returns
         -------
-        List[str]
-            The list of substrings
+        List[spacy.tokens.span.Span]
+            The resulting list of ngrams as spacy Spans
         """
-        substrings_spans = set()
+        substrings_spans = []
         for i in range(1, len(term_span)):
             # we need ngrams, i.e., all overlapping substrings
             for term_subspan in spacy_span_ngrams(term_span, i):
-                substrings_spans.add(term_subspan)
+                substrings_spans.append(term_subspan)
 
-        return list(substrings_spans)
+        return substrings_spans
 
     def _update_CandidateTermStatTriples(self, substring: str, parent_term: str) -> None:
-        """Update the stat triples table according to the algorithm in <https://doi.org/10.1007/s007999900023> (section 2.3, page 4).
+        """Update the self.CandidateTermStatTriples attribute according to the algorithm in <https://doi.org/10.1007/s007999900023> (section 2.3, page 4).
 
         Parameters
         ----------
         substring : str
-            The substring considered
-        stat_triples : Dict[str, int]
-            The set of stat triple. The keys are the substrings
+            the ngram text extracted from the candidate term.
         parent_term : str
-            The term the substring has been extracted from.
-        term_frequences : Counter
-            The terms frequences
+            the candidate term text
         """
 
         if substring in self.CandidateTermStatTriples.keys():
@@ -183,16 +175,13 @@ class Cvalue:
             )
 
     def _process_substrings_spans(self, candidate_term_span: spacy.tokens.span.Span) -> None:
-        """Extract the substrings of candidate term and loop over them to update the stat triples
+        """Extract the ngrams contained in the candidate term and loop over them to update the CandidateTermStatTriples attribute according to 
+        the algorithm in <https://doi.org/10.1007/s007999900023> (section 2.3, page 4).
 
         Parameters
         ----------
-        candidate_term : str
-            The candidate term to process
-        stat_triples : Dict[str, int]
-            The set of stat triple. The keys are the substrings
-        term_frequences : Counter
-            The candidate terms frequences
+        candidate_term_span : spacy.tokens.span.Span
+            The spacy Span object of the candidate term to process.
         """
         substrings_spans = self._get_substrings_spans(candidate_term_span)
         for substring_span in substrings_spans:
@@ -204,9 +193,15 @@ class Cvalue:
 
            This method sets the attribute:
              - self.c_values
+
+        Returns
+        -------
+        List[CValueResults]
+            the candidate terms and their C-values ordered by descending C-values. 
         """
 
-        self._extract_candidate_terms()
+        if self.candidateTermsSpans is None:
+            self._extract_candidate_terms()
 
         c_values = []
 
@@ -251,47 +246,6 @@ class Cvalue:
 
 
 class TermExtraction:
-    def c_value(self, tokenSequences: Iterable[spacy.tokens.span.Span], max_size_gram: int) -> List[CValueResults]:
-        pass
-
-
-if __name__ == "__main__":
-    test_terms = []
-    test_terms.extend(["ADENOID CYSTIC BASAL CELL CARCINOMA"] * 5)
-    test_terms.extend(["CYSTIC BASAL CELL CARCINOMA"] * 11)
-    test_terms.extend(["ULCERATED BASAL CELL CARCINOMA"] * 7)
-    test_terms.extend(["RECURRENT BASAL CELL CARCINOMA"] * 5)
-    test_terms.extend(["CIRCUMSCRIBED BASAL CELL CARCINOMA"] * 3)
-    test_terms.extend(["BASAL CELL CARCINOMA"] * 984)
-
-    vocab_strings = []
-    for term in test_terms:
-        vocab_strings.extend(term.split())
-
-    vocab = spacy.vocab.Vocab(strings=vocab_strings)
-
-    test_terms_spans = []
-
-    for term in test_terms:
-        words = term.split()
-        spaces = [True] * len(words)
-        doc = spacy.tokens.Doc(vocab, words=words, spaces=spaces)
-        span = spacy.tokens.Span(doc, doc[0].i, doc[-1].i + 1)
-        test_terms_spans.append(span)
-
-    my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
-
-    test_candidate_terms_by_size = defaultdict(list)
-    test_candidateTermsSpans = [span for span in test_terms_spans]
-    for term_span in test_candidateTermsSpans:
-        test_candidate_terms_by_size[len(term_span)].append(term_span)
-
-    # we manually set the candidate terms and their frequences otherwise the process considers all
-    # the ngrams extracted from the terms. This is not done like this in the paper.
-    # my_c_val.candidateTerms, my_c_val.candidateTermsCounter = my_c_val._order_count_candidate_terms(
-    #     test_candidate_terms_by_size)
-    my_c_val.compute_c_values()
-
-    c_values = my_c_val()
-
-    print(c_values)
+    def c_value(self, tokenSequences: Iterable[spacy.tokens.span.Span], max_size_gram: int) -> Cvalue:
+        self.c_value = Cvalue(tokenSequences, max_size_gram)
+        return self.c_value

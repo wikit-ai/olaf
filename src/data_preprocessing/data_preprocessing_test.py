@@ -70,19 +70,19 @@ test_texts_text_sequences = [
     ('Hexagon nut DIN EN 24036 - M3.5 - St', ['Hexagon nut DIN EN', 'St'])
 ]
 
-nlp = spacy.load("en_core_web_sm", disable=[
-                 'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
-nlp.tokenizer = no_split_on_dash_in_words_sapcy_tokenizer(nlp)
+spacy_model = spacy.load("en_core_web_sm", disable=[
+    'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
+spacy_model.tokenizer = no_split_on_dash_in_words_sapcy_tokenizer(nlp)
 
 
 class TestDataPreprocessing(unittest.TestCase):
     def test_c_value_tokenizer(self):
-        for idx, doc in enumerate([nlp(e[0]) for e in test_texts_tokens]):
+        for idx, doc in enumerate([spacy_model(e[0]) for e in test_texts_tokens]):
             self.assertEqual([token.text for token in doc],
                              test_texts_tokens[idx][1])
 
     def test_extract_text_sequences_from_corpus(self):
-        for idx, doc in enumerate([nlp(e[0]) for e in test_texts_text_sequences]):
+        for idx, doc in enumerate([spacy_model(e[0]) for e in test_texts_text_sequences]):
             selected_sequences = [
                 span.text for span in extract_text_sequences_from_corpus([doc])]
             self.assertEqual(selected_sequences,

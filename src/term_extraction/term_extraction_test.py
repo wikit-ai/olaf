@@ -5,13 +5,23 @@ import spacy
 
 from term_extraction.term_extraction_service import Cvalue
 
-test_terms = []
-test_terms.extend(["ADENOID CYSTIC BASAL CELL CARCINOMA"] * 5)
-test_terms.extend(["CYSTIC BASAL CELL CARCINOMA"] * 11)
-test_terms.extend(["ULCERATED BASAL CELL CARCINOMA"] * 7)
-test_terms.extend(["RECURRENT BASAL CELL CARCINOMA"] * 5)
-test_terms.extend(["CIRCUMSCRIBED BASAL CELL CARCINOMA"] * 3)
-test_terms.extend(["BASAL CELL CARCINOMA"] * 984)
+test_terms = [
+    "ADENOID CYSTIC BASAL CELL CARCINOMA",
+    "CYSTIC BASAL CELL CARCINOMA",
+    "ULCERATED BASAL CELL CARCINOMA",
+    "RECURRENT BASAL CELL CARCINOMA",
+    "CIRCUMSCRIBED BASAL CELL CARCINOMA",
+    "BASAL CELL CARCINOMA"
+]
+
+test_terms_counter = {
+    "ADENOID CYSTIC BASAL CELL CARCINOMA": 5,
+    "CYSTIC BASAL CELL CARCINOMA": 11,
+    "ULCERATED BASAL CELL CARCINOMA": 7,
+    "RECURRENT BASAL CELL CARCINOMA": 5,
+    "CIRCUMSCRIBED BASAL CELL CARCINOMA": 3,
+    "BASAL CELL CARCINOMA": 984
+}
 
 vocab_strings = []
 for term in test_terms:
@@ -30,15 +40,10 @@ for term in test_terms:
 
 my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
 
-test_candidate_terms_by_size = defaultdict(list)
-test_candidateTerms = [span.text for span in test_terms_spans]
-for term in test_candidateTerms:
-    test_candidate_terms_by_size[len(term.split())].append(term)
-
 # we manually set the candidate terms and their frequences otherwise the process considers all
 # the ngrams extracted from the terms. This is not done like this in the paper.
-my_c_val.candidateTerms, my_c_val.candidateTermsCounter = my_c_val._order_count_candidate_terms(
-    test_candidate_terms_by_size)
+my_c_val.candidateTermsSpans = test_terms_spans
+my_c_val.candidateTermsCounter = test_terms_counter
 my_c_val.compute_c_values()
 
 c_values = my_c_val()
