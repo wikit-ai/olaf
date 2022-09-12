@@ -27,3 +27,10 @@ git add {files}
 git commit -m "{comment}"
 git push {origin} {new_branch}
 ```
+Amend commit and push after a review
+```
+git checkout {branch_to_be_merged}
+git add {modified_files}
+git commit --amend
+git push --force-with-lease {origin} {branch_to_be_merged}
+```
