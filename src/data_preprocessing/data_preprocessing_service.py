@@ -84,8 +84,11 @@ class Data_Preprocessing():
     """
 
     def __init__(self) -> None:
+        pass
+
+    def _set_corpus(self) -> None:
         self.corpus = load_corpus()
-    
+
     def document_representation(self) -> List[spacy.tokens.doc.Doc]:
         """Convert text to spacy document representation.
 
@@ -97,16 +100,18 @@ class Data_Preprocessing():
         spacy_model = load_spacy_model()
         corpus_preprocessed = []
 
-        try : 
+        try:
             for spacy_document in spacy_model.pipe(self.corpus):
                 corpus_preprocessed.append(spacy_document)
-        except Exception as _e: 
-            logging_config.logger.error("Could not load content as spacy document. Trace : %s", _e)
-        else : 
-            logging_config.logger.info("File content converted to spacy document.")
+        except Exception as _e:
+            logging_config.logger.error(
+                "Could not load content as spacy document. Trace : %s", _e)
+        else:
+            logging_config.logger.info(
+                "File content converted to spacy document.")
         return corpus_preprocessed
 
-    def standard_cleaning(self,spacy_corpus: List[spacy.tokens.doc.Doc])-> List[List[spacy.tokens.token.Token]]:
+    def standard_cleaning(self, spacy_corpus: List[spacy.tokens.doc.Doc]) -> List[List[spacy.tokens.token.Token]]:
         """Cleaning of the corpus from spacy pipeline.
         Removing stop-words, punctuation, number and url.
 
@@ -121,20 +126,22 @@ class Data_Preprocessing():
             Corpus filtered.
         """
         clean_corpus = []
-        try : 
+        try:
             for document in spacy_corpus:
                 clean_doc = []
                 for token in document:
-                    if (not(token.is_stop) and
-                        not(token.is_punct) and
-                        not(token.like_num) and
-                        not(token.like_url)):
+                    if (not (token.is_stop) and
+                        not (token.is_punct) and
+                        not (token.like_num) and
+                            not (token.like_url)):
                         clean_doc.append(token)
                 clean_corpus.append(clean_doc)
         except Exception as _e:
-            logging_config.logger.error("Could not filter spacy tokens. Trace : %s", _e)
-        else : 
-            logging_config.logger.info("File content cleaned with spacy filters.")
+            logging_config.logger.error(
+                "Could not filter spacy tokens. Trace : %s", _e)
+        else:
+            logging_config.logger.info(
+                "File content cleaned with spacy filters.")
         return clean_corpus
 
 
