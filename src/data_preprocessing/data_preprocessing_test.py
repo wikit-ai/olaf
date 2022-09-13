@@ -3,7 +3,7 @@ import unittest
 import spacy
 
 from data_preprocessing.data_preprocessing_service import extract_text_sequences_from_corpus
-from data_preprocessing.data_preprocessing_repository import no_split_on_dash_in_words_sapcy_tokenizer
+from data_preprocessing.data_preprocessing_repository import no_split_on_dash_in_words_tokenizer
 
 test_texts_tokens = [
     ('Toothed lock washers - Type V, countersunk',
@@ -72,7 +72,7 @@ test_texts_text_sequences = [
 
 spacy_model = spacy.load("en_core_web_sm", disable=[
     'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
-spacy_model.tokenizer = no_split_on_dash_in_words_sapcy_tokenizer(nlp)
+spacy_model.tokenizer = no_split_on_dash_in_words_tokenizer(spacy_model)
 
 
 class TestDataPreprocessing(unittest.TestCase):
