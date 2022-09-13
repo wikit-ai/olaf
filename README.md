@@ -34,3 +34,20 @@ git add {modified_files}
 git commit --amend
 git push --force-with-lease {origin} {branch_to_be_merged}
 ```
+## Virtual environment
+
+Setting up the virtual environment:
+
+- change directory to the project root directory: `ontology-learning/`
+- run `virtualenv -p python3.8 venv`. (Virtualenv needs to be installed)
+- add the `src/` folder to the python paths by adding the full path `{path/to/the/project/}ontology-learning/src` to the file 
+  - On Linux add `{path/to/the/project/}ontology-learning/src` to the file `ontology-learning/venv/lib/python3.8/site-packages/_virtualenv.pth`
+  - On Windows add `{C:\path\to\the\project\}ontology-learning\src` to the file `C:\Users\msesboue\Documents\mindWork\ontology-learning\venv\Lib\site-packages\_virtualenv.pth`
+- Install the project dependencies: `pip install -r requirements.txt`
+
+Update requirements.txt: `pip freeze > requirements.txt`
+
+Run virtual environment: 
+
+- On Linux: `source {path/to/the/project/}venv/bin/activate`
+- On Windows: `{C:\path\to\the\project\}venv\Scripts\activate`
