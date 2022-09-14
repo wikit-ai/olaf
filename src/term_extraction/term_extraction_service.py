@@ -274,7 +274,7 @@ class Term_Extraction():
         Returns
         -------
         List[Dict[str,int]]
-            List of unique candidate terms lemmatized and their occurences.
+            List of unique candidate terms lemmatized and their occurrences.
         """
         candidate_terms = []
         try:
@@ -289,7 +289,7 @@ class Term_Extraction():
             logging_config.logger.info(
                 "List of tokens filtered and lemmatized.")
         unique_candidate_terms = list(set(candidate_terms))
-        count_candidate_terms = [{"term": term, "occurence": candidate_terms.count(
+        count_candidate_terms = [{"term": term, "occurrence": candidate_terms.count(
             term)} for term in unique_candidate_terms]
         return count_candidate_terms
 
@@ -299,7 +299,7 @@ class Term_Extraction():
         Parameters
         ----------
         count_candidate_terms : List[Dict[str,int]]
-            List of unique candidate terms and their occurences.
+            List of unique candidate terms and their occurrences.
 
         Returns
         -------
@@ -313,7 +313,7 @@ class Term_Extraction():
             try:
                 for candidate in count_candidate_terms:
                     term_occurrence.append(
-                        {"term": candidate['term'], "occurence": candidate['occurence']})
+                        {"term": candidate['term'], "occurrence": candidate['occurrence']})
 
                 validated_terms = [
                     term['term'] for term in term_occurrence if term['occurrence'] > core.OCCURRENCE_THRESHOLD]
