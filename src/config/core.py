@@ -1,6 +1,15 @@
-SPACY_MODEL = "fr_dep_news_trf"
-CORPUS_PATH = "../data/teams_10"
+import configparser
+import os
 
-OCCURRENCE_THRESHOLD = 0.1
+CONFIG_PATH = os.path.join(os.path.dirname(__file__))
 
-TOPIC_NUMBER = 5
+config = configparser.ConfigParser()
+config.read(os.path.join(
+    CONFIG_PATH + '/core_configs.ini'))
+
+SPACY_MODEL = config["SPACY"]["SPACY_MODEL"]
+CORPUS_PATH = config["DATA"]["CORPUS_PATH"]
+
+OCCURRENCE_THRESHOLD = float(config["LEARN2CONSTRUCT"]["OCCURRENCE_THRESHOLD"])
+
+TOPIC_NUMBER = int(config["LEARN2CONSTRUCT"]["TOPIC_NUMBER"])
