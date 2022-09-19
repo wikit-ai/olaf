@@ -7,10 +7,10 @@ import spacy.tokens
 import spacy.tokenizer
 import spacy.language
 
-from data_preprocessing.data_preprocessing_service import spacy_span_ngrams
+from data_preprocessing.data_preprocessing_methods.spacy_processing_tools import spacy_span_ngrams
 from term_extraction.term_extraction_schema import CandidateTermStatTriple, CValueResults
 from config import core
-import logging_config
+import config.logging_config as logging_config
 
 
 class Cvalue:

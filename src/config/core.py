@@ -2,6 +2,7 @@ import configparser
 import os
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__))
+DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 
 config = configparser.ConfigParser()
 config.read(os.path.join(

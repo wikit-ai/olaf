@@ -6,35 +6,36 @@ If you want to change the format of the log,
 refer to : https://docs.python.org/3/library/logging.html#logrecord-attributes, 
 and change the formatters format field.
 """
-import logging
-from logging import config
+import logging.config
+import config.core
+import os.path
 
 log_config = {
-    "version":1,
+    "version": 1,
     "disable_existing_loggers": False,
-    "root":{
-        "handlers" : ["console", "file"],
+    "root": {
+        "handlers": ["console", "file"],
         "level": "DEBUG"
     },
-    "handlers":{
-        "console":{
+    "handlers": {
+        "console": {
             "formatter": "std_out",
             "class": "logging.StreamHandler",
             "level": "INFO"
         },
-        "file":{
-            "formatter":"std_out",
-            "class":"logging.FileHandler",
-            "level":"INFO",
-            "filename":"../all_messages.log"
+        "file": {
+            "formatter": "std_out",
+            "class": "logging.FileHandler",
+            "level": "INFO",
+            "filename": os.path.join(config.core.DATA_PATH, "ontology_learning_logs.log")
         }
     },
-    "formatters":{
+    "formatters": {
         "std_out": {
             "format": "%(levelname)s: %(module)s : %(funcName)s : %(message)s : %(asctime)s",
         }
     },
 }
 
-config.dictConfig(log_config)
+logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
