@@ -1,8 +1,10 @@
 from dataclasses import dataclass
-from typing import Any, Callable, List
 
 
-TokenSequenceFilter = Callable[[List[Any]], List[List[str]]]
+class DocAttributeNotFound(Exception):
+    """An Exception to flag when a custom attribute on a Spacy Doc has not been found.
+    """
+    pass
 
 
 @dataclass
