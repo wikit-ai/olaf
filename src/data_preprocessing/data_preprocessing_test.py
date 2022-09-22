@@ -85,7 +85,7 @@ class TestDataPreprocessing(unittest.TestCase):
              ['Hexagon nut DIN EN', 'St'])
         ]
 
-        self.spacy_model = spacy.load("en_core_web_sm", disable=[
+        self.spacy_model = spacy.load("en_core_web_sm", exclude=[
             'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
         self.spacy_model.tokenizer = no_split_on_dash_in_words_tokenizer(
             self.spacy_model)
@@ -111,6 +111,35 @@ class TestDataPreprocessing(unittest.TestCase):
         selected_tokens_text = [
             token.text for token in doc._.get(self.doc_attribute_name)]
         self.assertListEqual(tokens_text_to_be_selected, selected_tokens_text)
+
+    def test_build_spans_from_tokens(self) -> None:
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        spans_text_to_be_extracted = [
+            "hello", "my name is Matthias", "I am", "and I love pasta", "By the way my website is"
+        ]
+        doc = self.spacy_model(txt)
+        selected_spans = build_spans_from_tokens(
+            doc._.get(self.doc_attribute_name), doc)
+        selected_span_texts = [span.text for span in selected_spans]
+        self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
+
+    def test_token_selector_pipeline_component_with_spans(self) -> None:
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        spans_text_to_be_extracted = [
+            "hello", "my name is Matthias", "I am", "and I love pasta", "By the way my website is"
+        ]
+
+        span_attribute_name = self.doc_attribute_name + "_span"
+        self.spacy_model.replace_pipe("token_selector", "token_selector", config={
+            "make_spans": True,
+            "token_selection_config_path": os.path.join(CONFIG_PATH, "token_selector_config4test.ini"),
+            "doc_attribute_name": span_attribute_name
+        })
+
+        doc = self.spacy_model(txt)
+        selected_spans = doc._.get(span_attribute_name)
+        selected_span_texts = [span.text for span in selected_spans]
+        self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
 
     def test_load_selectors_from_config(self) -> None:
         token_select_pipeline_config = {
@@ -145,17 +174,6 @@ class TestDataPreprocessing(unittest.TestCase):
                 " ".join(cm.output), re.compile("Token selectors loaded for pipeline Test TokenSelectionPipeline"))
 
         self.assertEqual(len(test_token_select_pipeline.token_selectors), 4)
-
-    def test_build_spans_from_tokens(self) -> None:
-        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
-        spans_text_to_be_extracted = [
-            "hello", "my name is Matthias", "I am", "and I love pasta", "By the way my website is"
-        ]
-        doc = self.spacy_model(txt)
-        selected_spans = build_spans_from_tokens(
-            doc._.get(self.doc_attribute_name), doc)
-        selected_span_texts = [span.text for span in selected_spans]
-        self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
 
     def test_extract_text_sequences_from_corpus(self) -> None:
         for idx, doc in enumerate([self.spacy_model(e[0]) for e in self.texts_and_sequences2extract]):

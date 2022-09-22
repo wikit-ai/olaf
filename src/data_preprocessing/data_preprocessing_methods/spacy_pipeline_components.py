@@ -5,6 +5,7 @@ import re
 
 import config.logging_config as logging_config
 from data_preprocessing.data_preprocessing_schema import TokenSelectionPipeline
+from data_preprocessing.data_preprocessing_methods.spacy_processing_tools import build_spans_from_tokens
 
 
 def no_split_on_dash_in_words_tokenizer(spacy_model: spacy.language.Language) -> spacy.tokenizer.Tokenizer:
@@ -45,7 +46,7 @@ def no_split_on_dash_in_words_tokenizer(spacy_model: spacy.language.Language) ->
     return tokenizer
 
 
-@spacy.language.Language.factory("token_selector")
+@spacy.language.Language.factory("token_selector", default_config={"make_spans": False})
 class TokenSelectorComponent:
     """A Spacy pipeline component setting a custom attribute on the Doc object containing a list of Tokens
         selected using a Token Selection Pipeline object. 
@@ -59,9 +60,11 @@ class TokenSelectorComponent:
             A python config parser object containing the configuration details for the Token Selection Pipeline 
         token_selector_pipeline : TokenSelectionPipeline
             The Token Selection Pipeline used to select tokens.
+        make_spans : bool
+            Wether or not to turn selected tokens into a list of spans
     """
 
-    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config_path: str, doc_attribute_name: str) -> None:
+    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config_path: str, doc_attribute_name: str, make_spans: bool) -> None:
         """Initialize a TokenSelectorComponent instance.
             Make sure that the Doc object has the custom attribute to use for storing selected tokens.
 
@@ -78,7 +81,10 @@ class TokenSelectorComponent:
         doc_attribute_name : str
             The name to use for the custom attribute on the Doc object containing a list of Tokens
             selected
+        make_spans : bool
+            Wether or not to turn selected tokens into a list of spans
         """
+        self.make_spans = make_spans
         self.doc_attribute_name = doc_attribute_name
         config = configparser.ConfigParser()
         config.read(token_selection_config_path)
@@ -113,6 +119,11 @@ class TokenSelectorComponent:
             if select_token:
                 selected_tokens.append(token)
 
-        doc._.set(self.doc_attribute_name, selected_tokens)
+        if self.make_spans:
+            selected_tokens_spans = build_spans_from_tokens(
+                token_list=selected_tokens, doc=doc)
+            doc._.set(self.doc_attribute_name, selected_tokens_spans)
+        else:
+            doc._.set(self.doc_attribute_name, selected_tokens)
 
         return doc

@@ -8,7 +8,7 @@ config = configparser.ConfigParser()
 config.read(os.path.join(
     CONFIG_PATH + '/core_configs.ini'))
 
-SPACY_MODEL = config["SPACY"]["SPACY_MODEL"]
+SPACY_MODEL = config["SPACY_MODEL"]["SPACY_MODEL_NAME"]
 CORPUS_PATH = config["DATA"]["CORPUS_PATH"]
 
 OCCURRENCE_THRESHOLD = float(config["LEARN2CONSTRUCT"]["OCCURRENCE_THRESHOLD"])
