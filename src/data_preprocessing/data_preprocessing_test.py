@@ -4,10 +4,10 @@ import unittest
 
 import spacy
 from data_preprocessing.data_preprocessing_methods.spacy_processing_tools import build_spans_from_tokens
-from data_preprocessing.data_preprocessing_schema import TokenSelectionPipeline, TokenSelector, TokenSelectorNotFound, TokenSelectorParamNotFound
+from data_preprocessing.data_preprocessing_schema import TokenSelectionPipeline
 
 from data_preprocessing.data_preprocessing_service import Data_Preprocessing, extract_text_sequences_from_corpus
-from data_preprocessing.data_preprocessing_methods.spacy_pipeline_components import no_split_on_dash_in_words_tokenizer
+from data_preprocessing.data_preprocessing_methods.spacy_pipeline_components import create_no_split_on_dash_in_words_tokenizer
 from config.core import CONFIG_PATH
 from config.logging_config import logger
 
@@ -87,8 +87,7 @@ class TestDataPreprocessing(unittest.TestCase):
 
         self.spacy_model = spacy.load("en_core_web_sm", exclude=[
             'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
-        self.spacy_model.tokenizer = no_split_on_dash_in_words_tokenizer(
-            self.spacy_model)
+        self.spacy_model.tokenizer = create_no_split_on_dash_in_words_tokenizer()(self.spacy_model)
 
         self.doc_attribute_name = "selected_tokens_4_test"
         self.spacy_model.add_pipe("token_selector", last=True, config={

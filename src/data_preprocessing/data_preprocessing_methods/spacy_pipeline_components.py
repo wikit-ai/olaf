@@ -1,49 +1,56 @@
 import configparser
+from typing import Callable
 import spacy.language
 import spacy.tokenizer
 import re
+import os.path
 
 import config.logging_config as logging_config
 from data_preprocessing.data_preprocessing_schema import TokenSelectionPipeline
 from data_preprocessing.data_preprocessing_methods.spacy_processing_tools import build_spans_from_tokens
+from config.core import PROJECT_ROOT_PATH
 
 
-def no_split_on_dash_in_words_tokenizer(spacy_model: spacy.language.Language) -> spacy.tokenizer.Tokenizer:
-    """Build a tokenizer based on Spacy Language model specifically to be able to extract ngrams for the C-value computation.
-        In particular, the tokenizer does not split on dashes ('-') in words.
+@spacy.registry.tokenizers("no_split_on_dash_in_words_tokenizer")
+def create_no_split_on_dash_in_words_tokenizer() -> Callable[[spacy.language.Language], spacy.tokenizer.Tokenizer]:
+    def create_tokenizer(spacy_model: spacy.language.Language) -> spacy.tokenizer.Tokenizer:
+        """Build a tokenizer based on Spacy Language model specifically to be able to extract ngrams for the C-value computation.
+            In particular, the tokenizer does not split on dashes ('-') in words.
 
-    Parameters
-    ----------
-    spacy_model : spacy.language.Language
-        The Spacy Language model the tokenizer will be set on.
+        Parameters
+        ----------
+        spacy_model : spacy.language.Language
+            The Spacy Language model the tokenizer will be set on.
 
-    Returns
-    -------
-    spacy.tokenizer.Tokenizer
-        The tokenizer
-    """
+        Returns
+        -------
+        spacy.tokenizer.Tokenizer
+            The tokenizer
+        """
 
-    special_cases = {}
-    prefix_re = re.compile(r'''^[\[\("'!#$%&\\\*+,\-./:;<=>?@\^_`\{|~]''')
-    suffix_re = re.compile(r'''[\]\)"'!#$%&\\\*+,\-./:;<=>?@\^_`\}|~]$''')
-    infix_re = re.compile(r'''(?<=[0-9])[+\-\*^](?=[0-9-])''')
-    simple_url_re = re.compile(r'''^https?://''')
+        special_cases = {}
+        prefix_re = re.compile(r'''^[\[\("'!#$%&\\\*+,\-./:;<=>?@\^_`\{|~]''')
+        suffix_re = re.compile(r'''[\]\)"'!#$%&\\\*+,\-./:;<=>?@\^_`\}|~]$''')
+        infix_re = re.compile(r'''(?<=[0-9])[+\-\*^](?=[0-9-])''')
+        simple_url_re = re.compile(r'''^https?://''')
 
-    try:
+        try:
 
-        tokenizer = spacy.tokenizer.Tokenizer(spacy_model.vocab, rules=special_cases,
-                                              prefix_search=prefix_re.search,
-                                              suffix_search=suffix_re.search,
-                                              infix_finditer=infix_re.finditer,
-                                              url_match=simple_url_re.match)
-    except Exception as tokenizer_exception:
-        logging_config.logger.error(
-            "Could not create Spacy tokenizer. Trace : %s", tokenizer_exception)
-    else:
-        logging_config.logger.info(
-            "Spacy tokenizer 'no_split_on_dash_in_words_tokenizer' created")
+            tokenizer = spacy.tokenizer.Tokenizer(spacy_model.vocab, rules=special_cases,
+                                                  prefix_search=prefix_re.search,
+                                                  suffix_search=suffix_re.search,
+                                                  infix_finditer=infix_re.finditer,
+                                                  url_match=simple_url_re.match)
+        except Exception as tokenizer_exception:
+            logging_config.logger.error(
+                "Could not create Spacy tokenizer. Trace : %s", tokenizer_exception)
+        else:
+            logging_config.logger.info(
+                "Spacy tokenizer 'no_split_on_dash_in_words_tokenizer' created")
 
-    return tokenizer
+        return tokenizer
+
+    return create_tokenizer
 
 
 @spacy.language.Language.factory("token_selector", default_config={"make_spans": False})
@@ -87,7 +94,8 @@ class TokenSelectorComponent:
         self.make_spans = make_spans
         self.doc_attribute_name = doc_attribute_name
         config = configparser.ConfigParser()
-        config.read(token_selection_config_path)
+        config.read(os.path.join(PROJECT_ROOT_PATH,
+                    token_selection_config_path))
         self.token_selection_config = config
         print(self.token_selection_config)
         self.token_selector_pipeline = TokenSelectionPipeline(

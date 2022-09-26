@@ -1,0 +1,27 @@
+{
+  "lang": "en",
+  "name": "tp_c_value_pipeline",
+  "version": "0.0.0",
+  "spacy_version": ">=3.4.1,<3.5.0",
+  "description": "A Language model to compute C-values from Traceparts product descriptions",
+  "author": "Matthias Sesboüé",
+  "email": "matthias.sesboue@insa-rouen.fr",
+  "url": "",
+  "license": "",
+  "spacy_git_version": "5c2a00cef",
+  "vectors": {
+    "width": 0,
+    "vectors": 0,
+    "keys": 0,
+    "name": null,
+    "mode": "default"
+  },
+  "labels": {},
+  "pipeline": [
+    "token_selector"
+  ],
+  "components": [
+    "token_selector"
+  ],
+  "disabled": []
+}

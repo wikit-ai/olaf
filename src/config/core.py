@@ -2,7 +2,10 @@ import configparser
 import os
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__))
-DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
+PROJECT_ROOT_PATH = os.path.join(os.path.dirname(__file__), '..', '..')
+DATA_PATH = os.path.join(PROJECT_ROOT_PATH, 'data')
+SPACY_PIPELINE_PATH = os.path.join(DATA_PATH, "spacy_pipelines")
+
 
 config = configparser.ConfigParser()
 config.read(os.path.join(
