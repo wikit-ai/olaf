@@ -76,7 +76,7 @@ class Cvalue:
                     raise DocAttributeNotFound(
                         f"Document custom attribute {self.tokenSequences_doc_attribute_name} not found for document {doc}")
                 else:
-                    tokenSequences.extend(doc.get_extension(
+                    tokenSequences.extend(doc._.get(
                         self.tokenSequences_doc_attribute_name))
         except Exception as e:
             logging_config.logger.error(

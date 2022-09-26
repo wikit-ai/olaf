@@ -25,6 +25,12 @@ str2type_processes = {
 }
 
 
+class FileTypeDetailsNotFound(Exception):
+    """An Exception to flag when the details specific to a corpus file type is not found.
+    """
+    pass
+
+
 class TokenSelectorNotFound(Exception):
     """An Exception to flag when the Token selector has not been found.
     """

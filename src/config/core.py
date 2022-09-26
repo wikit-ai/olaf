@@ -7,13 +7,15 @@ DATA_PATH = os.path.join(PROJECT_ROOT_PATH, 'data')
 SPACY_PIPELINE_PATH = os.path.join(DATA_PATH, "spacy_pipelines")
 
 
-config = configparser.ConfigParser()
-config.read(os.path.join(
+configurations_parser = configparser.ConfigParser()
+configurations_parser.read(os.path.join(
     CONFIG_PATH + '/core_configs.ini'))
 
-SPACY_MODEL = config["SPACY_MODEL"]["SPACY_MODEL_NAME"]
-CORPUS_PATH = config["DATA"]["CORPUS_PATH"]
+CORPUS_PATH = configurations_parser["CORPUS_DETAILS"]["CORPUS_PATH"]
 
-OCCURRENCE_THRESHOLD = float(config["LEARN2CONSTRUCT"]["OCCURRENCE_THRESHOLD"])
+SPACY_MODEL = configurations_parser["SPACY_MODEL"]["SPACY_MODEL_NAME"]
 
-TOPIC_NUMBER = int(config["LEARN2CONSTRUCT"]["TOPIC_NUMBER"])
+OCCURRENCE_THRESHOLD = float(
+    configurations_parser["LEARN2CONSTRUCT"]["OCCURRENCE_THRESHOLD"])
+
+TOPIC_NUMBER = int(configurations_parser["LEARN2CONSTRUCT"]["TOPIC_NUMBER"])

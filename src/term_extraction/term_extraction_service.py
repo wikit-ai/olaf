@@ -19,7 +19,7 @@ class Term_Extraction():
     def __init__(self) -> None:
         pass
 
-    def c_value(self, corpus: List[spacy.tokens.doc.Doc], tokenSequences_doc_attribute_name: str, max_size_gram: int) -> Cvalue:
+    def c_value_term_extraction(self, corpus: List[spacy.tokens.doc.Doc], tokenSequences_doc_attribute_name: str, max_size_gram: int) -> Cvalue:
         self.c_value = Cvalue(
             corpus, tokenSequences_doc_attribute_name, max_size_gram)
         return self.c_value

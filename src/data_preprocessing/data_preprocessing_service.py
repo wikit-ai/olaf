@@ -62,12 +62,6 @@ class Data_Preprocessing():
     def _set_corpus(self) -> None:
         self.corpus = load_corpus()
 
-    def _set_tokenizer(self) -> None:
-        pass
-
-    def get_token_filters(self):
-        pass
-
     def document_representation(self) -> List[spacy.tokens.doc.Doc]:
         """Convert text to spacy document representation.
 

@@ -44,15 +44,17 @@ def build_spans_from_tokens(token_list: List[spacy.tokens.Token], doc: spacy.tok
         The list of Spans extracted
     """
     spans = []
-    start_span_token_idx = token_list[0].i
-    previous_token_idx = token_list[0].i
 
-    for token in token_list:
-        if token.i > previous_token_idx + 1:
-            spans.append(doc[start_span_token_idx:previous_token_idx+1])
-            start_span_token_idx = token.i
+    if len(token_list) > 0:  # we can not extract spans from an empty list of tokens
+        start_span_token_idx = token_list[0].i
+        previous_token_idx = token_list[0].i
+
+        for token in token_list:
+            if token.i > previous_token_idx + 1:
+                spans.append(doc[start_span_token_idx:previous_token_idx+1])
+                start_span_token_idx = token.i
+                previous_token_idx = token.i
             previous_token_idx = token.i
-        previous_token_idx = token.i
-    spans.append(doc[start_span_token_idx:previous_token_idx+1])
+        spans.append(doc[start_span_token_idx:previous_token_idx+1])
 
     return spans
