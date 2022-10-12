@@ -9,7 +9,7 @@ SPACY_PIPELINE_PATH = os.path.join(DATA_PATH, "spacy_pipelines")
 
 configurations_parser = configparser.ConfigParser()
 configurations_parser.read(os.path.join(
-    CONFIG_PATH + '/core_configs.ini'))
+    CONFIG_PATH + '/core.ini'))
 
 CORPUS_PATH = configurations_parser["CORPUS_DETAILS"]["CORPUS_PATH"]
 

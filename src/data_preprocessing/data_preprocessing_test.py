@@ -3,11 +3,11 @@ import re
 import unittest
 
 import spacy
-from data_preprocessing.data_preprocessing_methods.spacy_processing_tools import build_spans_from_tokens
-from data_preprocessing.data_preprocessing_schema import TokenSelectionPipeline
+from commons.spacy_processing_tools import build_spans_from_tokens
+from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline
 
 from data_preprocessing.data_preprocessing_service import Data_Preprocessing, extract_text_sequences_from_corpus
-from data_preprocessing.data_preprocessing_methods.spacy_pipeline_components import create_no_split_on_dash_in_words_tokenizer
+from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
 from config.core import CONFIG_PATH
 from config.logging_config import logger
 

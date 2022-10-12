@@ -21,7 +21,7 @@ log_config = {
         "console": {
             "formatter": "std_out",
             "class": "logging.StreamHandler",
-            "level": "INFO"
+            "level": "WARN"
         },
         "file": {
             "formatter": "std_out",
@@ -32,7 +32,7 @@ log_config = {
     },
     "formatters": {
         "std_out": {
-            "format": "%(levelname)s: %(module)s : %(funcName)s : %(message)s : %(asctime)s",
+            "format": "%(asctime)s: %(levelname)s: %(module)s : %(funcName)s : %(message)s",
         }
     },
 }

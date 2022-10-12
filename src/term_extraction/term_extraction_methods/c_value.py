@@ -1,12 +1,12 @@
 from collections import defaultdict
 import math
-from typing import Dict, List
+from typing import Dict, List, Set
 
 import spacy.tokens.doc
 
 import config.logging_config as logging_config
 from term_extraction.term_extraction_schema import CandidateTermStatTriple, CValueResults, DocAttributeNotFound
-from data_preprocessing.data_preprocessing_methods.spacy_processing_tools import spacy_span_ngrams
+from commons.spacy_processing_tools import spacy_span_ngrams
 
 
 class Cvalue:
@@ -66,8 +66,18 @@ class Cvalue:
             return self.compute_c_values()
 
     def _extract_token_sequences(self) -> List[spacy.tokens.span.Span]:
-        # Actually an exception might not make sense there. Simply a log ?
+        """Extract the list of Spacy spans contained in the Spacy Doc custum attribute
 
+        Returns
+        -------
+        List[spacy.tokens.span.Span]
+            The list of Spacy spans corresponding to the token sequences to use for the C-value computation.
+
+        Raises
+        ------
+        DocAttributeNotFound
+            An Exception to flag when a custom attribute on a Spacy Doc has not been found.
+        """
         tokenSequences = []
 
         try:
@@ -89,11 +99,24 @@ class Cvalue:
 
     def _update_term_containers(self,
                                 span: spacy.tokens.span.Span,
-                                candidate_terms_by_size: Dict[int, str],
+                                candidate_terms_by_size: Dict[int, Set[str]],
                                 candidateTermsCounter: Dict[str, int],
                                 candidateTermSpans: Dict[str,
                                                          spacy.tokens.span.Span]
                                 ) -> None:
+        """Process a candidate term (Spacy span) and update data containers required for the C-value computation.
+
+        Parameters
+        ----------
+        span : spacy.tokens.span.Span
+            The candidate term to process
+        candidate_terms_by_size : Dict[int, Set[str]]
+            A data container with the candidate terms strings grouped by their size (i.e. number of words)
+        candidateTermsCounter : Dict[str, int]
+            A data container with the candidate terms occurence counts in the corpus 
+        candidateTermSpans : Dict[str, spacy.tokens.span.Span]
+            A data container with the strings associated with each candidate term
+        """
 
         for size in range(1, self.max_size_gram + 1):  # for each gram size
 
@@ -110,10 +133,53 @@ class Cvalue:
                 # select one spacy. Span for each text (in this case the last one)
                 candidateTermSpans[size_candidate_terms_span.text] = size_candidate_terms_span
 
+    def _tokenSequence2CandidateTerm(self, tokenSequence: spacy.tokens.span.Span) -> List[spacy.tokens.span.Span]:
+        """Extract the candidate terms spans from the selected token sequences. 
+            Generate sub sequences when the token sequence is longer than the self.max_size_gram.
+
+        Parameters
+        ----------
+        tokenSequence : spacy.tokens.span.Span
+            The token sequence to extract the candidate term from.
+
+        Returns
+        -------
+        List[spacy.tokens.span.Span]
+            The list of candidate terms
+        """
+        if len(tokenSequence) <= self.max_size_gram:  # token sequence length ok
+            return [tokenSequence]
+        else:  # token sequence too long --> generate subsequences and process them
+            return [gram for gram in spacy_span_ngrams(tokenSequence, self.max_size_gram)]
+
+    def _order_candidate_terms(self, candidate_terms_by_size: Dict[int, Set[str]]) -> List[spacy.tokens.span.Span]:
+        """Order the candidate terms as detailed in the algorithm defined in <https://doi.org/10.1007/s007999900023>.
+
+        Parameters
+        ----------
+        candidate_terms_by_size : Dict[int, Set[str]]
+            A data container with the candidate terms strings grouped by their size (i.e. number of words)
+
+        Returns
+        -------
+        List[str]
+            The ordered list of candidate terms
+        """
+        # each group of candidate terms needs to be ordered by the frequence
+        # groups of candidate terms are concatenated from the the longest to the smallest
+        ordered_candidate_terms = []
+        for terms_size in range(1, self.max_size_gram + 1).__reversed__():
+            orderedByFreqTerms = list(candidate_terms_by_size[terms_size])
+            orderedByFreqTerms.sort(
+                key=lambda term: self.candidateTermsCounter[term], reverse=True)
+            ordered_candidate_terms.extend(orderedByFreqTerms)
+
+        return ordered_candidate_terms
+
     def _extract_candidate_terms(self) -> None:
         """Extract the valid list of candidate terms and compute the corresponding frequences.
             This method sets the attributes:
-              - self.candidateTerms
+              - self.candidateTermsSpans
               - self.candidateTermsCounter
         """
 
@@ -124,31 +190,18 @@ class Cvalue:
 
         tokenSequences = self._extract_token_sequences()
 
-        for span in tokenSequences:
-            if len(span) <= self.max_size_gram:  # token sequence length ok
+        for tokenSeq in tokenSequences:
+            candidate_term_spans = self._tokenSequence2CandidateTerm(tokenSeq)
+
+            for candidate_term_span in candidate_term_spans:
                 self._update_term_containers(
-                    span, candidate_terms_by_size, candidateTermsCounter, candidateTermSpans)
+                    candidate_term_span, candidate_terms_by_size, candidateTermsCounter, candidateTermSpans)
 
-            else:  # token sequence too long --> generate subsequences and process them
-                tokenSubSequences = [
-                    gram for gram in spacy_span_ngrams(span, self.max_size_gram)]
+        self.candidateTermsCounter = candidateTermsCounter
 
-                for tokenSeq in tokenSubSequences:
-                    self._update_term_containers(
-                        tokenSeq, candidate_terms_by_size, candidateTermsCounter, candidateTermSpans)
-
-        # each group of candidate terms needs to be ordered by the frequence
-        # groups of candidate terms are concatenated from the the longest to the smallest
-        for terms_size in range(1, self.max_size_gram + 1).__reversed__():
-            orderedByFreqTerms = list(candidate_terms_by_size[terms_size])
-            orderedByFreqTerms.sort(
-                key=lambda term: candidateTermsCounter[term], reverse=True)
-            candidateTerms.extend(orderedByFreqTerms)
-
-        # self.candidateTerms = candidateTerms
+        candidateTerms = self._order_candidate_terms(candidate_terms_by_size)
         self.candidateTermsSpans = [candidateTermSpans[term]
                                     for term in candidateTerms]
-        self.candidateTermsCounter = candidateTermsCounter
 
     def _get_substrings_spans(self, term_span: spacy.tokens.span.Span) -> List[spacy.tokens.span.Span]:
         """Extract the ngrams contained in the term. The result is returned as a list of spacy Spans.
