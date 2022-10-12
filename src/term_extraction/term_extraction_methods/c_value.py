@@ -1,6 +1,6 @@
 from collections import defaultdict
 import math
-from typing import List
+from typing import Dict, List
 
 import spacy.tokens.doc
 
@@ -87,6 +87,29 @@ class Cvalue:
 
         return tokenSequences
 
+    def _update_term_containers(self,
+                                span: spacy.tokens.span.Span,
+                                candidate_terms_by_size: Dict[int, str],
+                                candidateTermsCounter: Dict[str, int],
+                                candidateTermSpans: Dict[str,
+                                                         spacy.tokens.span.Span]
+                                ) -> None:
+
+        for size in range(1, self.max_size_gram + 1):  # for each gram size
+
+            size_candidate_terms_spans = spacy_span_ngrams(
+                span, size)  # generate ngrams
+
+            for size_candidate_terms_span in size_candidate_terms_spans:  # update variables for each ngram
+
+                candidate_terms_by_size[size].add(
+                    size_candidate_terms_span.text)
+
+                candidateTermsCounter[size_candidate_terms_span.text] += 1
+
+                # select one spacy. Span for each text (in this case the last one)
+                candidateTermSpans[size_candidate_terms_span.text] = size_candidate_terms_span
+
     def _extract_candidate_terms(self) -> None:
         """Extract the valid list of candidate terms and compute the corresponding frequences.
             This method sets the attributes:
@@ -99,35 +122,20 @@ class Cvalue:
         candidateTerms = []
         candidate_terms_by_size = defaultdict(set)
 
-        # an inner function to not duplicate code
-        def update_term_containers(span) -> None:
-            for size in range(1, self.max_size_gram + 1):  # for each gram size
-
-                size_candidate_terms_spans = spacy_span_ngrams(
-                    span, size)  # generate ngrams
-
-                for size_candidate_terms_span in size_candidate_terms_spans:  # update variables for each ngram
-
-                    candidate_terms_by_size[size].add(
-                        size_candidate_terms_span.text)
-
-                    candidateTermsCounter[size_candidate_terms_span.text] += 1
-
-                    # select one spacy. Span for each text (in this case the last one)
-                    candidateTermSpans[size_candidate_terms_span.text] = size_candidate_terms_span
-
         tokenSequences = self._extract_token_sequences()
 
         for span in tokenSequences:
             if len(span) <= self.max_size_gram:  # token sequence length ok
-                update_term_containers(span)
+                self._update_term_containers(
+                    span, candidate_terms_by_size, candidateTermsCounter, candidateTermSpans)
 
             else:  # token sequence too long --> generate subsequences and process them
                 tokenSubSequences = [
                     gram for gram in spacy_span_ngrams(span, self.max_size_gram)]
 
                 for tokenSeq in tokenSubSequences:
-                    update_term_containers(tokenSeq)
+                    self._update_term_containers(
+                        tokenSeq, candidate_terms_by_size, candidateTermsCounter, candidateTermSpans)
 
         # each group of candidate terms needs to be ordered by the frequence
         # groups of candidate terms are concatenated from the the longest to the smallest

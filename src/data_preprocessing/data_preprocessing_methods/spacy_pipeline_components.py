@@ -81,7 +81,7 @@ class TokenSelectorComponent:
             The Spacy Language attached to the pipeline. The naming is enforced by 
             Spacy framework (https://spacy.io/usage/processing-pipelines#custom-components)
         name : str
-            The component name. The naming is enforced by 
+            The component name. The attribute naming is enforced by 
             Spacy framework (https://spacy.io/usage/processing-pipelines#custom-components)
         token_selection_config_path : str
             The path to the Token Selection Pipeline configuration file. 

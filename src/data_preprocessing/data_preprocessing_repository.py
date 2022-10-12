@@ -13,6 +13,21 @@ from data_preprocessing.data_preprocessing_schema import FileTypeDetailsNotFound
 
 
 def load_json_file(file_path: str, text_field: str) -> List[str]:
+    """Load data from a json file. The json file is expected to be a list of json objects
+        with at least the `text_field` variable string as a field containing the text. 
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the json file.
+    text_field : str
+        The name of the json field containing the text to extract.
+
+    Returns
+    -------
+    List[str]
+        The list of text strings.
+    """
     with open(file_path, "r", encoding='utf-8') as file:
         file_content = json.load(file)
 
@@ -22,7 +37,21 @@ def load_json_file(file_path: str, text_field: str) -> List[str]:
 
 
 def load_csv_file(file_path: str, separator: str) -> List[str]:
+    """Load data from a csv file. The csv file is expected to be a list of text strings
+        separated by a separator character. 
 
+    Parameters
+    ----------
+    file_path : str
+        The path to the csv file.
+    separator : str
+        The character separating the text strings.
+
+    Returns
+    -------
+    List[str]
+        The list of text strings.
+    """
     if separator == "\\n":
         texts = load_text_corpus(file_path)
     else:
@@ -37,7 +66,19 @@ def load_csv_file(file_path: str, separator: str) -> List[str]:
     return texts
 
 
-def load_text_file(file_path: str) -> List[str]:
+def load_text_file(file_path: str) -> str:
+    """Load text for a text file. The text file is expected to contain only one text document.
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the text file.
+
+    Returns
+    -------
+    str
+        The text string
+    """
     with open(file_path, "r", encoding='utf-8') as file:
         text = file.read()
 
@@ -45,6 +86,18 @@ def load_text_file(file_path: str) -> List[str]:
 
 
 def load_text_corpus(file_path: str) -> List[str]:
+    """Load a corpus from on text file. The text file is expected to contain one document text per line.
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the text file.
+
+    Returns
+    -------
+    List[str]
+        The list of text strings.
+    """
     with open(file_path, "r", encoding='utf-8') as file:
         texts = file.readlines()
 
