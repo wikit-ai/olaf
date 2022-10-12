@@ -62,7 +62,7 @@ class TokenSelectionPipeline:
         pipeline_name : str
             The Token Selection Pipeline name 
         token_selector_names : List[str]
-            a list of strings refering to the token selector functions
+            A list of strings refering to the token selector functions
     """
 
     def __init__(self, config: configparser.ConfigParser) -> None:
@@ -141,7 +141,7 @@ class TokenSelectionPipeline:
                         token_selectors_dict[token_selector_name]).parameters
                     token_selector_params_strings = list(inspect.signature(
                         token_selectors_dict[token_selector_name]).parameters.keys())
-                    # we only need to process the other extra paraleters
+                    # we only need to process the other extra parameters
                     token_selector_params_strings.remove('token')
 
                     params_dict = {}

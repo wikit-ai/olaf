@@ -97,9 +97,16 @@ class TokenSelectorComponent:
         config.read(os.path.join(PROJECT_ROOT_PATH,
                     token_selection_config_path))
         self.token_selection_config = config
-        print(self.token_selection_config)
-        self.token_selector_pipeline = TokenSelectionPipeline(
-            self.token_selection_config)
+
+        try:
+            self.token_selector_pipeline = TokenSelectionPipeline(
+                self.token_selection_config)
+        except Exception as e:
+            logging_config.logger.error(
+                f"There has been an issue while building TokenSelectionPipeline from token_selection_config {self.token_selection_config}. Trace : {e}")
+        else:
+            logging_config.logger.info(
+                f"TokenSelectionPipeline linked to custom Doc Spacy attribute {self.doc_attribute_name} instance created ")
 
         if not spacy.tokens.doc.Doc.has_extension(doc_attribute_name):
             spacy.tokens.doc.Doc.set_extension(doc_attribute_name, default=[])

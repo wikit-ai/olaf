@@ -7,7 +7,7 @@ import re
     The functions should return True if the token should be kept, False otherwise.
     Specifying the parameter types as annotations is critical since the token selector loading from config
     process relies on these typing annotations.
-    If you introduce a new typing annotation make sure you provide the way to precess it from a config file.
+    If you introduce a new typing annotation make sure you provide the way to process it from a config file.
 """
 
 
@@ -54,18 +54,66 @@ def select_on_shape_match_pattern(token: spacy.tokens.Token, shape_pattern_to_se
 
 
 def filter_stopwords(token: spacy.tokens.Token) -> bool:
+    """Return True if the Spacy Token is NOT a stopword.
+
+    Parameters
+    ----------
+    token : spacy.tokens.Token
+        The Spacy token to test
+
+    Returns
+    -------
+    bool
+        Wether the Token Shape is NOT a stopword or it is
+    """
     return not (token.is_stop)
 
 
 def filter_punct(token: spacy.tokens.Token) -> bool:
+    """Return True if the Spacy Token is NOT a punctuation symbol.
+
+    Parameters
+    ----------
+    token : spacy.tokens.Token
+        The Spacy token to test
+
+    Returns
+    -------
+    bool
+        Wether the Token Shape is NOT a punctuation symbol or it is
+    """
     return not (token.is_punct)
 
 
 def filter_num(token: spacy.tokens.Token) -> bool:
+    """Return True if the Spacy Token is NOT a numerical value.
+
+    Parameters
+    ----------
+    token : spacy.tokens.Token
+        The Spacy token to test
+
+    Returns
+    -------
+    bool
+        Wether the Token Shape is NOT a numerical value or it is
+    """
     return not (token.like_num)
 
 
 def filter_url(token: spacy.tokens.Token) -> bool:
+    """Return True if the Spacy Token is NOT a url.
+
+    Parameters
+    ----------
+    token : spacy.tokens.Token
+        The Spacy token to test
+
+    Returns
+    -------
+    bool
+        Wether the Token Shape is NOT a url or it is
+    """
     return not (token.like_url)
 
 

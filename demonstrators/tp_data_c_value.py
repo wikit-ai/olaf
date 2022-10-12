@@ -23,7 +23,7 @@ def main() -> None:
 
     c_values = term_extraction.c_value()
 
-    with open(os.path.join(DATA_PATH, "schneider_texts_cvalues.txt"), "w", encoding='utf8') as file:
+    with open(os.path.join(DATA_PATH, "data_files", "schneider_texts_cvalues.txt"), "w", encoding='utf8') as file:
         for c_val in tqdm.tqdm(c_values):
             file.write(f"{c_val.c_value:.2f} -- {c_val.candidate_term}\n")
 

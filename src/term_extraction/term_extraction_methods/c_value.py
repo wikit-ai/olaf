@@ -74,7 +74,7 @@ class Cvalue:
             for doc in self.corpus:
                 if not doc.has_extension(self.tokenSequences_doc_attribute_name):
                     raise DocAttributeNotFound(
-                        f"Document custom attribute {self.tokenSequences_doc_attribute_name} not found for document {doc}")
+                        f"Document custom attribute {self.tokenSequences_doc_attribute_name} not found for document object {doc}")
                 else:
                     tokenSequences.extend(doc._.get(
                         self.tokenSequences_doc_attribute_name))

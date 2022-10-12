@@ -1,5 +1,6 @@
 from typing import List
 
+import config.logging_config as logging_config
 from nltk.util import ngrams as nltk_ngrams
 import spacy.tokens
 
@@ -19,7 +20,15 @@ def spacy_span_ngrams(span: spacy.tokens.span.Span, gram_size: int) -> List[spac
     List[spacy.tokens.span.Span]
         The list of ngrams as Spacy Span objects
     """
-    grams = nltk_ngrams(span, gram_size)
+    try:
+        grams = nltk_ngrams(span, gram_size)
+    except Exception as e:
+        logging_config.logger.error(
+            f"There has been an issue while computing {gram_size}-grams for span {span.text}  using nltk.util.ngrams function. Trace : {e}")
+    else:
+        logging_config.logger.info(
+            f"{gram_size}-grams extracted for span {span.text}")
+
     doc = span.doc
     gram_spans = [spacy.tokens.span.Span(
         doc, gram[0].i, gram[-1].i + 1) for gram in grams]
@@ -46,6 +55,7 @@ def build_spans_from_tokens(token_list: List[spacy.tokens.Token], doc: spacy.tok
     spans = []
 
     if len(token_list) > 0:  # we can not extract spans from an empty list of tokens
+        # The Spacy Token attribute i correspond the index of the token within the parent document.
         start_span_token_idx = token_list[0].i
         previous_token_idx = token_list[0].i
 
