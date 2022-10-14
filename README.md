@@ -51,3 +51,14 @@ Run virtual environment:
 
 - On Linux: `source {path/to/the/project/}venv/bin/activate`
 - On Windows: `{C:\path\to\the\project\}venv\Scripts\activate`
+
+## Spacy language processing pipelines
+
+To create and save a Language processing pipeline you need to:
+
+- Create your pipeline (and test it)
+- Save it to disk in the `SPACY_PIPELINE_PATH` directory using the [spacy Language `to_disk()` method](https://spacy.io/api/language#to_disk): `your_spacy_model .to_disk(os.path.join(SPACY_PIPELINE_PATH, "your_model_name"))`
+- It will create a folder `SPACY_PIPELINE_PATH/your_model_name/` with all the details to reconstruct your pipeline.
+- You can edit the `SPACY_PIPELINE_PATH/your_model_name/meta.json` file to add your personal information and associate the pipeline with you as an author.
+
+You can then load it anywhere in the project with: `your_spacy_model = spacy.load(os.path.join(SPACY_PIPELINE_PATH, "your_model_name"))`

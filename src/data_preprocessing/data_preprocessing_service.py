@@ -1,6 +1,4 @@
-import functools
 import re
-
 from typing import Iterable, List
 
 import spacy
@@ -9,11 +7,8 @@ import spacy.tokenizer
 import spacy.tokens.span
 import spacy.language
 
-from nltk.util import ngrams as nltk_ngrams
-
-from data_preprocessing.data_preprocessing_schema import TokenFilter
 from data_preprocessing.data_preprocessing_repository import load_corpus, load_spacy_model
-import logging_config
+import config.logging_config as logging_config
 
 
 def extract_text_sequences_from_corpus(docs: Iterable[spacy.tokens.doc.Doc]) -> List[spacy.tokens.span.Span]:
@@ -51,28 +46,6 @@ def extract_text_sequences_from_corpus(docs: Iterable[spacy.tokens.doc.Doc]) -> 
                 doc, str_token_seq[0].i, str_token_seq[-1].i + 1))
 
     return str_token_sequences
-
-
-def spacy_span_ngrams(span: spacy.tokens.span.Span, gram_size: int) -> List[spacy.tokens.span.Span]:
-    """Adapt the NTLK ngrams function to work with Spacy Span objects.
-
-    Parameters
-    ----------
-    span : spacy.tokens.span.Span
-        The spacy Span object to extract the ngrams from.
-    gram_size : int
-        The gram size
-
-    Returns
-    -------
-    List[spacy.tokens.span.Span]
-        The list of ngrams as Spacy Span objects
-    """
-    grams = nltk_ngrams(span, gram_size)
-    doc = span.doc
-    gram_spans = [spacy.tokens.span.Span(
-        doc, gram[0].i, gram[-1].i + 1) for gram in grams]
-    return gram_spans
 
 
 class Data_Preprocessing():

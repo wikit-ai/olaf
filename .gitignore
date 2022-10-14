@@ -1,3 +1,6 @@
+# application logs
+*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -49,3 +52,5 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+demonstrators/short_tests.ipynb
+data/data_files/*

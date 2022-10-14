@@ -1,15 +1,22 @@
+import os.path
+import re
 import unittest
 
 import spacy
+from commons.spacy_processing_tools import build_spans_from_tokens
+from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline
 
-from data_preprocessing.data_preprocessing_service import extract_text_sequences_from_corpus
-from data_preprocessing.data_preprocessing_repository import no_split_on_dash_in_words_tokenizer
+from data_preprocessing.data_preprocessing_service import Data_Preprocessing, extract_text_sequences_from_corpus
+from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
+from config.core import CONFIG_PATH
+from config.logging_config import logger
 
 
 class TestDataPreprocessing(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(self) -> None:
+        self.data_preprocessing = Data_Preprocessing()
         self.texts_and_tokens = [
             ('Toothed lock washers - Type V, countersunk',
              ['Toothed', 'lock', 'washers', '-', 'Type', 'V', ',', 'countersunk']),
@@ -78,17 +85,96 @@ class TestDataPreprocessing(unittest.TestCase):
              ['Hexagon nut DIN EN', 'St'])
         ]
 
-        self.spacy_model = spacy.load("en_core_web_sm", disable=[
+        self.spacy_model = spacy.load("en_core_web_sm", exclude=[
             'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
-        self.spacy_model.tokenizer = no_split_on_dash_in_words_tokenizer(
-            self.spacy_model)
+        self.spacy_model.tokenizer = create_no_split_on_dash_in_words_tokenizer()(self.spacy_model)
 
-    def test_c_value_tokenizer(self):
+        self.doc_attribute_name = "selected_tokens_4_test"
+        self.spacy_model.add_pipe("token_selector", last=True, config={
+            "token_selection_config_path": os.path.join(CONFIG_PATH, "token_selector_config4test.ini"),
+            "doc_attribute_name": self.doc_attribute_name
+        })
+
+    def test_no_split_on_dash_in_words_tokenizer(self) -> None:
         for idx, doc in enumerate([self.spacy_model(e[0]) for e in self.texts_and_tokens]):
             self.assertEqual([token.text for token in doc],
                              self.texts_and_tokens[idx][1])
 
-    def test_extract_text_sequences_from_corpus(self):
+    def test_token_selector_pipeline_component(self) -> None:
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        tokens_text_to_be_selected = [
+            "hello", "my", "name", "is", "Matthias", "I", "am",
+            "and", "I", "love", "pasta", "By", "the", "way", "my", "website", "is"
+        ]
+        doc = self.spacy_model(txt)
+        selected_tokens_text = [
+            token.text for token in doc._.get(self.doc_attribute_name)]
+        self.assertListEqual(tokens_text_to_be_selected, selected_tokens_text)
+
+    def test_build_spans_from_tokens(self) -> None:
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        spans_text_to_be_extracted = [
+            "hello", "my name is Matthias", "I am", "and I love pasta", "By the way my website is"
+        ]
+        doc = self.spacy_model(txt)
+        selected_spans = build_spans_from_tokens(
+            doc._.get(self.doc_attribute_name), doc)
+        selected_span_texts = [span.text for span in selected_spans]
+        self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
+
+    def test_token_selector_pipeline_component_with_spans(self) -> None:
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        spans_text_to_be_extracted = [
+            "hello", "my name is Matthias", "I am", "and I love pasta", "By the way my website is"
+        ]
+
+        span_attribute_name = self.doc_attribute_name + "_span"
+        self.spacy_model.replace_pipe("token_selector", "token_selector", config={
+            "make_spans": True,
+            "token_selection_config_path": os.path.join(CONFIG_PATH, "token_selector_config4test.ini"),
+            "doc_attribute_name": span_attribute_name
+        })
+
+        doc = self.spacy_model(txt)
+        selected_spans = doc._.get(span_attribute_name)
+        selected_span_texts = [span.text for span in selected_spans]
+        self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
+
+    def test_load_selectors_from_config(self) -> None:
+        token_select_pipeline_config = {
+            "TOKEN_SELECTION_PIPELINE_CONFIG": {
+                "PIPELINE_NAME": "Test TokenSelectionPipeline",
+                "TOKEN_SELECTOR_NAMES": "not_exist_token_selector select_on_pos filter_punct filter_num filter_url"
+            }
+        }
+
+        test_token_select_pipeline = TokenSelectionPipeline(
+            token_select_pipeline_config)
+
+        with self.assertLogs(logger, level='ERROR') as cm:
+            test_token_select_pipeline = TokenSelectionPipeline(
+                token_select_pipeline_config)
+            self.assertRegex(
+                " ".join(cm.output), re.compile("not_exist_token_selector token selector not found"))
+
+        with self.assertLogs(logger, level='ERROR') as cm:
+            token_select_pipeline_config["TOKEN_SELECTION_PIPELINE_CONFIG"][
+                "TOKEN_SELECTOR_NAMES"] = "select_on_pos filter_punct filter_num filter_url"
+            test_token_select_pipeline = TokenSelectionPipeline(
+                token_select_pipeline_config)
+            self.assertRegex(
+                " ".join(cm.output), re.compile("Parameter pos_to_select for token selector select_on_pos not found in pipeline config"))
+
+        with self.assertLogs(logger, level='INFO') as cm:
+            token_select_pipeline_config["TOKEN_SELECTION_PIPELINE_CONFIG"]["pos_to_select"] = "NOUN VERB"
+            test_token_select_pipeline = TokenSelectionPipeline(
+                token_select_pipeline_config)
+            self.assertRegex(
+                " ".join(cm.output), re.compile("Token selectors loaded for pipeline Test TokenSelectionPipeline"))
+
+        self.assertEqual(len(test_token_select_pipeline.token_selectors), 4)
+
+    def test_extract_text_sequences_from_corpus(self) -> None:
         for idx, doc in enumerate([self.spacy_model(e[0]) for e in self.texts_and_sequences2extract]):
             selected_sequences = [
                 span.text for span in extract_text_sequences_from_corpus([doc])]

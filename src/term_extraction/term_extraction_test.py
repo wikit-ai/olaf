@@ -2,7 +2,7 @@ import unittest
 
 import spacy
 
-from term_extraction.term_extraction_service import Cvalue
+from term_extraction.term_extraction_methods.c_value import Cvalue
 
 
 class TestCvalue(unittest.TestCase):
@@ -35,16 +35,24 @@ class TestCvalue(unittest.TestCase):
 
         vocab = spacy.vocab.Vocab(strings=vocab_strings)
 
-        test_terms_spans = []
+        self.doc_attribute_name = "cvalue_token_sequences"
 
+        if not spacy.tokens.doc.Doc.has_extension(self.doc_attribute_name):
+            spacy.tokens.doc.Doc.set_extension(
+                self.doc_attribute_name, default=[])
+
+        test_terms_spans = []
+        corpus = []
         for term in self.test_terms:
             words = term.split()
             spaces = [True] * len(words)
             doc = spacy.tokens.Doc(vocab, words=words, spaces=spaces)
-            span = spacy.tokens.Span(doc, doc[0].i, doc[-1].i + 1)
-            test_terms_spans.append(span)
+            doc._.set(self.doc_attribute_name, [doc[:]])
+            test_terms_spans.append(doc[:])
+            corpus.append(doc)
 
-        my_c_val = Cvalue(tokenSequences=test_terms_spans, max_size_gram=5)
+        my_c_val = Cvalue(
+            corpus=corpus, tokenSequences_doc_attribute_name=self.doc_attribute_name, max_size_gram=5)
 
         # we manually set the candidate terms and their frequences otherwise the process considers all
         # the ngrams extracted from the terms. This is not done like this in the paper.
