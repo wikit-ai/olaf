@@ -1,4 +1,5 @@
 from typing import Iterable, List, Dict
+from collections import Counter
 
 import spacy
 import spacy.tokens
@@ -8,6 +9,7 @@ import spacy.language
 from config import core
 import config.logging_config as logging_config
 from term_extraction.term_extraction_methods.c_value import Cvalue
+from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos,select_on_occurence_count
 
 
 class Term_Extraction():
@@ -16,81 +18,71 @@ class Term_Extraction():
 
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc]) -> None:
+        self.corpus = corpus
 
-    def c_value_term_extraction(self, corpus: List[spacy.tokens.doc.Doc], tokenSequences_doc_attribute_name: str, max_size_gram: int) -> Cvalue:
+    def c_value_term_extraction(self, tokenSequences_doc_attribute_name: str, max_size_gram: int) -> Cvalue:
         self.c_value = Cvalue(
-            corpus, tokenSequences_doc_attribute_name, max_size_gram)
+            self.corpus, tokenSequences_doc_attribute_name, max_size_gram)
         return self.c_value
 
-    def on_pos_token_filtering(self, corpus: List[List[spacy.tokens.token.Token]], token_pos_filter: List[str]) -> List[Dict[str, int]]:
+    def on_pos_token_filtering(self, on_lemma:bool = False) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
-        Candidate terms are lemmatized and put into lowercase.
 
         Parameters
         ----------
-        corpus : List[List[spacy.tokens.token.Token]]
-            Cleaned corpus.
-        token_pos_filter : List[str]
-            Pos-tagging filters to apply.
-
+        on_lemma : bool
+            If true, the output is the lemma of token. By defaut, the output is the text.
         Returns
         -------
-        List[Dict[str,int]]
-            List of unique candidate terms lemmatized and their occurrences.
+        List[str]
+            List of unique validated terms.
         """
-        candidate_terms = []
-        try:
-            for document in corpus:
-                for token in document:
-                    if token.pos_ in token_pos_filter:
-                        candidate_terms.append(token.lemma_.lower())
-        except Exception as _e:
-            logging_config.logger.error(
-                "Could not filter and lemmatize spacy tokens. Trace : %s", _e)
-        else:
-            logging_config.logger.info(
-                "List of tokens filtered and lemmatized.")
-        unique_candidate_terms = list(set(candidate_terms))
-        count_candidate_terms = [{"term": term, "occurrence": candidate_terms.count(
-            term)} for term in unique_candidate_terms]
-        return count_candidate_terms
+        candidate_pos_terms = []
 
-    def frequency_filtering(self, count_candidate_terms: List[Dict[str, int]]) -> List[str]:
-        """Return candidate terms with frequency higher than a configured threshold.
+        for doc in self.corpus:
+            for token in doc : 
+                if select_on_pos(token,core.configurations_parser["TERM_EXTRACTION"]["POS_SELECTION"]):
+                    if on_lemma :
+                        candidate_pos_terms.append(token.lemma_)
+                    else : 
+                        candidate_pos_terms.append(token.text)
+        unique_candidates = list(set(candidate_pos_terms))
+
+        return unique_candidates
+
+    def occurence_filtering(self, on_lemma:bool = False) -> List[str]:
+        """Return unique candidate terms with occurence higher than a configured threshold.
 
         Parameters
         ----------
-        count_candidate_terms : List[Dict[str,int]]
-            List of unique candidate terms and their occurrences.
+        on_lemma : bool
+            If true the count is made on lemma attribute. By default it is made on the text attribute.
 
         Returns
         -------
         List[str]
-            Candidate terms extracted.
+            List of unique validated terms.
         """
-        nb_term_candidates = len(count_candidate_terms)
-        validated_terms = []
-        if nb_term_candidates > 0:
-            term_occurrence = []
-            try:
-                for candidate in count_candidate_terms:
-                    term_occurrence.append(
-                        {"term": candidate['term'], "occurrence": candidate['occurrence']})
+        candidate_terms = [token for doc in self.corpus for token in doc]
+        candidate_occurence_terms = []
+        count_candidates = {}
 
-                validated_terms = [
-                    term['term'] for term in term_occurrence if term['occurrence'] > core.OCCURRENCE_THRESHOLD]
-            except Exception as _e:
-                logging_config.logger.error(
-                    "Could not filter candidate terms by occurrence. Trace : %s", _e)
-            else:
-                logging_config.logger.info(
-                    "List of tokens filtered by occurrence.")
-        else:
-            logging_config.logger.error("No term candidate found.")
-            validated_terms = None
-        return validated_terms
+        if on_lemma:
+            terms = [token.lemma_ for token in candidate_terms]
+        else : 
+            terms = [token.text for token in candidate_terms]
+        
+        occurences = Counter(terms)
 
+        for token in candidate_terms : 
+            if select_on_occurence_count(token,core.OCCURRENCE_THRESHOLD,occurences,on_lemma):
+                if on_lemma :
+                    candidate_occurence_terms.append(token.lemma_)
+                else : 
+                    candidate_occurence_terms.append(token.text)
+        unique_candidates = list(set(candidate_occurence_terms))
+        
+        return unique_candidates
 
-term_extraction = Term_Extraction()
+# term_extraction = Term_Extraction()

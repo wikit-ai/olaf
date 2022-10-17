@@ -3,6 +3,7 @@ import functools
 import inspect
 from typing import Dict, List
 import os.path
+import collections
 
 import spacy.tokens
 import re
@@ -133,7 +134,7 @@ def filter_url(token: spacy.tokens.Token) -> bool:
     return not (token.like_url)
 
 
-def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurence_counts: Dict[str, int]) -> bool:
+def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurence_counts: collections.Counter, on_lemma: bool =False) -> bool:
     """Return true if the Spacy Token Text has an occurence above a defined treshold.
 
     Parameters
@@ -144,13 +145,18 @@ def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurenc
         The treshold below which the Token is not selected 
     occurence_counts : Dict[str, int]
         A Dictionnary with token texts as keys and their occurence as value.
+    on_lemma : bool
+        If true the count is made on lemma attribute. By default it is made on the text attribute. 
 
     Returns
     -------
     bool
         Wether the token text occurence is above the defined treshold or not.
     """
-    token_occurrence = occurence_counts.get(token.text)
+    if on_lemma:
+        token_occurrence = occurence_counts.get(token.lemma_)
+    else : 
+        token_occurrence = occurence_counts.get(token.text)
     selected = False
     if token_occurrence is not None:
         if token_occurrence > treshold:
@@ -181,7 +187,7 @@ class TokenSelectionPipeline:
         config : configparser.ConfigParser()
              A python config parser object containing the configuration details for the Token Selection Pipeline setup.
         """
-        self.pipeline_config = config['TOKEN_SELECTION_PIPELINE_CONFIG']
+        self.pipeline_config = config
         self.pipeline_name: str = self.pipeline_config['PIPELINE_NAME']
         self.token_selector_names = self.pipeline_config['TOKEN_SELECTOR_NAMES'].strip(
         ).split()
@@ -288,7 +294,7 @@ class TokenSelectionPipeline:
         return token_selectors
 
 
-@spacy.language.Language.factory("token_selector", default_config={"make_spans": False})
+@spacy.language.Language.factory(name="token_selector", default_config={"make_spans": False})
 class TokenSelectorComponent:
     """A Spacy pipeline component setting a custom attribute on the Doc object containing a list of Tokens
         selected using a Token Selection Pipeline object. 
@@ -306,7 +312,7 @@ class TokenSelectorComponent:
             Wether or not to turn selected tokens into a list of spans
     """
 
-    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config_path: str, doc_attribute_name: str, make_spans: bool) -> None:
+    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config: configparser, doc_attribute_name: str, make_spans: bool) -> None:
         """Initialize a TokenSelectorComponent instance.
             Make sure that the Doc object has the custom attribute to use for storing selected tokens.
 
@@ -328,10 +334,7 @@ class TokenSelectorComponent:
         """
         self.make_spans = make_spans
         self.doc_attribute_name = doc_attribute_name
-        config = configparser.ConfigParser()
-        config.read(os.path.join(PROJECT_ROOT_PATH,
-                    token_selection_config_path))
-        self.token_selection_config = config
+        self.token_selection_config = token_selection_config
 
         try:
             self.token_selector_pipeline = TokenSelectionPipeline(

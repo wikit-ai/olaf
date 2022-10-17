@@ -13,7 +13,7 @@ configurations_parser.read(os.path.join(
 
 CORPUS_PATH = configurations_parser["CORPUS_DETAILS"]["CORPUS_PATH"]
 
-SPACY_MODEL = configurations_parser["SPACY_MODEL"]["SPACY_MODEL_NAME"]
+PIPELINE_COMPONENTS = configurations_parser["PIPELINE_COMPONENTS"]
 
 OCCURRENCE_THRESHOLD = float(
     configurations_parser["LEARN2CONSTRUCT"]["OCCURRENCE_THRESHOLD"])
