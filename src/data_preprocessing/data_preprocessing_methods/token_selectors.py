@@ -142,9 +142,9 @@ def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurenc
     token : spacy.tokens.Token
         The Spacy token to test
     treshold : int
-        The treshold below which the Token is not selected 
-    occurence_counts : Dict[str, int]
-        A Dictionnary with token texts as keys and their occurence as value.
+        The occurence treshold below which the Token is not selected 
+    occurence_counts : collections.Counter
+        A Counter dictionnary with token texts as keys and their occurence as value.
     on_lemma : bool
         If true the count is made on lemma attribute. By default it is made on the text attribute. 
 
@@ -154,13 +154,16 @@ def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurenc
         Wether the token text occurence is above the defined treshold or not.
     """
     if on_lemma:
-        token_occurrence = occurence_counts.get(token.lemma_)
+        token_value = token.lemma_  
     else:
-        token_occurrence = occurence_counts.get(token.text)
+        token_value = token.text
+    token_occurrence = occurence_counts.get(token_value)
     selected = False
     if token_occurrence is not None:
         if token_occurrence > treshold:
             selected = True
+    else : 
+        logging_config.logger.warning(f"Token {token_value} was not found in the occurence counter. Please check that it is a wanted behavior.")
     return selected
 
 
@@ -312,7 +315,7 @@ class TokenSelectorComponent:
             Wether or not to turn selected tokens into a list of spans
     """
 
-    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config: Dict[str, Any], doc_attribute_name: str, make_spans: bool) -> None:
+    def __init__(self, nlp: spacy.language.Language, name: str, token_selector_config: Dict[str, Any], doc_attribute_name: str, make_spans: bool) -> None:
         """Initialize a TokenSelectorComponent instance.
             Make sure that the Doc object has the custom attribute to use for storing selected tokens.
 
@@ -324,8 +327,8 @@ class TokenSelectorComponent:
         name : str
             The component name. The attribute naming is enforced by 
             Spacy framework (https://spacy.io/usage/processing-pipelines#custom-components)
-        token_selection_config_path : str
-            The path to the Token Selection Pipeline configuration file. 
+        token_selector_config: Dict[str, Any]
+             A Dictionary containing the Token Selection Pipeline configuration details.
         doc_attribute_name : str
             The name to use for the custom attribute on the Doc object containing a list of Tokens
             selected
@@ -334,14 +337,14 @@ class TokenSelectorComponent:
         """
         self.make_spans = make_spans
         self.doc_attribute_name = doc_attribute_name
-        self.token_selection_config = token_selection_config
+        self.token_selector_config = token_selector_config
 
         try:
             self.token_selector_pipeline = TokenSelectionPipeline(
-                self.token_selection_config)
+                self.token_selector_config)
         except Exception as e:
             logging_config.logger.error(
-                f"There has been an issue while building TokenSelectionPipeline from token_selection_config {self.token_selection_config}. Trace : {e}")
+                f"There has been an issue while building TokenSelectionPipeline from token_selection_config {self.token_selector_config}. Trace : {e}")
         else:
             logging_config.logger.info(
                 f"TokenSelectionPipeline linked to custom Doc Spacy attribute {self.doc_attribute_name} instance created ")

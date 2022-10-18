@@ -22,11 +22,47 @@ class Term_Extraction():
         self.corpus = corpus
 
     def c_value_term_extraction(self, tokenSequences_doc_attribute_name: str, max_size_gram: int) -> Cvalue:
+        """Computes the C-value score for candidate terms attached to the Doc by the custom 
+            attribute named tokenSequences_doc_attribute_name.
+
+        Parameters
+        ----------
+        tokenSequences_doc_attribute_name : str
+            The name of the custom attribute storing the Document parts to consider for the C-value computation.
+        max_size_gram : int
+            The maximum number of words a candidate term can have.
+
+        Returns
+        -------
+        Cvalue
+            The class containing the c-value scores.
+        """
         self.c_value = Cvalue(
             self.corpus, tokenSequences_doc_attribute_name, max_size_gram)
         return self.c_value
 
-    def on_pos_token_filtering(self, on_lemma:bool = False) -> List[str]:
+    def _get_doc(self,use_selected_token: bool,doc: spacy.tokens.doc.Doc) :
+        """Get the doc content of interest for the term extraction process.
+        The term extraction can be performed on either the raw source documents or selected parts of each document.
+
+
+        Parameters
+        ----------
+        use_selected_token : bool
+            True if spacy model has token selection attribute, false otherwise
+        doc : spacy.tokens.doc.Doc
+            Spacy representation of document
+
+        Returns
+        -------
+        List[spacy.tokens.Token]
+            Attribute of selected tokens if it exists, spacy doc otherwise
+        """
+        if use_selected_token: 
+            return doc._.get(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
+        else : return doc
+
+    def on_pos_term_extraction(self, on_lemma:bool = False) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
 
         Parameters
@@ -40,8 +76,10 @@ class Term_Extraction():
         """
         candidate_pos_terms = []
 
+        use_selected_token = spacy.tokens.Doc.has_extension(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
+
         for doc in self.corpus:
-            for token in doc : 
+            for token in self._get_doc(use_selected_token,doc) : 
                 if select_on_pos(token,core.configurations_parser["TERM_EXTRACTION"]["POS_SELECTION"]):
                     if on_lemma :
                         candidate_pos_terms.append(token.lemma_)
@@ -51,7 +89,7 @@ class Term_Extraction():
 
         return unique_candidates
 
-    def occurence_filtering(self, on_lemma:bool = False) -> List[str]:
+    def on_occurence_term_extraction(self, on_lemma:bool = False) -> List[str]:
         """Return unique candidate terms with occurence higher than a configured threshold.
 
         Parameters
@@ -64,9 +102,10 @@ class Term_Extraction():
         List[str]
             List of unique validated terms.
         """
-        candidate_terms = [token for doc in self.corpus for token in doc]
+        use_selected_token = spacy.tokens.Doc.has_extension(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
+
+        candidate_terms = [token for doc in self.corpus for token in self._get_doc(use_selected_token,doc)]
         candidate_occurence_terms = []
-        count_candidates = {}
 
         if on_lemma:
             terms = [token.lemma_ for token in candidate_terms]
@@ -84,5 +123,3 @@ class Term_Extraction():
         unique_candidates = list(set(candidate_occurence_terms))
         
         return unique_candidates
-
-# term_extraction = Term_Extraction()

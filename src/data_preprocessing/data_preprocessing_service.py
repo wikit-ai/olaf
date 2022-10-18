@@ -48,6 +48,3 @@ class Data_Preprocessing():
             logging_config.logger.info(
                 "File content converted to spacy document.")
         return corpus_preprocessed
-
-
-# data_preprocessing = Data_Preprocessing()
