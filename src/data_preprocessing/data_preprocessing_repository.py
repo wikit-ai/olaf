@@ -40,6 +40,8 @@ def load_json_file(file_path: str, text_field: str) -> List[str]:
     return texts
 
 # TO DISCUSS WITH MATTHIAS : the method can't deal with multi field csv
+
+
 def load_csv_file(file_path: str, separator: str) -> List[str]:
     """Load data from a csv file. The csv file is expected to be a list of text strings
         separated by a separator character. 
@@ -209,22 +211,25 @@ def load_spacy_model() -> spacy.language.Language:
     spacy.language.Language
         Language model loaded.
     """
-    try : 
+    try:
         spacy_model = spacy.load(core.PIPELINE_COMPONENTS['BASE_PIPELINE'])
 
     except Exception as _e:
         spacy_model = None
-        logging_config.logger.error("Could not load spacy model. Trace : %s", _e)
+        logging_config.logger.error(
+            "Could not load spacy model. Trace : %s", _e)
     else:
         logging_config.logger.info("Spacy model has been loaded.")
-    
-    
-    extra_component_names = core.PIPELINE_COMPONENTS['EXTRA_COMPONENTS'].strip().split()
+
+    extra_component_names = core.PIPELINE_COMPONENTS['EXTRA_COMPONENTS'].strip(
+    ).split()
     for component_name in extra_component_names:
-        component_config_section = component_name.upper() + '_config'.upper()
-        spacy_model.add_pipe(name="token_selector", last=True, config={
-            "token_selection_config": core.configurations_parser[component_config_section],
-            "doc_attribute_name": core.configurations_parser[component_config_section]['DOC_ATTRIBUTE_NAME']
+        if component_name == "token_selector":
+            component_config_section = component_name.upper() + '_component_config'.upper()
+            spacy_model.add_pipe(factory_name="token_selector", last=True, config={
+                "make_spans": bool(core.configurations_parser[component_config_section]['make_spans']),
+                "token_selection_config": dict(core.configurations_parser[component_config_section]),
+                "doc_attribute_name": core.configurations_parser[component_config_section]['DOC_ATTRIBUTE_NAME']
             })
 
     return spacy_model

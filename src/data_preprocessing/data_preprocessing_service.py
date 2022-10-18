@@ -8,7 +8,6 @@ import spacy.tokens.span
 import spacy.language
 
 from data_preprocessing.data_preprocessing_repository import load_corpus, load_spacy_model
-from data_preprocessing_methods.token_selectors import TokenSelectorComponent
 import config.logging_config as logging_config
 from config.core import configurations_parser
 
@@ -28,7 +27,7 @@ class Data_Preprocessing():
         corpus = load_corpus()
         self.corpus = self._get_document_representation(corpus)
 
-    def _get_document_representation(self,corpus: List[str]) -> List[spacy.tokens.doc.Doc]:
+    def _get_document_representation(self, corpus: List[str]) -> List[spacy.tokens.doc.Doc]:
         """Convert text to spacy document representation.
 
         Returns

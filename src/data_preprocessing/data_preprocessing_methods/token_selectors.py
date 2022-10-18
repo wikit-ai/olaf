@@ -1,7 +1,7 @@
 import configparser
 import functools
 import inspect
-from typing import Dict, List
+from typing import Any, Dict, List
 import os.path
 import collections
 
@@ -134,7 +134,7 @@ def filter_url(token: spacy.tokens.Token) -> bool:
     return not (token.like_url)
 
 
-def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurence_counts: collections.Counter, on_lemma: bool =False) -> bool:
+def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurence_counts: collections.Counter, on_lemma: bool = False) -> bool:
     """Return true if the Spacy Token Text has an occurence above a defined treshold.
 
     Parameters
@@ -155,7 +155,7 @@ def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurenc
     """
     if on_lemma:
         token_occurrence = occurence_counts.get(token.lemma_)
-    else : 
+    else:
         token_occurrence = occurence_counts.get(token.text)
     selected = False
     if token_occurrence is not None:
@@ -188,8 +188,8 @@ class TokenSelectionPipeline:
              A python config parser object containing the configuration details for the Token Selection Pipeline setup.
         """
         self.pipeline_config = config
-        self.pipeline_name: str = self.pipeline_config['PIPELINE_NAME']
-        self.token_selector_names = self.pipeline_config['TOKEN_SELECTOR_NAMES'].strip(
+        self.pipeline_name: str = self.pipeline_config['pipeline_name']
+        self.token_selector_names = self.pipeline_config['token_selector_names'].strip(
         ).split()
         self.token_selectors: List[TokenSelector] = self._load_selectors_from_config(
         )
@@ -312,7 +312,7 @@ class TokenSelectorComponent:
             Wether or not to turn selected tokens into a list of spans
     """
 
-    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config: configparser, doc_attribute_name: str, make_spans: bool) -> None:
+    def __init__(self, nlp: spacy.language.Language, name: str, token_selection_config: Dict[str, Any], doc_attribute_name: str, make_spans: bool) -> None:
         """Initialize a TokenSelectorComponent instance.
             Make sure that the Doc object has the custom attribute to use for storing selected tokens.
 

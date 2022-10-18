@@ -13,7 +13,7 @@ def main() -> None:
 
     term_extraction = Term_Extraction(data_prep.corpus)
 
-    term_extraction.c_value_term_extraction("c_value_token_sequences", 5)
+    term_extraction.c_value_term_extraction("selected_tokens", 5)
 
     c_values = term_extraction.c_value()
 
