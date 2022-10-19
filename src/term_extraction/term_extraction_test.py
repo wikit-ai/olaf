@@ -54,7 +54,7 @@ class TestCvalue(unittest.TestCase):
         my_c_val = Cvalue(
             corpus=corpus, tokenSequences_doc_attribute_name=self.doc_attribute_name, max_size_gram=5)
 
-        # we manually set the candidate terms and their frequences otherwise the process considers all
+        # we manually set the candidate terms and their occurencies otherwise the process considers all
         # the ngrams extracted from the terms. This is not done like this in the paper.
         my_c_val.candidateTermsSpans = test_terms_spans
         my_c_val.candidateTermsCounter = test_terms_counter

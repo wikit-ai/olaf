@@ -13,7 +13,7 @@ from data_preprocessing.data_preprocessing_schema import FileTypeDetailsNotFound
 
 # to make sure the methods are registered inthe spacy registry
 import data_preprocessing.data_preprocessing_methods.token_selectors
-import data_preprocessing.data_preprocessing_methods.tokenizers
+from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectorComponent
 
 
 def load_json_file(file_path: str, text_field: str) -> List[str]:
@@ -33,11 +33,13 @@ def load_json_file(file_path: str, text_field: str) -> List[str]:
         The list of text strings.
     """
     with open(file_path, "r", encoding='utf-8') as file:
-        file_content = json.load(file)
+        file_content = json.load(file)    
 
     texts = [content[text_field] for content in file_content]
 
     return texts
+
+# TO DISCUSS WITH MATTHIAS : the method can't deal with multi field csv
 
 
 def load_csv_file(file_path: str, separator: str) -> List[str]:
@@ -131,7 +133,7 @@ def load_corpus() -> List[str]:
                     if filename.split('.')[-1] == "json":
                         if "json_field" in core.configurations_parser["CORPUS_DETAILS"]:
                             json_field = core.configurations_parser["CORPUS_DETAILS"]["json_field"]
-                            texts = load_json_file(file_path=file_path,
+                            texts += load_json_file(file_path=file_path,
                                                    text_field=json_field)
                         else:
                             raise FileTypeDetailsNotFound(
@@ -140,14 +142,14 @@ def load_corpus() -> List[str]:
                     if filename.split('.')[-1] == "csv":
                         if "csv_separator" in core.configurations_parser["CORPUS_DETAILS"]:
                             csv_separator = core.configurations_parser["CORPUS_DETAILS"]["csv_separator"]
-                            texts = load_csv_file(file_path=file_path,
+                            texts += load_csv_file(file_path=file_path,
                                                   separator=csv_separator)
                         else:
                             raise FileTypeDetailsNotFound(
                                 f"Error while loading file {filename}, CSV separator not found in config while loading corpus from folder {core.CORPUS_PATH}")
 
                     if filename.split('.')[-1] == "txt":
-                        texts = load_text_file(file_path=file_path)
+                        texts.append(load_text_file(file_path=file_path))
 
                 except Exception as e:
                     logging_config.logger.error(
@@ -210,16 +212,28 @@ def load_spacy_model() -> spacy.language.Language:
         Language model loaded.
     """
     try:
-        if os.path.isdir(os.path.join(core.SPACY_PIPELINE_PATH, core.SPACY_MODEL)):
-            spacy_model = spacy.load(os.path.join(
-                core.SPACY_PIPELINE_PATH, core.SPACY_MODEL))
-        else:
-            spacy_model = spacy.load(core.SPACY_MODEL)
+        spacy_model = spacy.load(core.PIPELINE_COMPONENTS['BASE_PIPELINE'])
+
     except Exception as _e:
         spacy_model = None
         logging_config.logger.error(
             "Could not load spacy model. Trace : %s", _e)
     else:
         logging_config.logger.info("Spacy model has been loaded.")
+
+    extra_component_names = core.PIPELINE_COMPONENTS['EXTRA_COMPONENTS'].strip().split()
+    for component_name in extra_component_names:
+        if component_name == "token_selector":
+            try : 
+                component_config_section = component_name.upper() + '_component_config'.upper()
+                spacy_model.add_pipe(factory_name="token_selector", last=True, config={
+                    "make_spans": core.configurations_parser[component_config_section]['make_spans'] == 'True',
+                    "token_selector_config": dict(core.configurations_parser[component_config_section]),
+                    "doc_attribute_name": core.configurations_parser[component_config_section]['DOC_ATTRIBUTE_NAME']
+                })
+            except Exception as _e:
+                logging_config.logger.error("Could not add custom %s component to the pipeline. Trace : %s", component_name, _e)
+            else:
+                logging_config.logger.info("Component %s has been added to the pipeline.", component_name)
 
     return spacy_model

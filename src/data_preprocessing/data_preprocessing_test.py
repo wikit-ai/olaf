@@ -1,12 +1,13 @@
 import os.path
 import re
 import unittest
+import configparser
 
 import spacy
 from commons.spacy_processing_tools import build_spans_from_tokens
 from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline
 
-from data_preprocessing.data_preprocessing_service import Data_Preprocessing, extract_text_sequences_from_corpus
+from data_preprocessing.data_preprocessing_service import Data_Preprocessing
 from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
 from config.core import CONFIG_PATH
 from config.logging_config import logger
@@ -89,9 +90,12 @@ class TestDataPreprocessing(unittest.TestCase):
             'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
         self.spacy_model.tokenizer = create_no_split_on_dash_in_words_tokenizer()(self.spacy_model)
 
+        configurations_parser = configparser.ConfigParser()
+        configurations_parser.read(os.path.join(
+            CONFIG_PATH, "token_selector_config4test.ini"))
         self.doc_attribute_name = "selected_tokens_4_test"
         self.spacy_model.add_pipe("token_selector", last=True, config={
-            "token_selection_config_path": os.path.join(CONFIG_PATH, "token_selector_config4test.ini"),
+            "token_selection_config": {"PIPELINE_NAME": "test_pipeline", "TOKEN_SELECTOR_NAMES": "filter_punct filter_num filter_url"},
             "doc_attribute_name": self.doc_attribute_name
         })
 
@@ -131,7 +135,7 @@ class TestDataPreprocessing(unittest.TestCase):
         span_attribute_name = self.doc_attribute_name + "_span"
         self.spacy_model.replace_pipe("token_selector", "token_selector", config={
             "make_spans": True,
-            "token_selection_config_path": os.path.join(CONFIG_PATH, "token_selector_config4test.ini"),
+            "token_selection_config": {"PIPELINE_NAME": "test_pipeline", "TOKEN_SELECTOR_NAMES": "filter_punct filter_num filter_url"},
             "doc_attribute_name": span_attribute_name
         })
 
@@ -141,12 +145,8 @@ class TestDataPreprocessing(unittest.TestCase):
         self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
 
     def test_load_selectors_from_config(self) -> None:
-        token_select_pipeline_config = {
-            "TOKEN_SELECTION_PIPELINE_CONFIG": {
-                "PIPELINE_NAME": "Test TokenSelectionPipeline",
-                "TOKEN_SELECTOR_NAMES": "not_exist_token_selector select_on_pos filter_punct filter_num filter_url"
-            }
-        }
+        token_select_pipeline_config = {"PIPELINE_NAME": "test_pipeline",
+                                        "TOKEN_SELECTOR_NAMES": "not_exist_token_selector select_on_pos filter_punct filter_num filter_url"}
 
         test_token_select_pipeline = TokenSelectionPipeline(
             token_select_pipeline_config)
@@ -158,7 +158,7 @@ class TestDataPreprocessing(unittest.TestCase):
                 " ".join(cm.output), re.compile("not_exist_token_selector token selector not found"))
 
         with self.assertLogs(logger, level='ERROR') as cm:
-            token_select_pipeline_config["TOKEN_SELECTION_PIPELINE_CONFIG"][
+            token_select_pipeline_config[
                 "TOKEN_SELECTOR_NAMES"] = "select_on_pos filter_punct filter_num filter_url"
             test_token_select_pipeline = TokenSelectionPipeline(
                 token_select_pipeline_config)
@@ -166,20 +166,13 @@ class TestDataPreprocessing(unittest.TestCase):
                 " ".join(cm.output), re.compile("Parameter pos_to_select for token selector select_on_pos not found in pipeline config"))
 
         with self.assertLogs(logger, level='INFO') as cm:
-            token_select_pipeline_config["TOKEN_SELECTION_PIPELINE_CONFIG"]["pos_to_select"] = "NOUN VERB"
+            token_select_pipeline_config["pos_to_select"] = "NOUN VERB"
             test_token_select_pipeline = TokenSelectionPipeline(
                 token_select_pipeline_config)
             self.assertRegex(
-                " ".join(cm.output), re.compile("Token selectors loaded for pipeline Test TokenSelectionPipeline"))
+                " ".join(cm.output), re.compile("Token selectors loaded for pipeline test_pipeline"))
 
         self.assertEqual(len(test_token_select_pipeline.token_selectors), 4)
-
-    def test_extract_text_sequences_from_corpus(self) -> None:
-        for idx, doc in enumerate([self.spacy_model(e[0]) for e in self.texts_and_sequences2extract]):
-            selected_sequences = [
-                span.text for span in extract_text_sequences_from_corpus([doc])]
-            self.assertEqual(selected_sequences,
-                             self.texts_and_sequences2extract[idx][1])
 
 
 if __name__ == '__main__':
