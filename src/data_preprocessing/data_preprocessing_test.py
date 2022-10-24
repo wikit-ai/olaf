@@ -89,14 +89,17 @@ class TestDataPreprocessing(unittest.TestCase):
         self.spacy_model = spacy.load("en_core_web_sm", exclude=[
             'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
         self.spacy_model.tokenizer = create_no_split_on_dash_in_words_tokenizer()(self.spacy_model)
-
-        configurations_parser = configparser.ConfigParser()
-        configurations_parser.read(os.path.join(
-            CONFIG_PATH, "token_selector_config4test.ini"))
         self.doc_attribute_name = "selected_tokens_4_test"
         self.spacy_model.add_pipe("token_selector", last=True, config={
-            "token_selection_config": {"PIPELINE_NAME": "test_pipeline", "TOKEN_SELECTOR_NAMES": "filter_punct filter_num filter_url"},
-            "doc_attribute_name": self.doc_attribute_name
+            "token_selector_config": {
+                "pipeline_name": "test_pipeline", 
+                "token_selector_names": ["filter_punct", "filter_num", "filter_url"],
+                "doc_attribute_name": self.doc_attribute_name,
+                'make_spans':False,
+                "select_on_pos": {
+                    "pos_to_select":["NOUN"]
+                    }
+                }
         })
 
     def test_no_split_on_dash_in_words_tokenizer(self) -> None:
@@ -134,19 +137,22 @@ class TestDataPreprocessing(unittest.TestCase):
 
         span_attribute_name = self.doc_attribute_name + "_span"
         self.spacy_model.replace_pipe("token_selector", "token_selector", config={
-            "make_spans": True,
-            "token_selection_config": {"PIPELINE_NAME": "test_pipeline", "TOKEN_SELECTOR_NAMES": "filter_punct filter_num filter_url"},
-            "doc_attribute_name": span_attribute_name
+            "token_selector_config": {
+                "make_spans": True,
+                "pipeline_name": "test_pipeline", 
+                "token_selector_names": ["filter_punct", "filter_num", "filter_url"],
+                "doc_attribute_name": span_attribute_name
+            }
         })
-
         doc = self.spacy_model(txt)
         selected_spans = doc._.get(span_attribute_name)
         selected_span_texts = [span.text for span in selected_spans]
         self.assertListEqual(spans_text_to_be_extracted, selected_span_texts)
 
     def test_load_selectors_from_config(self) -> None:
-        token_select_pipeline_config = {"PIPELINE_NAME": "test_pipeline",
-                                        "TOKEN_SELECTOR_NAMES": "not_exist_token_selector select_on_pos filter_punct filter_num filter_url"}
+        token_select_pipeline_config = {"pipeline_name": "test_pipeline",
+                                    "token_selector_names": ["not_exist_token_selector", "select_on_pos", "filter_punct", "filter_num", "filter_url"],
+                                    "select_on_pos":{}}
 
         test_token_select_pipeline = TokenSelectionPipeline(
             token_select_pipeline_config)
@@ -159,14 +165,14 @@ class TestDataPreprocessing(unittest.TestCase):
 
         with self.assertLogs(logger, level='ERROR') as cm:
             token_select_pipeline_config[
-                "TOKEN_SELECTOR_NAMES"] = "select_on_pos filter_punct filter_num filter_url"
+                "token_selector_names"] = ["select_on_pos", "filter_punct", "filter_num", "filter_url"]
             test_token_select_pipeline = TokenSelectionPipeline(
                 token_select_pipeline_config)
             self.assertRegex(
                 " ".join(cm.output), re.compile("Parameter pos_to_select for token selector select_on_pos not found in pipeline config"))
 
         with self.assertLogs(logger, level='INFO') as cm:
-            token_select_pipeline_config["pos_to_select"] = "NOUN VERB"
+            token_select_pipeline_config["select_on_pos"] = {"pos_to_select": ["NOUN", "VERB"]}
             test_token_select_pipeline = TokenSelectionPipeline(
                 token_select_pipeline_config)
             self.assertRegex(
