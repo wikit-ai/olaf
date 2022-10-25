@@ -6,7 +6,7 @@ import spacy.tokens
 import spacy.tokenizer
 import spacy.language
 
-from config import core
+from config.core import config
 import config.logging_config as logging_config
 from term_extraction.term_extraction_methods.c_value import Cvalue
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurence_count
@@ -54,13 +54,11 @@ class Term_Extraction():
 
     def _get_doc(self, use_selected_token: bool, doc: spacy.tokens.doc.Doc):
         """Get the doc content of interest for the term extraction process.
-        The term extraction can be performed on either the raw source documents or selected parts of each document.
+        The term extraction can be performed on either the raw source documents or selected parts of each document after token selection process.
 
 
         Parameters
         ----------
-        use_selected_token : bool
-            True if spacy model has token selection attribute, false otherwise
         doc : spacy.tokens.doc.Doc
             Spacy representation of document
 
@@ -69,18 +67,14 @@ class Term_Extraction():
         List[spacy.tokens.Token]
             Attribute of selected tokens if it exists, spacy doc otherwise
         """
-        if use_selected_token:
-            return doc._.get(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
+        if config['term_extraction']['tokens_attribute']:
+            return doc._.get(config['term_extraction']['tokens_attribute'])
         else:
             return doc
 
-    def on_pos_term_extraction(self, on_lemma: bool = False) -> List[str]:
+    def on_pos_term_extraction(self) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
 
-        Parameters
-        ----------
-        on_lemma : bool
-            If true, the output is the lemma of token. By defaut, the output is the text.
         Returns
         -------
         List[str]
@@ -88,13 +82,10 @@ class Term_Extraction():
         """
         candidate_pos_terms = []
 
-        use_selected_token = spacy.tokens.Doc.has_extension(
-            core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
-
         for doc in self.corpus:
-            for token in self._get_doc(use_selected_token, doc):
-                if select_on_pos(token, core.configurations_parser["TERM_EXTRACTION"]["POS_SELECTION"]):
-                    if on_lemma:
+            for token in self._get_doc(doc):
+                if select_on_pos(token, config['term_extraction']['on_pos']['pos_selection']):
+                    if config['term_extraction']['on_pos']['use_lemma']:
                         candidate_pos_terms.append(token.lemma_)
                     else:
                         candidate_pos_terms.append(token.text)
@@ -102,35 +93,30 @@ class Term_Extraction():
 
         return unique_candidates
 
-    def on_occurence_term_extraction(self, on_lemma: bool = False) -> List[str]:
+    def on_occurence_term_extraction(self) -> List[str]:
         """Return unique candidate terms with occurence higher than a configured threshold.
-
-        Parameters
-        ----------
-        on_lemma : bool
-            If true the count is made on lemma attribute. By default it is made on the text attribute.
 
         Returns
         -------
         List[str]
             List of unique validated terms.
         """
-        use_selected_token = spacy.tokens.Doc.has_extension(
-            core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
-
-        candidate_terms = [token for doc in self.corpus for token in self._get_doc(
-            use_selected_token, doc)]
+        candidate_terms = [
+            token for doc in self.corpus for token in self._get_doc(doc)]
         candidate_occurence_terms = []
 
-        if on_lemma:
+        on_lemma = False
+
+        if config['term_extraction']['on_occurence']['use_lemma']:
             terms = [token.lemma_ for token in candidate_terms]
+            on_lemma = True
         else:
             terms = [token.text for token in candidate_terms]
 
         occurences = Counter(terms)
 
         for token in candidate_terms:
-            if select_on_occurence_count(token, core.OCCURRENCE_THRESHOLD, occurences, on_lemma):
+            if select_on_occurence_count(token, config['term_extraction']['on_occurence']['occurence_threshold'], occurences, on_lemma):
                 if on_lemma:
                     candidate_occurence_terms.append(token.lemma_)
                 else:

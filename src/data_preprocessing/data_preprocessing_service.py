@@ -9,7 +9,6 @@ import spacy.language
 
 from data_preprocessing.data_preprocessing_repository import load_corpus, load_spacy_model
 import config.logging_config as logging_config
-from config.core import configurations_parser
 
 
 class Data_Preprocessing():

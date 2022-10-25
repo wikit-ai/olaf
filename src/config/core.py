@@ -1,21 +1,9 @@
-import configparser
+from confection import registry, Config
 import os
+# import configparser
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__))
 PROJECT_ROOT_PATH = os.path.join(os.path.dirname(__file__), '..', '..')
 DATA_PATH = os.path.join(PROJECT_ROOT_PATH, 'data')
-SPACY_PIPELINE_PATH = os.path.join(DATA_PATH, "spacy_pipelines")
 
-
-configurations_parser = configparser.ConfigParser()
-configurations_parser.read(os.path.join(
-    CONFIG_PATH + '/core.ini'))
-
-CORPUS_PATH = configurations_parser["CORPUS_DETAILS"]["CORPUS_PATH"]
-
-PIPELINE_COMPONENTS = configurations_parser["PIPELINE_COMPONENTS"]
-
-OCCURRENCE_THRESHOLD = float(
-    configurations_parser["LEARN2CONSTRUCT"]["OCCURRENCE_THRESHOLD"])
-
-TOPIC_NUMBER = int(configurations_parser["LEARN2CONSTRUCT"]["TOPIC_NUMBER"])
+config = Config().from_disk(os.path.join(CONFIG_PATH,"config.cfg"))
