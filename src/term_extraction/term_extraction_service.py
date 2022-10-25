@@ -9,7 +9,7 @@ import spacy.language
 from config import core
 import config.logging_config as logging_config
 from term_extraction.term_extraction_methods.c_value import Cvalue
-from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos,select_on_occurence_count
+from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurence_count
 
 
 class Term_Extraction():
@@ -20,9 +20,10 @@ class Term_Extraction():
 
     def __init__(self, corpus: List[spacy.tokens.doc.Doc]) -> None:
         self.corpus = corpus
+        self.c_value = None
 
-    def c_value_term_extraction(self, tokenSequences_doc_attribute_name: str, max_size_gram: int) -> Cvalue:
-        """Computes the C-value score for candidate terms attached to the Doc by the custom 
+    def compute_c_value(self, tokenSequences_doc_attribute_name: str, max_size_gram: int) -> None:
+        """Computes the C-value score for candidate terms attached to the Doc by the custom
             attribute named tokenSequences_doc_attribute_name.
 
         Parameters
@@ -39,9 +40,19 @@ class Term_Extraction():
         """
         self.c_value = Cvalue(
             self.corpus, tokenSequences_doc_attribute_name, max_size_gram)
-        return self.c_value
 
-    def _get_doc(self,use_selected_token: bool,doc: spacy.tokens.doc.Doc) :
+    def c_value_term_extraction(self, treshold: float = 0.0) -> List[str]:
+
+        candidate_terms = []
+
+        if self.c_value is not None:
+            candidate_terms = [
+                c_val.candidate_term for c_val in self.c_value if c_val.c_value >= treshold
+            ]
+
+        return candidate_terms
+
+    def _get_doc(self, use_selected_token: bool, doc: spacy.tokens.doc.Doc):
         """Get the doc content of interest for the term extraction process.
         The term extraction can be performed on either the raw source documents or selected parts of each document.
 
@@ -58,11 +69,12 @@ class Term_Extraction():
         List[spacy.tokens.Token]
             Attribute of selected tokens if it exists, spacy doc otherwise
         """
-        if use_selected_token: 
+        if use_selected_token:
             return doc._.get(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
-        else : return doc
+        else:
+            return doc
 
-    def on_pos_term_extraction(self, on_lemma:bool = False) -> List[str]:
+    def on_pos_term_extraction(self, on_lemma: bool = False) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
 
         Parameters
@@ -76,20 +88,21 @@ class Term_Extraction():
         """
         candidate_pos_terms = []
 
-        use_selected_token = spacy.tokens.Doc.has_extension(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
+        use_selected_token = spacy.tokens.Doc.has_extension(
+            core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
 
         for doc in self.corpus:
-            for token in self._get_doc(use_selected_token,doc) : 
-                if select_on_pos(token,core.configurations_parser["TERM_EXTRACTION"]["POS_SELECTION"]):
-                    if on_lemma :
+            for token in self._get_doc(use_selected_token, doc):
+                if select_on_pos(token, core.configurations_parser["TERM_EXTRACTION"]["POS_SELECTION"]):
+                    if on_lemma:
                         candidate_pos_terms.append(token.lemma_)
-                    else : 
+                    else:
                         candidate_pos_terms.append(token.text)
         unique_candidates = list(set(candidate_pos_terms))
 
         return unique_candidates
 
-    def on_occurence_term_extraction(self, on_lemma:bool = False) -> List[str]:
+    def on_occurence_term_extraction(self, on_lemma: bool = False) -> List[str]:
         """Return unique candidate terms with occurence higher than a configured threshold.
 
         Parameters
@@ -102,24 +115,26 @@ class Term_Extraction():
         List[str]
             List of unique validated terms.
         """
-        use_selected_token = spacy.tokens.Doc.has_extension(core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
+        use_selected_token = spacy.tokens.Doc.has_extension(
+            core.configurations_parser["TOKEN_SELECTOR_COMPONENT_CONFIG"]["doc_attribute_name"])
 
-        candidate_terms = [token for doc in self.corpus for token in self._get_doc(use_selected_token,doc)]
+        candidate_terms = [token for doc in self.corpus for token in self._get_doc(
+            use_selected_token, doc)]
         candidate_occurence_terms = []
 
         if on_lemma:
             terms = [token.lemma_ for token in candidate_terms]
-        else : 
+        else:
             terms = [token.text for token in candidate_terms]
-        
+
         occurences = Counter(terms)
 
-        for token in candidate_terms : 
-            if select_on_occurence_count(token,core.OCCURRENCE_THRESHOLD,occurences,on_lemma):
-                if on_lemma :
+        for token in candidate_terms:
+            if select_on_occurence_count(token, core.OCCURRENCE_THRESHOLD, occurences, on_lemma):
+                if on_lemma:
                     candidate_occurence_terms.append(token.lemma_)
-                else : 
+                else:
                     candidate_occurence_terms.append(token.text)
         unique_candidates = list(set(candidate_occurence_terms))
-        
+
         return unique_candidates
