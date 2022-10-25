@@ -334,10 +334,10 @@ class TokenSelectorComponent:
         make_spans : bool
             Wether or not to turn selected tokens into a list of spans
         """
-        self.make_spans = token_selector_config['make_spans']
-        self.doc_attribute_name = token_selector_config['doc_attribute_name']
         self.token_selector_config = token_selector_config
-
+        self.make_spans = self.token_selector_config['make_spans']
+        self.doc_attribute_name = self.token_selector_config['doc_attribute_name']
+        
         try:
             self.token_selector_pipeline = TokenSelectionPipeline(
                 self.token_selector_config)

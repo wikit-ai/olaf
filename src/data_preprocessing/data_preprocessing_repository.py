@@ -225,7 +225,7 @@ def load_spacy_model() -> spacy.language.Language:
     else:
         logging_config.logger.info("Spacy model has been loaded.")
 
-    extra_component_names = config['data_preprocessing']['extra_component']
+    extra_component_names = config['data_preprocessing']['extra_components']
     for component_name in extra_component_names:
         if component_name == "token_selector":
             try : 

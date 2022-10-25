@@ -64,10 +64,6 @@ class Term_Extraction():
     def on_pos_term_extraction(self) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
 
-        Parameters
-        ----------
-        on_lemma : bool
-            If true, the output is the lemma of token. By defaut, the output is the text.
         Returns
         -------
         List[str]
@@ -78,7 +74,7 @@ class Term_Extraction():
         for doc in self.corpus:
             for token in self._get_doc(doc) : 
                 if select_on_pos(token,config['term_extraction']['on_pos']['pos_selection']):
-                    if config['term_extraction']['use_lemma']['use_lemma'] :
+                    if config['term_extraction']['on_pos']['use_lemma']:
                         candidate_pos_terms.append(token.lemma_)
                     else : 
                         candidate_pos_terms.append(token.text)
@@ -99,7 +95,7 @@ class Term_Extraction():
 
         on_lemma = False
 
-        if config['term_extraction']['use_lemma']['use_lemma']:
+        if config['term_extraction']['on_occurence']['use_lemma']:
             terms = [token.lemma_ for token in candidate_terms]
             on_lemma = True
         else : 

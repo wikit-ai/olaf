@@ -1,17 +1,17 @@
-import re
 from data_preprocessing.data_preprocessing_service import Data_Preprocessing
 from term_extraction.term_extraction_service import Term_Extraction
-# from relation_extraction.relation_extraction_service import relation_extraction
 
-# ----------Corpus preprocessing--------------------
-data_preprocessing = Data_Preprocessing()
-data_preprocessing._set_corpus()
-print(data_preprocessing.corpus[0])
+def main() -> None:
 
-# -----------Term extraction------------------------
+    data_prep = Data_Preprocessing()
+    data_prep._set_corpus()
 
-term_extraction = Term_Extraction(data_preprocessing.corpus)
-pos_candidate_terms = term_extraction.on_pos_term_extraction(on_lemma=True)
-occurence_candidate_terms = term_extraction.on_occurence_term_extraction(on_lemma=True)
-candidates_terms = list(set(pos_candidate_terms) & set(occurence_candidate_terms))
-print(candidates_terms)
+    term_extraction = Term_Extraction(data_prep.corpus)
+    pos_candidate_terms = term_extraction.on_pos_term_extraction()
+    occurence_candidate_terms = term_extraction.on_occurence_term_extraction()
+    candidates_terms = list(set(pos_candidate_terms) & set(occurence_candidate_terms))
+    print(candidates_terms) 
+
+if __name__ == "__main__":
+    main()
+

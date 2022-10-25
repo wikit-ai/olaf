@@ -102,6 +102,11 @@ class TestDataPreprocessing(unittest.TestCase):
                 }
         })
 
+    def test_extension_set(self) -> None :
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        doc = self.spacy_model(txt)
+        self.assertTrue(doc.has_extension(self.doc_attribute_name))
+
     def test_no_split_on_dash_in_words_tokenizer(self) -> None:
         for idx, doc in enumerate([self.spacy_model(e[0]) for e in self.texts_and_tokens]):
             self.assertEqual([token.text for token in doc],
