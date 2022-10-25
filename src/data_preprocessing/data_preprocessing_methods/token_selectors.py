@@ -182,7 +182,7 @@ class TokenSelectionPipeline:
             A list of strings refering to the token selector functions
     """
 
-    def __init__(self, config: configparser.ConfigParser) -> None:
+    def __init__(self, config: Dict) -> None:
         """Initialize the Token Selection Pipeline
 
         Parameters
@@ -191,9 +191,8 @@ class TokenSelectionPipeline:
              A python config parser object containing the configuration details for the Token Selection Pipeline setup.
         """
         self.pipeline_config = config
-        self.pipeline_name: str = self.pipeline_config['pipeline_name']
-        self.token_selector_names = self.pipeline_config['token_selector_names'].strip(
-        ).split()
+        self.pipeline_name = self.pipeline_config['pipeline_name']
+        self.token_selector_names = self.pipeline_config['token_selector_names']
         self.token_selectors: List[TokenSelector] = self._load_selectors_from_config(
         )
 
@@ -265,7 +264,7 @@ class TokenSelectionPipeline:
                     # setup each extra parameters
                     for param_string in token_selector_params_strings:
                         # try to get the parameter value from the config
-                        param_value_string = self.pipeline_config.get(
+                        param_value_string = self.pipeline_config[token_selector_name].get(
                             param_string)
                         if param_value_string is None:
                             raise TokenSelectorParamNotFound(
@@ -297,7 +296,7 @@ class TokenSelectionPipeline:
         return token_selectors
 
 
-@spacy.language.Language.factory(name="token_selector", default_config={"make_spans": False})
+@spacy.language.Language.factory(name="token_selector")
 class TokenSelectorComponent:
     """A Spacy pipeline component setting a custom attribute on the Doc object containing a list of Tokens
         selected using a Token Selection Pipeline object. 
@@ -315,7 +314,7 @@ class TokenSelectorComponent:
             Wether or not to turn selected tokens into a list of spans
     """
 
-    def __init__(self, nlp: spacy.language.Language, name: str, token_selector_config: Dict[str, Any], doc_attribute_name: str, make_spans: bool) -> None:
+    def __init__(self, nlp: spacy.language.Language, name: str, token_selector_config: Dict[str, Any]) -> None:
         """Initialize a TokenSelectorComponent instance.
             Make sure that the Doc object has the custom attribute to use for storing selected tokens.
 
@@ -335,10 +334,10 @@ class TokenSelectorComponent:
         make_spans : bool
             Wether or not to turn selected tokens into a list of spans
         """
-        self.make_spans = make_spans
-        self.doc_attribute_name = doc_attribute_name
         self.token_selector_config = token_selector_config
-
+        self.make_spans = self.token_selector_config['make_spans']
+        self.doc_attribute_name = self.token_selector_config['doc_attribute_name']
+        
         try:
             self.token_selector_pipeline = TokenSelectionPipeline(
                 self.token_selector_config)
@@ -349,8 +348,8 @@ class TokenSelectorComponent:
             logging_config.logger.info(
                 f"TokenSelectionPipeline linked to custom Doc Spacy attribute {self.doc_attribute_name} instance created ")
 
-        if not spacy.tokens.doc.Doc.has_extension(doc_attribute_name):
-            spacy.tokens.doc.Doc.set_extension(doc_attribute_name, default=[])
+        if not spacy.tokens.doc.Doc.has_extension(self.doc_attribute_name):
+            spacy.tokens.doc.Doc.set_extension(self.doc_attribute_name, default=[])
 
     def __call__(self, doc: spacy.tokens.doc.Doc) -> spacy.tokens.doc.Doc:
         """Process a Spacy Doc object and set the custom attribute with the selected tokens.
