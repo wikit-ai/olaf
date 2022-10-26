@@ -22,35 +22,54 @@ class Term_Extraction():
         self.corpus = corpus
         self.c_value = None
 
-    def compute_c_value(self, tokenSequences_doc_attribute_name: str, max_size_gram: int) -> None:
+    def compute_c_value(self) -> None:
         """Computes the C-value score for candidate terms attached to the Doc by the custom
-            attribute named tokenSequences_doc_attribute_name.
+            attribute named term_extraction.selected_tokens_doc_attribute defined in the configuration file.
+            The CValue instance is attached to the self.c_value attribute.
+            All the parameters are defined in the configuration file.
+        """
+        try:
+            doc_attribute_name = config['term_extraction']['selected_tokens_doc_attribute']
+            max_size_gram = config['term_extraction']['c_value']['max_size_gram']
+        except Exception as e:
+            logging_config.logger.error(
+                f"""Config information missing for C-value. Make sure you provided the configuration fields:
+                    - term_extraction.selected_tokens_doc_attribute
+                    - term_extraction.c_value.max_size_gram
+                    Trace : {e}
+                """)
 
-        Parameters
-        ----------
-        tokenSequences_doc_attribute_name : str
-            The name of the custom attribute storing the Document parts to consider for the C-value computation.
-        max_size_gram : int
-            The maximum number of words a candidate term can have.
+        self.c_value = Cvalue(
+            self.corpus, doc_attribute_name, max_size_gram)
+
+        _ = self.c_value.compute_c_values()
+
+    def c_value_term_extraction(self) -> List[str]:
+        """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 
+        the configuration field term_extraction.c_value.treshold.
 
         Returns
         -------
-        Cvalue
-            The class containing the c-value scores.
+        List[str]
+            The list of validated candidate terms.
         """
-        self.c_value = Cvalue(
-            self.corpus, tokenSequences_doc_attribute_name, max_size_gram)
-
-        c_values = self.c_value.compute_c_values()
-
-    def c_value_term_extraction(self, treshold: float = 0.0) -> List[str]:
-
         candidate_terms = []
 
-        if self.c_value is not None:
-            candidate_terms = [
-                c_val.candidate_term for c_val in self.c_value.c_values if c_val.c_value >= treshold
-            ]
+        try:
+            treshold = config['term_extraction']['c_value']['treshold']
+        except Exception as e:
+            logging_config.logger.error(
+                f"""Config information missing for C-value. Make sure you provided the configuration field:
+                    - term_extraction.c_value.treshold
+                    Trace : {e}
+                """)
+
+        if self.c_value is None:
+            self.compute_c_value()
+
+        candidate_terms = [
+            c_val.candidate_term for c_val in self.c_value.c_values if c_val.c_value >= treshold
+        ]
 
         return candidate_terms
 
@@ -69,8 +88,8 @@ class Term_Extraction():
         List[spacy.tokens.Token]
             Attribute of selected tokens if it exists, spacy doc otherwise
         """
-        if config['term_extraction']['tokens_attribute']:
-            return doc._.get(config['term_extraction']['tokens_attribute'])
+        if config['term_extraction']['selected_tokens_doc_attribute']:
+            return doc._.get(config['term_extraction']['selected_tokens_doc_attribute'])
         else:
             return doc
 
