@@ -41,13 +41,15 @@ class Term_Extraction():
         self.c_value = Cvalue(
             self.corpus, tokenSequences_doc_attribute_name, max_size_gram)
 
+        c_values = self.c_value.compute_c_values()
+
     def c_value_term_extraction(self, treshold: float = 0.0) -> List[str]:
 
         candidate_terms = []
 
         if self.c_value is not None:
             candidate_terms = [
-                c_val.candidate_term for c_val in self.c_value if c_val.c_value >= treshold
+                c_val.candidate_term for c_val in self.c_value.c_values if c_val.c_value >= treshold
             ]
 
         return candidate_terms
