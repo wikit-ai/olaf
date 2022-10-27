@@ -1,15 +1,12 @@
-import os.path
 import re
 import unittest
-import configparser
 
 import spacy
 from commons.spacy_processing_tools import build_spans_from_tokens
 from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline
 
 from data_preprocessing.data_preprocessing_service import Data_Preprocessing
-from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
-from config.core import CONFIG_PATH
+# from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
 from config.logging_config import logger
 
 
@@ -88,21 +85,27 @@ class TestDataPreprocessing(unittest.TestCase):
 
         self.spacy_model = spacy.load("en_core_web_sm", exclude=[
             'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
-        self.spacy_model.tokenizer = create_no_split_on_dash_in_words_tokenizer()(self.spacy_model)
+
+        create_tokenizer = spacy.util.registry.get(
+            "tokenizers", "no_split_on_dash_in_words_tokenizer")
+        custom_tokenizer = create_tokenizer()(self.spacy_model)
+        self.spacy_model.tokenizer = custom_tokenizer
+        # self.spacy_model.tokenizer = create_no_split_on_dash_in_words_tokenizer()(self.spacy_model)
+
         self.doc_attribute_name = "selected_tokens_4_test"
         self.spacy_model.add_pipe("token_selector", last=True, config={
             "token_selector_config": {
-                "pipeline_name": "test_pipeline", 
+                "pipeline_name": "test_pipeline",
                 "token_selector_names": ["filter_punct", "filter_num", "filter_url"],
                 "doc_attribute_name": self.doc_attribute_name,
-                'make_spans':False,
+                'make_spans': False,
                 "select_on_pos": {
-                    "pos_to_select":["NOUN"]
-                    }
+                    "pos_to_select": ["NOUN"]
                 }
+            }
         })
 
-    def test_extension_set(self) -> None :
+    def test_extension_set(self) -> None:
         txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
         doc = self.spacy_model(txt)
         self.assertTrue(doc.has_extension(self.doc_attribute_name))
@@ -144,7 +147,7 @@ class TestDataPreprocessing(unittest.TestCase):
         self.spacy_model.replace_pipe("token_selector", "token_selector", config={
             "token_selector_config": {
                 "make_spans": True,
-                "pipeline_name": "test_pipeline", 
+                "pipeline_name": "test_pipeline",
                 "token_selector_names": ["filter_punct", "filter_num", "filter_url"],
                 "doc_attribute_name": span_attribute_name
             }
@@ -156,8 +159,8 @@ class TestDataPreprocessing(unittest.TestCase):
 
     def test_load_selectors_from_config(self) -> None:
         token_select_pipeline_config = {"pipeline_name": "test_pipeline",
-                                    "token_selector_names": ["not_exist_token_selector", "select_on_pos", "filter_punct", "filter_num", "filter_url"],
-                                    "select_on_pos":{}}
+                                        "token_selector_names": ["not_exist_token_selector", "select_on_pos", "filter_punct", "filter_num", "filter_url"],
+                                        "select_on_pos": {}}
 
         test_token_select_pipeline = TokenSelectionPipeline(
             token_select_pipeline_config)
@@ -177,7 +180,8 @@ class TestDataPreprocessing(unittest.TestCase):
                 " ".join(cm.output), re.compile("Parameter pos_to_select for token selector select_on_pos not found in pipeline config"))
 
         with self.assertLogs(logger, level='INFO') as cm:
-            token_select_pipeline_config["select_on_pos"] = {"pos_to_select": ["NOUN", "VERB"]}
+            token_select_pipeline_config["select_on_pos"] = {
+                "pos_to_select": ["NOUN", "VERB"]}
             test_token_select_pipeline = TokenSelectionPipeline(
                 token_select_pipeline_config)
             self.assertRegex(

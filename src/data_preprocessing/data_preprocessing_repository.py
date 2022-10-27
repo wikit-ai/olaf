@@ -14,11 +14,6 @@ import spacy.util
 
 from data_preprocessing.data_preprocessing_schema import FileTypeDetailsNotFound
 
-# to make sure the methods are registered inthe spacy registry
-import data_preprocessing.data_preprocessing_methods.token_selectors
-import data_preprocessing.data_preprocessing_methods.tokenizers
-from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectorComponent
-
 
 def load_json_file(file_path: str, text_field: str) -> List[str]:
     """Load data from a json file. The json file is expected to be a list of json objects
