@@ -6,16 +6,12 @@ import spacy
 import os.path
 import os
 import pathlib
-from config.core import config
+from config.core import config, DATA_PATH
 import config.logging_config as logging_config
 import spacy.language
 
 
 from data_preprocessing.data_preprocessing_schema import FileTypeDetailsNotFound
-
-# to make sure the methods are registered inthe spacy registry
-import data_preprocessing.data_preprocessing_methods.token_selectors
-from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectorComponent
 
 
 def load_json_file(file_path: str, text_field: str) -> List[str]:
@@ -35,7 +31,7 @@ def load_json_file(file_path: str, text_field: str) -> List[str]:
         The list of text strings.
     """
     with open(file_path, "r", encoding='utf-8') as file:
-        file_content = json.load(file)    
+        file_content = json.load(file)
 
     texts = [content[text_field] for content in file_content]
 
@@ -126,6 +122,9 @@ def load_corpus() -> List[str]:
 
     corpus_path = config['data_preprocessing']['corpus']['corpus_path']
 
+    if not os.path.isabs(corpus_path):
+        corpus_path = os.path.join(DATA_PATH, corpus_path)
+
     if os.path.isdir(corpus_path):
 
         for filename in os.listdir(corpus_path):
@@ -138,7 +137,7 @@ def load_corpus() -> List[str]:
                         if "json_field" in config['data_preprocessing']['corpus']:
                             json_field = config['data_preprocessing']['corpus']["json_field"]
                             texts += load_json_file(file_path=file_path,
-                                                   text_field=json_field)
+                                                    text_field=json_field)
                         else:
                             raise FileTypeDetailsNotFound(
                                 f"Error while loading file {filename}, JSON field not found in config while loading corpus from folder {corpus_path}")
@@ -147,7 +146,7 @@ def load_corpus() -> List[str]:
                         if "csv_separator" in config['data_preprocessing']['corpus']:
                             csv_separator = config['data_preprocessing']['corpus']["csv_separator"]
                             texts += load_csv_file(file_path=file_path,
-                                                  separator=csv_separator)
+                                                   separator=csv_separator)
                         else:
                             raise FileTypeDetailsNotFound(
                                 f"Error while loading file {filename}, CSV separator not found in config while loading corpus from folder {corpus_path}")
@@ -228,13 +227,15 @@ def load_spacy_model() -> spacy.language.Language:
     extra_component_names = config['data_preprocessing']['extra_components']
     for component_name in extra_component_names:
         if component_name == "token_selector":
-            try : 
+            try:
                 spacy_model.add_pipe(factory_name=component_name, last=True, config={
                     "token_selector_config": config['data_preprocessing'][component_name]
                 })
             except Exception as _e:
-                logging_config.logger.error("Could not add custom %s component to the pipeline. Trace : %s", component_name, _e)
+                logging_config.logger.error(
+                    "Could not add custom %s component to the pipeline. Trace : %s", component_name, _e)
             else:
-                logging_config.logger.info("Component %s has been added to the pipeline.", component_name)
+                logging_config.logger.info(
+                    "Component %s has been added to the pipeline.", component_name)
 
     return spacy_model
