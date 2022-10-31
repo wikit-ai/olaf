@@ -86,8 +86,8 @@ class Cvalue:
                     raise DocAttributeNotFound(
                         f"Document custom attribute {self.tokenSequences_doc_attribute_name} not found for document object {doc}")
                 else:
-                    tokenSequences.extend(doc._.get(
-                        self.tokenSequences_doc_attribute_name))
+                    tokenSequences.extend([token_seq for token_seq in doc._.get(
+                        self.tokenSequences_doc_attribute_name) if len(token_seq) > 1])
         except Exception as e:
             logging_config.logger.error(
                 f"Trace : {e}")
@@ -118,7 +118,7 @@ class Cvalue:
             A data container with the strings associated with each candidate term
         """
 
-        for size in range(1, self.max_size_gram + 1):  # for each gram size
+        for size in range(2, self.max_size_gram + 1):  # for each gram size
 
             size_candidate_terms_spans = spacy_span_ngrams(
                 span, size)  # generate ngrams
@@ -148,7 +148,10 @@ class Cvalue:
             The list of candidate terms
         """
         if len(tokenSequence) <= self.max_size_gram:  # token sequence length ok
-            return [tokenSequence]
+            if len(tokenSequence) > 1:
+                return [tokenSequence]
+            else:
+                return []
         else:  # token sequence too long --> generate subsequences and process them
             return [gram for gram in spacy_span_ngrams(tokenSequence, self.max_size_gram)]
 
@@ -217,7 +220,7 @@ class Cvalue:
             The resulting list of ngrams as spacy Spans
         """
         substrings_spans = []
-        for i in range(1, len(term_span)):
+        for i in range(2, len(term_span)):
             # we need ngrams, i.e., all overlapping substrings
             for term_subspan in spacy_span_ngrams(term_span, i):
                 substrings_spans.append(term_subspan)

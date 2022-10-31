@@ -15,7 +15,7 @@ import spacy.tokens.doc
 TokenSelector = Callable[[spacy.tokens.Token], bool]
 
 str2type_processes = {
-    re.Pattern: lambda pattern_str: re.compile(pattern_str),
+    re.Pattern: lambda pattern_str: re.compile("^" + pattern_str + "$"),
     List[str]: lambda l_str: l_str,
     Dict[str, int]: lambda json_str: json.loads(json_str),
     int: lambda int_str: int(int_str)
