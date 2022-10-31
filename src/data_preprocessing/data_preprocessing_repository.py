@@ -9,6 +9,7 @@ import pathlib
 from config.core import config, DATA_PATH
 import config.logging_config as logging_config
 import spacy.language
+import spacy.util
 
 
 from data_preprocessing.data_preprocessing_schema import FileTypeDetailsNotFound
@@ -223,6 +224,21 @@ def load_spacy_model() -> spacy.language.Language:
             "Could not load spacy model. Trace : %s", _e)
     else:
         logging_config.logger.info("Spacy model has been loaded.")
+
+    tokenizer_name = config['data_preprocessing'].get('tokenizer')
+    if (tokenizer_name is not None) or (len(tokenizer_name) > 0):
+        try:
+            create_tokenizer = spacy.util.registry.get(
+                "tokenizers", tokenizer_name)
+            custom_tokenizer = create_tokenizer()(spacy_model)
+        except Exception as _e:
+            logging_config.logger.error(
+                f"Could not load tokenizer named {tokenizer_name} from registry. Trace : {_e}")
+        else:
+            logging_config.logger.info(
+                "Tokenizer {tokenizer_name} has been loaded.")
+
+        spacy_model.tokenizer = custom_tokenizer
 
     extra_component_names = config['data_preprocessing']['extra_components']
     for component_name in extra_component_names:

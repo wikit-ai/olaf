@@ -1,5 +1,4 @@
-import re
-from typing import Iterable, List
+from typing import List
 
 import spacy
 import spacy.tokens.doc
