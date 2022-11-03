@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Set
 import os.path
 
 from term_enrichment.term_enrichment_schema import CandidateTerm
@@ -38,3 +38,19 @@ def load_wordnet_domains() -> Dict[str, List[str]]:
         domains_map[ssid] = domains.split(" ")
 
     return domains_map
+
+
+def load_enrichment_wordnet_domains_from_file() -> Set[str]:
+    domain_file_path = config['term_enrichment']['wordnet'].get(
+        'enrichment_domains_file')
+
+    if not os.path.isabs(domain_file_path):
+        domain_file_path = os.path.join(
+            DATA_PATH, domain_file_path)
+
+    enrichment_domains = set()
+
+    for line in open(domain_file_path, "r", encoding="utf8"):
+        enrichment_domains.add(line.strip())
+
+    return enrichment_domains
