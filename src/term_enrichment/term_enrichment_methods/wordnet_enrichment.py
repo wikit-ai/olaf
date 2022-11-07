@@ -5,7 +5,7 @@ from nltk.corpus.reader.wordnet import (
     ADV as WN_ADV,
     NOUN as WN_NOUN,
     VERB as WN_VERB,
-    Synset,
+    Synset, Lemma
 )
 
 from term_enrichment.term_enrichment_schema import CandidateTerm
@@ -76,6 +76,14 @@ def fetch_wordnet_lang(lang: Optional[str] = None) -> str:
     return language
 
 
+def termStr2wordnetStr(term_text: str) -> str:
+    return "_".join(term_text.split())
+
+
+def wordnetStr2termStr(wordnet_text: str) -> str:
+    return " ".join(wordnet_text.split("_"))
+
+
 class WordNetTermEnrichment:
 
     def __init__(self, lang: str = 'en', use_domains: bool = False, use_pos: bool = False) -> None:
@@ -93,25 +101,6 @@ class WordNetTermEnrichment:
 
         if self.use_pos:
             self._get_wordnet_pos()
-
-    def __call__(self, terms_to_enrich: List[CandidateTerm]) -> None:
-        for candidate_term in terms_to_enrich:
-            term_string = candidate_term.value
-            term_wordnet_string = term_string.replace(" ", "_")
-            synsets = wn.synsets(term_wordnet_string, pos=wn.NOUN)
-
-            candidate_term_synsets = self._filter_synsets_on_domains(synsets)
-
-            enriching_terms = set()
-            enriching_synsets = set()
-
-            for selected_synset in candidate_term_synsets:
-                enriching_terms.update(
-                    {" ".join(lemma.name().split("_")) for lemma in selected_synset.lemmas()})
-                enriching_synsets.add(selected_synset.name())
-
-            candidate_term.enriching_terms.update(enriching_terms)
-            candidate_term.source_ids['wordnet'].update(enriching_synsets)
 
     def _get_enrichment_domains(self) -> None:
         domains = config["term_enrichment"]["wordnet"].get(
@@ -150,13 +139,121 @@ class WordNetTermEnrichment:
 
         return wordnet_domains
 
-    def _filter_synsets_on_domains(self, synsets: List[Synset]) -> List[Synset]:
+    def _filter_synsets_on_domains(self, synsets: Set[Synset]) -> Set[Synset]:
 
-        kept_synsets = []
+        kept_synsets = set()
 
         for synset in synsets:
             synset_domains = self._get_domains_for_synset(synset)
             if len(self.enrichment_domains.intersection(synset_domains)):
-                kept_synsets.append(synset)
+                kept_synsets.add(synset)
 
         return synset
+
+    def enrich_candidate_term(self, candidate_term: CandidateTerm) -> None:
+        term_wordnet_text = termStr2wordnetStr(candidate_term.value)
+
+        term_synsets = self._get_term_wordnet_synsets(term_wordnet_text)
+
+        candidate_term.synonyms.update(self._get_term_synonyms(term_synsets))
+
+        candidate_term.hypernyms.update(self._get_term_hypernyms(term_synsets))
+
+        candidate_term.hyponyms.update(self._get_term_hyponyms(term_synsets))
+
+        candidate_term.antonyms.update(self._get_term_antonyms(term_synsets))
+
+    def enrich_candidate_terms(self, candidate_terms: List[CandidateTerm]) -> None:
+        for term in candidate_terms:
+            self.enrich_candidate_term(term)
+
+    def _get_lemmas_texts(lemmas: Set[Lemma]) -> Set[str]:
+        lemmas_names = set()
+
+        for lemma in lemmas:
+            lemmas_names.add(lemma.name())
+
+            for derived_lemma in lemma.derivationally_related_forms():
+                lemmas_names.add(derived_lemma.name())
+
+        lemmas_texts = {wordnetStr2termStr(name) for name in lemmas_names}
+
+        return lemmas_texts
+
+    def _get_term_synonyms(self, term_synsets: Set[Synset]) -> Set[str]:
+        term_synonyms = set()
+        for synset in term_synsets:
+            synset_lemmas = synset.lemmas(lang=self.wordnet_lang)
+            synset_lemmas_texts = self._get_lemmas_texts(synset_lemmas)
+            term_synonyms.update(synset_lemmas_texts)
+        return term_synonyms
+
+    def _get_term_hypernyms(self, term_synsets: Set[Synset]) -> Set[str]:
+        term_hypernyms_synsets = set()
+        for synset in term_synsets:
+            synset_hypernyms = self._get_synset_hypernyms(synset)
+            term_hypernyms_synsets.update(synset_hypernyms)
+
+        term_hypernyms = set()
+        for synset in term_hypernyms_synsets:
+            synset_lemmas = synset.lemmas(lang=self.wordnet_lang)
+            synset_lemmas_texts = self._get_lemmas_texts(synset_lemmas)
+            term_hypernyms.update(synset_lemmas_texts)
+
+    def _get_term_hyponyms(self, term_synsets: Set[Synset]) -> Set[str]:
+        term_hyponyms_synsets = set()
+        for synset in term_synsets:
+            synset_hyponyms = self._get_synset_hyponyms(synset)
+            term_hyponyms_synsets.update(synset_hyponyms)
+
+        term_hyponyms = set()
+        for synset in term_hyponyms_synsets:
+            synset_lemmas = synset.lemmas(lang=self.wordnet_lang)
+            synset_lemmas_texts = self._get_lemmas_texts(synset_lemmas)
+            term_hyponyms.update(synset_lemmas_texts)
+
+    def _get_term_antonyms(self, term_synsets: Set[Synset]) -> Set[str]:
+        term_antonyms_lemmas = set()
+        for synset in term_synsets:
+            synset_lemmas = synset.lemmas(lang=self.wordnet_lang)
+            synset_antonyms = set()
+            for lemma in synset_lemmas:
+                synset_antonyms.update(set(lemma.antonyms()))
+
+            term_antonyms_lemmas.update(synset_antonyms)
+
+        term_antonyms_texts = self._get_lemmas_texts(term_antonyms_lemmas)
+
+        return term_antonyms_texts
+
+    def _get_term_wordnet_synsets(self, term_text: str) -> Set[Synset]:
+        term_synsets = set()
+
+        if self.use_pos:
+            for pos in self.wordnet_pos:
+                term_synsets.update(
+                    set(wn.synsets(term_text, pos=pos, lang=self.wordnet_lang)))
+
+        if self.use_domains:
+            term_synsets = self._filter_synsets_on_domains(
+                synsets=term_synsets)
+
+        return term_synsets
+
+    def _get_synset_hypernyms(self, synset: Synset) -> Set[Synset]:
+        synset_hypernyms = set(synset.hypernyms())
+
+        if self.use_domains:
+            synset_hypernyms = self._filter_synsets_on_domains(
+                synsets=synset_hypernyms)
+
+        return synset_hypernyms
+
+    def _get_synset_hyponyms(self, synset: Synset) -> Set[Synset]:
+        synset_hyponyms = set(synset.hyponyms())
+
+        if self.use_domains:
+            synset_hyponyms = self._filter_synsets_on_domains(
+                synsets=synset_hyponyms)
+
+        return synset_hyponyms

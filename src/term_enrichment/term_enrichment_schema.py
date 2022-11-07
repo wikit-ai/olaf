@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
-from typing import Set, Dict
-from collections import defaultdict
+from typing import Set
 
 
 @dataclass
 class CandidateTerm:
     value: str
-    enriching_terms: Set[str] = field(default_factory=set)
-    source_ids: Dict[str, Set[str]] = field(default_factory=defaultdict(set))
+    synonyms: Set[str] = field(default_factory=set)
+    hypernyms: Set[str] = field(default_factory=set)
+    hyponyms: Set[str] = field(default_factory=set)
+    antonyms: Set[str] = field(default_factory=set)
