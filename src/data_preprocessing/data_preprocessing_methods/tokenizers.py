@@ -40,7 +40,7 @@ def create_no_split_on_dash_in_words_tokenizer() -> Callable[[spacy.language.Lan
                                                   url_match=simple_url_re.match)
         except Exception as tokenizer_exception:
             logging_config.logger.error(
-                "Could not create Spacy tokenizer. Trace : %s", tokenizer_exception)
+                f"Could not create Spacy tokenizer. Trace : {tokenizer_exception}")
         else:
             logging_config.logger.info(
                 "Spacy tokenizer 'no_split_on_dash_in_words_tokenizer' created")

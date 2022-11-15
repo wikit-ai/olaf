@@ -41,7 +41,7 @@ class Data_Preprocessing():
                 corpus_preprocessed.append(spacy_document)
         except Exception as _e:
             logging_config.logger.error(
-                "Could not load content as spacy document. Trace : %s", _e)
+                f"Could not load content as spacy document. Trace : {_e}")
         else:
             logging_config.logger.info(
                 "File content converted to spacy document.")
