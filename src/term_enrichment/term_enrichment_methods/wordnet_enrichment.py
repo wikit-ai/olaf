@@ -10,7 +10,6 @@ from nltk.corpus.reader.wordnet import (
 
 from term_enrichment.term_enrichment_schema import CandidateTerm
 from term_enrichment.term_enrichment_repository import load_wordnet_domains, load_enrichment_wordnet_domains_from_file
-from config.core import config
 import config.logging_config as logging_config
 
 # Adapted from <https://github.com/argilla-io/spacy-wordnet/tree/b9efd800e02d55e848d56ce7acfacafb2089f587>
@@ -162,11 +161,13 @@ class WordNetTermEnrichment:
         The WordNet POS tags to consider for term enrichment, default to None.
     """
 
-    def __init__(self, lang: str = 'en', use_domains: bool = False, use_pos: bool = False) -> None:
+    def __init__(self, options: Dict[str, Any], lang: str = 'en', use_domains: bool = False, use_pos: bool = False) -> None:
         """Initializer for a WordNet based term enrichment process.
 
         Parameters
         ----------
+        options: Dict[str, Any]
+            The specific parameters to setup the class.
         lang : str, optional
             The language tag to use for enrichment, by default 'en'
         use_domains : bool, optional
@@ -174,6 +175,8 @@ class WordNetTermEnrichment:
         use_pos : bool, optional
             Wether or not to consider POS tags., by default False
         """
+        self.options = options
+
         self.wordnet_lang = fetch_wordnet_lang(lang)
         self.use_domains = use_domains
         self.use_pos = use_pos
@@ -207,11 +210,15 @@ class WordNetTermEnrichment:
 
             This method affects the attribute self.enrichment_domains
         """
-        domains = config["term_enrichment"]["wordnet"].get(
-            "enrichment_domains", [])
+        domains = self.options.get("enrichment_domains")
 
-        if len(domains) > 0:
-            self.enrichment_domains = set(domains)
+        if domains is not None:
+            if len(domains) > 0:
+                self.enrichment_domains = set(domains)
+            else:
+                logging_config.logger.warn(
+                    f"""Using enrichment wordnet domains but config parameter `enrichment_domains` is an empty list.  
+                    """)
         else:
             self.enrichment_domains = load_enrichment_wordnet_domains_from_file()
 
@@ -243,10 +250,13 @@ class WordNetTermEnrichment:
 
             This method affects the attribute self.wordnet_pos
         """
-        config_pos = config["term_enrichment"]["wordnet"].get(
-            "synset_pos")
+        config_pos = self.options.get("synset_pos")
         if isinstance(config_pos, list):
             self.wordnet_pos = {spacy2wordnet_pos(pos) for pos in config_pos}
+        else:
+            logging_config.logger.warn(
+                f"""Using specified POS but config parameter `synset_pos` is an empty.  
+                    """)
 
     def _get_domains_for_synset(self, synset: Synset) -> Set[str]:
         """Private method to extract the domains associated with a WordNet Sysnset.
