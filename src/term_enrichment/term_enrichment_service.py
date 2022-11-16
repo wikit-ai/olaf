@@ -15,8 +15,6 @@ class TermEnrichment:
     ----------
     candidate_terms: List[CandidateTerm]
         The candidate terms to enrich
-    wordnet_term_enricher: WordNetTermEnrichment
-        The instance of WordNet Enricher
     """
 
     def __init__(self, candidate_terms: List[CandidateTerm] = None, config: Dict[str, Any] = config['term_enrichment']) -> None:
@@ -29,15 +27,14 @@ class TermEnrichment:
         """
         self.candidate_terms = candidate_terms
         self.config = config
-        self.wordnet_term_enricher = None
 
         if self.candidate_terms is None:
             self.candidate_terms = load_candidate_terms_from_file()
 
-    def _set_wordnet_term_enricher(self) -> None:
-        """A private method to setup the WordNetTermEnrichment instance based on the configuration file.
-            Sets attribute self.wordnet_term_enricher
+    def wordnet_term_enrichment(self) -> None:
+        """The method to enirch the candidate terms using wordnet term enricher.
         """
+
         try:
             wordnet_enricher_options = self.config['wordnet']
         except KeyError as key_error_exception:
@@ -49,8 +46,8 @@ class TermEnrichment:
         use_pos = wordnet_enricher_options.get("use_pos")
 
         try:
-            self.wordnet_term_enricher = WordNetTermEnrichment(wordnet_enricher_options,
-                                                               lang, use_domains, use_pos)
+            wordnet_term_enricher = WordNetTermEnrichment(wordnet_enricher_options,
+                                                          lang, use_domains, use_pos)
         except Exception as e:
             logging_config.logger.error(
                 f"Could not setup attribute wordnet_term_enricher. Trace : {e}")
@@ -58,11 +55,4 @@ class TermEnrichment:
             logging_config.logger.info(
                 f"Attribute wordnet_term_enricher initialized.")
 
-    def wordnet_term_enrichment(self) -> None:
-        """The method to enirch the candidate terms using wordnet term enricher.
-        """
-
-        if self.wordnet_term_enricher is None:
-            self._set_wordnet_term_enricher()
-
-        self.wordnet_term_enricher(self.candidate_terms)
+        wordnet_term_enricher(self.candidate_terms)
