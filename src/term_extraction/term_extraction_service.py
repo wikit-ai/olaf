@@ -22,16 +22,6 @@ class Term_Extraction():
     def __init__(self, corpus: List[spacy.tokens.doc.Doc], config: Dict[str, Any] = config['term_extraction']) -> None:
         self.corpus = corpus
         self.config = config
-        self.c_value = None
-
-    def compute_c_value(self) -> None:
-        """Computes the C-value score for candidate terms attached to the Doc by the custom
-            attribute named term_extraction.selected_tokens_doc_attribute defined in the configuration file.
-            The CValue instance is attached to the self.c_value attribute.
-            All the parameters are defined in the configuration file.
-        """
-
-        _ = self.c_value.compute_c_values()
 
     def c_value_term_extraction(self) -> List[CandidateTerm]:
         """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 
