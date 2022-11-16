@@ -1,5 +1,5 @@
 from term_enrichment.term_enrichment_service import TermEnrichment
-from term_enrichment.term_enrichment_schema import CandidateTerm
+from commons.ontology_learning_schema import CandidateTerm
 
 
 def main() -> None:

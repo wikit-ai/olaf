@@ -8,7 +8,7 @@ from nltk.corpus.reader.wordnet import (
     Synset, Lemma
 )
 
-from term_enrichment.term_enrichment_schema import CandidateTerm
+from commons.ontology_learning_schema import CandidateTerm
 from term_enrichment.term_enrichment_repository import load_wordnet_domains, load_enrichment_wordnet_domains_from_file
 import config.logging_config as logging_config
 

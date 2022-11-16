@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 
-from term_enrichment.term_enrichment_schema import CandidateTerm
+from commons.ontology_learning_schema import CandidateTerm
 from term_enrichment.term_enrichment_repository import load_candidate_terms_from_file
 from term_enrichment.term_enrichment_methods.wordnet_enrichment import WordNetTermEnrichment
 

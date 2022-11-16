@@ -1,7 +1,7 @@
 from typing import List, Dict, Set
 import os.path
 
-from term_enrichment.term_enrichment_schema import CandidateTerm
+from commons.ontology_learning_schema import CandidateTerm
 from config.core import config, DATA_PATH
 import config.logging_config as logging_config
 
