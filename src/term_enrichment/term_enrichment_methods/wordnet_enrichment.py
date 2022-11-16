@@ -64,7 +64,7 @@ _WN_POS_MAPPING = {
 }
 
 
-def spacy2wordnet_pos(spacy_pos: int) -> Optional[str]:
+def spacy2wordnet_pos(spacy_pos: str) -> Optional[str]:
     """Tool function to map a Spacy POS tag to the corresponding WordNet one.
         Return None if no mapping is found.
         Adapted from project <https://github.com/argilla-io/spacy-wordnet>
@@ -72,7 +72,7 @@ def spacy2wordnet_pos(spacy_pos: int) -> Optional[str]:
 
     Parameters
     ----------
-    spacy_pos : int
+    spacy_pos : str
         The Spacy POS tag.
 
     Returns
@@ -208,20 +208,19 @@ class WordNetTermEnrichment:
             This method affects the attribute self.enrichment_domains
         """
         domains = config["term_enrichment"]["wordnet"].get(
-            "enrichment_domains")
+            "enrichment_domains", [])
 
-        if domains is not None:
-            if isinstance(domains, list):
-                self.enrichment_domains = set(domains)
+        if len(domains) > 0:
+            self.enrichment_domains = set(domains)
         else:
             self.enrichment_domains = load_enrichment_wordnet_domains_from_file()
 
-        if not self._check_domains_exists:
+        if not self._check_domains_exist():
             logging_config.logger.warn(
                 f"""Some Wordnet domains have not been found in the mappings.  
                 """)
 
-    def _check_domains_exists(self) -> bool:
+    def _check_domains_exist(self) -> bool:
         """Private method to test wether all the WordNet domains provided for enrichment 
             exist in the mapping of WordNet Synsets to domains
 
@@ -234,7 +233,9 @@ class WordNetTermEnrichment:
         for synset_domains in self.wordnet_domains_map.values():
             all_wordnet_domains.update(set(synset_domains))
 
-        return self.enrichment_domains.issubset(all_wordnet_domains)
+        domains_exist = self.enrichment_domains.issubset(all_wordnet_domains)
+
+        return domains_exist
 
     def _get_wordnet_pos(self) -> None:
         """Private method to get a list of WordNet POS tags to use for term enrichment.
@@ -262,7 +263,9 @@ class WordNetTermEnrichment:
             The set of domains associated with the synset
         """
         ssid = "{}-{}".format(str(synset.offset()).zfill(8), synset.pos())
-        return self.wordnet_domains_map.get(ssid, set())
+        synset_domains = self.wordnet_domains_map.get(ssid, set())
+
+        return synset_domains
 
     def _find_wordnet_domains(self, synsets: Set[Synset]) -> Set[str]:
         """A private tool method to fecth the WordNet domains associated with a set of Synsets. 
@@ -383,6 +386,7 @@ class WordNetTermEnrichment:
             synset_lemmas = synset.lemmas(lang=self.wordnet_lang)
             synset_lemmas_texts = self._get_lemmas_texts(synset_lemmas)
             term_synonyms.update(synset_lemmas_texts)
+
         return term_synonyms
 
     def _get_term_hypernyms(self, term_synsets: Set[Synset]) -> Set[str]:
