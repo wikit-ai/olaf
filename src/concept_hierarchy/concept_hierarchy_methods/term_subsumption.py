@@ -4,6 +4,8 @@ from typing import Dict,List
 import uuid
 
 from config.core import config
+import config.logging_config as logging_config
+
 
 class TermSubsumption():
     """Algorithm that find generalisation meta relations with subsumption method.
@@ -21,8 +23,22 @@ class TermSubsumption():
         """
         self.corpus = corpus
         self.kr = kr
-        self.representative_terms = self._set_representative_terms()
-        self.terms_count = self._set_terms_count()
+
+        try : 
+            self.representative_terms = self._set_representative_terms()
+        except Exception as _e:
+            self.representative_terms = []
+            logging_config.logger.error("Could not set representative terms. Trace : %s", _e)
+        else:
+            logging_config.logger.info("Representative terms set.")
+
+        try : 
+            self.terms_count = self._set_terms_count()
+        except Exception as _e: 
+            self.terms_count = {}
+            logging_config.logger.error("Could not set terms count. Trace: %s", _e)
+        else : 
+            logging_config.logger.info("Terms count set.")
 
     def _set_representative_terms(self) -> None:
         """Set one string per concept. This string is the best text representation of the concept among all its terms.
@@ -31,11 +47,19 @@ class TermSubsumption():
             if len(concept.terms) == 1:
                 term = list(concept.terms)[0]
             else : 
-                term = self._get_most_representative_term(concept)
-            representative_term = RepresentativeTerm()
-            representative_term.value = term
-            representative_term.concept_id = concept.uid
-            self.representative_terms.append(representative_term)
+                try : 
+                    term = self._get_most_representative_term(concept)
+                except Exception as _e: 
+                    term = None
+                    logging_config.logger.error("Could not get most representative term. Trace: %s", _e)
+                else : 
+                    logging_config.logger.info("Most representative term found.")
+            
+            if term is not None :
+                representative_term = RepresentativeTerm()
+                representative_term.value = term
+                representative_term.concept_id = concept.uid
+                self.representative_terms.append(representative_term)
 
     def _set_terms_count(self):
         """Set for each terms the number of documents contaning the term.
@@ -101,7 +125,11 @@ class TermSubsumption():
         float
             Score of generalisation between term1 and term2.
         """
-        subsumption_score = nb_doc_coocurence/nb_doc_occurence
+        if not(nb_doc_occurence == 0):
+            subsumption_score = nb_doc_coocurence/nb_doc_occurence
+        else :
+            subsumption_score = 0
+            raise ZeroDivisionError
         return subsumption_score
 
     def _verify_threshold(self,subsumption: float, inverse_subsumption: float) -> bool:
@@ -121,7 +149,12 @@ class TermSubsumption():
         bool
             True if rules are respected, that is to say there is a generalisation relation. False otherwise.
         """
-        if (subsumption > config['concept_hierachy']['term_subsumption']['threshold']) and (subsumption > inverse_subsumption):
+        try :
+            threshold = config['concept_hierarchy']['term_subsumption']['threshold']
+        except Exception as _e: 
+            logging_config.logger.error("Threshold value missing for term subsumption in confuration file. Trace: %s", _e)
+
+        if (subsumption > threshold) and (subsumption > inverse_subsumption):
             return True
         else : 
             return False
@@ -139,7 +172,12 @@ class TermSubsumption():
         List[Sict[str,str]]
             List of representative terms built.
         """
-        return [term for term in self.representative_terms[:term_index]+self.representative_terms[term_index+1:]]
+        try : 
+            other_terms = [term for term in self.representative_terms[:term_index]+self.representative_terms[term_index+1:]]
+        except Exception as _e: 
+            other_terms = []
+            logging_config.logger.error("Could not find other terms. You should check the term index. Trace: %s", _e)
+        return other_terms
 
     def _create_generalisation_relation(self,source_id : str, destination_id : str) -> MetaRelation:
         """Create generalition relation.

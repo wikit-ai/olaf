@@ -23,11 +23,11 @@ class Concept:
     ----------
     uid : str
         Concept unique id.
-    terms : Set(str)
+    terms : Set[str]
         Set of terms that is to say strings that represent the concept.
     """
     uid : str
-    terms : Set(str)
+    terms : Set[str]
 
 @dataclass
 class Relation:
@@ -41,13 +41,13 @@ class Relation:
         Id of the relationship source.
     destination : str
         Id of the relationship destination.
-    terms : Set(str)
+    terms : Set[str]
         Set of terms that is to say strings that represent the concept.
     """
     uid : str
     source : str
     destination : str
-    terms : Set(str)
+    terms : Set[str]
 
 MetaRelationType = Literal["generalisation"]
 
@@ -74,13 +74,13 @@ class MetaRelation:
 @dataclass
 class KR:
     """Dataclass that contains knowledge representation information.
-    concepts : Set(Concept)
+    concepts : Set[Concept]
         Concepts contained in the knowledge representation.
-    relations : Set(Relation)
+    relations : Set[Relation]
         Relations contained in the knowledge representation.
-    meta_relations : Set(MetaRelation)
+    meta_relations : Set[MetaRelation]
         Meta relations contained in the knowlegde representation.
     """
-    concepts = Set(Concept)
-    relations = Set(Relation)
-    meta_relation = Set(MetaRelation)
+    concepts = Set[Concept]
+    relations = Set[Relation]
+    meta_relation = Set[MetaRelation]
