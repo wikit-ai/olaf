@@ -1,9 +1,10 @@
 import re
+from collections import Counter
 import unittest
 
 import spacy
 from commons.spacy_processing_tools import build_spans_from_tokens
-from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline
+from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline, select_on_pos, select_on_occurence_count
 
 from data_preprocessing.data_preprocessing_service import Data_Preprocessing
 # from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
@@ -83,8 +84,7 @@ class TestDataPreprocessing(unittest.TestCase):
              ['Hexagon nut DIN EN', 'St'])
         ]
 
-        self.spacy_model = spacy.load("en_core_web_sm", exclude=[
-            'tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner'])
+        self.spacy_model = spacy.load("en_core_web_sm")
 
         create_tokenizer = spacy.util.registry.get(
             "tokenizers", "no_split_on_dash_in_words_tokenizer")
@@ -101,6 +101,9 @@ class TestDataPreprocessing(unittest.TestCase):
                 'make_spans': False,
                 "select_on_pos": {
                     "pos_to_select": ["NOUN"]
+                },
+                "select_on_occurence": {
+                    "occurence_threshold" : 3
                 }
             }
         })
@@ -125,6 +128,28 @@ class TestDataPreprocessing(unittest.TestCase):
         selected_tokens_text = [
             token.text for token in doc._.get(self.doc_attribute_name)]
         self.assertListEqual(tokens_text_to_be_selected, selected_tokens_text)
+
+    def test_select_on_pos(self):
+        txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
+        doc = self.spacy_model(txt)
+        text_noun = ["name", "pasta", "way","website"]
+        results = [token.text for token in doc if select_on_pos(token, ["NOUN"])]
+        self.assertEqual(text_noun,results)
+
+    def test_select_on_occurence(self):
+        txt = "hello, my name is Matthias, I am 26, and I love pasta and website. By the way my website is http://matthias.com . My cats names are Jack and Hector but they do not have website."
+        doc = self.spacy_model(txt)
+        terms = [token.text for token in doc._.get(self.doc_attribute_name)]
+        term_lemmas = [token.lemma_ for token in doc._.get(self.doc_attribute_name)]
+
+        counter_terms = Counter(terms)
+        counter_term_lemmas = Counter(term_lemmas)
+
+        self.assertFalse(select_on_occurence_count(doc._.get(self.doc_attribute_name)[2],1,counter_terms,False)) 
+        self.assertTrue(select_on_occurence_count(doc._.get(self.doc_attribute_name)[12],2,counter_terms,False))
+
+        self.assertTrue(select_on_occurence_count(doc._.get(self.doc_attribute_name)[3],1,counter_term_lemmas,True))
+        self.assertTrue(select_on_occurence_count(doc._.get(self.doc_attribute_name)[12],2,counter_terms,True))
 
     def test_build_spans_from_tokens(self) -> None:
         txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
@@ -188,7 +213,6 @@ class TestDataPreprocessing(unittest.TestCase):
                 " ".join(cm.output), re.compile("Token selectors loaded for pipeline test_pipeline"))
 
         self.assertEqual(len(test_token_select_pipeline.token_selectors), 4)
-
 
 if __name__ == '__main__':
     unittest.main()
