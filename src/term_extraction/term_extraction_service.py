@@ -1,4 +1,4 @@
-from typing import Iterable, List, Dict
+from typing import List, Dict, Any
 from collections import Counter
 
 import spacy
@@ -9,6 +9,7 @@ import spacy.language
 from config.core import config
 import config.logging_config as logging_config
 from term_extraction.term_extraction_methods.c_value import Cvalue
+from commons.ontology_learning_schema import CandidateTerm
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurence_count
 
 
@@ -18,19 +19,23 @@ class Term_Extraction():
 
     """
 
-    def __init__(self, corpus: List[spacy.tokens.doc.Doc]) -> None:
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc], config: Dict[str, Any] = config['term_extraction']) -> None:
         self.corpus = corpus
-        self.c_value = None
+        self.config = config
 
-    def compute_c_value(self) -> None:
-        """Computes the C-value score for candidate terms attached to the Doc by the custom
-            attribute named term_extraction.selected_tokens_doc_attribute defined in the configuration file.
-            The CValue instance is attached to the self.c_value attribute.
-            All the parameters are defined in the configuration file.
+    def c_value_term_extraction(self) -> List[CandidateTerm]:
+        """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 
+        the configuration field term_extraction.c_value.treshold.
+
+        Returns
+        -------
+        List[CandidateTerm]
+            The list of extracted candidate terms.
         """
+
         try:
-            doc_attribute_name = config['term_extraction']['selected_tokens_doc_attribute']
-            max_size_gram = config['term_extraction']['c_value']['max_size_gram']
+            doc_attribute_name = self.config['selected_tokens_doc_attribute']
+            max_size_gram = self.config['c_value']['max_size_gram']
         except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration fields:
@@ -39,24 +44,11 @@ class Term_Extraction():
                     Trace : {e}
                 """)
 
-        self.c_value = Cvalue(
-            self.corpus, doc_attribute_name, max_size_gram)
+        c_value = Cvalue(self.corpus, doc_attribute_name, max_size_gram)
 
-        _ = self.c_value.compute_c_values()
-
-    def c_value_term_extraction(self) -> List[str]:
-        """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 
-        the configuration field term_extraction.c_value.treshold.
-
-        Returns
-        -------
-        List[str]
-            The list of validated candidate terms.
-        """
-        candidate_terms = []
-
+        # Compute C-values
         try:
-            treshold = config['term_extraction']['c_value']['treshold']
+            treshold = self.config['c_value']['treshold']
         except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration field:
@@ -64,22 +56,24 @@ class Term_Extraction():
                     Trace : {e}
                 """)
 
-        if self.c_value is None:
-            self.compute_c_value()
+        c_values = c_value.compute_c_values()
 
         candidate_terms = [
-            c_val.candidate_term for c_val in self.c_value.c_values if c_val.c_value >= treshold
+            CandidateTerm(c_val.candidate_term) for c_val in c_values if c_val.c_value >= treshold
         ]
 
         return candidate_terms
 
-    def _get_doc(self, use_selected_token: bool, doc: spacy.tokens.doc.Doc):
+    def _get_doc_content_for_term_extraction(self, selected_tokens_doc_attribute:str , doc: spacy.tokens.doc.Doc):
         """Get the doc content of interest for the term extraction process.
         The term extraction can be performed on either the raw source documents or selected parts of each document after token selection process.
 
 
         Parameters
         ----------
+        selected_tokens_doc_attribute:str
+            Name of selected tokens attribute if it exists, empty string otherwise
+
         doc : spacy.tokens.doc.Doc
             Spacy representation of document
 
@@ -88,10 +82,11 @@ class Term_Extraction():
         List[spacy.tokens.Token]
             Attribute of selected tokens if it exists, spacy doc otherwise
         """
-        if config['term_extraction']['selected_tokens_doc_attribute']:
-            return doc._.get(config['term_extraction']['selected_tokens_doc_attribute'])
+        if selected_tokens_doc_attribute is not None:
+            content =  doc._.get(selected_tokens_doc_attribute)
         else:
-            return doc
+            content = doc
+        return content
 
     def on_pos_term_extraction(self) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
@@ -104,9 +99,9 @@ class Term_Extraction():
         candidate_pos_terms = []
 
         for doc in self.corpus:
-            for token in self._get_doc(doc):
-                if select_on_pos(token, config['term_extraction']['on_pos']['pos_selection']):
-                    if config['term_extraction']['on_pos']['use_lemma']:
+            for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc):
+                if select_on_pos(token, self.config['on_pos']['pos_selection']):
+                    if self.config['on_pos']['use_lemma']:
                         candidate_pos_terms.append(token.lemma_)
                     else:
                         candidate_pos_terms.append(token.text)
@@ -123,12 +118,12 @@ class Term_Extraction():
             List of unique validated terms.
         """
         candidate_terms = [
-            token for doc in self.corpus for token in self._get_doc(doc)]
+            token for doc in self.corpus for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc)]
         candidate_occurence_terms = []
 
         on_lemma = False
 
-        if config['term_extraction']['on_occurence']['use_lemma']:
+        if self.config['on_occurence']['use_lemma']:
             terms = [token.lemma_ for token in candidate_terms]
             on_lemma = True
         else:
@@ -137,7 +132,7 @@ class Term_Extraction():
         occurences = Counter(terms)
 
         for token in candidate_terms:
-            if select_on_occurence_count(token, config['term_extraction']['on_occurence']['occurence_threshold'], occurences, on_lemma):
+            if select_on_occurence_count(token, self.config['on_occurence']['occurence_threshold'], occurences, on_lemma):
                 if on_lemma:
                     candidate_occurence_terms.append(token.lemma_)
                 else:

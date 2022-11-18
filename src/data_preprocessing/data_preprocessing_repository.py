@@ -221,12 +221,12 @@ def load_spacy_model() -> spacy.language.Language:
     except Exception as _e:
         spacy_model = None
         logging_config.logger.error(
-            "Could not load spacy model. Trace : %s", _e)
+            f"Could not load spacy model. Trace : {_e}")
     else:
         logging_config.logger.info("Spacy model has been loaded.")
-
+        
     tokenizer_name = config['data_preprocessing'].get('tokenizer')
-    if (tokenizer_name is not None) or (len(tokenizer_name) > 0):
+    if tokenizer_name is not None:
         try:
             create_tokenizer = spacy.util.registry.get(
                 "tokenizers", tokenizer_name)
@@ -236,22 +236,22 @@ def load_spacy_model() -> spacy.language.Language:
                 f"Could not load tokenizer named {tokenizer_name} from registry. Trace : {_e}")
         else:
             logging_config.logger.info(
-                "Tokenizer {tokenizer_name} has been loaded.")
-
+                f"Tokenizer {tokenizer_name} has been loaded.")
         spacy_model.tokenizer = custom_tokenizer
 
     extra_component_names = config['data_preprocessing']['extra_components']
-    for component_name in extra_component_names:
-        if component_name == "token_selector":
-            try:
-                spacy_model.add_pipe(factory_name=component_name, last=True, config={
-                    "token_selector_config": config['data_preprocessing'][component_name]
-                })
-            except Exception as _e:
-                logging_config.logger.error(
-                    "Could not add custom %s component to the pipeline. Trace : %s", component_name, _e)
-            else:
-                logging_config.logger.info(
-                    "Component %s has been added to the pipeline.", component_name)
+    if extra_component_names is not None :
+        for component_name in extra_component_names:
+            if component_name == "token_selector":
+                try:
+                    spacy_model.add_pipe(factory_name=component_name, last=True, config={
+                        "token_selector_config": config['data_preprocessing'][component_name]
+                    })
+                except Exception as _e:
+                    logging_config.logger.error(
+                        f"Could not add custom {component_name} component to the pipeline. Trace : {_e}")
+                else:
+                    logging_config.logger.info(
+                        f"Component {component_name} has been added to the pipeline.")
 
     return spacy_model
