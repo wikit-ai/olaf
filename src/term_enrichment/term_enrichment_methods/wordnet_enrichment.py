@@ -20,6 +20,9 @@ import config.logging_config as logging_config
 # af am ar bg bn ca cs da de el en es et eu fa fi fr ga gu he hi hr hu hy id is it ja kn ko ky lb lij
 # lt lv mk ml mr nb ne nl pl pt ro ru sa si sk sl sq sr sv ta te th ti tl tn tr tt uk ur vi xx yo zh
 # then the full mapping is
+
+WORDNET_DOMAINS_SSID_NUM_SIZE = 8
+
 _WN_LANGUAGES_MAPPING = dict(
     es="spa",
     en="eng",
@@ -147,17 +150,15 @@ class WordNetTermEnrichment:
 
     Attributes
     ----------
+    options: Dict[str, Any]
+        The parameters to setup the class. 
     wordnet_lang: str
         The wordnet language tag to use for enrichment.
-    use_domains: bool
-        Wether or not to consider wordnet domains.
-    use_pos: bool
-        Wether or not to consider POS tags.
     wordnet_domains_map: Dict[str, List[str]] = None
         The mapping of WordNet Synsets to domains, default to None.
     enrichment_domains: Set[str] = None
-        The WordNet Synsets to domains to consider for term enrichment, default to None.
-    enrichment_domains: Set[str] = None
+        The WordNet Synsets domains to consider for term enrichment, default to None.
+    wordnet_pos: Set[str] = None
         The WordNet POS tags to consider for term enrichment, default to None.
     """
 
@@ -172,10 +173,10 @@ class WordNetTermEnrichment:
         self.options = options
 
         try:
-            self.wordnet_lang = fetch_wordnet_lang(self.options["lang"])
-            self.use_domains = self.options["use_domains"]
-            self.use_pos = self.options["use_pos"]
-        except KeyError as e:
+            assert self.options["lang"] is not None
+            assert self.options["use_domains"] is not None
+            assert self.options["use_pos"] is not None
+        except AssertionError as e:
             logging_config.logger.error(
                 f"""Config information missing for WordNet term enrichment. Make sure you provided the configuration fields:
                     - term_enrichment.wordnet.lang
@@ -184,15 +185,16 @@ class WordNetTermEnrichment:
                     Trace : {e}
                 """)
 
+        self.wordnet_lang = fetch_wordnet_lang(self.options["lang"])
         self.wordnet_domains_map: Dict[str, List[str]] = None
         self.enrichment_domains: Set[str] = None
         self.wordnet_pos: Set[str] = None
 
-        if self.use_domains:
+        if self.options["use_domains"]:
             self.wordnet_domains_map = load_wordnet_domains()
             self._get_enrichment_domains()
 
-        if self.use_pos:
+        if self.options["use_pos"]:
             self._get_wordnet_pos()
 
     def __call__(self, candidate_terms: List[CandidateTerm]) -> None:
@@ -213,7 +215,13 @@ class WordNetTermEnrichment:
 
             This method affects the attribute self.enrichment_domains
         """
-        domains = self.options.get("enrichment_domains")
+        try:
+            domains = self.options["enrichment_domains"]
+        except KeyError as e:
+            logging_config.logger.error(
+                f"""Using enrichment wordnet domains (use_domains = True) but config parameter `enrichment_domains` is not provided.
+                    Trace : {e}
+                """)
 
         if domains is not None:
             if len(domains) > 0:
@@ -253,7 +261,14 @@ class WordNetTermEnrichment:
 
             This method affects the attribute self.wordnet_pos
         """
-        config_pos = self.options.get("synset_pos")
+        try:
+            config_pos = self.options["synset_pos"]
+        except KeyError as e:
+            logging_config.logger.error(
+                f"""Using POS tags (use_pos = True) but config parameter `synset_pos` is not provided.
+                    Trace : {e}
+                """)
+
         if isinstance(config_pos, list):
             self.wordnet_pos = {spacy2wordnet_pos(pos) for pos in config_pos}
         else:
@@ -275,7 +290,8 @@ class WordNetTermEnrichment:
         Set[str]
             The set of domains associated with the synset
         """
-        ssid = "{}-{}".format(str(synset.offset()).zfill(8), synset.pos())
+        ssid = "{}-{}".format(str(synset.offset()
+                                  ).zfill(WORDNET_DOMAINS_SSID_NUM_SIZE), synset.pos())
         synset_domains = self.wordnet_domains_map.get(ssid, set())
 
         return synset_domains
@@ -505,7 +521,7 @@ class WordNetTermEnrichment:
         """
         term_synsets = set()
 
-        if self.use_pos:
+        if self.options["use_pos"]:
             for pos in self.wordnet_pos:
                 term_synsets.update(
                     set(wn.synsets(term_text, pos=pos, lang=self.wordnet_lang)))
@@ -513,7 +529,7 @@ class WordNetTermEnrichment:
             term_synsets.update(
                 set(wn.synsets(term_text, lang=self.wordnet_lang)))
 
-        if self.use_domains:
+        if self.options["use_domains"]:
             term_synsets = self._filter_synsets_on_domains(
                 synsets=term_synsets)
 
@@ -534,7 +550,7 @@ class WordNetTermEnrichment:
         """
         synset_hypernyms = set(synset.hypernyms())
 
-        if self.use_domains:
+        if self.options["use_domains"]:
             synset_hypernyms = self._filter_synsets_on_domains(
                 synsets=synset_hypernyms)
 
@@ -555,7 +571,7 @@ class WordNetTermEnrichment:
         """
         synset_hyponyms = set(synset.hyponyms())
 
-        if self.use_domains:
+        if self.options["use_domains"]:
             synset_hyponyms = self._filter_synsets_on_domains(
                 synsets=synset_hyponyms)
 

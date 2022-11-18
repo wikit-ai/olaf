@@ -34,6 +34,17 @@ class TermEnrichment:
         else:
             self.candidate_terms = candidate_terms
 
+        try:
+            assert self.candidate_terms is not None
+        except AssertionError as e:
+            logging_config.logger.error(
+                f"""No candidate terms could be load.
+                    Either provide a list of candidate terms as input.
+                    Or set the config parameter `term_enrichment.load_candidate_terms_from_file = true` 
+                    and provide the adequate file path by setting config parameter `term_enrichment.candidate_terms_path = path/to/your/file.txt`   
+                    Trace : {e}
+                """)
+
     def wordnet_term_enrichment(self) -> None:
         """The method to enirch the candidate terms using wordnet term enricher.
         """
