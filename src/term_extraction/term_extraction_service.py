@@ -64,13 +64,16 @@ class Term_Extraction():
 
         return candidate_terms
 
-    def _get_doc(self, use_selected_token: bool, doc: spacy.tokens.doc.Doc):
+    def _get_doc_content_for_term_extraction(self, selected_tokens_doc_attribute:str , doc: spacy.tokens.doc.Doc):
         """Get the doc content of interest for the term extraction process.
         The term extraction can be performed on either the raw source documents or selected parts of each document after token selection process.
 
 
         Parameters
         ----------
+        selected_tokens_doc_attribute:str
+            Name of selected tokens attribute if it exists, empty string otherwise
+
         doc : spacy.tokens.doc.Doc
             Spacy representation of document
 
@@ -79,10 +82,11 @@ class Term_Extraction():
         List[spacy.tokens.Token]
             Attribute of selected tokens if it exists, spacy doc otherwise
         """
-        if config['term_extraction']['selected_tokens_doc_attribute']:
-            return doc._.get(config['term_extraction']['selected_tokens_doc_attribute'])
+        if selected_tokens_doc_attribute is not None:
+            content =  doc._.get(selected_tokens_doc_attribute)
         else:
-            return doc
+            content = doc
+        return content
 
     def on_pos_term_extraction(self) -> List[str]:
         """Return unique candidate terms after filtering on pos-tagging labels.
@@ -95,9 +99,9 @@ class Term_Extraction():
         candidate_pos_terms = []
 
         for doc in self.corpus:
-            for token in self._get_doc(doc):
-                if select_on_pos(token, config['term_extraction']['on_pos']['pos_selection']):
-                    if config['term_extraction']['on_pos']['use_lemma']:
+            for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc):
+                if select_on_pos(token, self.config['on_pos']['pos_selection']):
+                    if self.config['on_pos']['use_lemma']:
                         candidate_pos_terms.append(token.lemma_)
                     else:
                         candidate_pos_terms.append(token.text)
@@ -114,12 +118,12 @@ class Term_Extraction():
             List of unique validated terms.
         """
         candidate_terms = [
-            token for doc in self.corpus for token in self._get_doc(doc)]
+            token for doc in self.corpus for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc)]
         candidate_occurence_terms = []
 
         on_lemma = False
 
-        if config['term_extraction']['on_occurence']['use_lemma']:
+        if self.config['on_occurence']['use_lemma']:
             terms = [token.lemma_ for token in candidate_terms]
             on_lemma = True
         else:
@@ -128,7 +132,7 @@ class Term_Extraction():
         occurences = Counter(terms)
 
         for token in candidate_terms:
-            if select_on_occurence_count(token, config['term_extraction']['on_occurence']['occurence_threshold'], occurences, on_lemma):
+            if select_on_occurence_count(token, self.config['on_occurence']['occurence_threshold'], occurences, on_lemma):
                 if on_lemma:
                     candidate_occurence_terms.append(token.lemma_)
                 else:
