@@ -33,12 +33,9 @@ class Term_Extraction():
             The list of extracted candidate terms.
         """
 
-        # setup CValue instance
-        c_value_options = self.config['c_value']
-
         try:
             doc_attribute_name = self.config['selected_tokens_doc_attribute']
-            max_size_gram = c_value_options['max_size_gram']
+            max_size_gram = self.config['c_value']['max_size_gram']
         except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration fields:
@@ -51,7 +48,7 @@ class Term_Extraction():
 
         # Compute C-values
         try:
-            treshold = c_value_options['treshold']
+            treshold = self.config['c_value']['treshold']
         except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration field:
@@ -59,8 +56,10 @@ class Term_Extraction():
                     Trace : {e}
                 """)
 
+        c_values = c_value.compute_c_values()
+
         candidate_terms = [
-            CandidateTerm(c_val.candidate_term) for c_val in c_value.compute_c_values() if c_val.c_value >= treshold
+            CandidateTerm(c_val.candidate_term) for c_val in c_values if c_val.c_value >= treshold
         ]
 
         return candidate_terms
