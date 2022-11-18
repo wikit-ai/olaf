@@ -100,7 +100,7 @@ def fetch_wordnet_lang(lang: str) -> Optional[str]:
     Raises
     ------
     Exception
-        _description_
+        An exception to spot a language not existing.
     """
     language = _WN_LANGUAGES_MAPPING.get(lang, None)
 
@@ -161,25 +161,28 @@ class WordNetTermEnrichment:
         The WordNet POS tags to consider for term enrichment, default to None.
     """
 
-    def __init__(self, options: Dict[str, Any], lang: str = 'en', use_domains: bool = False, use_pos: bool = False) -> None:
+    def __init__(self, options: Dict[str, Any]) -> None:
         """Initializer for a WordNet based term enrichment process.
 
         Parameters
         ----------
         options: Dict[str, Any]
             The specific parameters to setup the class.
-        lang : str, optional
-            The language tag to use for enrichment, by default 'en'
-        use_domains : bool, optional
-            Wether or not to consider wordnet domains., by default False
-        use_pos : bool, optional
-            Wether or not to consider POS tags., by default False
         """
         self.options = options
 
-        self.wordnet_lang = fetch_wordnet_lang(lang)
-        self.use_domains = use_domains
-        self.use_pos = use_pos
+        try:
+            self.wordnet_lang = fetch_wordnet_lang(self.options["lang"])
+            self.use_domains = self.options["use_domains"]
+            self.use_pos = self.options["use_pos"]
+        except KeyError as e:
+            logging_config.logger.error(
+                f"""Config information missing for WordNet term enrichment. Make sure you provided the configuration fields:
+                    - term_enrichment.wordnet.lang
+                    - term_enrichment.wordnet.use_domain
+                    - term_enrichment.wordnet.use_pos
+                    Trace : {e}
+                """)
 
         self.wordnet_domains_map: Dict[str, List[str]] = None
         self.enrichment_domains: Set[str] = None

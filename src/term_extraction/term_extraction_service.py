@@ -31,7 +31,7 @@ class Term_Extraction():
         try:
             doc_attribute_name = config['term_extraction']['selected_tokens_doc_attribute']
             max_size_gram = config['term_extraction']['c_value']['max_size_gram']
-        except Exception as e:
+        except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration fields:
                     - term_extraction.selected_tokens_doc_attribute
@@ -57,7 +57,7 @@ class Term_Extraction():
 
         try:
             treshold = config['term_extraction']['c_value']['treshold']
-        except Exception as e:
+        except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration field:
                     - term_extraction.c_value.treshold

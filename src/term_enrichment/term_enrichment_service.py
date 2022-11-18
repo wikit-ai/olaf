@@ -24,12 +24,15 @@ class TermEnrichment:
         ----------
         candidate_terms : List[CandidateTerm], optional
             The candidate terms to enrich, by default None
+        config: Dict[str, Any]
+            The configuration details.
         """
-        self.candidate_terms = candidate_terms
         self.config = config
 
-        if self.candidate_terms is None:
+        if self.config.get("load_candidate_terms_from_file"):
             self.candidate_terms = load_candidate_terms_from_file()
+        else:
+            self.candidate_terms = candidate_terms
 
     def wordnet_term_enrichment(self) -> None:
         """The method to enirch the candidate terms using wordnet term enricher.
@@ -41,13 +44,9 @@ class TermEnrichment:
             logging_config.logger.error(
                 f"No configuration found for WordNet term enricher. Trace: {key_error_exception}.")
 
-        lang = wordnet_enricher_options.get("lang")
-        use_domains = wordnet_enricher_options.get("use_domains")
-        use_pos = wordnet_enricher_options.get("use_pos")
-
         try:
-            wordnet_term_enricher = WordNetTermEnrichment(wordnet_enricher_options,
-                                                          lang, use_domains, use_pos)
+            wordnet_term_enricher = WordNetTermEnrichment(
+                wordnet_enricher_options)
         except Exception as e:
             logging_config.logger.error(
                 f"Could not setup attribute wordnet_term_enricher. Trace : {e}")
