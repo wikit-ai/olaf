@@ -9,6 +9,7 @@ import spacy.language
 from config.core import config
 import config.logging_config as logging_config
 from term_extraction.term_extraction_methods.c_value import Cvalue
+from commons.ontology_learning_schema import CandidateTerm
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurence_count
 
 
@@ -20,19 +21,22 @@ class Term_Extraction():
 
     def __init__(self, corpus: List[spacy.tokens.doc.Doc], config: Dict[str, Any] = config['term_extraction']) -> None:
         self.corpus = corpus
-        self.c_value = None
         self.config = config
 
-    def compute_c_value(self) -> None:
-        """Computes the C-value score for candidate terms attached to the Doc by the custom
-            attribute named term_extraction.selected_tokens_doc_attribute defined in the configuration file.
-            The CValue instance is attached to the self.c_value attribute.
-            All the parameters are defined in the configuration file.
+    def c_value_term_extraction(self) -> List[CandidateTerm]:
+        """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 
+        the configuration field term_extraction.c_value.treshold.
+
+        Returns
+        -------
+        List[CandidateTerm]
+            The list of extracted candidate terms.
         """
+
         try:
             doc_attribute_name = self.config['selected_tokens_doc_attribute']
             max_size_gram = self.config['c_value']['max_size_gram']
-        except Exception as e:
+        except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration fields:
                     - term_extraction.selected_tokens_doc_attribute
@@ -40,36 +44,22 @@ class Term_Extraction():
                     Trace : {e}
                 """)
 
-        self.c_value = Cvalue(
-            self.corpus, doc_attribute_name, max_size_gram)
+        c_value = Cvalue(self.corpus, doc_attribute_name, max_size_gram)
 
-        _ = self.c_value.compute_c_values()
-
-    def c_value_term_extraction(self) -> List[str]:
-        """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 
-        the configuration field term_extraction.c_value.treshold.
-
-        Returns
-        -------
-        List[str]
-            The list of validated candidate terms.
-        """
-        candidate_terms = []
-
+        # Compute C-values
         try:
             treshold = self.config['c_value']['treshold']
-        except Exception as e:
+        except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for C-value. Make sure you provided the configuration field:
                     - term_extraction.c_value.treshold
                     Trace : {e}
                 """)
 
-        if self.c_value is None:
-            self.compute_c_value()
+        c_values = c_value.compute_c_values()
 
         candidate_terms = [
-            c_val.candidate_term for c_val in self.c_value.c_values if c_val.c_value >= treshold
+            CandidateTerm(c_val.candidate_term) for c_val in c_values if c_val.c_value >= treshold
         ]
 
         return candidate_terms
