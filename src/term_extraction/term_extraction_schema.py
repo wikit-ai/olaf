@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Set
 
 
 class DocAttributeNotFound(Exception):
