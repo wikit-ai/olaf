@@ -1,8 +1,4 @@
 from dataclasses import dataclass
-<<<<<<< HEAD
-=======
-from typing import Literal, Set
->>>>>>> df2b2e5031d1ca72fee6eb973267a38eb2da58f7
 
 @dataclass
 class RepresentativeTerm:
@@ -18,77 +14,5 @@ class RepresentativeTerm:
     value: str
     concept_id: str
 
-<<<<<<< HEAD
     def __hash__(self):
         return hash((self.value, self.concept_id))
-=======
-@dataclass
-class Concept:
-    """Dataclass that contains concept information.
-
-    Parameters
-    ----------
-    uid : str
-        Concept unique id.
-    terms : Set[str]
-        Set of terms that is to say strings that represent the concept.
-    """
-    uid : str
-    terms : Set[str]
-
-@dataclass
-class Relation:
-    """Dataclass that contains relation information.
-
-    Parameters
-    ----------
-    uid : str
-        Relation unique id.
-    source : str
-        Id of the relationship source.
-    destination : str
-        Id of the relationship destination.
-    terms : Set[str]
-        Set of terms that is to say strings that represent the concept.
-    """
-    uid : str
-    source : str
-    destination : str
-    terms : Set[str]
-
-MetaRelationType = Literal["generalisation"]
-
-@dataclass
-class MetaRelation:
-    """Dataclass that contains meta-relation information.
-
-    Parameters
-    ----------
-    uid : str
-        Meta relation unique id.
-    source : str
-        Id of the meta relationship source.
-    destination : str
-        Id of the meta relationship destination.
-    relation_type : MetaRelationType
-        Type of the meta relation.
-    """
-    uid : str
-    source : str
-    destination : str
-    relation_type : MetaRelationType
-
-@dataclass
-class KR:
-    """Dataclass that contains knowledge representation information.
-    concepts : Set[Concept]
-        Concepts contained in the knowledge representation.
-    relations : Set[Relation]
-        Relations contained in the knowledge representation.
-    meta_relations : Set[MetaRelation]
-        Meta relations contained in the knowlegde representation.
-    """
-    concepts = Set[Concept]
-    relations = Set[Relation]
-    meta_relation = Set[MetaRelation]
->>>>>>> df2b2e5031d1ca72fee6eb973267a38eb2da58f7

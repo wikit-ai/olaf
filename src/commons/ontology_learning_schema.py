@@ -49,16 +49,16 @@ class Relation:
     ----------
     uid : str
         Relation unique id.
-    source : str
-        Id of the relationship source.
-    destination : str
-        Id of the relationship destination.
+    source_concept_id : str
+        UID of the relationship source.
+    destination_concept_id : str
+        UID of the relationship destination.
     terms : Set[str]
         Set of terms that is to say strings that represent the concept.
     """
     uid : str
-    source : str
-    destination : str
+    source_concept_id : str
+    destination_concept_id : str
     terms : Set[str] = field(default_factory=set)
 
     def __hash__(self):
@@ -74,16 +74,16 @@ class MetaRelation:
     ----------
     uid : str
         Meta relation unique id.
-    source : str
-        Id of the meta relationship source.
-    destination : str
-        Id of the meta relationship destination.
+    source_concept_id : str
+        UID of the meta relationship source.
+    destination_concept_id : str
+        UID of the meta relationship destination.
     relation_type : MetaRelationType
         Type of the meta relation.
     """
     uid : str
-    source : str
-    destination : str
+    source_concept_id : str
+    destination_concept_id : str
     relation_type : MetaRelationType
 
     def __hash__(self):
