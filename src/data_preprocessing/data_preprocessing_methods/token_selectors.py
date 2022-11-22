@@ -134,36 +134,36 @@ def filter_url(token: spacy.tokens.Token) -> bool:
     return not (token.like_url)
 
 
-def select_on_occurence_count(token: spacy.tokens.Token, treshold: int, occurence_counts: collections.Counter, on_lemma: bool = False) -> bool:
-    """Return true if the Spacy Token Text has an occurence above a defined treshold.
+def select_on_occurrence_count(token: spacy.tokens.Token, treshold: int, occurrence_counts: collections.Counter, on_lemma: bool = False) -> bool:
+    """Return true if the Spacy Token Text has an occurrence above a defined treshold.
 
     Parameters
     ----------
     token : spacy.tokens.Token
         The Spacy token to test
     treshold : int
-        The occurence treshold below which the Token is not selected 
-    occurence_counts : collections.Counter
-        A Counter dictionnary with token texts as keys and their occurence as value.
+        The occurrence treshold below which the Token is not selected 
+    occurrence_counts : collections.Counter
+        A Counter dictionnary with token texts as keys and their occurrence as value.
     on_lemma : bool
         If true the count is made on lemma attribute. By default it is made on the text attribute. 
 
     Returns
     -------
     bool
-        Wether the token text occurence is above the defined treshold or not.
+        Wether the token text occurrence is above the defined treshold or not.
     """
     if on_lemma:
         token_value = token.lemma_  
     else:
         token_value = token.text
-    token_occurrence = occurence_counts.get(token_value)
+    token_occurrence = occurrence_counts.get(token_value)
     selected = False
     if token_occurrence is not None:
         if token_occurrence > treshold:
             selected = True
     else : 
-        logging_config.logger.warning(f"Token {token_value} was not found in the occurence counter. Please check that it is a wanted behavior.")
+        logging_config.logger.warning(f"Token {token_value} was not found in the occurrence counter. Please check that it is a wanted behavior.")
     return selected
 
 
