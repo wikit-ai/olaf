@@ -2,7 +2,7 @@ from collections import Counter
 import spacy
 import unittest
 
-from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos,select_on_occurence_count
+from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos,select_on_occurrence_count
 from term_extraction.term_extraction_methods.c_value import Cvalue
 from term_extraction.term_extraction_service import Term_Extraction
 
@@ -94,7 +94,7 @@ class TestOnPosTermExtraction(unittest.TestCase):
         self.assertEqual(corpus_noun_lemma,set(term_extraction_instance_lemma.on_pos_term_extraction()))
 
 
-class TestOnOccurenceTermExtraction(unittest.TestCase):
+class TestOnoccurrenceTermExtraction(unittest.TestCase):
 
     @classmethod
     def setUpClass(self) -> None:
@@ -116,18 +116,18 @@ class TestOnOccurenceTermExtraction(unittest.TestCase):
         for spacy_document in spacy_model.pipe(corpus):
             self.test_spacy_doc.append(spacy_document)
 
-    def test_on_occurence_results(self):
+    def test_on_occurrence_results(self):
         config = {
             "selected_tokens_doc_attribute": self.doc_attribute_name,
-            "on_occurence": {
-                "occurence_threshold": 1,
+            "on_occurrence": {
+                "occurrence_threshold": 1,
                 "use_lemma": False
             }
         }
         config_lemma = {
             "selected_tokens_doc_attribute": self.doc_attribute_name,
-            "on_occurence": {
-                "occurence_threshold": 1,
+            "on_occurrence": {
+                "occurrence_threshold": 1,
                 "use_lemma": True
             }
         }
@@ -135,11 +135,11 @@ class TestOnOccurenceTermExtraction(unittest.TestCase):
         term_extraction_instance = Term_Extraction(self.test_spacy_doc,config)
         term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc,config_lemma)
 
-        words_occurence_selection = {"groupe"}
-        lemmas_occurence_selection = {"groupe","réunion","principal"}
+        words_occurrence_selection = {"groupe"}
+        lemmas_occurrence_selection = {"groupe","réunion","principal"}
 
-        self.assertEqual(set(term_extraction_instance.on_occurence_term_extraction()),words_occurence_selection)
-        self.assertEqual(set(term_extraction_instance_lemma.on_occurence_term_extraction()),lemmas_occurence_selection)
+        self.assertEqual(set(term_extraction_instance.on_occurrence_term_extraction()),words_occurrence_selection)
+        self.assertEqual(set(term_extraction_instance_lemma.on_occurrence_term_extraction()),lemmas_occurrence_selection)
         
 
 class TestCvalue(unittest.TestCase):

@@ -10,7 +10,7 @@ from config.core import config
 import config.logging_config as logging_config
 from term_extraction.term_extraction_methods.c_value import Cvalue
 from commons.ontology_learning_schema import CandidateTerm
-from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurence_count
+from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurrence_count
 
 
 class Term_Extraction():
@@ -88,13 +88,13 @@ class Term_Extraction():
             content = doc
         return content
 
-    def on_pos_term_extraction(self) -> List[str]:
+    def on_pos_term_extraction(self) -> List[CandidateTerm]:
         """Return unique candidate terms after filtering on pos-tagging labels.
 
         Returns
         -------
-        List[str]
-            List of unique validated terms.
+        List[CandidateTerm]
+            The list of extracted candidate terms.
         """
         candidate_pos_terms = []
 
@@ -107,36 +107,44 @@ class Term_Extraction():
                         candidate_pos_terms.append(token.text)
         unique_candidates = list(set(candidate_pos_terms))
 
-        return unique_candidates
+        candidate_terms = [
+            CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
+        ]
 
-    def on_occurence_term_extraction(self) -> List[str]:
-        """Return unique candidate terms with occurence higher than a configured threshold.
+        return candidate_terms
+
+    def on_occurrence_term_extraction(self) -> List[CandidateTerm]:
+        """Return unique candidate terms with occurrence higher than a configured threshold.
 
         Returns
         -------
-        List[str]
-            List of unique validated terms.
+        List[CandidateTerm]
+            The list of extracted candidate terms.
         """
         candidate_terms = [
             token for doc in self.corpus for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc)]
-        candidate_occurence_terms = []
+        candidate_occurrence_terms = []
 
         on_lemma = False
 
-        if self.config['on_occurence']['use_lemma']:
+        if self.config['on_occurrence']['use_lemma']:
             terms = [token.lemma_ for token in candidate_terms]
             on_lemma = True
         else:
             terms = [token.text for token in candidate_terms]
 
-        occurences = Counter(terms)
+        occurrences = Counter(terms)
 
         for token in candidate_terms:
-            if select_on_occurence_count(token, self.config['on_occurence']['occurence_threshold'], occurences, on_lemma):
+            if select_on_occurrence_count(token, self.config['on_occurrence']['occurrence_threshold'], occurrences, on_lemma):
                 if on_lemma:
-                    candidate_occurence_terms.append(token.lemma_)
+                    candidate_occurrence_terms.append(token.lemma_)
                 else:
-                    candidate_occurence_terms.append(token.text)
-        unique_candidates = list(set(candidate_occurence_terms))
+                    candidate_occurrence_terms.append(token.text)
+        unique_candidates = list(set(candidate_occurrence_terms))
 
-        return unique_candidates
+        candidate_terms = [
+            CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
+        ]
+
+        return candidate_terms

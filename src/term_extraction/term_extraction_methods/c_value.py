@@ -113,7 +113,7 @@ class Cvalue:
         candidate_terms_by_size : Dict[int, Set[str]]
             A data container with the candidate terms strings grouped by their size (i.e. number of words)
         candidateTermsCounter : Dict[str, int]
-            A data container with the candidate terms occurence counts in the corpus 
+            A data container with the candidate terms occurrence counts in the corpus 
         candidateTermSpans : Dict[str, spacy.tokens.span.Span]
             A data container with the strings associated with each candidate term
         """
@@ -168,14 +168,14 @@ class Cvalue:
         List[str]
             The ordered list of candidate terms
         """
-        # each group of candidate terms needs to be ordered by occurence
+        # each group of candidate terms needs to be ordered by occurrence
         # groups of candidate terms are concatenated from the the longest to the smallest
         ordered_candidate_terms = []
         for terms_size in range(1, self.max_size_gram + 1).__reversed__():
-            orderedByOccurenceTerms = list(candidate_terms_by_size[terms_size])
-            orderedByOccurenceTerms.sort(
+            orderedByOccurrenceTerms = list(candidate_terms_by_size[terms_size])
+            orderedByOccurrenceTerms.sort(
                 key=lambda term: self.candidateTermsCounter[term], reverse=True)
-            ordered_candidate_terms.extend(orderedByOccurenceTerms)
+            ordered_candidate_terms.extend(orderedByOccurrenceTerms)
 
         return ordered_candidate_terms
 
@@ -241,16 +241,16 @@ class Cvalue:
         if substring in self.CandidateTermStatTriples.keys():
 
             if parent_term in self.CandidateTermStatTriples.keys():
-                self.CandidateTermStatTriples[substring].substring_nested_occurence += (
-                    self.candidateTermsCounter[parent_term] - self.CandidateTermStatTriples[parent_term].substring_nested_occurence)
+                self.CandidateTermStatTriples[substring].substring_nested_occurrence += (
+                    self.candidateTermsCounter[parent_term] - self.CandidateTermStatTriples[parent_term].substring_nested_occurrence)
             else:
-                self.CandidateTermStatTriples[substring].substring_nested_occurence += self.candidateTermsCounter[parent_term]
+                self.CandidateTermStatTriples[substring].substring_nested_occurrence += self.candidateTermsCounter[parent_term]
 
             self.CandidateTermStatTriples[substring].count_longer_terms += 1
 
         else:  # if substring never seen before, init a new CandidateTermStatTriple
 
-            substr_corpus_occurence = 0
+            substr_corpus_occurrence = 0
             # the substring might be an existing candidate term, if so its frenquency is the condidate term one
             if self.candidateTermsCounter.get(substring) is not None:
                 self.candidateTermsCounter[substring]
@@ -258,8 +258,8 @@ class Cvalue:
             self.CandidateTermStatTriples[substring] = CandidateTermStatTriple(
                 candidate_term=parent_term,
                 substring=substring,
-                substring_corpus_occurence=substr_corpus_occurence,
-                substring_nested_occurence=self.candidateTermsCounter[parent_term],
+                substring_corpus_occurrence=substr_corpus_occurrence,
+                substring_nested_occurrence=self.candidateTermsCounter[parent_term],
                 count_longer_terms=1  # init to one, it is the first time we encunter the substring
             )
 
@@ -317,7 +317,7 @@ class Cvalue:
                     c_val = math.log2(
                         len_candidate_term) * (self.candidateTermsCounter[candidate_term_span.text] -
                                                (
-                                                   self.CandidateTermStatTriples[candidate_term_span.text].substring_nested_occurence /
+                                                   self.CandidateTermStatTriples[candidate_term_span.text].substring_nested_occurrence /
                             self.CandidateTermStatTriples[candidate_term_span.text].count_longer_terms)
                     )
                     c_values.append(CValueResults(

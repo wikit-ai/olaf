@@ -4,7 +4,7 @@ import unittest
 
 import spacy
 from commons.spacy_processing_tools import build_spans_from_tokens
-from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline, select_on_pos, select_on_occurence_count
+from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline, select_on_pos, select_on_occurrence_count
 
 from data_preprocessing.data_preprocessing_service import Data_Preprocessing
 # from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
@@ -102,8 +102,8 @@ class TestDataPreprocessing(unittest.TestCase):
                 "select_on_pos": {
                     "pos_to_select": ["NOUN"]
                 },
-                "select_on_occurence": {
-                    "occurence_threshold" : 3
+                "select_on_occurrence": {
+                    "occurrence_threshold" : 3
                 }
             }
         })
@@ -136,7 +136,7 @@ class TestDataPreprocessing(unittest.TestCase):
         results = [token.text for token in doc if select_on_pos(token, ["NOUN"])]
         self.assertEqual(text_noun,results)
 
-    def test_select_on_occurence(self):
+    def test_select_on_occurrence(self):
         txt = "hello, my name is Matthias, I am 26, and I love pasta and website. By the way my website is http://matthias.com . My cats names are Jack and Hector but they do not have website."
         doc = self.spacy_model(txt)
         terms = [token.text for token in doc._.get(self.doc_attribute_name)]
@@ -145,11 +145,11 @@ class TestDataPreprocessing(unittest.TestCase):
         counter_terms = Counter(terms)
         counter_term_lemmas = Counter(term_lemmas)
 
-        self.assertFalse(select_on_occurence_count(doc._.get(self.doc_attribute_name)[2],1,counter_terms,False)) 
-        self.assertTrue(select_on_occurence_count(doc._.get(self.doc_attribute_name)[12],2,counter_terms,False))
+        self.assertFalse(select_on_occurrence_count(doc._.get(self.doc_attribute_name)[2],1,counter_terms,False)) 
+        self.assertTrue(select_on_occurrence_count(doc._.get(self.doc_attribute_name)[12],2,counter_terms,False))
 
-        self.assertTrue(select_on_occurence_count(doc._.get(self.doc_attribute_name)[3],1,counter_term_lemmas,True))
-        self.assertTrue(select_on_occurence_count(doc._.get(self.doc_attribute_name)[12],2,counter_terms,True))
+        self.assertTrue(select_on_occurrence_count(doc._.get(self.doc_attribute_name)[3],1,counter_term_lemmas,True))
+        self.assertTrue(select_on_occurrence_count(doc._.get(self.doc_attribute_name)[12],2,counter_terms,True))
 
     def test_build_spans_from_tokens(self) -> None:
         txt = "hello, my name is Matthias, I am 26, and I love pasta. By the way my website is http://matthias.com"
