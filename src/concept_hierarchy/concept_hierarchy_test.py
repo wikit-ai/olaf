@@ -33,7 +33,7 @@ class TestTermSubsumption(unittest.TestCase):
         representative_terms = set()
         representative_terms.add(RepresentativeTerm("phrase",self.concept_phrase.uid))
         representative_terms.add(RepresentativeTerm("test",self.concept_test.uid))
-        self.assertSetEqual(representative_terms, set(self.term_sub.representative_terms))
+        self.assertSetEqual(representative_terms, set(self.term_sub._get_representative_terms()))
 
         concept_multiple_terms = Concept(uuid.uuid4(),{"téléphone","mobile","portable","smartphone"})
         self.term_sub.kr.concepts.add(concept_multiple_terms)
@@ -98,14 +98,14 @@ class TestTermSubsumption(unittest.TestCase):
         self.term_sub.representative_terms.remove(new_rep_term)
 
     def test_compute_subsumption(self):
-        cooccurence = 10
-        occurence = 5
+        cooccurrence = 10
+        occurrence = 5
         sub_score = 2
-        self.assertEqual(self.term_sub._compute_subsumption(cooccurence,occurence),sub_score)
+        self.assertEqual(self.term_sub._compute_subsumption(cooccurrence,occurrence),sub_score)
 
-        wrong_occurence = 0
+        wrong_occurrence = 0
         with self.assertRaises(ZeroDivisionError):
-            self.term_sub._compute_subsumption(cooccurence,wrong_occurence)
+            self.term_sub._compute_subsumption(cooccurrence,wrong_occurrence)
 
 
     def test_create_generalisation_relation(self):
