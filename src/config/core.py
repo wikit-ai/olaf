@@ -1,6 +1,5 @@
 from confection import registry, Config
 import os
-# import configparser
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__))
 PROJECT_ROOT_PATH = os.path.join(os.path.dirname(__file__), '..', '..')
