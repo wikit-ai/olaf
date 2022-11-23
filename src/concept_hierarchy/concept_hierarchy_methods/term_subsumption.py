@@ -63,7 +63,7 @@ class TermSubsumption():
         representative_terms = []
         for concept in self.kr.concepts:
             if len(concept.terms) == 1:
-                term = concept.terms.pop()
+                term = list(concept.terms)[0]
             else:
                 try:
                     term = self._get_most_representative_term(concept)
@@ -262,7 +262,7 @@ class TermSubsumption():
             logging_config.logger.error(f"Could not find other terms. You should check the term index.")
             other_terms = []
         else : 
-            other_terms = [term for term in terms[:term_index]+terms[term_index+1:]]
+            other_terms = [term for term in terms[: term_index] + terms[term_index +1 :]]
         return other_terms
 
     def _create_generalisation_relation(self, source_concept_id : str, destination_concept_id : str) -> MetaRelation:
