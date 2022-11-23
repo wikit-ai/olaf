@@ -1,7 +1,7 @@
 import numpy as np
 import spacy.tokens
 from statistics import mean
-from typing import Any,Dict,List
+from typing import Any, Dict, List
 import uuid
 
 from commons.ontology_learning_schema import Concept, KR, MetaRelation
@@ -13,7 +13,7 @@ class TermSubsumption():
     """Algorithm that find generalisation meta relations with subsumption method.
     """
 
-    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr : KR, threshold : float, use_lemma: bool) -> None:
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, threshold: float, use_lemma: bool) -> None:
         """Initialisation.
 
         Parameters
@@ -34,29 +34,27 @@ class TermSubsumption():
         self.threshold = threshold
         self.use_lemma = use_lemma
 
-        try : 
+        try:
             self.representative_terms = self._get_representative_terms()
         except Exception as _e:
             logging_config.logger.error(f"Could not set representative terms. Trace : {_e}.")
         else:
             logging_config.logger.info(f"Representative terms set.")
 
-        try : 
+        try:
             self.terms_count = self._get_terms_count()
         except Exception as _e: 
             logging_config.logger.error(f"Could not set terms count. Trace: {_e}.")
         else : 
             logging_config.logger.info("Terms count set.")
 
-
     def __call__(self) -> None:
         """The method directly update the knowledge representation"""
         self.term_subsumption()
 
-
     def _get_representative_terms(self) -> List[RepresentativeTerm]:
         """Get one string per concept. This string is the best text representation of the concept among all its terms.
-        
+
         Returns
         -------
         List[RepresentativeTerm]
@@ -65,11 +63,11 @@ class TermSubsumption():
         representative_terms = []
         for concept in self.kr.concepts:
             if len(concept.terms) == 1:
-                term = list(concept.terms)[0]
-            else : 
-                try : 
+                term = concept.terms.pop()
+            else:
+                try:
                     term = self._get_most_representative_term(concept)
-                except Exception as _e: 
+                except Exception as _e:
                     term = None
                     logging_config.logger.error(f"Could not get most representative term for concept {concept.uid}. Trace: {_e}.")
                 else : 
@@ -110,15 +108,16 @@ class TermSubsumption():
         float
             Similarity score between two vectors.
         """
-        try : 
-            similarity = np.dot(term1_vector, term2_vector) / (np.linalg.norm(term1_vector) * np.linalg.norm(term2_vector))
+        try:
+            similarity = np.dot(term1_vector, term2_vector) / \
+                (np.linalg.norm(term1_vector) * np.linalg.norm(term2_vector))
             # Cast result from numpy.float32 to float
             similarity = similarity.item()
         except Exception as _e:
             logging_config.logger.error(f"Could not compute similarity. Trace : {_e}.")
             similarity = 0
         return similarity
-    
+
     def _get_most_representative_term(self, concept: Concept) -> str:
         """Try to find the most representative term of a concept. For each term it computes the average of similarity with other terms. The term with the higher average similarity is used as most representative term.
 
@@ -134,7 +133,7 @@ class TermSubsumption():
         """
         concept_terms = list(concept.terms)
         vocab = self.corpus[0].vocab
-        if len(vocab)>0 :
+        if len(vocab) > 0:
             terms_mean_similarity = []
             for i,term in enumerate (concept_terms):
                 term_vector = vocab.get_vector(term)
@@ -171,7 +170,7 @@ class TermSubsumption():
             else : 
                 doc_words = [token.text for token in doc]
             if term in doc_words:
-                count +=1
+                count += 1
         return count
 
     def _count_doc_with_both_terms(self, term1: str, term2: str) -> int:
@@ -196,7 +195,7 @@ class TermSubsumption():
             else : 
                 doc_words = [token.text for token in doc]
             if (term1 in doc_words) and (term2 in doc_words):
-                count +=1
+                count += 1
         return count
 
     def _compute_subsumption(self, nb_doc_cooccurrence: int, nb_doc_occurrence: int) -> float:
@@ -240,9 +239,9 @@ class TermSubsumption():
         """
         if (subsumption_score > self.threshold) and (subsumption_score > inverse_subsumption_score):
             return True
-        else : 
+        else:
             return False
-    
+
     def _find_other_terms(self, term_index: int, terms: List[Any]) -> List[Any]:
         """Duplicate list without the specified index.
 
@@ -291,7 +290,7 @@ class TermSubsumption():
     def term_subsumption(self):
         """Find generalisation relations between concepts from term representation via term subsumption method.
         """
-        for i,term in enumerate (self.representative_terms):
+        for i, term in enumerate(self.representative_terms):
             for pair_term in self._find_other_terms(i, self.representative_terms):
                 score_cooccurrence = self._count_doc_with_both_terms(term.value, pair_term.value)
                 subsumption_score = self._compute_subsumption(score_cooccurrence, self.terms_count[pair_term.value])
