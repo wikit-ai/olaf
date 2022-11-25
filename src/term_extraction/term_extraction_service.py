@@ -96,20 +96,24 @@ class Term_Extraction():
         List[CandidateTerm]
             The list of extracted candidate terms.
         """
-        candidate_pos_terms = []
 
-        for doc in self.corpus:
-            for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc):
-                if select_on_pos(token, self.config['on_pos']['pos_selection']):
-                    if self.config['on_pos']['use_lemma']:
-                        candidate_pos_terms.append(token.lemma_)
-                    else:
-                        candidate_pos_terms.append(token.text)
-        unique_candidates = list(set(candidate_pos_terms))
+        if self.config.get("use_span") : 
+            candidate_terms = []
+            logging_config.logger.error(f"Could not extract spans with pos tagging. Update configuration file or use an other method.")
+        else : 
+            candidate_pos_terms = []
+            for doc in self.corpus:
+                for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc):
+                    if select_on_pos(token, self.config['on_pos']['pos_selection']):
+                        if self.config['on_pos']['use_lemma']:
+                            candidate_pos_terms.append(token.lemma_)
+                        else:
+                            candidate_pos_terms.append(token.text)
+            unique_candidates = list(set(candidate_pos_terms))
 
-        candidate_terms = [
-            CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
-        ]
+            candidate_terms = [
+                CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
+            ]
 
         return candidate_terms
 
