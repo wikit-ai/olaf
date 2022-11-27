@@ -90,6 +90,7 @@ class Term_Extraction():
 
     def on_pos_term_extraction(self) -> List[CandidateTerm]:
         """Return unique candidate terms after filtering on pos-tagging labels.
+        Not working for span.
 
         Returns
         -------
@@ -117,6 +118,7 @@ class Term_Extraction():
 
         return candidate_terms
 
+
     def on_occurrence_term_extraction(self) -> List[CandidateTerm]:
         """Return unique candidate terms with occurrence higher than a configured threshold.
 
@@ -125,30 +127,39 @@ class Term_Extraction():
         List[CandidateTerm]
             The list of extracted candidate terms.
         """
-        candidate_terms = [
-            token for doc in self.corpus for token in self._get_doc_content_for_term_extraction(self.config['selected_tokens_doc_attribute'],doc)]
-        candidate_occurrence_terms = []
+        if self.config.get("use_span") and (self.config.get('selected_tokens_doc_attribute') is None): 
+            candidate_terms = []
+            logging_config.logger.error(f"Could not extract spans on occurence without specific attribute on doc. Update configuration file or use an other method.")
+        
+        else : 
+            if self.config.get("use_span") : 
+                terms_of_interest = [span for doc in self.corpus for span in doc._.get(self.config.get('selected_tokens_doc_attribute'))]
 
-        on_lemma = False
+            else : 
+                terms_of_interest = [
+                    token for doc in self.corpus for token in self._get_doc_content_for_term_extraction(self.config.get('selected_tokens_doc_attribute'),doc)]
+                
+            candidate_occurrence_terms = []
 
-        if self.config['on_occurrence']['use_lemma']:
-            terms = [token.lemma_ for token in candidate_terms]
-            on_lemma = True
-        else:
-            terms = [token.text for token in candidate_terms]
+            on_lemma = False
+            if self.config['on_occurrence']['use_lemma']:
+                terms = [term.lemma_ for term in terms_of_interest]
+                on_lemma = True
+            else:
+                terms = [term.text for term in terms_of_interest]
 
-        occurrences = Counter(terms)
+            occurrences = Counter(terms)
 
-        for token in candidate_terms:
-            if select_on_occurrence_count(token, self.config['on_occurrence']['occurrence_threshold'], occurrences, on_lemma):
-                if on_lemma:
-                    candidate_occurrence_terms.append(token.lemma_)
-                else:
-                    candidate_occurrence_terms.append(token.text)
-        unique_candidates = list(set(candidate_occurrence_terms))
+            for term in terms_of_interest:
+                if select_on_occurrence_count(term, self.config['on_occurrence']['occurrence_threshold'], occurrences, on_lemma):
+                    if on_lemma:
+                        candidate_occurrence_terms.append(term.lemma_)
+                    else:
+                        candidate_occurrence_terms.append(term.text)
 
-        candidate_terms = [
-            CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
-        ]
+            unique_candidates = list(set(candidate_occurrence_terms))
+            candidate_terms = [
+                CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
+            ]
 
         return candidate_terms

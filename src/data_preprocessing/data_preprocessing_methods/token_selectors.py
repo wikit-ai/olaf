@@ -1,14 +1,12 @@
-import configparser
+import collections
+from commons.spacy_processing_tools import build_spans_from_tokens
 import functools
 import inspect
-from typing import Any, Dict, List
-import os.path
-import collections
-
-import spacy.tokens
 import re
-from commons.spacy_processing_tools import build_spans_from_tokens
-from config.core import PROJECT_ROOT_PATH
+import spacy.tokens
+from typing import Any, Dict, List, Union
+
+# from config.core import PROJECT_ROOT_PATH
 
 import config.logging_config as logging_config
 from data_preprocessing.data_preprocessing_schema import (
@@ -134,13 +132,13 @@ def filter_url(token: spacy.tokens.Token) -> bool:
     return not (token.like_url)
 
 
-def select_on_occurrence_count(token: spacy.tokens.Token, treshold: int, occurrence_counts: collections.Counter, on_lemma: bool = False) -> bool:
+def select_on_occurrence_count(token: Union[spacy.tokens.Token, spacy.tokens.span.Span], treshold: int, occurrence_counts: collections.Counter, on_lemma: bool = False) -> bool:
     """Return true if the Spacy Token Text has an occurrence above a defined treshold.
 
     Parameters
     ----------
-    token : spacy.tokens.Token
-        The Spacy token to test
+    token : Union[spacy.tokens.Token, spacy.tokens.span.Span]
+        The Spacy token or span to test
     treshold : int
         The occurrence treshold below which the Token is not selected 
     occurrence_counts : collections.Counter
