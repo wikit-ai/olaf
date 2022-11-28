@@ -22,15 +22,22 @@ class Concept_Hierarchy():
         """
 
         try:
-            threshold = self.config['term_subsumption']['threshold']
-            use_lemma = self.config['tem_subsumption']['use_lemma']
+            assert self.config['term_subsumption']['threshold'] is not None
+            assert self.config['tem_subsumption']['use_lemma'] is not None
+            assert self.config['use_span'] is not None
         except KeyError as e:
             logging_config.logger.error(
                 f"""Config information missing for Term subsumption. Make sure you provided the configuration fields:
+                    - concept_hierarchy.use_span
                     - concept_hierarchy.term_subsumption.threshold
                     - concept_hierarchy.term_subsumption.use_lemma
                     Trace : {e}
                 """)
-
-        term_subsumption = TermSubsumption(self.corpus, self.kr, threshold,use_lemma)
-        term_subsumption()
+        else : 
+            term_sub_options = {
+                "threshold": self.config['term_subsumption']['threshold'],
+                "use_lemma": self.config['tem_subsumption']['use_lemma'],
+                "use_span": self.config['use_span']
+            }
+            term_subsumption = TermSubsumption(self.corpus, self.kr, term_sub_options)
+            term_subsumption()
