@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 from commons.ontology_learning_schema import CandidateTerm
 from term_enrichment.term_enrichment_repository import load_candidate_terms_from_file
 from term_enrichment.term_enrichment_methods.wordnet_enrichment import WordNetTermEnrichment
+from term_enrichment.term_enrichment_methods.conceptnet_enrichment import ConceptNetTermEnrichment
 
 from config.core import config
 import config.logging_config as logging_config
@@ -66,3 +67,25 @@ class TermEnrichment:
                 f"Attribute wordnet_term_enricher initialized.")
 
         wordnet_term_enricher(self.candidate_terms)
+
+    def conceptnet_term_enrichment(self) -> None:
+        """The method to enirch the candidate terms using conceptnet term enricher.
+        """
+
+        try:
+            conceptnet_enricher_options = self.config['conceptnet']
+        except KeyError as key_error_exception:
+            logging_config.logger.error(
+                f"No configuration found for ConceptNet term enricher. Trace: {key_error_exception}.")
+
+        try:
+            conceptnet_term_enricher = ConceptNetTermEnrichment(
+                conceptnet_enricher_options)
+        except Exception as e:
+            logging_config.logger.error(
+                f"Could not setup attribute conceptnet_term_enricher. Trace : {e}")
+        else:
+            logging_config.logger.info(
+                f"Attribute conceptnet_term_enricher initialized.")
+
+        conceptnet_term_enricher(self.candidate_terms)
