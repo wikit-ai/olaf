@@ -24,6 +24,9 @@ class CandidateTerm:
     hyponyms: Set[str] = field(default_factory=set)
     antonyms: Set[str] = field(default_factory=set)
 
+    def __hash__(self):
+        return hash(self.value)
+
 @dataclass
 class Concept:
     """Dataclass that contains concept information.

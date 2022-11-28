@@ -1,6 +1,7 @@
 import spacy
 import unittest
 
+from commons.ontology_learning_schema import CandidateTerm
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos,select_on_occurrence_count
 from term_extraction.term_extraction_methods.c_value import Cvalue
 from term_extraction.term_extraction_service import Term_Extraction
@@ -47,6 +48,7 @@ class TestOnPosTermExtraction(unittest.TestCase):
         """
         config = {
             "selected_tokens_doc_attribute": None,
+            "use_span" : False,
             "on_pos": {
                 "pos_selection": ["NOUN"],
                 "use_lemma": False
@@ -54,27 +56,38 @@ class TestOnPosTermExtraction(unittest.TestCase):
         }
         config_custom = {
             "selected_tokens_doc_attribute": self.doc_attribute_name,
+            "use_span" : False,
             "on_pos": {
                 "pos_selection": ["NOUN"],
                 "use_lemma": True
             }
         }
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc,config)
-        term_extraction_instance_custom = Term_Extraction(self.test_spacy_custom_doc,config_custom)
-        self.assertEqual(term_extraction_instance_custom._get_doc_content_for_term_extraction(self.doc_attribute_name,self.test_spacy_custom_doc[0]),self.test_spacy_custom_doc[0]._.get(self.doc_attribute_name))
-        self.assertEqual(term_extraction_instance._get_doc_content_for_term_extraction(None,self.test_spacy_doc[0]),self.test_spacy_doc[0])
+        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
+        term_extraction_instance_custom = Term_Extraction(self.test_spacy_custom_doc, config_custom)
+        self.assertEqual(term_extraction_instance_custom._get_doc_content_for_term_extraction(self.doc_attribute_name, self.test_spacy_custom_doc[0]), self.test_spacy_custom_doc[0]._.get(self.doc_attribute_name))
+        self.assertEqual(term_extraction_instance._get_doc_content_for_term_extraction(None, self.test_spacy_doc[0]), self.test_spacy_doc[0])
+
 
     def test_on_pos_results(self):
         """Test the on_pos_term_extraction function to check that correct terms are extracted depending on pos tags.
         """
-        corpus_noun = {
-            "réunion", "groupe", "participants", "options", "onglets","fenêtre"
-        }
+        corpus_noun = [
+            "réunion", "groupe", "participants", "options", "onglets", "fenêtre"
+        ]
+        corpus_noun_ct = set()
+        for noun in corpus_noun : 
+            corpus_noun_ct.add(CandidateTerm(noun))
+
         corpus_noun_lemma = {
-            "réunion", "groupe", "participant", "option", "onglet","fenêtre"
+            "réunion", "groupe", "participant", "option", "onglet", "fenêtre"
         }
+        corpus_noun_lemma_ct = set()
+        for noun in corpus_noun_lemma:
+            corpus_noun_lemma_ct.add(CandidateTerm(noun))
+
         config = {
             "selected_tokens_doc_attribute": None,
+            "use_span" : False,
             "on_pos": {
                 "pos_selection": ["NOUN"],
                 "use_lemma": False
@@ -82,23 +95,26 @@ class TestOnPosTermExtraction(unittest.TestCase):
         }
         config_lemma = {
             "selected_tokens_doc_attribute": None,
+            "use_span" : False,
             "on_pos": {
                 "pos_selection": ["NOUN"],
                 "use_lemma": True
             }
         }
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc,config)
-        term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc,config_lemma)
-        self.assertEqual(corpus_noun,set(term_extraction_instance.on_pos_term_extraction()))
-        self.assertEqual(corpus_noun_lemma,set(term_extraction_instance_lemma.on_pos_term_extraction()))
+        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
+        term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc, config_lemma)
+        self.assertEqual(corpus_noun_ct,set(term_extraction_instance.on_pos_term_extraction()))
+        self.assertEqual(corpus_noun_lemma_ct,set(term_extraction_instance_lemma.on_pos_term_extraction()))
 
+        term_extraction_instance.config["use_span"] = True
+        self.assertListEqual(term_extraction_instance.on_pos_term_extraction(), [])
 
 class TestOnoccurrenceTermExtraction(unittest.TestCase):
 
     @classmethod
     def setUpClass(self) -> None:
         corpus = [
-            "La réunion de groupe est terminée, je voudrais ajouter des participants au groupe principal pour les prochaines réunions et les options de groupe sont configurables dans les onglets de la fenêtre principale."
+            "La réunion du groupe est terminée, je voudrais ajouter des participants au groupe principal pour les prochaines réunions et les options de groupe sont configurables dans les onglets de la fenêtre principale."
         ]
         spacy_model = spacy.load("fr_core_news_sm")
         self.doc_attribute_name = "selected_tokens_4_test"
@@ -115,9 +131,26 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
         for spacy_document in spacy_model.pipe(corpus):
             self.test_spacy_doc.append(spacy_document)
 
+        corpus_span = [
+            "La réunion de groupe principal est terminée, je voudrais ajouter des participants au groupe principal pour les prochaines réunions de groupe et les options sont configurables dans les onglets de la fenêtre principale  pour n'import quel participant."
+        ]
+        spacy_model_span = spacy.load("fr_core_news_sm")
+        spacy_model_span.add_pipe("token_selector", last=True, config={
+            "token_selector_config": {
+                "pipeline_name": "test_pipeline",
+                "token_selector_names": ["filter_punct", "filter_num", "filter_url","filter_stopwords"],
+                "doc_attribute_name": self.doc_attribute_name,
+                'make_spans': True,
+            }
+        })
+        self.test_spacy_doc_span = []
+        for spacy_document in spacy_model_span.pipe(corpus_span):
+            self.test_spacy_doc_span.append(spacy_document)
+
     def test_on_occurrence_results(self):
         config = {
             "selected_tokens_doc_attribute": self.doc_attribute_name,
+            "use_span" : False,
             "on_occurrence": {
                 "occurrence_threshold": 1,
                 "use_lemma": False
@@ -125,21 +158,58 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
         }
         config_lemma = {
             "selected_tokens_doc_attribute": self.doc_attribute_name,
+            "use_span" : False,
+            "on_occurrence": {
+                "occurrence_threshold": 1,
+                "use_lemma": True
+            }
+        }
+        config_span = {
+            "selected_tokens_doc_attribute": self.doc_attribute_name,
+            "use_span" : True,
+            "on_occurrence": {
+                "occurrence_threshold": 1,
+                "use_lemma": False
+            }
+        }
+        config_span_lemma = {
+            "selected_tokens_doc_attribute": self.doc_attribute_name,
+            "use_span" : True,
             "on_occurrence": {
                 "occurrence_threshold": 1,
                 "use_lemma": True
             }
         }
 
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc,config)
-        term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc,config_lemma)
+        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
+        term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc, config_lemma)
 
         words_occurrence_selection = {"groupe"}
-        lemmas_occurrence_selection = {"groupe","réunion","principal"}
+        words_occurrence_selection_ct = set()
+        for word in words_occurrence_selection:
+            words_occurrence_selection_ct.add(CandidateTerm(word))
 
-        self.assertEqual(set(term_extraction_instance.on_occurrence_term_extraction()),words_occurrence_selection)
-        self.assertEqual(set(term_extraction_instance_lemma.on_occurrence_term_extraction()),lemmas_occurrence_selection)
-        
+        lemmas_occurrence_selection = {"groupe", "réunion", "principal"}
+        lemmas_occurrence_selection_ct = set()
+        for lemma in lemmas_occurrence_selection:
+            lemmas_occurrence_selection_ct.add(CandidateTerm(lemma))
+
+        self.assertEqual(set(term_extraction_instance.on_occurrence_term_extraction()), words_occurrence_selection_ct)
+        self.assertEqual(set(term_extraction_instance_lemma.on_occurrence_term_extraction()), lemmas_occurrence_selection_ct)
+
+        term_extraction_instance.config["use_span"] = True
+        term_extraction_instance.config["selected_tokens_doc_attribute"] = None
+        self.assertListEqual(term_extraction_instance.on_occurrence_term_extraction(), [])
+
+        span_occurence_selection = set()
+        span_occurence_selection.add(CandidateTerm("groupe principal"))
+
+        term_extraction_span = Term_Extraction(self.test_spacy_doc_span,config_span)
+        self.assertSetEqual(set(term_extraction_span.on_occurrence_term_extraction()), span_occurence_selection)
+
+        term_extraction_span_lemma = Term_Extraction(self.test_spacy_doc_span,config_span_lemma)
+        span_occurence_selection.add(CandidateTerm("participant"))
+        self.assertSetEqual(set(term_extraction_span_lemma.on_occurrence_term_extraction()), span_occurence_selection)        
 
 class TestCvalue(unittest.TestCase):
     """Test the C-value computation according to the examples in <https://doi.org/10.1007/s007999900023> (section 2.3.1, page 5).
