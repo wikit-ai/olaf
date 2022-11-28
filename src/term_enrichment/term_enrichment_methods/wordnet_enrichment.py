@@ -1,16 +1,18 @@
-from typing import Dict, List, Set, Optional, Any
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import (
     ADJ as WN_ADJ,
     ADV as WN_ADV,
+    Lemma,
     NOUN as WN_NOUN,
-    VERB as WN_VERB,
-    Synset, Lemma
+    Synset,
+    VERB as WN_VERB
 )
+from typing import Any, Dict, List, Optional, Set
 
 from commons.ontology_learning_schema import CandidateTerm
-from term_enrichment.term_enrichment_repository import load_wordnet_domains, load_enrichment_wordnet_domains_from_file
+from commons.ontology_learning_utils import underscore2spaceStr, space2underscoreStr
 import config.logging_config as logging_config
+from term_enrichment.term_enrichment_repository import load_enrichment_wordnet_domains_from_file, load_wordnet_domains
 
 # Adapted from <https://github.com/argilla-io/spacy-wordnet/tree/b9efd800e02d55e848d56ce7acfacafb2089f587>
 # The Open Multi Wordnet corpus contains the following languages:
@@ -111,38 +113,6 @@ def fetch_wordnet_lang(lang: str) -> Optional[str]:
         raise Exception(f"Language {lang} not supported")
 
     return language
-
-
-def termStr2wordnetStr(term_text: str) -> str:
-    """Tool function to map a term string to a one processable by WordNet methods.
-
-    Parameters
-    ----------
-    term_text : str
-        The term string
-
-    Returns
-    -------
-    str
-        The Wordnet term string
-    """
-    return "_".join(term_text.split())
-
-
-def wordnetStr2termStr(wordnet_text: str) -> str:
-    """Tool function to reverse the termStr2wordnetStr output.
-
-    Parameters
-    ----------
-    wordnet_text : str
-        The Wordnet term string
-
-    Returns
-    -------
-    str
-        The term string
-    """
-    return " ".join(wordnet_text.split("_"))
 
 
 class WordNetTermEnrichment:
@@ -349,7 +319,7 @@ class WordNetTermEnrichment:
         candidate_term : CandidateTerm
             The candidate term to enrich.
         """
-        term_wordnet_text = termStr2wordnetStr(candidate_term.value)
+        term_wordnet_text = space2underscoreStr(candidate_term.value)
 
         term_synsets = self._get_term_wordnet_synsets(term_wordnet_text)
 
@@ -393,7 +363,7 @@ class WordNetTermEnrichment:
             for derived_lemma in lemma.derivationally_related_forms():
                 lemmas_names.add(derived_lemma.name())
 
-        lemmas_texts = {wordnetStr2termStr(name) for name in lemmas_names}
+        lemmas_texts = {underscore2spaceStr(name) for name in lemmas_names}
 
         return lemmas_texts
 
