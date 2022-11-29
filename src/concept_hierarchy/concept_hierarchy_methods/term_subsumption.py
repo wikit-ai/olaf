@@ -1,5 +1,6 @@
 import numpy as np
 import spacy.tokens
+import spacy.vocab
 from statistics import mean
 from typing import Any, Dict, List
 import uuid
@@ -11,9 +12,10 @@ import config.logging_config as logging_config
 
 class TermSubsumption():
     """Algorithm that find generalisation meta relations with subsumption method.
+    If the option use_lemma is set to true, the algorithm will only consider lemmatisation of the corpus.
     """
 
-    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, threshold: float, use_lemma: bool) -> None:
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, options: Dict[str, Any]) -> None:
         """Initialisation.
 
         Parameters
@@ -22,17 +24,14 @@ class TermSubsumption():
             Corpus used to find generalisation relations.
         kr : KR
             Existing knowledge representation of the corpus.
-        threshold : float
-            Validation threshold for subsumption score
-        use_lemma : boolean
-            Define if term are identified in doc from lemmas or from raw text values.
+        options : Dict[str, Any]
+            Options needed for term subsumption algorithm that is to say configuration for span, lemma and threshold value.
         """
         self.corpus = corpus
         self.kr = kr
         self.representative_terms = []
         self.terms_count = {}
-        self.threshold = threshold
-        self.use_lemma = use_lemma
+        self.options = options
 
         try:
             self.representative_terms = self._get_representative_terms()
@@ -108,15 +107,47 @@ class TermSubsumption():
         float
             Similarity score between two vectors.
         """
-        try:
-            similarity = np.dot(term1_vector, term2_vector) / \
-                (np.linalg.norm(term1_vector) * np.linalg.norm(term2_vector))
-            # Cast result from numpy.float32 to float
+        denominator = np.linalg.norm(term1_vector) * np.linalg.norm(term2_vector)
+        if denominator == 0.0 :
+            logging_config.logger.error(f"ZeroDivisionError, could not compute similarity.")
+            similarity = 0.0
+        else : 
+            similarity = np.dot(term1_vector, term2_vector) / denominator
             similarity = similarity.item()
-        except Exception as _e:
-            logging_config.logger.error(f"Could not compute similarity. Trace : {_e}.")
-            similarity = 0
         return similarity
+
+    def _get_representative_vector(self, term: str, vocab: spacy.vocab.Vocab) -> np.ndarray:
+        """Get representative vector of an expression.
+        If the expression contains only one word, it directly gets the vector of the word from the vocabulary.
+        If the expression contains multiple words, it computes the mean from each word's representative vector. 
+
+        Parameters
+        ----------
+        term : str
+            Term to be represented as a vector.
+        vocab : spacy.vocab.Vocab
+            Vocabulary containing all term vectors.
+
+        Returns
+        -------
+        np.ndarray
+            Representative vector of the wanted expression.
+        """
+        term_nb_words = len(term.split())
+        if self.options.get('use_span') and (term_nb_words > 1):
+            term_words = term.split()
+            term_vectors = []
+            for word in term_words : 
+                term_vectors.append(vocab.get_vector(word))
+                if vocab.has_vector(word) == False :
+                    logging_config.logger.warning(f"Term {term} has no representative vector in the spacy vocabulary.")
+            term_vector = np.mean(term_vectors, axis=0)
+        else : 
+            term_vector = vocab.get_vector(term)
+            if vocab.has_vector(term) == False :
+                logging_config.logger.warning(f"Term {term} has no representative vector in the spacy vocabulary.")
+        return term_vector
+
 
     def _get_most_representative_term(self, concept: Concept) -> str:
         """Try to find the most representative term of a concept. For each term it computes the average of similarity with other terms. The term with the higher average similarity is used as most representative term.
@@ -136,11 +167,12 @@ class TermSubsumption():
         if len(vocab) > 0:
             terms_mean_similarity = []
             for i,term in enumerate (concept_terms):
-                term_vector = vocab.get_vector(term)
+                term_vector = self._get_representative_vector(term, vocab)
                 other_terms = self._find_other_terms(i, concept_terms)
+                
                 term_similarities = []
                 for other_term in other_terms:
-                    terms_similarity = self._compute_similarity_between_tokens(term_vector, vocab.get_vector(other_term))
+                    terms_similarity = self._compute_similarity_between_tokens(term_vector, self._get_representative_vector(other_term,vocab))
                     term_similarities.append(terms_similarity)
                 terms_mean_similarity.append(mean(term_similarities))
             index_most_representative_term = np.argmax(terms_mean_similarity)
@@ -149,6 +181,32 @@ class TermSubsumption():
             logging_config.logger.error(f"Spacy vocabulary not loaded.")
             raise ValueError
         return most_representative_term
+
+    def _check_term_in_doc(self, term: str, doc_words: List[str]) -> bool:
+        """Test if a term in present or not in a document content.
+
+        Parameters
+        ----------
+        term : str
+            Term to be tested as present or not in document.
+        doc_words : List[str]
+            Document representation as list of words lemmatized or not.
+
+        Returns
+        -------
+        bool
+            True in term is in doc and false otherwise.
+        """
+        term_in_doc = False
+        term_nb_words = len(term.split())
+        if self.options.get('use_span') and (term_nb_words > 1):
+            expression_to_test = " " + " ".join(doc_words) + " "
+            term_to_find = " " + term + " "
+            term_in_doc = term_to_find in expression_to_test
+        else : 
+            term_in_doc = term in doc_words
+        return term_in_doc
+
 
     def _count_doc_with_term(self, term: str) -> int:
         """Count the number of documents containing the term in parameter.
@@ -165,11 +223,11 @@ class TermSubsumption():
         """
         count = 0
         for doc in self.corpus:
-            if self.use_lemma:
+            if self.options.get('use_lemma'):
                 doc_words = [token.lemma_ for token in doc]
             else : 
                 doc_words = [token.text for token in doc]
-            if term in doc_words:
+            if self._check_term_in_doc(term, doc_words):
                 count += 1
         return count
 
@@ -190,11 +248,11 @@ class TermSubsumption():
         """
         count = 0
         for doc in self.corpus:
-            if self.use_lemma:
+            if self.options.get('use_lemma'):
                 doc_words = [token.lemma_ for token in doc]
             else : 
                 doc_words = [token.text for token in doc]
-            if (term1 in doc_words) and (term2 in doc_words):
+            if self._check_term_in_doc(term1,doc_words) and self._check_term_in_doc(term2,doc_words):
                 count += 1
         return count
 
@@ -237,7 +295,7 @@ class TermSubsumption():
         bool
             True if rules are respected, that is to say there is a generalisation relation. False otherwise.
         """
-        if (subsumption_score > self.threshold) and (subsumption_score > inverse_subsumption_score):
+        if (subsumption_score > self.options.get('threshold')) and (subsumption_score > inverse_subsumption_score):
             return True
         else:
             return False
