@@ -37,5 +37,8 @@ log_config = {
     },
 }
 
+if os.path.exists(os.path.join(config.core.DATA_PATH, "ontology_learning_logs.log")):
+    os.remove(os.path.join(config.core.DATA_PATH, "ontology_learning_logs.log"))
+
 logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
