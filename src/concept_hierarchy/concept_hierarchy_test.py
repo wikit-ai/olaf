@@ -29,9 +29,11 @@ class TestTermSubsumption(unittest.TestCase):
         kr.concepts.add(self.concept_test)
 
         options = {
-            'threshold' : 0.45,
+            'subsumption_threshold' : 0.45,
             'use_lemma' : True,
-            'use_span' : True
+            'use_span' : True,
+            'mean_high_threshold' : 0.5,
+            'mean_low_threshold' : 0.3
         }
 
         self.term_sub = TermSubsumption(corpus_preprocessed, kr, options)
@@ -189,9 +191,9 @@ class TestTermSubsumption(unittest.TestCase):
         self.assertEqual(test_meta_relation.destination_concept_id, destination_id)
         self.assertEqual(test_meta_relation.relation_type, relation_type)
 
-    def test_term_subsumption(self):
+    def test_term_subsumption_unique(self):
         self.term_sub.options['use_span'] = True
-        self.term_sub()
+        self.term_sub.term_subsumption_unique()
         test_kr = KR()
         test_kr.concepts.add(Concept(self.concept_phrase_span.uid, self.concept_phrase_span.terms))
         test_kr.concepts.add(Concept(self.concept_phrase.uid, self.concept_phrase.terms))
@@ -206,7 +208,7 @@ class TestTermSubsumption(unittest.TestCase):
 
         self.term_sub.options['use_span'] = False
         self.term_sub.kr.meta_relations.clear()
-        self.term_sub()
+        self.term_sub.term_subsumption_unique()
         test_kr = KR()
         test_kr.concepts.add(Concept(self.concept_phrase_span.uid, self.concept_phrase_span.terms))
         test_kr.concepts.add(Concept(self.concept_phrase.uid, self.concept_phrase.terms))
@@ -214,6 +216,18 @@ class TestTermSubsumption(unittest.TestCase):
         test_meta_relation_id = list(self.term_sub.kr.meta_relations)[0].uid
         test_kr.meta_relations.add(MetaRelation(test_meta_relation_id, self.concept_test.uid, self.concept_phrase.uid, "generalisation"))
         self.assertEqual(self.term_sub.kr, test_kr)
+
+    def test_check_concept_more_general(self):
+        self.assertTrue(self.term_sub._check_concept_more_general(0.7, 0.2))
+        self.assertFalse(self.term_sub._check_concept_more_general(0.7, 0.4))
+        self.assertFalse(self.term_sub._check_concept_more_general(0.5, 0.2))
+        self.assertFalse(self.term_sub._check_concept_more_general(0.3, 0.6))
+
+    def test__compute_general_words_percentage(self):
+        pass
+    
+    def test_term_subsumption_mean(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

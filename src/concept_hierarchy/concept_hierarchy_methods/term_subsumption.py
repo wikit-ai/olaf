@@ -1,8 +1,9 @@
+from itertools import combinations
 import numpy as np
 import spacy.tokens
 import spacy.vocab
 from statistics import mean
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 import uuid
 
 from commons.ontology_learning_schema import Concept, KR, MetaRelation
@@ -51,7 +52,12 @@ class TermSubsumption():
 
     def __call__(self) -> None:
         """The method directly update the knowledge representation"""
-        self.term_subsumption()
+        if self.options.get("algo_type") == "unique" :
+            self.term_subsumption_unique()
+        elif self.options.get("algo_type") == "mean" :
+            self.term_subsumption_mean()
+        else : 
+            logging_config.logger.error(f"Invalid value for algo_type option, must be unique or mean.")
 
     def _get_representative_terms(self) -> List[RepresentativeTerm]:
         """Get one string per concept. This string is the best text representation of the concept among all its terms.
@@ -62,26 +68,26 @@ class TermSubsumption():
             List of one representing term by concept.
         """
         representative_terms = []
-        for concept in self.kr.concepts:
-            if len(concept.terms) == 1:
-                term = list(concept.terms)[0]
-            else:
-                try:
-                    term = self._get_most_representative_term(concept)
-                except Exception as _e:
-                    term = None
-                    logging_config.logger.error(
-                        f"Could not get most representative term for concept {concept.uid}. Trace: {_e}.")
+        if self.options.get('algo_type') == "mean":
+            for concept in self.kr.concepts:
+                representative_terms += [RepresentativeTerm(term, concept.uid) for term in concept.terms]
+        else : 
+            for concept in self.kr.concepts:
+                if len(concept.terms) == 1:
+                    term = list(concept.terms)[0]
                 else:
-                    logging_config.logger.info(
-                        f"Most representative term found for concept {concept.uid}.")
+                    try:
+                        term = self._get_most_representative_term(concept)
+                    except Exception as _e:
+                        term = None
+                        logging_config.logger.error(
+                            f"Could not get most representative term for concept {concept.uid}. Trace: {_e}.")
+                    else:
+                        logging_config.logger.info(
+                            f"Most representative term found for concept {concept.uid}.")
 
-            if term is not None:
-                representative_term_value = term
-                representative_term_concept_id = concept.uid
-                representative_term = RepresentativeTerm(
-                    representative_term_value, representative_term_concept_id)
-                representative_terms.append(representative_term)
+                if term is not None:
+                    representative_terms.append(RepresentativeTerm(term, concept.uid))
         return representative_terms
 
     def _get_terms_count(self) -> Dict[str, int]:
@@ -304,7 +310,7 @@ class TermSubsumption():
         bool
             True if rules are respected, that is to say there is a generalisation relation. False otherwise.
         """
-        if (subsumption_score > self.options.get('threshold')) and (subsumption_score > inverse_subsumption_score):
+        if (subsumption_score > self.options.get('subsumption_threshold')) and (subsumption_score > inverse_subsumption_score):
             return True
         else:
             return False
@@ -334,6 +340,55 @@ class TermSubsumption():
                 term for term in terms[: term_index] + terms[term_index + 1:]]
         return other_terms
 
+    def _compute_general_words_percentage(self, general_concept_rt: List[RepresentativeTerm], specialized_concept_rt: List[RepresentativeTerm]) -> float:
+        """Compute the generalisation score between the general concept and the specialized concept.
+        The score is the proportion of terms in the general concept that subsumes terms in the specialized concept.
+
+        Parameters
+        ----------
+        general_concept_rt : List[RepresentativeTerm]
+            Representative terms of the general concept.
+        specialized_concept_rt : List[RepresentativeTerm]
+            Representative terms of the specialized concept.
+
+        Returns
+        -------
+        float
+            Generalisation score.
+        """
+        total_count = 0
+        sub_count = 0
+        for gen_term in general_concept_rt :
+            for spe_term in specialized_concept_rt :
+                total_count += 1
+                score_coocurrence = self._count_doc_with_both_terms(gen_term.value,spe_term.value)
+                sub_score = self._compute_subsumption(score_coocurrence, self.terms_count[spe_term.value])
+                inverse_sub_score = self._compute_subsumption(score_coocurrence, self.terms_count[gen_term.value])
+                if self._verify_threshold(sub_score, inverse_sub_score) :
+                    sub_count += 1
+        return sub_count/total_count
+
+    def _check_concept_more_general(self, score_gen_concept_1: float, score_gen_concept_2: float) -> bool :
+        """Verify if a first concept is more general than a second concept according to term subsumption rules based on thresholds.
+
+        Parameters
+        ----------
+        score_gen_concept_1 : float
+            Generalisation score of the first concept.
+        score_gen_concept_2 : float
+            Generalisation score of the second concept.
+
+        Returns
+        -------
+        bool
+            True is the first concept is more general, False otherwise.
+        """
+        validity = False
+        if score_gen_concept_1 > self.options.get('mean_high_threshold') > self.options.get('mean_low_threshold') > score_gen_concept_2 : 
+            validity = True
+        return validity
+
+
     def _create_generalisation_relation(self, source_concept_id: str, destination_concept_id: str) -> MetaRelation:
         """Create generalition relation.
 
@@ -357,8 +412,9 @@ class TermSubsumption():
                                      meta_relation_destination_concept_id, meta_relation_type)
         return meta_relation
 
-    def term_subsumption(self):
-        """Find generalisation relations between concepts from term representation via term subsumption method.
+    def term_subsumption_unique(self):
+        """Find generalisation relations between concepts via term subsumption method.
+        This method uses one unique representative word by concept.
         """
         for i, term in enumerate(self.representative_terms):
             for pair_term in self._find_other_terms(i, self.representative_terms):
@@ -372,3 +428,21 @@ class TermSubsumption():
                     meta_relation = self._create_generalisation_relation(
                         term.concept_id, pair_term.concept_id)
                     self.kr.meta_relations.add(meta_relation)
+
+    def term_subsumption_mean(self):
+        """Find generalisation relations between concepts via term subsumption method.
+        This method computes for each concept the percentage of words generalising words in another concept.
+        """
+        concept_pairs = list(combinations(self.kr.concepts,2))
+        for pair in concept_pairs : 
+            concept_representative_terms = list(filter(lambda rt: rt.concept_id == pair[0].uid, self.representative_terms))
+            other_concept_representative_terms = list(filter(lambda rt: rt.concept_id == pair[1].uid, self.representative_terms))
+            score_concept_gen = self._compute_general_words_percentage(concept_representative_terms, other_concept_representative_terms)
+            score_other_concept_gen = self._compute_general_words_percentage(other_concept_representative_terms,concept_representative_terms)
+            if self._check_concept_more_general(score_concept_gen, score_other_concept_gen):
+                meta_relation = self._create_generalisation_relation(pair[0].uid, pair[1].uid)
+                self.kr.meta_relations.add(meta_relation)
+            elif self._check_concept_more_general(score_other_concept_gen, score_concept_gen):
+                meta_relation = self._create_generalisation_relation(pair[1].uid, pair[0].uid)
+                self.kr.meta_relations.add(meta_relation)
+
