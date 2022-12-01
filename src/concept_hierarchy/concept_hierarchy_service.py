@@ -12,7 +12,7 @@ class Concept_Hierarchy():
     Feed meta relation of knowledge representation.
     """
 
-    def __init__(self, corpus : List[spacy.tokens.doc.Doc], kr : KR, config: Dict[str, Any] = config['concept_hierarchy']) -> None:
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, config: Dict[str, Any] = config['concept_hierarchy']) -> None:
         self.corpus = corpus
         self.kr = kr
         self.config = config
@@ -26,7 +26,7 @@ class Concept_Hierarchy():
             assert self.config['term_subsumption']['subsumption_threshold'] is not None
             assert self.config['tem_subsumption']['use_lemma'] is not None
             assert self.config['use_span'] is not None
-            if self.config['term_subsumption']['algo_type'] == "mean":
+            if self.config['term_subsumption']['algo_type'] == "MEAN":
                 assert self.config['term_subsumption']['mean']['high_threshold'] is not None
                 assert self.config['term_subsumption']['mean']['low_threshold'] is not None
         except KeyError as e:
@@ -41,15 +41,16 @@ class Concept_Hierarchy():
                     - concept_hierarchy.term_subsumption.mean_low_threshold
                     Trace : {e}.
                 """)
-        else : 
+        else:
             term_sub_options = {
                 "algo_type": self.config['term_subsumption']['algo_type'],
                 "subsumption_threshold": self.config['term_subsumption']['subsumption_threshold'],
                 "use_lemma": self.config['tem_subsumption']['use_lemma'],
                 "use_span": self.config['use_span']
             }
-            if term_sub_options["algo_type"] == "mean":
+            if term_sub_options["algo_type"] == "MEAN":
                 term_sub_options["mean_high_threshold"] = self.config['term_subsumption']['mean']['high_threshold']
                 term_sub_options["mean_low_threshold"] = self.config['term_subsumption']['mean']['low_threshold']
-            term_subsumption = TermSubsumption(self.corpus, self.kr, term_sub_options)
+            term_subsumption = TermSubsumption(
+                self.corpus, self.kr, term_sub_options)
             term_subsumption()
