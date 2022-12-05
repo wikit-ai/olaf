@@ -10,10 +10,12 @@ def main() -> None:
         CandidateTerm("ordinateur", synonyms={"pc", "ordi", "ordinateur portable"})
     ]
 
+    config = {}
+
     print("\nList of candidate tersm : ")
     print(candidate_terms)
 
-    concept_extraction = ConceptExtraction(candidate_terms)
+    concept_extraction = ConceptExtraction(candidate_terms, config)
     concept_extraction.group_by_synonyms()
 
     print("\n\nKnowledge representation built : ")
