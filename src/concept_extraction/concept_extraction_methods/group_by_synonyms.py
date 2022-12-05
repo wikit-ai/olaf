@@ -23,7 +23,7 @@ class GroupBySynonyms():
         """
         self.group_terms_by_synonyms()
 
-    def _find_cterms_with_particular_synonym(self, synonym: str, candidate_terms : List[CandidateTerm]) -> Set[CandidateTerm]:
+    def _find_cterms_with_particular_synonym(self, synonym: str, candidate_terms: List[CandidateTerm]) -> Set[CandidateTerm]:
         """Find candidate terms that contain the same value or synonym as the input term value.
 
         Parameters
@@ -39,13 +39,15 @@ class GroupBySynonyms():
             Set of candidate terms with values or synonyms that contains a particular term.
         """
         candidates_of_same_concept = set()
-        candidates_from_value = set(filter(lambda candidate : candidate.value==synonym, candidate_terms))
-        candidates_from_syn = set(filter(lambda candidate : synonym in candidate.synonyms, candidate_terms))
+        candidates_from_value = set(
+            filter(lambda candidate: candidate.value == synonym, candidate_terms))
+        candidates_from_syn = set(
+            filter(lambda candidate: synonym in candidate.synonyms, candidate_terms))
         candidates_of_same_concept.update(candidates_from_value)
         candidates_of_same_concept.update(candidates_from_syn)
         return candidates_of_same_concept
 
-    def _find_cterms_with_shared_synonyms(self, current_candidate : CandidateTerm, candidate_terms : List[CandidateTerm]) -> Set[CandidateTerm]:
+    def _find_cterms_with_shared_synonyms(self, current_candidate: CandidateTerm, candidate_terms: List[CandidateTerm]) -> Set[CandidateTerm]:
         """Find candidate terms that contain the same value or synonym as the input candidate.
 
         Parameters
