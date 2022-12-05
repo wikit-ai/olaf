@@ -10,6 +10,8 @@ class ConceptExtraction():
         self.kr = KR()
         self.options = options
 
-    def group_by_synonyms(self):
+    def group_by_synonyms(self) -> None:
+        """This method merges candidate terms in a concept if they have value or synonyms in common.
+        """
         group_by_syn = GroupBySynonyms(self.candidate_terms, self.kr)
         group_by_syn()
