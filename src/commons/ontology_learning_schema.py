@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Literal, Set
 
+
 @dataclass
 class CandidateTerm:
     """A Dataclass to contain Candidate terms informations.
@@ -27,6 +28,7 @@ class CandidateTerm:
     def __hash__(self):
         return hash(self.value)
 
+
 @dataclass
 class Concept:
     """Dataclass that contains concept information.
@@ -37,12 +39,16 @@ class Concept:
         Concept unique id.
     terms : Set[str]
         Set of terms that is to say strings that represent the concept.
+    external_uris: Set[str]
+        Set of known URIs representing the concept in other KGs
     """
-    uid : str
-    terms : Set[str] = field(default_factory=set)
+    uid: str
+    terms: Set[str] = field(default_factory=set)
+    external_uris: Set[str] = field(default_factory=set)
 
     def __hash__(self):
         return hash(self.uid)
+
 
 @dataclass
 class Relation:
@@ -59,15 +65,17 @@ class Relation:
     terms : Set[str]
         Set of terms that is to say strings that represent the concept.
     """
-    uid : str
-    source_concept_id : str
-    destination_concept_id : str
-    terms : Set[str] = field(default_factory=set)
+    uid: str
+    source_concept_id: str
+    destination_concept_id: str
+    terms: Set[str] = field(default_factory=set)
 
     def __hash__(self):
         return hash(self.uid)
 
+
 MetaRelationType = Literal["generalisation"]
+
 
 @dataclass
 class MetaRelation:
@@ -84,13 +92,14 @@ class MetaRelation:
     relation_type : MetaRelationType
         Type of the meta relation.
     """
-    uid : str
-    source_concept_id : str
-    destination_concept_id : str
-    relation_type : MetaRelationType
+    uid: str
+    source_concept_id: str
+    destination_concept_id: str
+    relation_type: MetaRelationType
 
     def __hash__(self):
         return hash(self.uid)
+
 
 @dataclass
 class KR:
@@ -102,6 +111,6 @@ class KR:
     meta_relations : Set[MetaRelation]
         Meta relations contained in the knowlegde representation.
     """
-    concepts : Set[Concept] = field(default_factory=set)
-    relations : Set[Relation] = field(default_factory=set)
-    meta_relations : Set[MetaRelation] = field(default_factory=set)
+    concepts: Set[Concept] = field(default_factory=set)
+    relations: Set[Relation] = field(default_factory=set)
+    meta_relations: Set[MetaRelation] = field(default_factory=set)
