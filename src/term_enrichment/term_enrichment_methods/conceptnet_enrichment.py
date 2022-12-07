@@ -1,9 +1,9 @@
 from typing import Any, Dict, List, Optional, Set
 
+from commons.ontology_learning_repository import conceptnet_api_fetch_term, get_paginated_conceptnet_edges
 from commons.ontology_learning_schema import CandidateTerm
 from commons.ontology_learning_utils import space2underscoreStr
 import config.logging_config as logging_config
-from term_enrichment.term_enrichment_repository import conceptnet_api_fetch_term, get_paginated_conceptnet_edges
 from term_enrichment.term_enrichment_schema import ConceptNetEdgeData, ConceptNetTermData
 
 
