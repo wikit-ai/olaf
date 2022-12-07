@@ -7,10 +7,13 @@ from config.core import config
 
 class ConceptExtraction():
 
-    def __init__(self, candidate_terms: List[CandidateTerm], config: Dict[str, Any] = config['concept_extraction']) -> None:
+    def __init__(self, candidate_terms: List[CandidateTerm], configuration: Dict[str, Any] = None) -> None:
         self.candidate_terms = candidate_terms
         self.kr = KR()
-        self.config = config
+        if configuration is None :
+            self.config = config['concept_extraction']
+        else :
+            self.config = configuration
 
     def group_by_synonyms(self) -> None:
         """This method merges candidate terms in a concept if they have value or synonyms in common.
