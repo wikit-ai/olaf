@@ -9,7 +9,7 @@ import config.logging_config as logging_config
 
 class ConceptExtraction:
 
-    def __init__(self, candidate_terms: List[CandidateTerm], config: Dict[str, Any] = config['concept_extraction']) -> None:
+    def __init__(self, candidate_terms: List[CandidateTerm], configuration: Dict[str, Any] = None) -> None:
         """Main class for concept extraction.
 
         Parameters
@@ -20,7 +20,10 @@ class ConceptExtraction:
             The concept extraction configuration details, by default config['concept_extraction']
         """
 
-        self.config = config
+        if configuration is None :
+            self.config = config['concept_extraction']
+        else :
+            self.config = configuration
         self.candidate_terms = candidate_terms
         self.kr = KR()
 

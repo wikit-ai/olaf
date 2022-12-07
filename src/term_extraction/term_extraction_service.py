@@ -13,15 +13,18 @@ from commons.ontology_learning_schema import CandidateTerm
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurrence_count
 
 
-class Term_Extraction():
+class TermExtraction():
     """Second processing of the corpus.
     Finding of terms under interest.
 
     """
 
-    def __init__(self, corpus: List[spacy.tokens.doc.Doc], config: Dict[str, Any] = config['term_extraction']) -> None:
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc], configuration: Dict[str, Any] = None) -> None:
         self.corpus = corpus
-        self.config = config
+        if configuration is None: 
+            self.config = config['term_extraction']
+        else: 
+            self.config = configuration
 
     def c_value_term_extraction(self) -> List[CandidateTerm]:
         """Returns the list of candidate terms having a c-value score equal or greater to the treshold defined in 

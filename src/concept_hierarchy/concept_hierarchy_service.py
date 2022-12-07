@@ -7,15 +7,18 @@ from config.core import config
 import config.logging_config as logging_config
 
 
-class Concept_Hierarchy():
+class ConceptHierarchy():
     """Step of hierarchisation between concepts.
     Feed meta relation of knowledge representation.
     """
 
-    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, config: Dict[str, Any] = config['concept_hierarchy']) -> None:
+    def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, configuration: Dict[str, Any] = None) -> None:
         self.corpus = corpus
         self.kr = kr
-        self.config = config
+        if configuration is None:
+            self.config = config['concept_hierarchy']
+        else:
+            self.config = configuration
 
     def term_subsumption(self):
         """Find generalisation relations with term subsumption method.
@@ -24,7 +27,7 @@ class Concept_Hierarchy():
         try:
             assert self.config['term_subsumption']['algo_type'] is not None
             assert self.config['term_subsumption']['subsumption_threshold'] is not None
-            assert self.config['tem_subsumption']['use_lemma'] is not None
+            assert self.config['term_subsumption']['use_lemma'] is not None
             assert self.config['use_span'] is not None
             if self.config['term_subsumption']['algo_type'] == "MEAN":
                 assert self.config['term_subsumption']['mean']['high_threshold'] is not None
@@ -36,7 +39,7 @@ class Concept_Hierarchy():
                     - concept_hierarchy.term_subsumption.subsumption_threshold
                     - concept_hierarchy.term_subsumption.use_lemma
                     - concept_hierarchy.term_subsumption.algo_type.
-                    If you set algo_type to "mean", make sure you provided the configuration fields : 
+                    If you set algo_type to "MEAN", make sure you provided the configuration fields : 
                     - concept_hierarchy.term_subsumption.mean_high_threshold
                     - concept_hierarchy.term_subsumption.mean_low_threshold
                     Trace : {e}.
@@ -45,7 +48,7 @@ class Concept_Hierarchy():
             term_sub_options = {
                 "algo_type": self.config['term_subsumption']['algo_type'],
                 "subsumption_threshold": self.config['term_subsumption']['subsumption_threshold'],
-                "use_lemma": self.config['tem_subsumption']['use_lemma'],
+                "use_lemma": self.config['term_subsumption']['use_lemma'],
                 "use_span": self.config['use_span']
             }
             if term_sub_options["algo_type"] == "MEAN":
