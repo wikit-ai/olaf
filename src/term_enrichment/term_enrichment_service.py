@@ -18,7 +18,7 @@ class TermEnrichment:
         The candidate terms to enrich
     """
 
-    def __init__(self, candidate_terms: List[CandidateTerm] = None, config: Dict[str, Any] = config['term_enrichment']) -> None:
+    def __init__(self, candidate_terms: List[CandidateTerm] = None, configuration: Dict[str, Any] = None) -> None:
         """_summary_
 
         Parameters
@@ -28,7 +28,10 @@ class TermEnrichment:
         config: Dict[str, Any]
             The configuration details.
         """
-        self.config = config
+        if configuration is None: 
+            self.config = config['term_enrichment']
+        else:
+            self.config = configuration
 
         if self.config.get("load_candidate_terms_from_file"):
             self.candidate_terms = load_candidate_terms_from_file()

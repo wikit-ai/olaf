@@ -10,7 +10,7 @@ from data_preprocessing.data_preprocessing_repository import load_corpus, load_s
 import config.logging_config as logging_config
 
 
-class Data_Preprocessing():
+class DataPreprocessing():
     """First basic processing of the corpus.
 
     Attributes: 

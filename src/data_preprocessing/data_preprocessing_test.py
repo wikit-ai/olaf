@@ -6,7 +6,7 @@ import spacy
 from commons.spacy_processing_tools import build_spans_from_tokens
 from data_preprocessing.data_preprocessing_methods.token_selectors import TokenSelectionPipeline, select_on_pos, select_on_occurrence_count
 
-from data_preprocessing.data_preprocessing_service import Data_Preprocessing
+from data_preprocessing.data_preprocessing_service import DataPreprocessing
 # from data_preprocessing.data_preprocessing_methods.tokenizers import create_no_split_on_dash_in_words_tokenizer
 from config.logging_config import logger
 
@@ -15,7 +15,7 @@ class TestDataPreprocessing(unittest.TestCase):
 
     @classmethod
     def setUpClass(self) -> None:
-        self.data_preprocessing = Data_Preprocessing()
+        self.data_preprocessing = DataPreprocessing()
         self.texts_and_tokens = [
             ('Toothed lock washers - Type V, countersunk',
              ['Toothed', 'lock', 'washers', '-', 'Type', 'V', ',', 'countersunk']),

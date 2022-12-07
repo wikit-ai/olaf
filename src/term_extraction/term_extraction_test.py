@@ -4,7 +4,7 @@ import unittest
 from commons.ontology_learning_schema import CandidateTerm
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos,select_on_occurrence_count
 from term_extraction.term_extraction_methods.c_value import Cvalue
-from term_extraction.term_extraction_service import Term_Extraction
+from term_extraction.term_extraction_service import TermExtraction
 
 class TestOnPosTermExtraction(unittest.TestCase):
     """Test term extraction based on pos tagging.
@@ -62,8 +62,8 @@ class TestOnPosTermExtraction(unittest.TestCase):
                 "use_lemma": True
             }
         }
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
-        term_extraction_instance_custom = Term_Extraction(self.test_spacy_custom_doc, config_custom)
+        term_extraction_instance = TermExtraction(self.test_spacy_doc, config)
+        term_extraction_instance_custom = TermExtraction(self.test_spacy_custom_doc, config_custom)
         self.assertEqual(term_extraction_instance_custom._get_doc_content_for_term_extraction(self.doc_attribute_name, self.test_spacy_custom_doc[0]), self.test_spacy_custom_doc[0]._.get(self.doc_attribute_name))
         self.assertEqual(term_extraction_instance._get_doc_content_for_term_extraction(None, self.test_spacy_doc[0]), self.test_spacy_doc[0])
 
@@ -101,8 +101,8 @@ class TestOnPosTermExtraction(unittest.TestCase):
                 "use_lemma": True
             }
         }
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
-        term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc, config_lemma)
+        term_extraction_instance = TermExtraction(self.test_spacy_doc, config)
+        term_extraction_instance_lemma = TermExtraction(self.test_spacy_doc, config_lemma)
         self.assertEqual(corpus_noun_ct,set(term_extraction_instance.on_pos_term_extraction()))
         self.assertEqual(corpus_noun_lemma_ct,set(term_extraction_instance_lemma.on_pos_term_extraction()))
 
@@ -181,8 +181,8 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
             }
         }
 
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
-        term_extraction_instance_lemma = Term_Extraction(self.test_spacy_doc, config_lemma)
+        term_extraction_instance = TermExtraction(self.test_spacy_doc, config)
+        term_extraction_instance_lemma = TermExtraction(self.test_spacy_doc, config_lemma)
 
         words_occurrence_selection = {"groupe"}
         words_occurrence_selection_ct = set()
@@ -204,10 +204,10 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
         span_occurence_selection = set()
         span_occurence_selection.add(CandidateTerm("groupe principal"))
 
-        term_extraction_span = Term_Extraction(self.test_spacy_doc_span,config_span)
+        term_extraction_span = TermExtraction(self.test_spacy_doc_span,config_span)
         self.assertSetEqual(set(term_extraction_span.on_occurrence_term_extraction()), span_occurence_selection)
 
-        term_extraction_span_lemma = Term_Extraction(self.test_spacy_doc_span,config_span_lemma)
+        term_extraction_span_lemma = TermExtraction(self.test_spacy_doc_span,config_span_lemma)
         span_occurence_selection.add(CandidateTerm("participant"))
         self.assertSetEqual(set(term_extraction_span_lemma.on_occurrence_term_extraction()), span_occurence_selection)        
 
