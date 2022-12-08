@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import Callable, List
+
+import spacy.tokens.doc
 
 
 class DocAttributeNotFound(Exception):
@@ -8,10 +11,10 @@ class DocAttributeNotFound(Exception):
 
 
 @dataclass
-class CValueResults:
-    """A dataclass to contain the C-value information
+class TermExtractionResults:
+    """A dataclass to contain the term extraction results information
     """
-    c_value: float
+    score: float
     candidate_term: str
 
 
@@ -30,3 +33,6 @@ class CandidateTermStatTriple:
     substring_corpus_occurrence: int = 0
     substring_nested_occurrence: int = 0
     count_longer_terms: int = 1
+
+
+TFIDF_ANALYZER = Callable[[spacy.tokens.doc.Doc], List[str]]
