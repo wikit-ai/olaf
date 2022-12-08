@@ -3,12 +3,13 @@ import unittest
 
 from commons.ontology_learning_schema import CandidateTerm
 from term_extraction.term_extraction_methods.c_value import Cvalue
+from term_extraction.term_extraction_methods.tf_idf_term_extraction import TFIDF_TermExtraction
 from term_extraction.term_extraction_methods.candidate_terms_post_filters import (
     filter_candidate_terms_on_first_token,
     filter_candidate_terms_on_last_token,
     filter_candidate_terms_if_token_in_term
 )
-from term_extraction.term_extraction_service import Term_Extraction
+from term_extraction.term_extraction_service import TermExtraction
 
 
 class TestOnPosTermExtraction(unittest.TestCase):
@@ -67,8 +68,8 @@ class TestOnPosTermExtraction(unittest.TestCase):
                 "use_lemma": True
             }
         }
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
-        term_extraction_instance_custom = Term_Extraction(
+        term_extraction_instance = TermExtraction(self.test_spacy_doc, config)
+        term_extraction_instance_custom = TermExtraction(
             self.test_spacy_custom_doc, config_custom)
         self.assertEqual(term_extraction_instance_custom._get_doc_content_for_term_extraction(
             self.doc_attribute_name, self.test_spacy_custom_doc[0]), self.test_spacy_custom_doc[0]._.get(self.doc_attribute_name))
@@ -108,8 +109,8 @@ class TestOnPosTermExtraction(unittest.TestCase):
                 "use_lemma": True
             }
         }
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
-        term_extraction_instance_lemma = Term_Extraction(
+        term_extraction_instance = TermExtraction(self.test_spacy_doc, config)
+        term_extraction_instance_lemma = TermExtraction(
             self.test_spacy_doc, config_lemma)
         self.assertEqual(corpus_noun_ct, set(
             term_extraction_instance.on_pos_term_extraction()))
@@ -193,8 +194,8 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
             }
         }
 
-        term_extraction_instance = Term_Extraction(self.test_spacy_doc, config)
-        term_extraction_instance_lemma = Term_Extraction(
+        term_extraction_instance = TermExtraction(self.test_spacy_doc, config)
+        term_extraction_instance_lemma = TermExtraction(
             self.test_spacy_doc, config_lemma)
 
         words_occurrence_selection = {"groupe"}
@@ -207,10 +208,14 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
         for lemma in lemmas_occurrence_selection:
             lemmas_occurrence_selection_ct.add(CandidateTerm(lemma))
 
-        self.assertEqual(set(term_extraction_instance.on_occurrence_term_extraction(
-        )), words_occurrence_selection_ct)
-        self.assertEqual(set(term_extraction_instance_lemma.on_occurrence_term_extraction(
-        )), lemmas_occurrence_selection_ct)
+        self.assertEqual(
+            set(term_extraction_instance.on_occurrence_term_extraction()),
+            words_occurrence_selection_ct
+        )
+        self.assertEqual(
+            set(term_extraction_instance_lemma.on_occurrence_term_extraction()),
+            lemmas_occurrence_selection_ct
+        )
 
         term_extraction_instance.config["use_span"] = True
         term_extraction_instance.config["selected_tokens_doc_attribute"] = None
@@ -220,12 +225,12 @@ class TestOnoccurrenceTermExtraction(unittest.TestCase):
         span_occurence_selection = set()
         span_occurence_selection.add(CandidateTerm("groupe principal"))
 
-        term_extraction_span = Term_Extraction(
+        term_extraction_span = TermExtraction(
             self.test_spacy_doc_span, config_span)
         self.assertSetEqual(set(
             term_extraction_span.on_occurrence_term_extraction()), span_occurence_selection)
 
-        term_extraction_span_lemma = Term_Extraction(
+        term_extraction_span_lemma = TermExtraction(
             self.test_spacy_doc_span, config_span_lemma)
         span_occurence_selection.add(CandidateTerm("participant"))
         self.assertSetEqual(set(
@@ -286,34 +291,62 @@ class TestCvalue(unittest.TestCase):
         my_c_val.candidateTermsSpans = test_terms_spans
         my_c_val.candidateTermsCounter = test_terms_counter
 
-        self.c_values = my_c_val()
+        self.c_values = my_c_val.c_values
 
     def test_Cvalue_results(self):
         self.assertEqual(len(self.c_values), len(set(self.test_terms)))
 
-        self.assertEqual(round(self.c_values[0].c_value, 2), 1551.36)
+        self.assertEqual(round(self.c_values[0].score, 2), 1551.36)
         self.assertEqual(
             self.c_values[0].candidate_term, "BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(self.c_values[1].c_value), 14.0)
+        self.assertEqual(round(self.c_values[1].score), 14.0)
         self.assertEqual(
             self.c_values[1].candidate_term, "ULCERATED BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(self.c_values[2].c_value), 12.0)
+        self.assertEqual(round(self.c_values[2].score), 12.0)
         self.assertEqual(
             self.c_values[2].candidate_term, "CYSTIC BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(self.c_values[3].c_value, 4), 11.6096)
+        self.assertEqual(round(self.c_values[3].score, 4), 11.6096)
         self.assertEqual(self.c_values[3].candidate_term,
                          "ADENOID CYSTIC BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(self.c_values[4].c_value), 10.0)
+        self.assertEqual(round(self.c_values[4].score), 10.0)
         self.assertEqual(
             self.c_values[4].candidate_term, "RECURRENT BASAL CELL CARCINOMA")
 
-        self.assertEqual(round(self.c_values[5].c_value), 6.0)
+        self.assertEqual(round(self.c_values[5].score), 6.0)
         self.assertEqual(self.c_values[5].candidate_term,
                          "CIRCUMSCRIBED BASAL CELL CARCINOMA")
+
+
+class TestTFIDF_TermExtraction(unittest.TestCase):
+
+    def setUp(self) -> None:
+        corpus = [
+            'This is the first document.',
+            'This is the first.',
+            'This document is the second document.',
+            'And this is the third one.',
+            'Is this the first document?',
+            'Is this the first?',
+            "what is actually a document?"
+        ]
+        nlp = spacy.load("en_core_web_sm")
+        processed_corpus = [doc for doc in nlp.pipe(corpus)]
+
+        self.tfidf_term_extractor = TFIDF_TermExtraction(
+            processed_corpus, tfidf_agg_type="MEAN")
+
+    def test_compute_tfidf(self) -> None:
+
+        tfidf_res = self.tfidf_term_extractor.tfidf_values
+
+        self.assertNotEqual(len(tfidf_res), 0)
+        self.assertIsNotNone(self.tfidf_term_extractor.tfidf_values)
+        self.assertIn(
+            "document", self.tfidf_term_extractor.tfidf_vectorizer.vocabulary_.keys())
 
 
 class TestCandidateTermPostFiltering(unittest.TestCase):
@@ -336,7 +369,7 @@ class TestCandidateTermPostFiltering(unittest.TestCase):
         ]
         self.candidate_terms = [CandidateTerm(term) for term in terms_text]
 
-        self.term_extraction = Term_Extraction(list(), config={})
+        self.term_extraction = TermExtraction(list(), configuration={})
 
         self.filter_on_first_expected_res = {
             "control and signalling units",

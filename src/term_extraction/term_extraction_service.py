@@ -8,8 +8,9 @@ import spacy.language
 
 from config.core import config
 import config.logging_config as logging_config
-from term_extraction.term_extraction_methods.c_value import Cvalue
 from term_extraction.term_extraction_methods.candidate_terms_post_filters import str2candidateTermFilter
+from term_extraction.term_extraction_methods.c_value import Cvalue
+from term_extraction.term_extraction_methods.tf_idf_term_extraction import TFIDF_TermExtraction, TFIDF_ANALYZER
 from commons.ontology_learning_schema import CandidateTerm
 from data_preprocessing.data_preprocessing_methods.token_selectors import select_on_pos, select_on_occurrence_count
 
@@ -22,9 +23,9 @@ class TermExtraction():
 
     def __init__(self, corpus: List[spacy.tokens.doc.Doc], configuration: Dict[str, Any] = None) -> None:
         self.corpus = corpus
-        if configuration is None: 
+        if configuration is None:
             self.config = config['term_extraction']
-        else: 
+        else:
             self.config = configuration
 
     def c_value_term_extraction(self) -> List[CandidateTerm]:
@@ -60,10 +61,10 @@ class TermExtraction():
                     Trace : {e}
                 """)
 
-        c_values = c_value.compute_c_values()
+        c_values = c_value.c_values
 
         candidate_terms = [
-            CandidateTerm(c_val.candidate_term) for c_val in c_values if c_val.c_value >= treshold
+            CandidateTerm(c_val.candidate_term) for c_val in c_values if c_val.score >= treshold
         ]
 
         return candidate_terms
@@ -167,6 +168,44 @@ class TermExtraction():
             candidate_terms = [
                 CandidateTerm(unique_candidate) for unique_candidate in unique_candidates
             ]
+
+        return candidate_terms
+
+    def tfidf_term_extraction(self, tfidf_token_filter: Optional[TFIDF_ANALYZER] = None) -> List[CandidateTerm]:
+        """Returns the list of candidate terms having a tfidf score equal or greater to the treshold defined in 
+        the configuration field term_extraction.tfidf.treshold.
+
+
+         Parameters
+        ----------
+        tfidf_token_filter: Optional[TFIDF_ANALYZER] = None
+            The function to preprocess tokens before computing TF IDF scores.
+
+        Returns
+        -------
+        List[CandidateTerm]
+            The list of extracted candidate terms.
+        """
+        try:
+            treshold = self.config['tfidf']['treshold']
+        except KeyError as e:
+            logging_config.logger.error(
+                f"""Config information missing for TF IDF term extraction. Make sure you provided the configuration field:
+                    - term_extraction.tfidf.treshold
+                    Trace : {e}
+                """)
+
+        candidate_terms = list()
+
+        tfidf_agg_type = self.config["tfidf"].get("tfidf_agg_type", "MEAN")
+        tfidf_term_extraction = TFIDF_TermExtraction(
+            self.corpus, tfidf_agg_type, tfidf_token_filter)
+
+        tfidf_term_extract_res = tfidf_term_extraction.tfidf_values
+
+        candidate_terms = [
+            CandidateTerm(term_extraction_res.candidate_term) for term_extraction_res in tfidf_term_extract_res if term_extraction_res.score >= treshold
+        ]
 
         return candidate_terms
 

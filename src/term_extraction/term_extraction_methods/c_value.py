@@ -5,7 +5,7 @@ from typing import Dict, List, Set
 import spacy.tokens.doc
 
 import config.logging_config as logging_config
-from term_extraction.term_extraction_schema import CandidateTermStatTriple, CValueResults, DocAttributeNotFound
+from term_extraction.term_extraction_schema import CandidateTermStatTriple, DocAttributeNotFound, TermExtractionResults
 from commons.spacy_processing_tools import spacy_span_ngrams
 
 
@@ -47,7 +47,7 @@ class Cvalue:
         CandidateTermStatTriples : Dict[str, CandidateTermStatTriple]
             An attribute updated and used during the C-value computation process
             This attribute will be set by the private method compute_c_values.
-        c_values : List[CValueResults]
+        c_values : List[TermExtractionResults]
             An attribute that will contained the candidate terms and their C-values ordered by descending C-values.
             This attribute will be set by the private method compute_c_values.
         """
@@ -59,11 +59,34 @@ class Cvalue:
         self.CandidateTermStatTriples = dict()
         self.c_values = None
 
-    def __call__(self) -> List[CValueResults]:
-        if self.c_values is not None:
-            return self.c_values
+    @property
+    def c_values(self) -> List[TermExtractionResults]:
+        """Getter for self.c_value property
+
+        Returns
+        -------
+        List[TermExtractionResults]
+            The list of C-values alongside the terms
+        """
+        if self._c_values is None:
+            self.compute_c_values()
+
+        return self._c_values
+
+    @c_values.setter
+    def c_values(self, value: List[TermExtractionResults]) -> None:
+        """Setter for self.c_value attribute.
+
+        Parameters
+        ----------
+        value : List[TermExtractionResults]
+            The value to set.
+        """
+        if (value is None) or isinstance(value, list):
+            self._c_values = value
         else:
-            return self.compute_c_values()
+            logging_config.logger.error(
+                "Incompatible value type for self.c_value attribute. It should be List[TermExtractionResults]")
 
     def _extract_token_sequences(self) -> List[spacy.tokens.span.Span]:
         """Extract the list of Spacy spans contained in the Spacy Doc custum attribute
@@ -172,7 +195,8 @@ class Cvalue:
         # groups of candidate terms are concatenated from the the longest to the smallest
         ordered_candidate_terms = []
         for terms_size in range(1, self.max_size_gram + 1).__reversed__():
-            orderedByOccurrenceTerms = list(candidate_terms_by_size[terms_size])
+            orderedByOccurrenceTerms = list(
+                candidate_terms_by_size[terms_size])
             orderedByOccurrenceTerms.sort(
                 key=lambda term: self.candidateTermsCounter[term], reverse=True)
             ordered_candidate_terms.extend(orderedByOccurrenceTerms)
@@ -277,16 +301,11 @@ class Cvalue:
             self._update_CandidateTermStatTriples(
                 substring_span.text, candidate_term_span.text)
 
-    def compute_c_values(self) -> List[CValueResults]:
+    def compute_c_values(self) -> None:
         """Compute the C-value following the algorithm in <https://doi.org/10.1007/s007999900023> (section 2.3, page 4).
 
            This method sets the attribute:
              - self.c_values
-
-        Returns
-        -------
-        List[CValueResults]
-            the candidate terms and their C-values ordered by descending C-values. 
         """
 
         if self.candidateTermsSpans is None:
@@ -298,11 +317,16 @@ class Cvalue:
 
             len_candidate_term = len(candidate_term_span)
 
+            if len_candidate_term == 1:
+                logging_config.logger.error(
+                    f"Error with candidate term {candidate_term_span.text}. C-value does not make sens for term composed of only one token.")
+                continue
+
             if len_candidate_term == self.max_size_gram:
                 c_val = math.log2(len_candidate_term) * \
                     self.candidateTermsCounter[candidate_term_span.text]
-                c_values.append(CValueResults(
-                    c_value=c_val, candidate_term=candidate_term_span.text))
+                c_values.append(TermExtractionResults(
+                    score=c_val, candidate_term=candidate_term_span.text))
 
                 self._process_substrings_spans(
                     candidate_term_span)
@@ -311,8 +335,8 @@ class Cvalue:
                 if candidate_term_span.text not in self.CandidateTermStatTriples.keys():
                     c_val = math.log2(len_candidate_term) * \
                         self.candidateTermsCounter[candidate_term_span.text]
-                    c_values.append(CValueResults(
-                        c_value=c_val, candidate_term=candidate_term_span.text))
+                    c_values.append(TermExtractionResults(
+                        score=c_val, candidate_term=candidate_term_span.text))
                 else:
                     c_val = math.log2(
                         len_candidate_term) * (self.candidateTermsCounter[candidate_term_span.text] -
@@ -320,15 +344,13 @@ class Cvalue:
                                                    self.CandidateTermStatTriples[candidate_term_span.text].substring_nested_occurrence /
                             self.CandidateTermStatTriples[candidate_term_span.text].count_longer_terms)
                     )
-                    c_values.append(CValueResults(
-                        c_value=c_val, candidate_term=candidate_term_span.text))
+                    c_values.append(TermExtractionResults(
+                        score=c_val, candidate_term=candidate_term_span.text))
 
                 self._process_substrings_spans(
                     candidate_term_span)
 
         # reorder the c-values so we have the terms with the highest c-values at the top.
-        c_values.sort(key=lambda c_val: c_val.c_value, reverse=True)
+        c_values.sort(key=lambda c_val: c_val.score, reverse=True)
 
         self.c_values = c_values
-
-        return self.c_values
