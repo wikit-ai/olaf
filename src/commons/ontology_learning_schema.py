@@ -74,7 +74,7 @@ class Relation:
         return hash(self.uid)
 
 
-MetaRelationType = Literal["generalisation"]
+MetaRelationType = Literal["generalisation", "related_to"]
 
 
 @dataclass
