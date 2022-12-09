@@ -1,6 +1,7 @@
 import spacy
 import uuid
 
+from commons.ontology_learning_repository import KR2RDF
 from commons.ontology_learning_schema import Concept, KR
 from concept_hierarchy.concept_hierarchy_service import TermSubsumption
 
@@ -18,11 +19,11 @@ for spacy_document in spacy_model.pipe(corpus):
 
 options = {
     "algo_type": "MEAN",
-    "use_span" : False,
-    "subsumption_threshold" : 0.8,
-    "mean_high_threshold" : 0.6,
-    "mean_low_threshold" : 0.4,
-    "use_lemma" : True
+    "use_span": False,
+    "subsumption_threshold": 0.8,
+    "mean_high_threshold": 0.6,
+    "mean_low_threshold": 0.4,
+    "use_lemma": True
 }
 
 kr = KR()
@@ -36,5 +37,7 @@ print(kr)
 term_sub = TermSubsumption(corpus_preprocessed, kr, options)
 term_sub()
 
-print("\n\nKnowledge graph before concept hierarchisation : \n")
+print("\n\nKnowledge graph after concept hierarchisation : \n")
 print(term_sub.kr)
+
+KR2RDF(kr, "data_files/term_subsumption_mean_demo.ttl")

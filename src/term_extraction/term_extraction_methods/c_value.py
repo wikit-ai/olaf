@@ -57,7 +57,7 @@ class Cvalue:
         self.candidateTermsSpans = None
         self.candidateTermsCounter = None
         self.CandidateTermStatTriples = dict()
-        self.c_values = None
+        self.c_values = list()
 
     @property
     def c_values(self) -> List[TermExtractionResults]:
@@ -68,7 +68,7 @@ class Cvalue:
         List[TermExtractionResults]
             The list of C-values alongside the terms
         """
-        if self._c_values is None:
+        if len(self._c_values) == 0:
             self.compute_c_values()
 
         return self._c_values
@@ -82,7 +82,7 @@ class Cvalue:
         value : List[TermExtractionResults]
             The value to set.
         """
-        if (value is None) or isinstance(value, list):
+        if isinstance(value, list):
             self._c_values = value
         else:
             logging_config.logger.error(
