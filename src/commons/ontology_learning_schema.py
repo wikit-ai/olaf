@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Literal, Set
 
+import config.logging_config as logging_config
+
 
 @dataclass
 class CandidateTerm:
@@ -46,6 +48,11 @@ class Concept:
     terms: Set[str] = field(default_factory=set)
     external_uris: Set[str] = field(default_factory=set)
 
+    def __post_init__(self):
+        if not isinstance(self.uid, str):
+            logging_config.logger.error(
+                "Incompatible value type for Concept.uid attribute. It should be a str")
+
     def __hash__(self):
         return hash(self.uid)
 
@@ -69,6 +76,11 @@ class Relation:
     source_concept_id: str
     destination_concept_id: str
     terms: Set[str] = field(default_factory=set)
+
+    def __post_init__(self):
+        if not isinstance(self.uid, str):
+            logging_config.logger.error(
+                "Incompatible value type for Concept.uid attribute. It should be a str")
 
     def __hash__(self):
         return hash(self.uid)
@@ -96,6 +108,11 @@ class MetaRelation:
     source_concept_id: str
     destination_concept_id: str
     relation_type: MetaRelationType
+
+    def __post_init__(self):
+        if not isinstance(self.uid, str):
+            logging_config.logger.error(
+                "Incompatible value type for Concept.uid attribute. It should be a str")
 
     def __hash__(self):
         return hash(self.uid)

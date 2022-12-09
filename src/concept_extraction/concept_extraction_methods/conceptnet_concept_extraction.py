@@ -70,7 +70,7 @@ class ConceptNetConceptExtraction:
                 term)
             if len(term_external_ids) > 0:
                 new_concept = Concept(
-                    uid=uuid4(),
+                    uid=str(uuid4()),
                     terms=term.synonyms,
                     external_uris=term_external_ids
                 )
@@ -203,7 +203,7 @@ class ConceptNetConceptExtraction:
             The concept resulting from the merge.
         """
         new_concept = Concept(
-            uid=uuid4(),
+            uid=str(uuid4()),
             terms=concept_1.terms.union(concept_2.terms),
             external_uris=concept_1.external_uris.union(
                 concept_2.external_uris)

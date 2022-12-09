@@ -3,7 +3,8 @@ import numpy as np
 import spacy.tokens
 import spacy.vocab
 from statistics import mean
-from typing import Any, Dict, List
+from tqdm import tqdm
+from typing import Any, Dict, List, Tuple
 import uuid
 
 from commons.ontology_learning_schema import Concept, KR, MetaRelation
@@ -32,6 +33,7 @@ class TermSubsumption():
         self.kr = kr
         self.representative_terms = []
         self.terms_count = {}
+        self.pair_terms_count = {}
         self.options = options
 
         try:
@@ -49,6 +51,14 @@ class TermSubsumption():
                 f"Could not set terms count. Trace: {_e}.")
         else:
             logging_config.logger.info("Terms count set.")
+
+        try:
+            self.pair_terms_count = self._count_doc_with_pair_terms()
+        except Exception as _e:
+            logging_config.logger.error(
+                f"Could not set pair terms count. Trace: {_e}.")
+        else:
+            logging_config.logger.info("Pair terms count set.")
 
     def __call__(self) -> None:
         """The method directly update the knowledge representation"""
@@ -70,11 +80,11 @@ class TermSubsumption():
         """
         representative_terms = []
         if self.options.get('algo_type') == "mean":
-            for concept in self.kr.concepts:
+            for concept in tqdm(self.kr.concepts):
                 representative_terms += [RepresentativeTerm(
                     term, concept.uid) for term in concept.terms]
         else:
-            for concept in self.kr.concepts:
+            for concept in tqdm(self.kr.concepts):
                 if len(concept.terms) == 1:
                     term = list(concept.terms)[0]
                 else:
@@ -102,7 +112,7 @@ class TermSubsumption():
             Dict with terms as keys and their count as values.
         """
         terms_count = {}
-        for term in self.representative_terms:
+        for term in tqdm(self.representative_terms):
             terms_count[term.value] = self._count_doc_with_term(term.value)
         return terms_count
 
@@ -216,7 +226,7 @@ class TermSubsumption():
             True in term is in doc and false otherwise.
         """
         term_in_doc = False
-        term_nb_words = len(term.split())
+        term_nb_words = len(term.strip().split())
         if self.options.get('use_span') and (term_nb_words > 1):
             expression_to_test = " " + " ".join(doc_words) + " "
             term_to_find = " " + term + " "
@@ -248,30 +258,27 @@ class TermSubsumption():
                 count += 1
         return count
 
-    def _count_doc_with_both_terms(self, term1: str, term2: str) -> int:
-        """Count the number of documents containing both terms in parameter.
-
-        Parameters
-        ----------
-        term1 : str
-            First representative term to analyse.
-        term2 : str
-            Second representative term to analyse.
+    def _count_doc_with_pair_terms(self) -> Dict[Tuple[str], int]:
+        """Create counter of all pair terms occurrences in corpus.
 
         Returns
         -------
-        int
-            Number of doc containing both terms.
+        Dict[Tuple(str), int]
+            Counter of all pair terms occurrences in corpus.
         """
-        count = 0
-        for doc in self.corpus:
+        all_terms_pairs = list(combinations(
+            [term for term in self.terms_count.keys()], 2))
+        pairs_count = {(term_pair[0], term_pair[1])
+                        : 0 for term_pair in all_terms_pairs}
+        for doc in tqdm(self.corpus):
             if self.options.get('use_lemma'):
                 doc_words = [token.lemma_ for token in doc]
             else:
                 doc_words = [token.text for token in doc]
-            if self._check_term_in_doc(term1, doc_words) and self._check_term_in_doc(term2, doc_words):
-                count += 1
-        return count
+            for term_pair in all_terms_pairs:
+                if self._check_term_in_doc(term_pair[0], doc_words) and self._check_term_in_doc(term_pair[1], doc_words):
+                    pairs_count[(term_pair[0], term_pair[1])] += 1
+        return pairs_count
 
     def _compute_subsumption(self, nb_doc_cooccurrence: int, nb_doc_occurrence: int) -> float:
         """Compute subsumption score between two terms.
@@ -364,12 +371,12 @@ class TermSubsumption():
         for gen_term in general_concept_rt:
             for spe_term in specialized_concept_rt:
                 total_count += 1
-                score_coocurrence = self._count_doc_with_both_terms(
-                    gen_term.value, spe_term.value)
+                score_cooccurrence = self.pair_terms_count.get(
+                    (gen_term.value, spe_term.value), self.pair_terms_count.get((spe_term.value, gen_term.value)))
                 sub_score = self._compute_subsumption(
-                    score_coocurrence, self.terms_count[spe_term.value])
+                    score_cooccurrence, self.terms_count[spe_term.value])
                 inverse_sub_score = self._compute_subsumption(
-                    score_coocurrence, self.terms_count[gen_term.value])
+                    score_cooccurrence, self.terms_count[gen_term.value])
                 if self._verify_threshold(sub_score, inverse_sub_score):
                     sub_count += 1
         return sub_count/total_count
@@ -409,7 +416,7 @@ class TermSubsumption():
         MetaRelation
             Generalisation relation built between concepts.
         """
-        meta_relation_uid = uuid.uuid4()
+        meta_relation_uid = str(uuid.uuid4())
         meta_relation_source_concept_id = source_concept_id
         meta_relation_destination_concept_id = destination_concept_id
         meta_relation_type = "generalisation"
@@ -421,18 +428,18 @@ class TermSubsumption():
         """Find generalisation relations between concepts via term subsumption method.
         This method uses one unique representative word by concept.
         """
-        for i, term in enumerate(self.representative_terms):
-            for pair_term in self._find_other_terms(i, self.representative_terms):
-                score_cooccurrence = self._count_doc_with_both_terms(
-                    term.value, pair_term.value)
-                subsumption_score = self._compute_subsumption(
-                    score_cooccurrence, self.terms_count[pair_term.value])
-                inverse_subsumption_score = self._compute_subsumption(
-                    score_cooccurrence, self.terms_count[term.value])
-                if self._verify_threshold(subsumption_score, inverse_subsumption_score):
-                    meta_relation = self._create_generalisation_relation(
-                        term.concept_id, pair_term.concept_id)
-                    self.kr.meta_relations.add(meta_relation)
+        representative_terms_pairs = combinations(self.representative_terms, 2)
+        for term_source, term_destination in representative_terms_pairs:
+            score_cooccurrence = self.pair_terms_count.get(
+                (term_source.value, term_destination.value), self.pair_terms_count.get((term_destination.value, term_source.value)))
+            subsumption_score = self._compute_subsumption(
+                score_cooccurrence, self.terms_count[term_destination.value])
+            inverse_subsumption_score = self._compute_subsumption(
+                score_cooccurrence, self.terms_count[term_source.value])
+            if self._verify_threshold(subsumption_score, inverse_subsumption_score):
+                meta_relation = self._create_generalisation_relation(
+                    term_source.concept_id, term_destination.concept_id)
+                self.kr.meta_relations.add(meta_relation)
 
     def term_subsumption_mean(self):
         """Find generalisation relations between concepts via term subsumption method.
