@@ -22,18 +22,16 @@ class OnOccurrenceRelationExtraction():
         self.corpus = corpus
         self.kr = kr
         self.options = options
-        if spacy.tokens.doc.Doc.has_extension('sents'):
-            if not spacy.tokens.span.Span.has_extension('concepts'):
-                spacy.tokens.span.Span.set_extension('concepts', default = [])
-        else : 
-            if not spacy.tokens.doc.Doc.has_extension('concepts'):
-                spacy.tokens.doc.Doc.set_extension('concepts', default = [])
+        if not spacy.tokens.span.Span.has_extension('concepts'):
+            spacy.tokens.span.Span.set_extension('concepts', default = [])
+        if not spacy.tokens.doc.Doc.has_extension('concepts'):
+            spacy.tokens.doc.Doc.set_extension('concepts', default = [])
 
     def _label_doc_with_concept(self) -> None:
         """Create attribute in spacy sentence that contains list of concepts found in the sentence.
         """
         for doc in self.corpus:
-            if spacy.tokens.doc.Doc.has_extension('sents'):
+            if doc.has_annotation('SENT_START'):
                 for sentence in doc.sents :
                     sentence._.concepts = self._find_concepts_in_sentence(sentence)
             else :
@@ -103,7 +101,7 @@ class OnOccurrenceRelationExtraction():
         """
         concepts_in_sentences = []
         for doc in self.corpus:
-            if spacy.tokens.doc.Doc.has_extension('sents'):
+            if doc.has_annotation('SENT_START'):
                 for sent in doc.sents :
                     concepts_in_sentences.append(sent._.get('concepts'))
             else:
