@@ -20,7 +20,7 @@ class ConceptHierarchy():
         else:
             self.config = configuration
 
-    def term_subsumption(self):
+    def term_subsumption(self) -> None:
         """Find generalisation relations with term subsumption method.
         """
 
@@ -56,4 +56,4 @@ class ConceptHierarchy():
                 term_sub_options["mean_low_threshold"] = self.config['term_subsumption']['mean']['low_threshold']
             term_subsumption = TermSubsumption(
                 self.corpus, self.kr, term_sub_options)
-            term_subsumption()
+            term_subsumption.term_subsumtion()

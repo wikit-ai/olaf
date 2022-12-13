@@ -1,7 +1,6 @@
 import spacy
 import uuid
 
-from commons.ontology_learning_repository import KR2RDF
 from commons.ontology_learning_schema import Concept, KR
 from concept_hierarchy.concept_hierarchy_service import TermSubsumption
 
@@ -33,9 +32,7 @@ print("\nKnowledge graph before concept hierarchisation : \n")
 print(kr)
 
 term_sub = TermSubsumption(corpus_preprocessed, kr, options)
-term_sub()
+term_sub.term_subsumtion()
 
 print("\n\nKnowledge graph after concept hierarchisation : \n")
 print(term_sub.kr)
-
-KR2RDF(kr, "data_files/term_subsumption_unique_demo.ttl")
