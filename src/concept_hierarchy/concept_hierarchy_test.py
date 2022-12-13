@@ -19,7 +19,7 @@ class TestTermSubsumption(unittest.TestCase):
         corpus_preprocessed = []
         self.spacy_model = spacy.load("fr_core_news_md")
         for spacy_document in self.spacy_model.pipe(corpus):
-                corpus_preprocessed.append(spacy_document)
+            corpus_preprocessed.append(spacy_document)
         kr = KR()
         self.concept_phrase_span = Concept(uuid.uuid4(), {"premier phrase"})
         self.concept_phrase = Concept(uuid.uuid4(), {"phrase"})
@@ -39,7 +39,7 @@ class TestTermSubsumption(unittest.TestCase):
         self.term_sub = TermSubsumption(corpus_preprocessed, kr, options)
 
 
-    def test_get_representative_terms(self):
+    def test_get_representative_terms(self) -> None:
         self.term_sub.options['use_span'] = True
         representative_terms = set()
         representative_terms.add(RepresentativeTerm("premier phrase", self.concept_phrase_span.uid))
@@ -59,29 +59,55 @@ class TestTermSubsumption(unittest.TestCase):
 
         self.term_sub.kr.concepts.remove(concept_multiple_terms)
 
-    def test_get_terms_count(self):
+    def test_compute_terms_cout(self) -> None:
         self.term_sub.options['use_span'] = True
         self.term_sub.options['use_lemma'] = True
         terms_count_span = {"premier phrase":2, "phrase": 2, "test":3}
-        self.assertDictEqual(terms_count_span, self.term_sub._get_terms_count())
+        pair_terms_count = {('test', 'phrase'): 2, ('test', 'premier phrase'): 2, ('phrase', 'premier phrase'): 2, ('phrase','test'): 2, ('premier phrase', 'test'): 2, ('premier phrase', 'phrase'): 2}
+        self.term_sub.terms_count.clear()
+        self.term_sub.pair_terms_count.clear()
+        self.term_sub._compute_terms_cout()
+        self.assertDictEqual(terms_count_span, self.term_sub.terms_count)
+        for pair_terms in self.term_sub.pair_terms_count:
+            self.assertIn(pair_terms, pair_terms_count)
+
         self.term_sub.options['use_lemma'] = False
         terms_count_span = {"premier phrase":0, "phrase": 1, "test":2}
-        self.assertDictEqual(terms_count_span, self.term_sub._get_terms_count())
+        pair_terms_count = {('test', 'phrase'): 1, ('phrase', 'test'): 1, ('test', 'premier phrase'): 0, ('premier phrase', 'test'): 0, ('phrase', 'premier phrase'): 0, ('premier phrase', 'phrase'): 0}
+        self.term_sub.terms_count.clear()
+        self.term_sub.pair_terms_count.clear()
+        self.term_sub._compute_terms_cout()
+        self.assertDictEqual(terms_count_span, self.term_sub.terms_count)
+        for pair_terms in self.term_sub.pair_terms_count:
+            self.assertIn(pair_terms, pair_terms_count)
 
         self.term_sub.options['use_span'] = False
-        self.assertDictEqual(terms_count_span, self.term_sub._get_terms_count())
+        self.term_sub.terms_count.clear()
+        self.term_sub.pair_terms_count.clear()
+        self.term_sub._compute_terms_cout()
+        self.assertDictEqual(terms_count_span, self.term_sub.terms_count)
+        for pair_terms in self.term_sub.pair_terms_count:
+            self.assertIn(pair_terms, pair_terms_count)
+
         self.term_sub.options['use_lemma'] = True
-        terms_count_span = {"premier phrase":0, "phrase": 2, "test":3}
-        self.assertDictEqual(terms_count_span, self.term_sub._get_terms_count())
+        self.term_sub.options['use_span'] = False
+        terms_count_span = {"premier phrase":2, "phrase": 2, "test":3}
+        pair_terms_count = {('test', 'phrase'): 2, ('test', 'premier phrase'): 2, ('phrase', 'premier phrase'): 2, ('phrase','test'): 2, ('premier phrase', 'test'): 2, ('premier phrase', 'phrase'): 2}
+        self.term_sub.terms_count.clear()
+        self.term_sub.pair_terms_count.clear()
+        self.term_sub._compute_terms_cout()
+        self.assertDictEqual(terms_count_span, self.term_sub.terms_count)
+        for pair_terms in self.term_sub.pair_terms_count:
+            self.assertIn(pair_terms, pair_terms_count)
 
         self.term_sub.options['use_span'] = True
 
-    def test_compute_similarity_between_tokens(self):
+    def test_compute_similarity_between_tokens(self) -> None:
         telephone = self.spacy_model("téléphone")
         mobile = self.spacy_model("mobile")
         self.assertEqual(round(telephone.similarity(mobile), 5), round(self.term_sub._compute_similarity_between_tokens(telephone.vector, mobile.vector), 5))
 
-    def test_get_representative_vector(self):
+    def test_get_representative_vector(self) -> None:
         self.term_sub.options['use_span'] = True
         one_word = self.spacy_model("phrase")
         self.assertListEqual(list(one_word.vector), list(self.term_sub._get_representative_vector("phrase", self.term_sub.corpus[0].vocab)))
@@ -93,85 +119,27 @@ class TestTermSubsumption(unittest.TestCase):
         self.assertListEqual(list(one_word.vector), list(self.term_sub._get_representative_vector("phrase", self.term_sub.corpus[0].vocab)))
         self.assertListEqual([0]*300, list(self.term_sub._get_representative_vector("première phrase", self.term_sub.corpus[0].vocab)))
 
-    def test_get_most_representative_terms(self):
+    def test_get_most_representative_terms(self) -> None:
         self.term_sub.options['use_span'] = True
         concept_multiple_terms_span = Concept(uuid.uuid4(), {"téléphone portable", "mobile", "smartphone","portable"})
         self.assertEqual(self.term_sub._get_most_representative_term(concept_multiple_terms_span), "téléphone portable")
 
         self.term_sub.options['use_span'] = False
         self.assertEqual(self.term_sub._get_most_representative_term(concept_multiple_terms_span), "smartphone")
-    
-    def test_check_term_in_doc(self):
-        doc_words = ["première", "phrase", "de", "test"]
-        self.term_sub.options['use_span'] = True
-        self.assertTrue(self.term_sub._check_term_in_doc("test", doc_words))
-        self.assertTrue(self.term_sub._check_term_in_doc("première phrase", doc_words))
-        self.assertTrue(self.term_sub._check_term_in_doc("phrase", doc_words))
 
-        self.term_sub.options['use_span'] = False
-        self.assertTrue(self.term_sub._check_term_in_doc("test", doc_words))
-        self.assertFalse(self.term_sub._check_term_in_doc("première phrase", doc_words))
-        self.assertTrue(self.term_sub._check_term_in_doc("phrase", doc_words))
-
-    def test_count_doc_with_term(self):
-        self.term_sub.options['use_span'] = True
-        self.term_sub.options['use_lemma'] = True
-        self.assertEqual(self.term_sub._count_doc_with_term("test"), 3)
-        self.assertEqual(self.term_sub._count_doc_with_term("premier phrase"), 2)
-        self.assertEqual(self.term_sub._count_doc_with_term("luciolle"), 0)
-
-        self.term_sub.options['use_lemma'] = False
-        self.assertEqual(self.term_sub._count_doc_with_term("test"), 2)
-        self.assertEqual(self.term_sub._count_doc_with_term("premier phrase"), 0)
-        self.assertEqual(self.term_sub._count_doc_with_term("luciolle"), 0)
-
-        self.term_sub.options['use_span'] = False
-        self.term_sub.options['use_lemma'] = True
-        self.assertEqual(self.term_sub._count_doc_with_term("test"), 3)
-        self.assertEqual(self.term_sub._count_doc_with_term("premier phrase"), 0)
-        self.assertEqual(self.term_sub._count_doc_with_term("luciolle"), 0)
-
-        self.term_sub.options['use_lemma'] = False
-        self.assertEqual(self.term_sub._count_doc_with_term("test"), 2)
-        self.assertEqual(self.term_sub._count_doc_with_term("premier phrase"), 0)
-        self.assertEqual(self.term_sub._count_doc_with_term("luciolle"), 0)
-
-    def test_count_doc_with_both_terms(self):
-        self.term_sub.options['use_span'] = True
-        self.term_sub.options['use_lemma'] = True
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("premier phrase", "test"), 2)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("phrase", "test"), 2)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("luciolle", "test"), 0)
-
-        self.term_sub.options['use_lemma'] = False
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("premier phrase", "test"), 0)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("phrase", "test"), 1)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("luciolle", "test"), 0)
-
-        self.term_sub.options['use_span'] = False
-        self.term_sub.options['use_lemma'] = True
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("premier phrase", "test"), 0)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("phrase", "test"), 2)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("luciolle", "test"), 0)
-
-        self.term_sub.options['use_lemma'] = False
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("premier phrase", "test"), 0)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("phrase", "test"), 1)
-        self.assertEqual(self.term_sub._count_doc_with_both_terms("luciolle", "test"), 0)
-
-    def test_verify_threshold(self):
+    def test_verify_threshold(self) -> None:
         self.assertTrue(self.term_sub._verify_threshold(0.8, 0.4))
         self.assertFalse(self.term_sub._verify_threshold(0.4, 0.2))
         self.assertFalse(self.term_sub._verify_threshold(0.6, 0.9))
         self.assertFalse(self.term_sub._verify_threshold(0.2, 0.4))
 
-    def test_find_other_terms(self):
+    def test_find_other_terms(self) -> None:
         rep_terms = self.term_sub.representative_terms
         self.assertListEqual(self.term_sub._find_other_terms(0, self.term_sub.representative_terms),[rep_terms[1], rep_terms[2]])
         self.assertListEqual(self.term_sub._find_other_terms(4, self.term_sub.representative_terms),[])
         self.assertListEqual(self.term_sub._find_other_terms(1, self.term_sub.representative_terms), [rep_terms[0], rep_terms[2]])
 
-    def test_compute_subsumption(self):
+    def test_compute_subsumption(self) -> None:
         cooccurrence = 10
         occurrence = 5
         sub_score = 2
@@ -180,53 +148,26 @@ class TestTermSubsumption(unittest.TestCase):
         wrong_occurrence = 0
         self.assertEqual(self.term_sub._compute_subsumption(cooccurrence, wrong_occurrence), 0)
 
-
-    def test_create_generalisation_relation(self):
+    def test_create_generalisation_relation(self) -> None:
         source_id = uuid.uuid4()
         destination_id = uuid.uuid4()
-        relation_type = "generalisation"
-        test_meta_relation = self.term_sub._create_generalisation_relation(source_id, destination_id)
-        self.assertIsInstance(test_meta_relation, MetaRelation)
-        self.assertEqual(test_meta_relation.source_concept_id, source_id)
-        self.assertEqual(test_meta_relation.destination_concept_id, destination_id)
-        self.assertEqual(test_meta_relation.relation_type, relation_type)
+        nb_meta_relation_before = len(self.term_sub.kr.meta_relations)
+        self.term_sub._create_generalisation_relation(source_id, destination_id)
+        self.assertEqual(len(self.term_sub.kr.meta_relations), nb_meta_relation_before + 1)
 
-    def test_term_subsumption_unique(self):
-        self.term_sub.options['use_span'] = True
-        self.term_sub.term_subsumption_unique()
-        test_kr = KR()
-        test_kr.concepts.add(Concept(self.concept_phrase_span.uid, self.concept_phrase_span.terms))
-        test_kr.concepts.add(Concept(self.concept_phrase.uid, self.concept_phrase.terms))
-        test_kr.concepts.add(Concept(self.concept_test.uid, self.concept_test.terms))
-        test_meta_relation_id_0 = list(self.term_sub.kr.meta_relations)[0].uid
-        test_meta_relation_dest_0 = list(self.term_sub.kr.meta_relations)[0].destination_concept_id 
-        test_meta_relation_id_1 = list(self.term_sub.kr.meta_relations)[1].uid
-        test_meta_relation_dest_1 = list(self.term_sub.kr.meta_relations)[1].destination_concept_id
-        test_kr.meta_relations.add(MetaRelation(test_meta_relation_id_0, self.concept_test.uid, test_meta_relation_dest_0, "generalisation"))
-        test_kr.meta_relations.add(MetaRelation(test_meta_relation_id_1, self.concept_test.uid, test_meta_relation_dest_1, "generalisation"))
-        self.assertEqual(self.term_sub.kr, test_kr)
+    def test_term_subsumption_unique(self) -> None:
+        pass
 
-        self.term_sub.options['use_span'] = False
-        self.term_sub.kr.meta_relations.clear()
-        self.term_sub.term_subsumption_unique()
-        test_kr = KR()
-        test_kr.concepts.add(Concept(self.concept_phrase_span.uid, self.concept_phrase_span.terms))
-        test_kr.concepts.add(Concept(self.concept_phrase.uid, self.concept_phrase.terms))
-        test_kr.concepts.add(Concept(self.concept_test.uid, self.concept_test.terms))
-        test_meta_relation_id = list(self.term_sub.kr.meta_relations)[0].uid
-        test_kr.meta_relations.add(MetaRelation(test_meta_relation_id, self.concept_test.uid, self.concept_phrase.uid, "generalisation"))
-        self.assertEqual(self.term_sub.kr, test_kr)
-
-    def test_check_concept_more_general(self):
+    def test_check_concept_more_general(self) -> None:
         self.assertTrue(self.term_sub._check_concept_more_general(0.7, 0.2))
         self.assertFalse(self.term_sub._check_concept_more_general(0.7, 0.4))
         self.assertFalse(self.term_sub._check_concept_more_general(0.5, 0.2))
         self.assertFalse(self.term_sub._check_concept_more_general(0.3, 0.6))
 
-    def test__compute_general_words_percentage(self):
+    def test_compute_general_words_percentage(self) -> None:
         pass
     
-    def test_term_subsumption_mean(self):
+    def test_term_subsumption_mean(self) -> None:
         pass
 
 if __name__ == '__main__':

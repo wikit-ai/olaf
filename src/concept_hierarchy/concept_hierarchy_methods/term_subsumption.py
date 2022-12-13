@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Tuple
 import uuid
 
 from commons.ontology_learning_schema import Concept, KR, MetaRelation
+from commons.ontology_learning_utils import check_term_in_content
 from concept_hierarchy.concept_hierarchy_schema import RepresentativeTerm
 import config.logging_config as logging_config
 
@@ -45,30 +46,13 @@ class TermSubsumption():
             logging_config.logger.info(f"Representative terms set.")
 
         try:
-            self.terms_count = self._get_terms_count()
+            self._compute_terms_cout()
         except Exception as _e:
             logging_config.logger.error(
-                f"Could not set terms count. Trace: {_e}.")
+                f"Could not set terms count and pair terms count. Trace: {_e}.")
         else:
-            logging_config.logger.info("Terms count set.")
+            logging_config.logger.info("Terms count and pair terms count set.")
 
-        try:
-            self.pair_terms_count = self._count_doc_with_pair_terms()
-        except Exception as _e:
-            logging_config.logger.error(
-                f"Could not set pair terms count. Trace: {_e}.")
-        else:
-            logging_config.logger.info("Pair terms count set.")
-
-    def __call__(self) -> None:
-        """The method directly update the knowledge representation"""
-        if self.options.get("algo_type") == "UNIQUE":
-            self.term_subsumption_unique()
-        elif self.options.get("algo_type") == "MEAN":
-            self.term_subsumption_mean()
-        else:
-            logging_config.logger.error(
-                f"Invalid value for algo_type option, must be 'UNIQUE' or 'MEAN'.")
 
     def _get_representative_terms(self) -> List[RepresentativeTerm]:
         """Get one string per concept. This string is the best text representation of the concept among all its terms.
@@ -79,13 +63,12 @@ class TermSubsumption():
             List of one representing term by concept.
         """
         representative_terms = []
-        if self.options.get('algo_type') == "mean":
+        if self.options.get('algo_type') == "MEAN":
             for concept in tqdm(self.kr.concepts):
-                representative_terms += [RepresentativeTerm(
-                    term, concept.uid) for term in concept.terms]
+                representative_terms += [RepresentativeTerm(term, concept.uid) for term in concept.terms]
         else:
             for concept in tqdm(self.kr.concepts):
-                if len(concept.terms) == 1:
+                if len(concept.terms) < 3:
                     term = list(concept.terms)[0]
                 else:
                     try:
@@ -99,22 +82,29 @@ class TermSubsumption():
                             f"Most representative term found for concept {concept.uid}.")
 
                 if term is not None:
-                    representative_terms.append(
-                        RepresentativeTerm(term, concept.uid))
+                    representative_terms.append(RepresentativeTerm(term, concept.uid))
         return representative_terms
 
-    def _get_terms_count(self) -> Dict[str, int]:
-        """Get for each terms the number of documents containing the term.
-
-        Returns
-        -------
-        Dict[str,int]
-            Dict with terms as keys and their count as values.
+    def _compute_terms_cout(self) -> None:
+        """Compute terms occurrence and terms pair occurrence in the corpus.
         """
-        terms_count = {}
-        for term in tqdm(self.representative_terms):
-            terms_count[term.value] = self._count_doc_with_term(term.value)
-        return terms_count
+        terms_pairs = list(combinations([term.value for term in self.representative_terms], 2))
+        for doc in tqdm(self.corpus):
+            if self.options.get('use_lemma'):
+                doc_words = [token.lemma_ for token in doc]
+            else:
+                doc_words = [token.text for token in doc]
+            for term in self.representative_terms:
+                if not(term.value in self.terms_count.keys()):
+                    self.terms_count[term.value] = 0
+                if check_term_in_content(term.value, doc_words):
+                    self.terms_count[term.value] = self.terms_count.get(term.value) + 1
+            for terms_pair in terms_pairs:
+                if not(terms_pair in self.pair_terms_count.keys()):
+                    self.pair_terms_count[terms_pair] = 0
+                if check_term_in_content(terms_pair[0], doc_words) and check_term_in_content(terms_pair[1], doc_words):
+                    self.pair_terms_count[terms_pair] = self.pair_terms_count.get(terms_pair, 0) + 1
+                
 
     def _compute_similarity_between_tokens(self, term1_vector: np.ndarray, term2_vector: np.ndarray) -> float:
         """Compute similarity between two vectors.
@@ -159,9 +149,8 @@ class TermSubsumption():
         np.ndarray
             Representative vector of the wanted expression.
         """
-        term_nb_words = len(term.split())
-        if self.options.get('use_span') and (term_nb_words > 1):
-            term_words = term.split()
+        term_words = term.strip().split()
+        if self.options.get('use_span') and (len(term_words) > 1):
             term_vectors = []
             for word in term_words:
                 term_vectors.append(vocab.get_vector(word))
@@ -209,76 +198,6 @@ class TermSubsumption():
             logging_config.logger.error(f"Spacy vocabulary not loaded.")
             raise ValueError
         return most_representative_term
-
-    def _check_term_in_doc(self, term: str, doc_words: List[str]) -> bool:
-        """Test if a term in present or not in a document content.
-
-        Parameters
-        ----------
-        term : str
-            Term to be tested as present or not in document.
-        doc_words : List[str]
-            Document representation as list of words lemmatized or not.
-
-        Returns
-        -------
-        bool
-            True in term is in doc and false otherwise.
-        """
-        term_in_doc = False
-        term_nb_words = len(term.strip().split())
-        if self.options.get('use_span') and (term_nb_words > 1):
-            expression_to_test = " " + " ".join(doc_words) + " "
-            term_to_find = " " + term + " "
-            term_in_doc = term_to_find in expression_to_test
-        else:
-            term_in_doc = term in doc_words
-        return term_in_doc
-
-    def _count_doc_with_term(self, term: str) -> int:
-        """Count the number of documents containing the term in parameter.
-
-        Parameters
-        ----------
-        term : str
-            Representative term to analyse.
-
-        Returns
-        -------
-        int
-            Number of doc containing term.
-        """
-        count = 0
-        for doc in self.corpus:
-            if self.options.get('use_lemma'):
-                doc_words = [token.lemma_ for token in doc]
-            else:
-                doc_words = [token.text for token in doc]
-            if self._check_term_in_doc(term, doc_words):
-                count += 1
-        return count
-
-    def _count_doc_with_pair_terms(self) -> Dict[Tuple[str], int]:
-        """Create counter of all pair terms occurrences in corpus.
-
-        Returns
-        -------
-        Dict[Tuple(str), int]
-            Counter of all pair terms occurrences in corpus.
-        """
-        all_terms_pairs = list(combinations(
-            [term for term in self.terms_count.keys()], 2))
-        pairs_count = {(term_pair[0], term_pair[1])
-                        : 0 for term_pair in all_terms_pairs}
-        for doc in tqdm(self.corpus):
-            if self.options.get('use_lemma'):
-                doc_words = [token.lemma_ for token in doc]
-            else:
-                doc_words = [token.text for token in doc]
-            for term_pair in all_terms_pairs:
-                if self._check_term_in_doc(term_pair[0], doc_words) and self._check_term_in_doc(term_pair[1], doc_words):
-                    pairs_count[(term_pair[0], term_pair[1])] += 1
-        return pairs_count
 
     def _compute_subsumption(self, nb_doc_cooccurrence: int, nb_doc_occurrence: int) -> float:
         """Compute subsumption score between two terms.
@@ -401,8 +320,8 @@ class TermSubsumption():
             validity = True
         return validity
 
-    def _create_generalisation_relation(self, source_concept_id: str, destination_concept_id: str) -> MetaRelation:
-        """Create generalition relation.
+    def _create_generalisation_relation(self, source_concept_id: str, destination_concept_id: str) -> None:
+        """Create generalition relation and add it to the knowledge representation.
 
         Parameters
         ----------
@@ -410,11 +329,6 @@ class TermSubsumption():
             Uid of the source concept in the relation.
         destination : str
             Uid of the destination concept in the relation.
-
-        Returns
-        -------
-        MetaRelation
-            Generalisation relation built between concepts.
         """
         meta_relation_uid = str(uuid.uuid4())
         meta_relation_source_concept_id = source_concept_id
@@ -422,44 +336,45 @@ class TermSubsumption():
         meta_relation_type = "generalisation"
         meta_relation = MetaRelation(meta_relation_uid, meta_relation_source_concept_id,
                                      meta_relation_destination_concept_id, meta_relation_type)
-        return meta_relation
 
-    def term_subsumption_unique(self):
+        self.kr.meta_relations.add(meta_relation)
+
+    def term_subsumtion(self) -> None:
+        """The method directly update the knowledge representation"""
+        if self.options.get("algo_type") == "UNIQUE":
+            self.term_subsumption_unique()
+        elif self.options.get("algo_type") == "MEAN":
+            self.term_subsumption_mean()
+        else:
+            logging_config.logger.error(
+                f"Invalid value for algo_type option, must be 'UNIQUE' or 'MEAN'.")
+
+
+    def term_subsumption_unique(self) -> None:
         """Find generalisation relations between concepts via term subsumption method.
         This method uses one unique representative word by concept.
         """
         representative_terms_pairs = combinations(self.representative_terms, 2)
-        for term_source, term_destination in representative_terms_pairs:
-            score_cooccurrence = self.pair_terms_count.get(
-                (term_source.value, term_destination.value), self.pair_terms_count.get((term_destination.value, term_source.value)))
-            subsumption_score = self._compute_subsumption(
-                score_cooccurrence, self.terms_count[term_destination.value])
-            inverse_subsumption_score = self._compute_subsumption(
-                score_cooccurrence, self.terms_count[term_source.value])
+        for term_source, term_destination in tqdm(representative_terms_pairs):
+            score_cooccurrence = self.pair_terms_count.get((term_source.value, term_destination.value), self.pair_terms_count.get((term_destination.value, term_source.value)))
+            subsumption_score = self._compute_subsumption(score_cooccurrence, self.terms_count[term_destination.value])
+            inverse_subsumption_score = self._compute_subsumption(score_cooccurrence, self.terms_count[term_source.value])
             if self._verify_threshold(subsumption_score, inverse_subsumption_score):
-                meta_relation = self._create_generalisation_relation(
-                    term_source.concept_id, term_destination.concept_id)
-                self.kr.meta_relations.add(meta_relation)
+                self._create_generalisation_relation(term_source.concept_id, term_destination.concept_id)
+            elif self._verify_threshold(inverse_subsumption_score, subsumption_score):
+                self._create_generalisation_relation(term_destination.concept_id, term_source.concept_id)
 
-    def term_subsumption_mean(self):
+    def term_subsumption_mean(self) -> None:
         """Find generalisation relations between concepts via term subsumption method.
         This method computes for each concept the percentage of words generalising words in another concept.
         """
         concept_pairs = list(combinations(self.kr.concepts, 2))
-        for pair in concept_pairs:
-            concept_representative_terms = list(
-                filter(lambda rt: rt.concept_id == pair[0].uid, self.representative_terms))
-            other_concept_representative_terms = list(
-                filter(lambda rt: rt.concept_id == pair[1].uid, self.representative_terms))
-            score_concept_gen = self._compute_general_words_percentage(
-                concept_representative_terms, other_concept_representative_terms)
-            score_other_concept_gen = self._compute_general_words_percentage(
-                other_concept_representative_terms, concept_representative_terms)
+        for pair in tqdm(concept_pairs):
+            concept_representative_terms = list(filter(lambda rt: rt.concept_id == pair[0].uid, self.representative_terms))
+            other_concept_representative_terms = list(filter(lambda rt: rt.concept_id == pair[1].uid, self.representative_terms))
+            score_concept_gen = self._compute_general_words_percentage(concept_representative_terms, other_concept_representative_terms)
+            score_other_concept_gen = self._compute_general_words_percentage(other_concept_representative_terms, concept_representative_terms)
             if self._check_concept_more_general(score_concept_gen, score_other_concept_gen):
-                meta_relation = self._create_generalisation_relation(
-                    pair[0].uid, pair[1].uid)
-                self.kr.meta_relations.add(meta_relation)
+                self._create_generalisation_relation(pair[0].uid, pair[1].uid)
             elif self._check_concept_more_general(score_other_concept_gen, score_concept_gen):
-                meta_relation = self._create_generalisation_relation(
-                    pair[1].uid, pair[0].uid)
-                self.kr.meta_relations.add(meta_relation)
+                self._create_generalisation_relation(pair[1].uid, pair[0].uid)

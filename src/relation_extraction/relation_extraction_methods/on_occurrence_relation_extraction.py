@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Tuple
 import uuid
 
 from commons.ontology_learning_schema import Concept, KR, MetaRelation
+from commons.ontology_learning_utils import check_term_in_content
 
 class OnOccurrenceRelationExtraction():
 
@@ -58,40 +59,10 @@ class OnOccurrenceRelationExtraction():
             sentence_words = [token.text for token in sentence]
         concepts_in_sentence = []
         for concept in self.kr.concepts:
-            conditions = [self._term_in_sentence(concept_term, sentence_words) for concept_term in concept.terms]
+            conditions = [check_term_in_content(concept_term, sentence_words) for concept_term in concept.terms]
             if any(conditions) :
                 concepts_in_sentence.append(concept)
         return concepts_in_sentence
-
-    def _term_in_sentence(self, term:str, sentence: List[str]) -> bool:
-        """Check if a term is in a sentence.
-        For term with multiple words, all words must be in the sentence and indexes must follow each other.
-
-        Parameters
-        ----------
-        term : str
-            Term to find.
-        sentence : List[str]
-            Sentence to analyze.
-
-        Returns
-        -------
-        bool
-            True if the term is in a sentence, false otherwise.
-        """
-        term_words = term.strip().split()
-        term_presence = True
-        if term_words[0] in sentence:
-            term_index = sentence.index(term_words[0])
-            for term in term_words[1:]:
-                if (term in sentence) and (sentence.index(term) == term_index+1):
-                    term_index += 1
-                else:
-                    term_presence = False  
-                    break           
-        else:
-            term_presence = False
-        return term_presence
 
     def _compute_concept_cooccurrence(self) -> Dict[Tuple[str], int]:
         """Count concept combination occurrences.
