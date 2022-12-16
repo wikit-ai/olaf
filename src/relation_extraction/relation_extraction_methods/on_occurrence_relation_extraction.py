@@ -6,6 +6,7 @@ import uuid
 from commons.ontology_learning_schema import Concept, KR, MetaRelation
 from commons.ontology_learning_utils import check_term_in_content
 
+
 class OnOccurrenceRelationExtraction():
 
     def __init__(self, corpus: List[spacy.tokens.doc.Doc], kr: KR, options: Dict[str, Any]) -> None:
@@ -24,18 +25,19 @@ class OnOccurrenceRelationExtraction():
         self.kr = kr
         self.options = options
         if not spacy.tokens.span.Span.has_extension('concepts'):
-            spacy.tokens.span.Span.set_extension('concepts', default = [])
+            spacy.tokens.span.Span.set_extension('concepts', default=[])
         if not spacy.tokens.doc.Doc.has_extension('concepts'):
-            spacy.tokens.doc.Doc.set_extension('concepts', default = [])
+            spacy.tokens.doc.Doc.set_extension('concepts', default=[])
 
     def _label_doc_with_concept(self) -> None:
         """Create attribute in spacy sentence that contains list of concepts found in the sentence.
         """
         for doc in self.corpus:
             if doc.has_annotation('SENT_START'):
-                for sentence in doc.sents :
-                    sentence._.concepts = self._find_concepts_in_sentence(sentence)
-            else :
+                for sentence in doc.sents:
+                    sentence._.concepts = self._find_concepts_in_sentence(
+                        sentence)
+            else:
                 doc._.concepts = self._find_concepts_in_sentence(doc)
 
     def _find_concepts_in_sentence(self, sentence: spacy.tokens.span.Span) -> List[Concept]:
@@ -53,12 +55,13 @@ class OnOccurrenceRelationExtraction():
         """
         if self.options.get('use_lemma'):
             sentence_words = [token.lemma_ for token in sentence]
-        else: 
+        else:
             sentence_words = [token.text for token in sentence]
         concepts_in_sentence = []
         for concept in self.kr.concepts:
-            conditions = [check_term_in_content(concept_term, sentence_words) for concept_term in concept.terms]
-            if any(conditions) :
+            conditions = [check_term_in_content(
+                concept_term, sentence_words) for concept_term in concept.terms]
+            if any(conditions):
                 concepts_in_sentence.append(concept)
         return concepts_in_sentence
 
@@ -73,14 +76,15 @@ class OnOccurrenceRelationExtraction():
         concepts_in_sentences = []
         for doc in self.corpus:
             if doc.has_annotation('SENT_START'):
-                for sent in doc.sents :
+                for sent in doc.sents:
                     concepts_in_sentences.append(sent._.get('concepts'))
             else:
                 concepts_in_sentences.append(doc._.get('concepts'))
 
         unique_concepts = set(chain.from_iterable(concepts_in_sentences))
         all_pairs = list(combinations(unique_concepts, 2))
-        concepts_cooccurrence = {pair: len([x for x in concepts_in_sentences if set(pair) <= set(x)]) for pair in all_pairs}
+        concepts_cooccurrence = {pair: len(
+            [x for x in concepts_in_sentences if set(pair) <= set(x)]) for pair in all_pairs}
         return concepts_cooccurrence
 
     def _create_relatedto_relation(self, concept_pair: Tuple[Concept]) -> None:
@@ -91,7 +95,10 @@ class OnOccurrenceRelationExtraction():
         concept_pair : Tuple[Concept]
             Pair of related concepts.
         """
-        new_relation = MetaRelation(str(uuid.uuid4()), concept_pair[0].uid, concept_pair[1].uid, "related_to")
+        new_relation = MetaRelation(
+            str(uuid.uuid4()), concept_pair[0].uid, concept_pair[1].uid, "related_to")
+        new_relation = MetaRelation(
+            str(uuid.uuid4()), concept_pair[1].uid, concept_pair[0].uid, "related_to")
         self.kr.meta_relations.add(new_relation)
 
     def on_occurrence_relation_extraction(self) -> None:
@@ -100,6 +107,6 @@ class OnOccurrenceRelationExtraction():
         self._label_doc_with_concept()
         concepts_cooccurrence = self._compute_concept_cooccurrence()
         occurrence_threshold = self.options.get("threshold")
-        for concept_pair, score in concepts_cooccurrence.items() :
+        for concept_pair, score in concepts_cooccurrence.items():
             if score > occurrence_threshold:
                 self._create_relatedto_relation(concept_pair)

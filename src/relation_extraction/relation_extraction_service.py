@@ -4,8 +4,10 @@ from typing import Any, Dict, List
 from commons.ontology_learning_schema import KR
 from config.core import config
 from config import logging_config
+from relation_extraction.relation_extraction_methods.on_cooc_with_sep_term_relation_extraction import OnCoocWithSepTermMetaRelationExtraction
 from relation_extraction.relation_extraction_methods.on_occurrence_relation_extraction import OnOccurrenceRelationExtraction
 from relation_extraction.relation_extraction_methods.on_pos_relation_extraction import OnPosRelationExtraction
+
 
 class RelationExtraction():
 
@@ -20,7 +22,7 @@ class RelationExtraction():
     def on_occurence_relation_extraction(self) -> None:
         """Extract relations based on concepts co-occurrence.
         """
-        try : 
+        try:
             assert self.config['on_occurrence'].get('use_lemma') is not None
             assert self.config['on_occurrence'].get('threshold') is not None
         except KeyError as e:
@@ -30,15 +32,16 @@ class RelationExtraction():
                     - relation_extraction.on_occurrence.threshold
                     Trace : {e}
                 """)
-        else : 
+        else:
             options = self.config['on_occurrence']
-        relation_extration = OnOccurrenceRelationExtraction(self.corpus, self.kr, options)
+        relation_extration = OnOccurrenceRelationExtraction(
+            self.corpus, self.kr, options)
         relation_extration.on_occurrence_relation_extraction()
 
     def on_pos_relation_extraction(self) -> None:
         """Extract relations based on pos-tagging.
         """
-        try : 
+        try:
             assert self.config['on_pos'].get('use_lemma') is not None
             assert self.config['on_pos'].get('pos_selection') is not None
             assert len(self.config['on_pos'].get('pos_selection')) > 0
@@ -49,7 +52,27 @@ class RelationExtraction():
                     - relation_extraction.on_pos.pos_selection.
                     Trace : {e}
                 """)
-        else : 
+        else:
             options = self.config['on_pos']
-        relation_extration = OnPosRelationExtraction(self.corpus, self.kr, options)
+        relation_extration = OnPosRelationExtraction(
+            self.corpus, self.kr, options)
         relation_extration.on_pos_relation_extraction()
+
+    def on_cooc_with_sep_term_map_meta_rel_extraction(self, spacy_nlp: spacy.language.Language) -> None:
+        """Extract meta relations based on cooccurrences of concepts and a mapping of term to meta relation types.
+            The method requires the same Spacy Language model as the one used to process the self.corpus attribute.
+            The method updates the self.kr attribute.
+
+        Parameters
+        ----------
+        spacy_nlp : spacy.language.Language
+            The same Spacy Language model as the one used to process the self.corpus attribute.
+        """
+        relation_extraction = OnCoocWithSepTermMetaRelationExtraction(
+            corpus=self.corpus,
+            kr=self.kr,
+            spacy_nlp=spacy_nlp,
+            options=self.config["on_occurrence_with_sep_term"]
+        )
+
+        relation_extraction.on_cooc_with_sep_term_map_meta_rel_extraction()
