@@ -1,8 +1,10 @@
-from typing import List
-
-import config.logging_config as logging_config
 from nltk.util import ngrams as nltk_ngrams
 import spacy.tokens
+import spacy.matcher
+from typing import List
+
+from commons.ontology_learning_schema import KR
+import config.logging_config as logging_config
 
 
 def spacy_span_ngrams(span: spacy.tokens.span.Span, gram_size: int) -> List[spacy.tokens.span.Span]:
@@ -68,3 +70,29 @@ def build_spans_from_tokens(token_list: List[spacy.tokens.Token], doc: spacy.tok
         spans.append(doc[start_span_token_idx:previous_token_idx+1])
 
     return spans
+
+
+def build_concept_matcher(kr: KR, spacy_nlp: spacy.language.Language) -> spacy.matcher.PhraseMatcher:
+    """Build a Spacy PhraseMatcher based on the knowledge representation concepts terms to find the concepts in documents.
+
+    Parameters
+    ----------
+    kr : KR
+        The knowledge representation containing the concepts
+    spacy_nlp : spacy.language.Language
+        The Spacy language model used to process the corpus from which the knowledge representation has been constructed.
+
+    Returns
+    -------
+    spacy.matcher.PhraseMatcher
+        The Spacy PhraseMatcher to find concepts in documents.
+    """
+    spacy_concept_matcher = spacy.matcher.PhraseMatcher(
+        spacy_nlp.vocab, attr="LOWER")
+
+    for concept in kr.concepts:
+        patterns = [spacy_nlp.make_doc(
+            term) for term in concept.terms]
+        spacy_concept_matcher.add(concept.uid, patterns)
+
+    return spacy_concept_matcher
