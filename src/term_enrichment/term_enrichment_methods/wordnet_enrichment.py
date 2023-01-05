@@ -167,17 +167,6 @@ class WordNetTermEnrichment:
         if self.options["use_pos"]:
             self._get_wordnet_pos()
 
-    def __call__(self, candidate_terms: List[CandidateTerm]) -> None:
-        """By default instances will process a list of Candidate terms. 
-            The method directly update the candidate terms instances.
-
-        Parameters
-        ----------
-        candidate_terms : List[CandidateTerm]
-            The candidate terms to process.
-        """
-
-        self.enrich_candidate_terms(candidate_terms)
 
     def _get_enrichment_domains(self) -> None:
         """Private method to get a list of WordNet domains to use for term enrichment.

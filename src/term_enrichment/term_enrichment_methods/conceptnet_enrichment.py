@@ -30,18 +30,6 @@ class ConceptNetTermEnrichment:
                     Trace : {e}
                 """)
 
-    def __call__(self, candidate_terms: List[CandidateTerm]) -> None:
-        """By default instances will process a list of Candidate terms. 
-            The method directly update the candidate terms instances.
-
-        Parameters
-        ----------
-        candidate_terms : List[CandidateTerm]
-            The candidate terms to process.
-        """
-
-        self.enrich_candidate_terms(candidate_terms)
-
     def enrich_candidate_term(self, candidate_term: CandidateTerm) -> None:
         """The method to enrich one candidate term.
 
