@@ -33,11 +33,11 @@ class DataPreprocessing():
         List(spacy.tokens.doc)
             Corpus of spacy document representation.
         """
-        spacy_model = load_spacy_model()
+        self.spacy_model = load_spacy_model()
         corpus_preprocessed = []
 
         try:
-            for spacy_document in spacy_model.pipe(corpus):
+            for spacy_document in self.spacy_model.pipe(corpus):
                 corpus_preprocessed.append(spacy_document)
         except Exception as _e:
             logging_config.logger.error(
