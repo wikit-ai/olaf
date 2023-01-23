@@ -1,12 +1,14 @@
 from typing import List, Dict, Any
 
-from commons.ontology_learning_schema import CandidateTerm
-from term_enrichment.term_enrichment_repository import load_candidate_terms_from_file
-from term_enrichment.term_enrichment_methods.wordnet_enrichment import WordNetTermEnrichment
-from term_enrichment.term_enrichment_methods.conceptnet_enrichment import ConceptNetTermEnrichment
+import spacy.language
 
+from commons.ontology_learning_schema import CandidateTerm
 from config.core import config
 import config.logging_config as logging_config
+from term_enrichment.term_enrichment_repository import load_candidate_terms_from_file
+from term_enrichment.term_enrichment_methods.conceptnet_enrichment import ConceptNetTermEnrichment
+from term_enrichment.term_enrichment_methods.embeddings_enrichment import EmbeddingEnrichment
+from term_enrichment.term_enrichment_methods.wordnet_enrichment import WordNetTermEnrichment
 
 
 class TermEnrichment:
@@ -19,7 +21,7 @@ class TermEnrichment:
     """
 
     def __init__(self, candidate_terms: List[CandidateTerm] = None, configuration: Dict[str, Any] = None) -> None:
-        """_summary_
+        """Initilization function for term enrichment process.
 
         Parameters
         ----------
@@ -28,7 +30,7 @@ class TermEnrichment:
         config: Dict[str, Any]
             The configuration details.
         """
-        if configuration is None: 
+        if configuration is None:
             self.config = config['term_enrichment']
         else:
             self.config = configuration
@@ -50,7 +52,7 @@ class TermEnrichment:
                 """)
 
     def wordnet_term_enrichment(self) -> None:
-        """The method to enirch the candidate terms using wordnet term enricher.
+        """The method to enrich the candidate terms using wordnet term enricher.
         """
 
         try:
@@ -69,7 +71,7 @@ class TermEnrichment:
             logging_config.logger.info(
                 f"Attribute wordnet_term_enricher initialized.")
 
-        wordnet_term_enricher(self.candidate_terms)
+        wordnet_term_enricher.enrich_candidate_terms(self.candidate_terms)
 
     def conceptnet_term_enrichment(self) -> None:
         """The method to enirch the candidate terms using conceptnet term enricher.
@@ -91,4 +93,33 @@ class TermEnrichment:
             logging_config.logger.info(
                 f"Attribute conceptnet_term_enricher initialized.")
 
-        conceptnet_term_enricher(self.candidate_terms)
+        conceptnet_term_enricher.enrich_candidate_terms(self.candidate_terms)
+
+    def embedding_term_enrichment(self, nlp_model: spacy.language.Language = None) -> None:
+        """The method to enrich the candidate terms using embedding term enricher.
+
+        Parameters
+        ----------
+        nlp_model : spacy.language.Language, optional
+            Spacy language model used to represente candidate terms value and find synonyms from similarity. Default to None if another model is wanted.
+        """
+        try:
+            embedding_enricher_options = self.config['embedding']
+        except KeyError as key_error_exception:
+            logging_config.logger.error(
+                f"No configuration found for embedding term enricher. Trace: {key_error_exception}.")
+
+        try:
+            embedding_term_enricher = EmbeddingEnrichment(
+                self.candidate_terms,
+                embedding_enricher_options,
+                nlp_model
+            )
+        except Exception as e:
+            logging_config.logger.error(
+                f"Could not setup attribute embedding_term_enricher. Trace : {e}")
+        else:
+            logging_config.logger.info(
+                f"Attribute embedding_term_enricher initialized.")
+
+        embedding_term_enricher.enrich_candidate_terms()
