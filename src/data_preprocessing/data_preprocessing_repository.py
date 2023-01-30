@@ -103,8 +103,10 @@ def load_text_corpus(file_path: str) -> List[str]:
     List[str]
         The list of text strings.
     """
+    texts = list()
     with open(file_path, "r", encoding='utf-8') as file:
-        texts = file.readlines()
+        for line in file.readlines():
+            texts.append(line.strip())
 
     return texts
 
@@ -224,7 +226,7 @@ def load_spacy_model() -> spacy.language.Language:
             f"Could not load spacy model. Trace : {_e}")
     else:
         logging_config.logger.info("Spacy model has been loaded.")
-        
+
     tokenizer_name = config['data_preprocessing'].get('tokenizer')
     if tokenizer_name is not None:
         try:
@@ -240,7 +242,7 @@ def load_spacy_model() -> spacy.language.Language:
         spacy_model.tokenizer = custom_tokenizer
 
     extra_component_names = config['data_preprocessing']['extra_components']
-    if extra_component_names is not None :
+    if extra_component_names is not None:
         for component_name in extra_component_names:
             if component_name == "token_selector":
                 try:
