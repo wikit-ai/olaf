@@ -33,15 +33,18 @@ def main() -> None:
     occurence_candidate_terms = term_extraction.on_occurrence_term_extraction()
 
     # Merge candidate terms
-    candidates_terms = [candidate_term for candidate_term in pos_candidate_terms if candidate_term in occurence_candidate_terms]
+    candidate_terms = [candidate_term for candidate_term in pos_candidate_terms if candidate_term in occurence_candidate_terms]
 
     # Remove wrong candidate terms
-    candidates_terms.remove(CandidateTerm("cc"))
-    candidates_terms.remove(CandidateTerm("pouvoir"))
-    candidates_terms.remove(CandidateTerm("bit"))
-    candidates_terms.remove(CandidateTerm(">"))
-    candidates_terms.remove(CandidateTerm("<"))
-    candidates_terms.remove(CandidateTerm("oui"))
+    candidate_terms.remove(CandidateTerm("cc"))
+    candidate_terms.remove(CandidateTerm("pouvoir"))
+    candidate_terms.remove(CandidateTerm("bit"))
+    candidate_terms.remove(CandidateTerm(">"))
+    candidate_terms.remove(CandidateTerm("<"))
+    candidate_terms.remove(CandidateTerm("oui"))
+
+    print(f"{len(candidate_terms)} candidate terms have been found")
+    print()
 
     ##########################################
     #            TERM ENRICHMENT             #
@@ -51,7 +54,7 @@ def main() -> None:
     print("Term enrichment based on embeddings similarity ...")
     print()
 
-    term_enrichment = TermEnrichment(candidates_terms)
+    term_enrichment = TermEnrichment(candidate_terms)
     term_enrichment.embedding_term_enrichment(data_prep.spacy_model)
 
 
@@ -64,9 +67,12 @@ def main() -> None:
     print()
 
 
-    concept_extraction = ConceptExtraction(candidates_terms)
+    concept_extraction = ConceptExtraction(candidate_terms)
     concept_extraction.group_by_synonyms()
     kr = concept_extraction.kr
+
+    print(f"{len(kr.concepts)} concepts have been found.")
+    print()
 
 
     ##########################################
@@ -81,6 +87,9 @@ def main() -> None:
     concept_hierarchy.term_subsumption()
     kr = concept_hierarchy.kr
 
+    print(f"{len(kr.meta_relations)} meta-relations have been found.")
+    print()
+
     ##########################################
     #           RELATION EXTRACTION          #
     ##########################################
@@ -92,6 +101,9 @@ def main() -> None:
     relation_extraction = RelationExtraction(data_prep.corpus, kr)
     relation_extraction.on_pos_relation_extraction()
     kr = relation_extraction.kr
+
+    print(f"{len(kr.relations)} relations have been found.")
+    print()
 
     KR2RDF(kr, "ttl", "teams_kr.ttl")
 
