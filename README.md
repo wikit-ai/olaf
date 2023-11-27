@@ -1,86 +1,27 @@
 # Ontology-learning
 
-## project structure
+Since the beginning of the century, research on ontology learning has gained popularity. Automatically extracting and structuring knowledge relevant to a domain of interest from unstructured data is a major scientific challenge. We propose a new approach with  modular ontology learning framework considering tasks from data pre-processing to axiom extraction. Whereas previous contributions considered ontology learning systems as tools to help the domain expert, we developed the proposed framework with full automation in mind. 
 
-### Folder structure
+Resources:
+- [Poster](./docs/Poster_OLAF_2023.pdf)
+- Our research paper has been accepted at [KES 2023](http://kes2023.kesinternational.org/) and will be published around December 2023. 
 
-We follow the layer cake architecture.
+## Installation
 
-- The folder `src/` structure is inspired and follows the ontology learning layer cake presented in <https://doi.org/10.1093/database/bay101>.
-  - The `src/config/` folder contains all the configuration management files.
-  - Each of the other folders contain a main class in the file `src/{layer cake name}/{layer cake name}_service.py`. This class is acting as a "listing"
-  
-Code structure:
+TODO
 
-- All main classes (i.e., the ones defined in the `src/{layer cake name}/{layer cake name}_service.py`) are initialized with a corpus object of format: `List[Spacy.Doc]`
-- Only the `Datapreprocessing` class (`src/data_preprocessing/data_preprocessing_service.py`) takes the corpus with format: `List[str]`
+## Quick-start
 
-### Configuration management
+TODO
 
-The project is set up to have only one global configuration file `config.cfg` located in the `src/config/` folder.
-We rely on the python library [`confection`](https://github.com/explosion/confection)
+## How to contribute
 
-We only push an example version of a config file
-It is the library user job to copy her/his own configuration file into the `src/config/` folder.
+When an algorithm is missing you can contribute by adding it. Please refer to the [developer note](./docs/dev_notes.md) in the documentation for more detailed information.
 
-The configuration file follows the below structure:
+## Citing us
 
-- One section per ontology learning layer cake (i.e., data_preprocessing, term_extraction, etc.)
-- One subsection for each sub-components specific configuration (e.g., token_selector.select_on_pos with a key-value pair pos_to_select = '["NOUN", "VERB"]')
+TODO
 
-## Methodology
+## License
 
-### Coding style
-
-- [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)
-
-- [Numpy docstrings style](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html)
-
-### Git best practices
-
-- Main branch must always be functional
-- When developing a new feature, a new branch named "feat/{feature_name}" must be created
-- When fixing an issue, a new branch named "fix/{feature_name}" must be created and linked to the issue
-- Create a merge/pull request to submit the code
-
-Start new developments
-
-```Bash
-git pull 
-git checkout -b {new_branch}
-```
-
-Submit new developments
-
-```Bash
-git add {files}
-git commit -m "{comment}"
-git push {origin} {new_branch}
-```
-
-Amend commit and push after a review
-
-```Bash
-git checkout {branch_to_be_merged}
-git add {modified_files}
-git commit --amend
-git push --force-with-lease {origin} {branch_to_be_merged}
-```
-
-## Virtual environment
-
-Setting up the virtual environment:
-
-- change directory to the project root directory: `ontology-learning/`
-- run `virtualenv -p python3.8 venv`. (Virtualenv needs to be installed)
-- add the `src/` folder to the python paths by adding the full path `{path/to/the/project/}ontology-learning/src` to the file:
-  - On Linux add `{path/to/the/project/}ontology-learning/src` to the file `ontology-learning/venv/lib/python3.8/site-packages/_virtualenv.pth`
-  - On Windows add `{C:\path\to\the\project\}ontology-learning\src` to the file `{path/to/the/project/}ontology-learning\venv\Lib\site-packages\_virtualenv.pth`
-- Install the project dependencies: `pip install -r requirements.txt`
-
-Update requirements.txt: `pip freeze > requirements.txt`
-
-Run virtual environment:
-
-- On Linux: `source {path/to/the/project/}venv/bin/activate`
-- On Windows: `{C:\path\to\the\project\}venv\Scripts\activate`
+This project is licensed under the Apache-2.0 License.
