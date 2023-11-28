@@ -86,16 +86,16 @@ def list_candidates(spacy_model) -> List[CandidateTerm]:
     )
     candidate_terms.append(
         CandidateTerm(
-            label="wine",
-            corpus_occurrences={spacy_model("wine")[:]},
-            enrichment=Enrichment({"drink", "beer"}),
+            label="other",
+            corpus_occurrences={spacy_model("other")[:]},
+            enrichment=Enrichment({"new"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
-            label="tandem",
-            corpus_occurrences={spacy_model("tandem")[:]},
-            enrichment=Enrichment({"velocipede", "cycle"}),
+            label="wine",
+            corpus_occurrences={spacy_model("wine")[:]},
+            enrichment=Enrichment({"drink", "beer"}),
         )
     )
     candidate_terms.append(
@@ -107,13 +107,6 @@ def list_candidates(spacy_model) -> List[CandidateTerm]:
     )
     candidate_terms.append(
         CandidateTerm(
-            label="cycling",
-            corpus_occurrences={spacy_model("cycling")[:]},
-            enrichment=Enrichment({"bike"}),
-        )
-    )
-    candidate_terms.append(
-        CandidateTerm(
             label="drink",
             corpus_occurrences={spacy_model("drink")[:]},
             enrichment=Enrichment({"water"}),
@@ -121,12 +114,18 @@ def list_candidates(spacy_model) -> List[CandidateTerm]:
     )
     candidate_terms.append(
         CandidateTerm(
-            label="other",
-            corpus_occurrences={spacy_model("other")[:]},
-            enrichment=Enrichment({"new"}),
+            label="tandem",
+            corpus_occurrences={spacy_model("tandem")[:]},
+            enrichment=Enrichment({"velocipede", "cycle"}),
         )
     )
-
+    candidate_terms.append(
+        CandidateTerm(
+            label="cycling",
+            corpus_occurrences={spacy_model("cycling")[:]},
+            enrichment=Enrichment({"bike"}),
+        )
+    )
     return candidate_terms
 
 
@@ -183,7 +182,6 @@ def set_candidates(spacy_model) -> Set[CandidateTerm]:
             enrichment=Enrichment({"new"}),
         )
     )
-
     return candidate_terms
 
 
@@ -326,9 +324,6 @@ def test_group_ct_on_synonyms(set_candidates):
             assert all(conditions)
 
 
-###########################################################################################################
-
-
 def test_filter_cts_on_first_token_in_term(candidate_terms_for_post_processing) -> None:
     filtered_cts = filter_cts_on_first_token_in_term(
         candidate_terms=candidate_terms_for_post_processing,
@@ -391,8 +386,6 @@ def test_split_cts_on_token(
     )
 
     cts_index = {ct.label: ct for ct in cts}
-
-    print(cts_index.keys())
 
     assert len(cts) == 6
     assert len(cts_index["bike"].corpus_occurrences) == 2
