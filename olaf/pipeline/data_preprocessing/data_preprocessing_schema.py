@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class DataPreprocessing(ABC):
@@ -7,7 +7,7 @@ class DataPreprocessing(ABC):
         The sequence of data preprocessing tasks should result in a corpus object, i.e., a List[spacy.tokens.doc.Doc].
     """
 
-    def __init__(self, parameters: Optional[Dict[str, Any]] = None, options: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, config: Any) -> None:
         """Initialise DataPreprocessing instance.
 
         Parameters
@@ -18,8 +18,7 @@ class DataPreprocessing(ABC):
         options : Optional[Dict[str, Any]]
             Options are tunable parameters which will be updated to optimise the component performance.
         """
-        self.parameters = parameters if parameters else dict()
-        self.options = options if options else dict()
+        self.config = config
 
     @abstractmethod
     def run(self, pipeline: Any) -> None:
