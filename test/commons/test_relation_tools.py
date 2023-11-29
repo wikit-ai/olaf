@@ -1,7 +1,6 @@
 from typing import Set
 
 import pytest
-import spacy
 
 from olaf.commons.relation_tools import crs_to_relation, cts_to_crs
 from olaf.data_container.candidate_term_schema import CandidateRelation, CandidateTerm
@@ -10,25 +9,16 @@ from olaf.data_container.linguistic_realisation_schema import LinguisticRealisat
 
 
 @pytest.fixture(scope="session")
-def spacy_model():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def cr_like(spacy_model):
-    sent1 = spacy_model("I like bike.")
-    sent2 = spacy_model("You look like my sister.")
+def cr_like(en_sm_spacy_model):
+    sent1 = en_sm_spacy_model("I like bike.")
+    sent2 = en_sm_spacy_model("You look like my sister.")
     cr_like = CandidateRelation(label="like", corpus_occurrences={sent1[1], sent2[2]})
     return cr_like
 
 
 @pytest.fixture(scope="session")
-def cr_love(spacy_model):
-    sent1 = spacy_model("I love bike.")
+def cr_love(en_sm_spacy_model):
+    sent1 = en_sm_spacy_model("I love bike.")
     cr_love = CandidateRelation(label="love", corpus_occurrences={sent1[1]})
     return cr_love
 
@@ -62,9 +52,9 @@ def c_dog() -> Concept:
 
 
 @pytest.fixture(scope="session")
-def cr_eat(spacy_model, c_cat, c_mouse):
-    sent1 = spacy_model("Cats eat grey rat.")
-    sent2 = spacy_model("My cat eat also mouse.")
+def cr_eat(en_sm_spacy_model, c_cat, c_mouse):
+    sent1 = en_sm_spacy_model("Cats eat grey rat.")
+    sent2 = en_sm_spacy_model("My cat eat also mouse.")
     cr_eat = CandidateRelation(
         label="eat",
         corpus_occurrences={
@@ -78,10 +68,10 @@ def cr_eat(spacy_model, c_cat, c_mouse):
 
 
 @pytest.fixture(scope="session")
-def ct_eat(spacy_model) -> Set[CandidateTerm]:
-    sent1 = spacy_model("Cat eat grey rat.")
-    sent2 = spacy_model("My cat eat also little mouse.")
-    sent3 = spacy_model("I eat spinach.")
+def ct_eat(en_sm_spacy_model) -> Set[CandidateTerm]:
+    sent1 = en_sm_spacy_model("Cat eat grey rat.")
+    sent2 = en_sm_spacy_model("My cat eat also little mouse.")
+    sent3 = en_sm_spacy_model("I eat spinach.")
     ct_eat = CandidateTerm(
         label="eat", corpus_occurrences={sent1[1:2], sent2[2:3], sent3[1:2]}
     )
@@ -89,16 +79,16 @@ def ct_eat(spacy_model) -> Set[CandidateTerm]:
 
 
 @pytest.fixture(scope="session")
-def ct_like(spacy_model) -> Set[CandidateTerm]:
-    sent1 = spacy_model("I like bike.")
-    sent2 = spacy_model("You look like my sister.")
+def ct_like(en_sm_spacy_model) -> Set[CandidateTerm]:
+    sent1 = en_sm_spacy_model("I like bike.")
+    sent2 = en_sm_spacy_model("You look like my sister.")
     ct_like = CandidateTerm(label="like", corpus_occurrences={sent1[1:2], sent2[2:3]})
     return ct_like
 
 
 @pytest.fixture(scope="session")
-def ct_pairs_eat(spacy_model) -> Set[CandidateTerm]:
-    sent = spacy_model("Cat dog eat mouse.")
+def ct_pairs_eat(en_sm_spacy_model) -> Set[CandidateTerm]:
+    sent = en_sm_spacy_model("Cat dog eat mouse.")
     ct_pairs_eat = CandidateTerm(label="eat", corpus_occurrences={sent[2:3]})
     return {ct_pairs_eat}
 
@@ -116,12 +106,12 @@ def test_crs_to_relation(cr_like, cr_love, cr_eat, c_cat, c_mouse) -> None:
     assert rel2.destination_concept == c_mouse
 
 
-def test_cts_to_crs(ct_eat, ct_like, c_cat, c_mouse, spacy_model) -> None:
+def test_cts_to_crs(ct_eat, ct_like, c_cat, c_mouse, en_sm_spacy_model) -> None:
     cts = {ct_eat, ct_like}
     concepts_labels_map = {}
     concepts_labels_map["cat"] = c_cat
     concepts_labels_map["mouse"] = c_mouse
-    crs = cts_to_crs(cts, concepts_labels_map, spacy_model, 2, "doc")
+    crs = cts_to_crs(cts, concepts_labels_map, en_sm_spacy_model, 2, "doc")
 
     assert len(crs) == 3
     for cr in crs:
@@ -141,12 +131,14 @@ def test_cts_to_crs(ct_eat, ct_like, c_cat, c_mouse, spacy_model) -> None:
             assert len(cr.corpus_occurrences) == 2
 
 
-def test_cts_to_crs_pairs(ct_pairs_eat, c_cat, c_dog, c_mouse, spacy_model) -> None:
+def test_cts_to_crs_pairs(
+    ct_pairs_eat, c_cat, c_dog, c_mouse, en_sm_spacy_model
+) -> None:
     concepts_labels_map = {}
     concepts_labels_map["cat"] = c_cat
     concepts_labels_map["mouse"] = c_mouse
     concepts_labels_map["dog"] = c_dog
-    crs = cts_to_crs(ct_pairs_eat, concepts_labels_map, spacy_model, 3, "doc")
+    crs = cts_to_crs(ct_pairs_eat, concepts_labels_map, en_sm_spacy_model, 3, "doc")
     assert len(crs) == 2
     for cr in crs:
         assert cr.destination_concept.label == "mouse"

@@ -1,7 +1,7 @@
 from typing import Callable, List, Set
 
 import pytest
-import spacy
+import spacy.tokens
 
 from olaf.data_container.concept_schema import Concept
 from olaf.data_container.linguistic_realisation_schema import LinguisticRealisation
@@ -23,17 +23,8 @@ def raw_corpus() -> List[str]:
 
 
 @pytest.fixture(scope="session")
-def spacy_nlp():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tagger", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def corpus_docs(spacy_nlp, raw_corpus) -> List[spacy.tokens.Doc]:
-    docs = [doc for doc in spacy_nlp.pipe(raw_corpus)]
+def corpus_docs(en_sm_spacy_model, raw_corpus) -> List[spacy.tokens.Doc]:
+    docs = [doc for doc in en_sm_spacy_model.pipe(raw_corpus)]
     return docs
 
 
@@ -157,9 +148,10 @@ def kr_concepts(
 
 class TestConceptCoocMetarelationExtractionDefault:
     @pytest.fixture(scope="class")
-    def pipeline(self, kr_concepts, spacy_nlp, raw_corpus) -> Pipeline:
+    def pipeline(self, kr_concepts, en_sm_spacy_model, raw_corpus) -> Pipeline:
         custom_pipeline = Pipeline(
-            spacy_model=spacy_nlp, corpus=[doc for doc in spacy_nlp.pipe(raw_corpus)]
+            spacy_model=en_sm_spacy_model,
+            corpus=[doc for doc in en_sm_spacy_model.pipe(raw_corpus)],
         )
         custom_pipeline.kr.concepts = kr_concepts
 
@@ -221,9 +213,10 @@ class TestConceptCoocMetarelationExtractionDefault:
 
 class TestConceptCoocMetarelationExtractionCustom:
     @pytest.fixture(scope="class")
-    def pipeline(self, kr_concepts, spacy_nlp, raw_corpus) -> Pipeline:
+    def pipeline(self, kr_concepts, en_sm_spacy_model, raw_corpus) -> Pipeline:
         custom_pipeline = Pipeline(
-            spacy_model=spacy_nlp, corpus=[doc for doc in spacy_nlp.pipe(raw_corpus)]
+            spacy_model=en_sm_spacy_model,
+            corpus=[doc for doc in en_sm_spacy_model.pipe(raw_corpus)],
         )
         custom_pipeline.kr.concepts = kr_concepts
 

@@ -2,7 +2,7 @@ from random import sample
 from typing import Dict, List, Set, Tuple
 
 import pytest
-import spacy.tokens.doc
+import spacy.tokens
 
 from olaf.commons.errors import OptionError
 from olaf.commons.spacy_processing_tools import spacy_span_ngrams
@@ -13,8 +13,8 @@ from olaf.pipeline.pipeline_schema import Pipeline
 
 custom_token_sequences_doc_attribute = "tokens_sequences_custom_attr"
 
-if not spacy.tokens.doc.Doc.has_extension(custom_token_sequences_doc_attribute):
-    spacy.tokens.doc.Doc.set_extension(custom_token_sequences_doc_attribute, default=[])
+if not spacy.tokens.Doc.has_extension(custom_token_sequences_doc_attribute):
+    spacy.tokens.Doc.set_extension(custom_token_sequences_doc_attribute, default=[])
 
 
 @pytest.fixture(scope="session")
@@ -27,18 +27,6 @@ def example_texts() -> List[str]:
     ]
 
     return corpus_texts
-
-
-@pytest.fixture(scope="session")
-def language_model():
-    nlp = spacy.load("en_core_web_sm")
-    return nlp
-
-
-# @pytest.fixture(scope="session")
-# def custom_token_sequences_doc_attribute():
-#     token_sequences_doc_attribute = "tokens_sequences_custom_attr"
-#     return token_sequences_doc_attribute
 
 
 @pytest.fixture(scope="session")
@@ -65,15 +53,15 @@ def unknown_doc_attr_parameters() -> Dict[str, str]:
 
 
 @pytest.fixture(scope="session")
-def corpus_raw(example_texts, language_model) -> List[spacy.tokens.doc.Doc]:
-    docs = [language_model(text) for text in example_texts]
+def corpus_raw(example_texts, en_sm_spacy_model) -> List[spacy.tokens.Doc]:
+    docs = [en_sm_spacy_model(text) for text in example_texts]
 
     return docs
 
 
 @pytest.fixture(scope="class")
-def corpus_custom_doc_attr(example_texts, language_model) -> List[spacy.tokens.doc.Doc]:
-    docs = [language_model(text) for text in example_texts]
+def corpus_custom_doc_attr(example_texts, en_sm_spacy_model) -> List[spacy.tokens.Doc]:
+    docs = [en_sm_spacy_model(text) for text in example_texts]
 
     for doc in docs[:2]:
         spans = [doc[2:7], doc[5:6]]
@@ -163,15 +151,17 @@ class TestCvalueTermExtractionParameters:
 
 class TestCvalueTermExtractionMethods:
     @pytest.fixture(scope="class")
-    def example_pipeline(language_model, corpus_custom_doc_attr) -> Pipeline:
-        pipeline = Pipeline(spacy_model=language_model, corpus=corpus_custom_doc_attr)
+    def example_pipeline(en_sm_spacy_model, corpus_custom_doc_attr) -> Pipeline:
+        pipeline = Pipeline(
+            spacy_model=en_sm_spacy_model, corpus=corpus_custom_doc_attr
+        )
 
         return pipeline
 
     @pytest.fixture(scope="class")
     def expected_token_sequences(
         self, corpus_custom_doc_attr
-    ) -> Tuple[spacy.tokens.span.Span]:
+    ) -> Tuple[spacy.tokens.Span]:
         token_sequences = []
         for doc in corpus_custom_doc_attr[:2]:
             token_sequences.extend([doc[2:5], doc[3:6], doc[4:7], doc[5:6]])

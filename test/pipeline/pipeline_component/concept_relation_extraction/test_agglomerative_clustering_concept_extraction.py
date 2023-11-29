@@ -1,13 +1,13 @@
 from typing import Any, Dict
 
 import pytest
-import spacy
 
 from olaf import Pipeline
 from olaf.commons.errors import OptionError, ParameterError
 from olaf.data_container import CandidateTerm, KnowledgeRepresentation
-from olaf.pipeline.pipeline_component.concept_relation_extraction import \
-    AgglomerativeClusteringConceptExtraction
+from olaf.pipeline.pipeline_component.concept_relation_extraction import (
+    AgglomerativeClusteringConceptExtraction,
+)
 
 
 @pytest.fixture(scope="session")
@@ -70,11 +70,10 @@ def good_options() -> Dict[str, Any]:
 
 
 @pytest.fixture(scope="session")
-def pipeline() -> Pipeline:
-    spacy_model = spacy.load("en_core_web_sm")
-    doc = spacy_model("car bike bicycle")
+def pipeline(en_sm_spacy_model) -> Pipeline:
+    doc = en_sm_spacy_model("car bike bicycle")
 
-    pipeline = Pipeline(spacy_model=spacy_model, corpus=[doc])
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=[doc])
     pipeline.kr = KnowledgeRepresentation()
     candidate_terms_set = set()
     candidate_terms_set.add(CandidateTerm(label="car", corpus_occurrences={doc[0]}))

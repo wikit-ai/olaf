@@ -1,7 +1,6 @@
 from typing import Set
 
 import pytest
-import spacy
 
 from olaf.data_container.candidate_term_schema import CandidateTerm
 from olaf.data_container.enrichment_schema import Enrichment
@@ -12,64 +11,55 @@ from olaf.pipeline.pipeline_schema import Pipeline
 
 
 @pytest.fixture(scope="session")
-def spacy_model():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def set_candidates(spacy_model) -> Set[CandidateTerm]:
+def set_candidates(en_sm_spacy_model) -> Set[CandidateTerm]:
     candidate_terms = set()
 
     candidate_terms.add(
         CandidateTerm(
             label="bicycle",
-            corpus_occurrences={spacy_model("bicycle")[:]},
+            corpus_occurrences={en_sm_spacy_model("bicycle")[:]},
             enrichment=Enrichment({"bike", "cycle"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="wine",
-            corpus_occurrences={spacy_model("wine")[:]},
+            corpus_occurrences={en_sm_spacy_model("wine")[:]},
             enrichment=Enrichment({"drink", "beer"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="tandem",
-            corpus_occurrences={spacy_model("tandem")[:]},
+            corpus_occurrences={en_sm_spacy_model("tandem")[:]},
             enrichment=Enrichment({"velocipede", "cycle"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="duo",
-            corpus_occurrences={spacy_model("duo")[:]},
+            corpus_occurrences={en_sm_spacy_model("duo")[:]},
             enrichment=Enrichment({"tandem"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="cycling",
-            corpus_occurrences={spacy_model("cycling")[:]},
+            corpus_occurrences={en_sm_spacy_model("cycling")[:]},
             enrichment=Enrichment({"bike"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="drink",
-            corpus_occurrences={spacy_model("drink")[:]},
+            corpus_occurrences={en_sm_spacy_model("drink")[:]},
             enrichment=Enrichment({"water"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="other",
-            corpus_occurrences={spacy_model("other")[:]},
+            corpus_occurrences={en_sm_spacy_model("other")[:]},
             enrichment=Enrichment({"new"}),
         )
     )
@@ -78,8 +68,8 @@ def set_candidates(spacy_model) -> Set[CandidateTerm]:
 
 
 @pytest.fixture(scope="session")
-def pipeline(spacy_model, set_candidates) -> Pipeline:
-    pipeline = Pipeline(spacy_model=spacy_model, corpus=[])
+def pipeline(en_sm_spacy_model, set_candidates) -> Pipeline:
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=[])
     pipeline.candidate_terms = set_candidates
     return pipeline
 

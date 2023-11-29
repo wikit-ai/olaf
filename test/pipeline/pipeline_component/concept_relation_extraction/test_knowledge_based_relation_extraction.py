@@ -1,7 +1,6 @@
 from typing import Any, Dict, Set
 
 import pytest
-import spacy
 
 from olaf.data_container.candidate_term_schema import CandidateTerm
 from olaf.data_container.concept_schema import Concept
@@ -16,15 +15,7 @@ from olaf.repository.knowledge_source.knowledge_source_schema import KnowledgeSo
 
 
 @pytest.fixture(scope="session")
-def spacy_model():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-@pytest.fixture(scope="session")
-def corpus(spacy_model):
+def corpus(en_sm_spacy_model):
     texts = [
         "Cats eat mouses.",
         "Dogs can eat little mouses too.",
@@ -33,7 +24,7 @@ def corpus(spacy_model):
         "You should not eat so fast",
         "I like bike.",
     ]
-    corpus = list(spacy_model.pipe(texts))
+    corpus = list(en_sm_spacy_model.pipe(texts))
     return corpus
 
 
@@ -45,13 +36,12 @@ def candidate_terms(corpus) -> Set[CandidateTerm]:
         CandidateTerm(
             label="eat",
             corpus_occurrences={corpus[0][1:2], corpus[1][2:3], corpus[4][3:4]},
-            enrichment=Enrichment({"devour"})
+            enrichment=Enrichment({"devour"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
-            label="devour",
-            corpus_occurrences={corpus[2][7:8], corpus[3][2:3]}
+            label="devour", corpus_occurrences={corpus[2][7:8], corpus[3][2:3]}
         )
     )
     return candidate_terms
@@ -82,8 +72,10 @@ def c_dog() -> Concept:
 
 
 @pytest.fixture(scope="function")
-def pipeline(spacy_model, candidate_terms, corpus, c_cat, c_dog, c_mouse) -> Pipeline:
-    pipeline = Pipeline(spacy_model=spacy_model, corpus=corpus)
+def pipeline(
+    en_sm_spacy_model, candidate_terms, corpus, c_cat, c_dog, c_mouse
+) -> Pipeline:
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=corpus)
     pipeline.candidate_terms = candidate_terms
     pipeline.kr = KnowledgeRepresentation()
     pipeline.kr.concepts.update({c_cat, c_dog, c_mouse})
@@ -145,7 +137,6 @@ def mock_knowledge_source() -> KnowledgeSource:
 
 
 class TestKnowledgeBasedRelationExtraction:
-
     @pytest.fixture(scope="class")
     def kg_based_relation_extraction(
         self, mock_knowledge_source
@@ -158,7 +149,7 @@ class TestKnowledgeBasedRelationExtraction:
 
         relations_ext_udis = set()
 
-        for relation in pipeline.kr.relations:            
+        for relation in pipeline.kr.relations:
             relations_ext_udis.update(relation.external_uids)
 
         conditions = [
@@ -174,7 +165,6 @@ class TestKnowledgeBasedRelationExtraction:
 
 
 class TestKnowledgeBasedRelationExtractionNoMerge:
-
     @pytest.fixture(scope="class")
     def kg_based_relation_extraction_no_merge_syn(
         self, mock_knowledge_source

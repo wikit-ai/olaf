@@ -1,7 +1,6 @@
 from typing import Dict, List, Set
 
 import pytest
-import spacy
 from spacy.matcher import PhraseMatcher
 
 from olaf.commons.errors import ParameterError
@@ -22,18 +21,10 @@ def raw_corpus() -> List[str]:
 
 
 @pytest.fixture(scope="session")
-def spacy_nlp():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def pipeline(spacy_nlp, raw_corpus) -> Pipeline:
+def pipeline(en_sm_spacy_model, raw_corpus) -> Pipeline:
     custom_pipeline = Pipeline(
-        spacy_model=spacy_nlp, corpus=[doc for doc in spacy_nlp.pipe(raw_corpus)]
+        spacy_model=en_sm_spacy_model,
+        corpus=[doc for doc in en_sm_spacy_model.pipe(raw_corpus)],
     )
     return custom_pipeline
 
@@ -55,8 +46,8 @@ class TestManualCandidateTermExtractionDefault:
         assert default_manual_ct_extract.phrase_matcher is None
         assert default_manual_ct_extract.ct_label_strings_map is not None
 
-    def test_build_matcher(self, default_manual_ct_extract, spacy_nlp) -> None:
-        matcher = default_manual_ct_extract._build_matcher(spacy_nlp)
+    def test_build_matcher(self, default_manual_ct_extract, en_sm_spacy_model) -> None:
+        matcher = default_manual_ct_extract._build_matcher(en_sm_spacy_model)
 
         assert isinstance(matcher, PhraseMatcher)
 
@@ -75,11 +66,11 @@ class TestManualCandidateTermExtractionDefault:
 
 class TestManualCandidateTermExtractionCustomMatcher:
     @pytest.fixture(scope="class")
-    def custom_matcher(self, spacy_nlp, ct_string_map) -> PhraseMatcher:
-        matcher = PhraseMatcher(spacy_nlp.vocab)
+    def custom_matcher(self, en_sm_spacy_model, ct_string_map) -> PhraseMatcher:
+        matcher = PhraseMatcher(en_sm_spacy_model.vocab)
 
         for label, match_strings in ct_string_map.items():
-            matcher.add(label, [spacy_nlp(string) for string in match_strings])
+            matcher.add(label, [en_sm_spacy_model(string) for string in match_strings])
 
         return matcher
 

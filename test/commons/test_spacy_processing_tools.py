@@ -1,7 +1,6 @@
 from typing import List
 
 import pytest
-import spacy
 
 from olaf.commons.spacy_processing_tools import (
     is_not_num,
@@ -24,55 +23,46 @@ def raw_corpus() -> List[str]:
     return corpus
 
 
-@pytest.fixture(scope="session")
-def spacy_model() -> spacy.Language:
-    spacy_nlp = spacy.load(
-        "en_core_web_sm",
-        exclude=["parser", "ner"],
-    )
-    return spacy_nlp
-
-
 class TestTokenSelectors:
-    def test_is_not_num(self, spacy_model, raw_corpus) -> None:
-        doc = spacy_model(raw_corpus[2])
+    def test_is_not_num(self, en_sm_spacy_model, raw_corpus) -> None:
+        doc = en_sm_spacy_model(raw_corpus[2])
 
         assert is_not_num(doc[3])
         assert not is_not_num(doc[-2])
         assert not is_not_num(doc[-3])
 
-    def test_is_not_punct(self, spacy_model, raw_corpus) -> None:
-        doc = spacy_model(raw_corpus[2])
+    def test_is_not_punct(self, en_sm_spacy_model, raw_corpus) -> None:
+        doc = en_sm_spacy_model(raw_corpus[2])
 
         assert is_not_punct(doc[0])
         assert not is_not_punct(doc[1])
         assert not is_not_punct(doc[-1])
 
-    def test_is_not_stopword(self, spacy_model, raw_corpus) -> None:
-        doc = spacy_model(raw_corpus[2])
+    def test_is_not_stopword(self, en_sm_spacy_model, raw_corpus) -> None:
+        doc = en_sm_spacy_model(raw_corpus[2])
 
         assert is_not_stopword(doc[1])
         assert not is_not_stopword(doc[0])
         assert not is_not_stopword(doc[3])
 
-    def test_is_not_url(self, spacy_model, raw_corpus) -> None:
-        doc = spacy_model(raw_corpus[2])
+    def test_is_not_url(self, en_sm_spacy_model, raw_corpus) -> None:
+        doc = en_sm_spacy_model(raw_corpus[2])
 
         assert is_not_url(doc[1])
         assert not is_not_url(doc[11])
         assert is_not_url(doc[3])
 
-    def test_select_on_pos(self, spacy_model, raw_corpus) -> None:
+    def test_select_on_pos(self, en_sm_spacy_model, raw_corpus) -> None:
         pos = ["NOUN", "DET"]
-        doc = spacy_model(raw_corpus[2])
+        doc = en_sm_spacy_model(raw_corpus[2])
 
         assert not select_on_pos(doc[1], pos)
         assert select_on_pos(doc[6], pos)
         assert select_on_pos(doc[7], pos)
 
 
-def test_spacy_span_ngrams(spacy_model, raw_corpus) -> None:
-    doc = spacy_model(raw_corpus[1])
+def test_spacy_span_ngrams(en_sm_spacy_model, raw_corpus) -> None:
+    doc = en_sm_spacy_model(raw_corpus[1])
 
     trigrams = spacy_span_ngrams(doc[:5], 3)
     trigrams_texts = [span.text for span in trigrams]
@@ -107,8 +97,8 @@ def test_spacy_span_ngrams(spacy_model, raw_corpus) -> None:
     assert too_big_gram[0].text == doc[:5].text
 
 
-def test_spans_overlap(spacy_model, raw_corpus) -> None:
-    docs = [spacy_model(text) for text in raw_corpus]
+def test_spans_overlap(en_sm_spacy_model, raw_corpus) -> None:
+    docs = [en_sm_spacy_model(text) for text in raw_corpus]
 
     span1 = docs[0][:3]
     span2 = docs[0][2:4]
