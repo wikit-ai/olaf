@@ -1,7 +1,7 @@
 from typing import Set
 
 import pytest
-import spacy
+import spacy.tokens
 
 from olaf.data_container.candidate_term_schema import CandidateTerm
 from olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts import (
@@ -11,18 +11,9 @@ from olaf.pipeline.pipeline_schema import Pipeline
 
 
 @pytest.fixture(scope="session")
-def spacy_nlp():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def c_terms_spacy_doc(spacy_nlp) -> spacy.tokens.Doc:
+def c_terms_spacy_doc(en_sm_spacy_model) -> spacy.tokens.Doc:
     c_terms_text = "car bicycle bike cycle tandem velocipede cycle wine drink beer"
-    c_terms_doc = spacy_nlp(c_terms_text)
+    c_terms_doc = en_sm_spacy_model(c_terms_text)
     return c_terms_doc
 
 
@@ -83,8 +74,8 @@ def candidate_terms(
 
 
 @pytest.fixture(scope="session")
-def pipeline(candidate_terms, spacy_nlp) -> Pipeline:
-    pipeline = Pipeline(spacy_model=spacy_nlp, corpus=[])
+def pipeline(candidate_terms, en_sm_spacy_model) -> Pipeline:
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=[])
     pipeline.candidate_terms = candidate_terms
     return pipeline
 

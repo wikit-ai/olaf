@@ -1,7 +1,6 @@
 from typing import Set
 
 import pytest
-import spacy
 
 from olaf.data_container.candidate_term_schema import CandidateTerm
 from olaf.data_container.concept_schema import Concept
@@ -15,16 +14,7 @@ from olaf.pipeline.pipeline_schema import Pipeline
 
 
 @pytest.fixture(scope="session")
-def spacy_model():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def corpus(spacy_model):
+def corpus(en_sm_spacy_model):
     texts = [
         "Cats eat mouses.",
         "Dogs can eat little mouses too.",
@@ -33,7 +23,7 @@ def corpus(spacy_model):
         "You should not eat so fast",
         "I like bike.",
     ]
-    corpus = list(spacy_model.pipe(texts))
+    corpus = list(en_sm_spacy_model.pipe(texts))
     return corpus
 
 
@@ -82,8 +72,10 @@ def c_dog() -> Concept:
 
 
 @pytest.fixture(scope="session")
-def pipeline(spacy_model, candidate_terms, corpus, c_cat, c_dog, c_mouse) -> Pipeline:
-    pipeline = Pipeline(spacy_model=spacy_model, corpus=corpus)
+def pipeline(
+    en_sm_spacy_model, candidate_terms, corpus, c_cat, c_dog, c_mouse
+) -> Pipeline:
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=corpus)
     pipeline.candidate_terms = candidate_terms
     pipeline.kr = KnowledgeRepresentation()
     pipeline.kr.concepts.update({c_cat, c_dog, c_mouse})

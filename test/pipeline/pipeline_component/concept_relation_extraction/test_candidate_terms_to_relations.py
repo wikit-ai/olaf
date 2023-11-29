@@ -1,7 +1,7 @@
 from typing import List, Set
 
 import pytest
-import spacy
+import spacy.tokens
 
 from olaf.data_container.candidate_term_schema import CandidateTerm
 from olaf.data_container.concept_schema import Concept
@@ -14,16 +14,7 @@ from olaf.pipeline.pipeline_schema import Pipeline
 
 
 @pytest.fixture(scope="session")
-def spacy_model():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def spacy_corpus(spacy_model) -> List[spacy.tokens.Doc]:
+def spacy_corpus(en_sm_spacy_model) -> List[spacy.tokens.Doc]:
     corpus = [
         "I do not eat meet.",
         "Cats eat mouses. ",
@@ -31,7 +22,7 @@ def spacy_corpus(spacy_model) -> List[spacy.tokens.Doc]:
         "Cats and dogs eat mouses.",
         "Cats eat. Dogs too.",
     ]
-    spacy_corpus = list(spacy_model.pipe(corpus))
+    spacy_corpus = list(en_sm_spacy_model.pipe(corpus))
     return spacy_corpus
 
 
@@ -69,8 +60,8 @@ def concepts() -> Set[Concept]:
 
 
 @pytest.fixture(scope="function")
-def pipeline(spacy_model, spacy_corpus, concepts, candidate_terms) -> Pipeline:
-    pipeline = Pipeline(spacy_model=spacy_model, corpus=spacy_corpus)
+def pipeline(en_sm_spacy_model, spacy_corpus, concepts, candidate_terms) -> Pipeline:
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=spacy_corpus)
     pipeline.candidate_terms = candidate_terms
     pipeline.kr = KnowledgeRepresentation()
     pipeline.kr.concepts.update(concepts)
@@ -113,10 +104,10 @@ def test_cts_to_relation(pipeline) -> None:
     assert len(pipeline.candidate_terms) == 1
     cts_to_relation.run(pipeline)
     assert len(pipeline.candidate_terms) == 0
-    assert len(pipeline.kr.relations) == 4
+    assert len(pipeline.kr.relations) == 3
     for relation in pipeline.kr.relations:
         if relation.source_concept is None:
-            assert len(relation.linguistic_realisations.pop().corpus_occurrences) == 2
+            assert len(relation.linguistic_realisations.pop().corpus_occurrences) == 3
         elif relation.source_concept.label == "cat":
             if relation.destination_concept.label == "mouse":
                 assert (

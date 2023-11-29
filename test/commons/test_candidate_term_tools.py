@@ -1,7 +1,7 @@
 from typing import List, Set
 
 import pytest
-import spacy
+import spacy.tokens
 
 from olaf.commons.candidate_term_tools import (
     build_cts_from_strings,
@@ -16,15 +16,6 @@ from olaf.commons.candidate_term_tools import (
 )
 from olaf.data_container.candidate_term_schema import CandidateTerm
 from olaf.data_container.enrichment_schema import Enrichment
-
-
-@pytest.fixture(scope="session")
-def spacy_model():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
 
 
 @pytest.fixture(scope="session")
@@ -62,67 +53,69 @@ def candidate_term_wine() -> CandidateTerm:
 
 
 @pytest.fixture(scope="session")
-def candidate_terms(spacy_model) -> Set[CandidateTerm]:
+def candidate_terms(en_sm_spacy_model) -> Set[CandidateTerm]:
     candidate_terms = set()
     candidate_terms.add(
-        CandidateTerm(label="bike", corpus_occurrences={spacy_model("bike")[:]})
+        CandidateTerm(label="bike", corpus_occurrences={en_sm_spacy_model("bike")[:]})
     ),
     candidate_terms.add(
-        CandidateTerm(label="bicycle", corpus_occurrences={spacy_model("bicycle")[:]})
+        CandidateTerm(
+            label="bicycle", corpus_occurrences={en_sm_spacy_model("bicycle")[:]}
+        )
     )
     return candidate_terms
 
 
 @pytest.fixture(scope="session")
-def list_candidates(spacy_model) -> List[CandidateTerm]:
+def list_candidates(en_sm_spacy_model) -> List[CandidateTerm]:
     candidate_terms = []
 
     candidate_terms.append(
         CandidateTerm(
             label="bicycle",
-            corpus_occurrences={spacy_model("bicycle")[:]},
+            corpus_occurrences={en_sm_spacy_model("bicycle")[:]},
             enrichment=Enrichment({"bike", "cycle"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
             label="other",
-            corpus_occurrences={spacy_model("other")[:]},
+            corpus_occurrences={en_sm_spacy_model("other")[:]},
             enrichment=Enrichment({"new"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
             label="wine",
-            corpus_occurrences={spacy_model("wine")[:]},
+            corpus_occurrences={en_sm_spacy_model("wine")[:]},
             enrichment=Enrichment({"drink", "beer"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
             label="duo",
-            corpus_occurrences={spacy_model("duo")[:]},
+            corpus_occurrences={en_sm_spacy_model("duo")[:]},
             enrichment=Enrichment({"tandem"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
             label="drink",
-            corpus_occurrences={spacy_model("drink")[:]},
+            corpus_occurrences={en_sm_spacy_model("drink")[:]},
             enrichment=Enrichment({"water"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
             label="tandem",
-            corpus_occurrences={spacy_model("tandem")[:]},
+            corpus_occurrences={en_sm_spacy_model("tandem")[:]},
             enrichment=Enrichment({"velocipede", "cycle"}),
         )
     )
     candidate_terms.append(
         CandidateTerm(
             label="cycling",
-            corpus_occurrences={spacy_model("cycling")[:]},
+            corpus_occurrences={en_sm_spacy_model("cycling")[:]},
             enrichment=Enrichment({"bike"}),
         )
     )
@@ -130,55 +123,55 @@ def list_candidates(spacy_model) -> List[CandidateTerm]:
 
 
 @pytest.fixture(scope="session")
-def set_candidates(spacy_model) -> Set[CandidateTerm]:
+def set_candidates(en_sm_spacy_model) -> Set[CandidateTerm]:
     candidate_terms = set()
 
     candidate_terms.add(
         CandidateTerm(
             label="bicycle",
-            corpus_occurrences={spacy_model("bicycle")[:]},
+            corpus_occurrences={en_sm_spacy_model("bicycle")[:]},
             enrichment=Enrichment({"bike", "cycle"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="wine",
-            corpus_occurrences={spacy_model("wine")[:]},
+            corpus_occurrences={en_sm_spacy_model("wine")[:]},
             enrichment=Enrichment({"drink", "beer"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="tandem",
-            corpus_occurrences={spacy_model("tandem")[:]},
+            corpus_occurrences={en_sm_spacy_model("tandem")[:]},
             enrichment=Enrichment({"velocipede", "cycle"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="duo",
-            corpus_occurrences={spacy_model("duo")[:]},
+            corpus_occurrences={en_sm_spacy_model("duo")[:]},
             enrichment=Enrichment({"tandem"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="cycling",
-            corpus_occurrences={spacy_model("cycling")[:]},
+            corpus_occurrences={en_sm_spacy_model("cycling")[:]},
             enrichment=Enrichment({"bike"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="drink",
-            corpus_occurrences={spacy_model("drink")[:]},
+            corpus_occurrences={en_sm_spacy_model("drink")[:]},
             enrichment=Enrichment({"water"}),
         )
     )
     candidate_terms.add(
         CandidateTerm(
             label="other",
-            corpus_occurrences={spacy_model("other")[:]},
+            corpus_occurrences={en_sm_spacy_model("other")[:]},
             enrichment=Enrichment({"new"}),
         )
     )
@@ -196,8 +189,8 @@ def raw_corpus() -> List[str]:
 
 
 @pytest.fixture(scope="session")
-def corpus_docs(raw_corpus, spacy_model) -> List[spacy.tokens.Doc]:
-    corpus = [doc for doc in spacy_model.pipe(raw_corpus)]
+def corpus_docs(raw_corpus, en_sm_spacy_model) -> List[spacy.tokens.Doc]:
+    corpus = [doc for doc in en_sm_spacy_model.pipe(raw_corpus)]
     return corpus
 
 
@@ -361,10 +354,10 @@ def test_filter_cts_on_token_in_term(candidate_terms_for_post_processing) -> Non
     assert filtered_ct_labels == {"fixed size wheel"}
 
 
-def test_build_cts_from_strings(spacy_model, corpus_docs) -> None:
+def test_build_cts_from_strings(en_sm_spacy_model, corpus_docs) -> None:
     cts = build_cts_from_strings(
         ct_label_strings={"fixed size", "anything interesting", "bike"},
-        spacy_model=spacy_model,
+        spacy_model=en_sm_spacy_model,
         docs=corpus_docs,
     )
 
@@ -376,12 +369,12 @@ def test_build_cts_from_strings(spacy_model, corpus_docs) -> None:
 
 
 def test_split_cts_on_token(
-    candidate_terms_for_post_processing, spacy_model, corpus_docs
+    candidate_terms_for_post_processing, en_sm_spacy_model, corpus_docs
 ) -> None:
     cts = split_cts_on_token(
         candidate_terms=candidate_terms_for_post_processing,
         splitting_tokens={"with", "of"},
-        spacy_model=spacy_model,
+        spacy_model=en_sm_spacy_model,
         docs=corpus_docs,
     )
 

@@ -2,7 +2,7 @@ from functools import partial
 from typing import Dict, List, Set
 
 import pytest
-import spacy
+import spacy.tokens
 
 from olaf.commons.candidate_term_tools import (
     filter_cts_on_first_token_in_term,
@@ -28,24 +28,16 @@ def raw_corpus() -> List[str]:
 
 
 @pytest.fixture(scope="session")
-def spacy_nlp():
-    spacy_model = spacy.load(
-        "en_core_web_sm",
-        exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"],
-    )
-    return spacy_model
-
-
-@pytest.fixture(scope="session")
-def corpus(raw_corpus, spacy_nlp) -> List[spacy.tokens.Doc]:
-    docs = [doc for doc in spacy_nlp.pipe(raw_corpus)]
+def corpus(raw_corpus, en_sm_spacy_model) -> List[spacy.tokens.Doc]:
+    docs = [doc for doc in en_sm_spacy_model.pipe(raw_corpus)]
     return docs
 
 
 @pytest.fixture(scope="function")
-def pipeline(spacy_nlp, raw_corpus) -> Pipeline:
+def pipeline(en_sm_spacy_model, raw_corpus) -> Pipeline:
     custom_pipeline = Pipeline(
-        spacy_model=spacy_nlp, corpus=[doc for doc in spacy_nlp.pipe(raw_corpus)]
+        spacy_model=en_sm_spacy_model,
+        corpus=[doc for doc in en_sm_spacy_model.pipe(raw_corpus)],
     )
     return custom_pipeline
 
@@ -128,13 +120,13 @@ class TestManualCandidateTermWithPostProcessing:
         assert ct_labels == {"sentence", "that might be in"}
 
     def test_ct_post_process_split(
-        self, manual_ct_extract, pipeline, spacy_nlp, corpus
+        self, manual_ct_extract, pipeline, en_sm_spacy_model, corpus
     ) -> None:
         manual_ct_extract.cts_post_processing_functions = [
             partial(
                 split_cts_on_token,
                 splitting_tokens={"might"},
-                spacy_model=spacy_nlp,
+                spacy_model=en_sm_spacy_model,
                 docs=corpus,
             ),
         ]
@@ -151,13 +143,13 @@ class TestManualCandidateTermWithPostProcessing:
         }
 
     def test_ct_post_process_split_filter(
-        self, manual_ct_extract, pipeline, spacy_nlp, corpus
+        self, manual_ct_extract, pipeline, en_sm_spacy_model, corpus
     ) -> None:
         manual_ct_extract.cts_post_processing_functions = [
             partial(
                 split_cts_on_token,
                 splitting_tokens={"might"},
-                spacy_model=spacy_nlp,
+                spacy_model=en_sm_spacy_model,
                 docs=corpus,
             ),
             partial(filter_cts_on_last_token_in_term, filtering_tokens={"with"}),

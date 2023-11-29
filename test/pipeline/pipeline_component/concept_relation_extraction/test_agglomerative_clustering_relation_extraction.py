@@ -89,16 +89,17 @@ def meet_concept() -> Concept:
 
 
 @pytest.fixture(scope="session")
-def pipeline(person_concept, vegetable_concept, meet_concept) -> Pipeline:
-    spacy_model = spacy.load("en_core_web_sm")
+def pipeline(
+    person_concept, vegetable_concept, meet_concept, en_sm_spacy_model
+) -> Pipeline:
     corpus = [
         "Let's dance.",
         "Person can eat both vegetables and meet.",
         "This person has food with some vegetables.",
     ]
-    docs = list(spacy_model.pipe(corpus))
+    docs = list(en_sm_spacy_model.pipe(corpus))
 
-    pipeline = Pipeline(spacy_model=spacy_model, corpus=docs)
+    pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=docs)
     pipeline.kr = KnowledgeRepresentation()
     candidate_terms_set = set()
     candidate_terms_set.add(
