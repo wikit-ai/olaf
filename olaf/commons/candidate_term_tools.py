@@ -1,4 +1,5 @@
-from typing import List, Set
+from collections import defaultdict
+from typing import List, Set, Tuple
 
 import spacy
 from spacy.matcher import PhraseMatcher
@@ -12,72 +13,126 @@ from ..data_container.linguistic_realisation_schema import ConceptLR
 def group_cts_on_synonyms(
     candidate_terms: Set[CandidateTerm],
 ) -> List[Set[CandidateTerm]]:
-    """Group candidate terms based on common synonyms.
+    ct_labels = {}
+    for ct in candidate_terms:
+        ct_labels[ct] = {ct.label}
+        if ct.enrichment is not None:
+            ct_labels[ct].update(ct.enrichment.synonyms)
 
-    Parameters
-    ----------
-    candidate_terms : Set[CandidateTerm]
-        Set of candidate terms to group.
+    cts_groups = {}
 
-    Returns
-    -------
-    List[Set[CandidateTerm]]
-        List of candidate terms grouped.
-        Each set contains candidate terms with common synonyms.
-    """
-    common_groups = []
-    common_candidates = set()
-    candidate_terms = list(candidate_terms)
-    while candidate_terms:
-        reference_term = candidate_terms.pop(0)
-        common_candidates.add(reference_term)
-        find_synonym_candidates(reference_term, candidate_terms, common_candidates)
-        common_groups.append(common_candidates)
-        common_candidates = set()
-    return common_groups
-
-
-def find_synonym_candidates(
-    reference_ct: CandidateTerm,
-    candidate_terms: List[CandidateTerm],
-    common_candidates: Set[CandidateTerm],
-) -> None:
-    """Find candidate terms with common synonyms based on
-    the reference term and group them in the a set.
-    If the candidate terms are candidate relations,
-    they should have the same source and destination concepts.
-
-    Parameters
-    ----------
-    reference_ct : CandidateTerm
-        Candidate term used as reference to start the synonym search with.
-    candidate_terms : List[CandidateTerm]
-        List of candidate terms to compare with the reference term.
-    common_candidates : Set[CandidateTerm]
-        Set of candidate terms with common synonyms.
-    """
-    i = 0
-    while i < len(candidate_terms):
-        check_source_destination = True
-        if isinstance(reference_ct, CandidateRelation):
-            check_source_destination = (
-                reference_ct.source_concept == candidate_terms[i].source_concept
-                and reference_ct.destination_concept
-                == candidate_terms[i].destination_concept
-            )
-        check_common_synonyms = cts_have_common_synonyms(
-            reference_ct, candidate_terms[i]
-        )
-        if check_source_destination and check_common_synonyms:
-            new_reference_ct = candidate_terms.pop(i)
-            common_candidates.add(new_reference_ct)
-            remaining_candidates = len(candidate_terms) - i
-            find_synonym_candidates(
-                new_reference_ct, candidate_terms, common_candidates
-            )
-            i = len(candidate_terms) - remaining_candidates
+    for ct in candidate_terms:
+        print(ct.label)
+        print(ct)
+        match_cts = []
+        match_labels = set()
+        for ct_g, labels in cts_groups.items():
+            if check_ct_belongs_to_group(ct, ct_labels[ct], ct_g, labels):
+                print("matching group", ct_g)
+                match_cts.append(ct_g)
+                match_labels.update(labels)
+        if len(match_cts) == 0:
+            print("no match")
+            cts_groups[tuple([ct])] = ct_labels[ct]
         else:
-            i += 1
+            print("match")
+            new_key = []
+            for key in match_cts:
+                del cts_groups[key]
+                keys = list(key)
+                keys.append(ct)
+                new_key.extend(keys)
+            match_labels.update(ct_labels[ct])
+            cts_groups[tuple(new_key)] = match_labels
+    print(cts_groups)
+    return [set(cts_group) for cts_group in cts_groups.keys()]
+
+
+def check_ct_belongs_to_group(
+    candidate_term: CandidateTerm,
+    ct_labels: Set[str],
+    group_cts: Tuple[CandidateTerm],
+    group_label: Set[str],
+) -> bool:
+    conditions = []
+    if isinstance(candidate_term, CandidateRelation):
+        conditions.append(candidate_term.source_concept == group_cts[0].source_concept)
+        conditions.append(
+            candidate_term.destination_concept == group_cts[0].destination_concept
+        )
+    conditions.append(len(ct_labels & group_label) > 0)
+    return all(conditions)
+
+
+# def group_cts_on_synonyms(
+#     candidate_terms: Set[CandidateTerm],
+# ) -> List[Set[CandidateTerm]]:
+#     """Group candidate terms based on common synonyms.
+
+#     Parameters
+#     ----------
+#     candidate_terms : Set[CandidateTerm]
+#         Set of candidate terms to group.
+
+#     Returns
+#     -------
+#     List[Set[CandidateTerm]]
+#         List of candidate terms grouped.
+#         Each set contains candidate terms with common synonyms.
+#     """
+#     common_groups = []
+#     common_candidates = set()
+#     candidate_terms = list(candidate_terms)
+#     while candidate_terms:
+#         reference_term = candidate_terms.pop(0)
+#         common_candidates.add(reference_term)
+#         find_synonym_candidates(reference_term, candidate_terms, common_candidates)
+#         common_groups.append(common_candidates)
+#         common_candidates = set()
+#     return common_groups
+
+
+# def find_synonym_candidates(
+#     reference_ct: CandidateTerm,
+#     candidate_terms: List[CandidateTerm],
+#     common_candidates: Set[CandidateTerm],
+# ) -> None:
+#     """Find candidate terms with common synonyms based on
+#     the reference term and group them in the a set.
+#     If the candidate terms are candidate relations,
+#     they should have the same source and destination concepts.
+
+#     Parameters
+#     ----------
+#     reference_ct : CandidateTerm
+#         Candidate term used as reference to start the synonym search with.
+#     candidate_terms : List[CandidateTerm]
+#         List of candidate terms to compare with the reference term.
+#     common_candidates : Set[CandidateTerm]
+#         Set of candidate terms with common synonyms.
+#     """
+#     i = 0
+#     while i < len(candidate_terms):
+#         check_source_destination = True
+#         if isinstance(reference_ct, CandidateRelation):
+#             check_source_destination = (
+#                 reference_ct.source_concept == candidate_terms[i].source_concept
+#                 and reference_ct.destination_concept
+#                 == candidate_terms[i].destination_concept
+#             )
+#         check_common_synonyms = cts_have_common_synonyms(
+#             reference_ct, candidate_terms[i]
+#         )
+#         if check_source_destination and check_common_synonyms:
+#             new_reference_ct = candidate_terms.pop(i)
+#             common_candidates.add(new_reference_ct)
+#             remaining_candidates = len(candidate_terms) - i
+#             find_synonym_candidates(
+#                 new_reference_ct, candidate_terms, common_candidates
+#             )
+#             i = len(candidate_terms) - remaining_candidates
+#         else:
+#             i += 1
 
 
 def cts_have_common_synonyms(c_term_1: CandidateTerm, c_term_2: CandidateTerm) -> bool:

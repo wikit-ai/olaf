@@ -10,7 +10,6 @@ from olaf.commons.candidate_term_tools import (
     filter_cts_on_first_token_in_term,
     filter_cts_on_last_token_in_term,
     filter_cts_on_token_in_term,
-    find_synonym_candidates,
     group_cts_on_synonyms,
     split_cts_on_token,
 )
@@ -284,17 +283,17 @@ def test_concept_creation(candidate_terms):
         assert list(lr.corpus_occurrences)[0].text in labels
 
 
-def test_find_common_syn_from_ref_term(list_candidates):
-    common_candidates = set()
-    ref_term = list_candidates.pop(0)
-    common_candidates.add(ref_term)
-    find_synonym_candidates(ref_term, list_candidates, common_candidates)
-    assert len(common_candidates) == 4
-    assert len(list_candidates) == 3
-    conditions = [
-        ct.label in ["cycling", "bicycle", "duo", "tandem"] for ct in common_candidates
-    ]
-    assert all(conditions)
+# def test_find_common_syn_from_ref_term(list_candidates):
+#     common_candidates = set()
+#     ref_term = list_candidates.pop(0)
+#     common_candidates.add(ref_term)
+#     find_synonym_candidates(ref_term, list_candidates, common_candidates)
+#     assert len(common_candidates) == 4
+#     assert len(list_candidates) == 3
+#     conditions = [
+#         ct.label in ["cycling", "bicycle", "duo", "tandem"] for ct in common_candidates
+#     ]
+#     assert all(conditions)
 
 
 def test_group_ct_on_synonyms(set_candidates):
