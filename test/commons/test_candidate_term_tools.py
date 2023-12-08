@@ -5,12 +5,12 @@ import spacy.tokens
 
 from olaf.commons.candidate_term_tools import (
     build_cts_from_strings,
+    check_ct_belongs_to_group,
     cts_have_common_synonyms,
     cts_to_concept,
     filter_cts_on_first_token_in_term,
     filter_cts_on_last_token_in_term,
     filter_cts_on_token_in_term,
-    find_synonym_candidates,
     group_cts_on_synonyms,
     split_cts_on_token,
 )
@@ -284,19 +284,6 @@ def test_concept_creation(candidate_terms):
         assert list(lr.corpus_occurrences)[0].text in labels
 
 
-def test_find_common_syn_from_ref_term(list_candidates):
-    common_candidates = set()
-    ref_term = list_candidates.pop(0)
-    common_candidates.add(ref_term)
-    find_synonym_candidates(ref_term, list_candidates, common_candidates)
-    assert len(common_candidates) == 4
-    assert len(list_candidates) == 3
-    conditions = [
-        ct.label in ["cycling", "bicycle", "duo", "tandem"] for ct in common_candidates
-    ]
-    assert all(conditions)
-
-
 def test_group_ct_on_synonyms(set_candidates):
     common_groups = group_cts_on_synonyms(set_candidates)
     assert len(common_groups) == 3
@@ -315,6 +302,36 @@ def test_group_ct_on_synonyms(set_candidates):
                 ct.label in ["cycling", "bicycle", "duo", "tandem"] for ct in group
             ]
             assert all(conditions)
+
+
+def test_check_ct_belongs_to_group(
+    candidate_term_bike,
+    candidate_term_bicycle,
+    candidate_term_tandem,
+    candidate_term_wine,
+) -> None:
+    ct_wine_labels = set([candidate_term_wine.label])
+    ct_wine_labels.update(candidate_term_wine.enrichment.synonyms)
+    ct_tandem_bicycle_labels = set([candidate_term_tandem.label])
+    ct_tandem_bicycle_labels.update(candidate_term_tandem.enrichment.synonyms)
+    ct_tandem_bicycle_labels.update(candidate_term_bicycle.enrichment.synonyms)
+    ct_tandem_bicycle_labels.add(candidate_term_bicycle.label)
+
+    assert not (
+        check_ct_belongs_to_group(
+            candidate_term_wine,
+            ct_wine_labels,
+            (candidate_term_tandem, candidate_term_bicycle),
+            ct_tandem_bicycle_labels,
+        )
+    )
+
+    assert check_ct_belongs_to_group(
+        candidate_term_bike,
+        set([candidate_term_bike.label]),
+        (candidate_term_tandem, candidate_term_bicycle),
+        ct_tandem_bicycle_labels,
+    )
 
 
 def test_filter_cts_on_first_token_in_term(candidate_terms_for_post_processing) -> None:
