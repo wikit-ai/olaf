@@ -47,16 +47,18 @@ class JsonCorpusLoader(CorpusLoader):
                 if os.path.isfile(file_path):
                     with open(file_path, "r", encoding="utf-8") as file:
                         file_content = json.load(file)
-                    try:
-                        text_corpus += [
-                            content[self.json_field] for content in file_content
-                        ]
-                    except Exception as _e:
-                        logger.error(
-                            f"Invalid json field {self.json_field} for file {filename}."
-                        )
-                        raise _e
-
+                        if isinstance(file_content, list):
+                            try:
+                                text_corpus += [content[self.json_field] for content in file_content]
+                            except Exception as _e:
+                                logger.error(f"Invalid json field {self.json_field} for file {filename}.")
+                                raise _e
+                        elif isinstance(file_content, dict):
+                            try:
+                                text_corpus += [file_content[self.json_field]]
+                            except Exception as _e:
+                                logger.error(f"Invalid json field {self.json_field} for file {filename}.")
+                                raise _e
         elif os.path.isfile(self.corpus_path):
             with open(self.corpus_path, "r", encoding="utf-8") as file:
                 file_content = json.load(file)
