@@ -1,0 +1,23 @@
+from typing import Dict, List
+
+
+def prompt_concept_term_extraction(context: str) -> List[Dict[str, str]]:
+    """Prompt template for concept term extraction with ChatCompletion OpenAI model.
+
+    Parameters
+    ----------
+    context: str
+        The context to add in the prompt template.
+    """
+    prompt_template = [
+        {
+            "role": "system",
+            "content": "You are an helpful assistant helping building an ontology.",
+        },
+        {
+            "role": "user",
+            "content": "Extract the most meaningful keywords of the following text. Keep only keywords that could be concepts and not relations. Write them as a python list of string with double quotes.",
+        },
+        {"role": "user", "content": f"Text: {context}"},
+    ]
+    return prompt_template

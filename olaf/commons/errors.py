@@ -1,15 +1,24 @@
 class ResourcesCheckFailError(Exception):
-    """Exception raised when a resource is missing to run a component of the pipeline.
-    """
+    """Exception raised when a resource is missing to run a component of the pipeline."""
 
     def __init__(self) -> None:
-        message = f"External resources check failed. Some might not be accessible or wrong."
+        message = (
+            f"External resources check failed. Some might not be accessible or wrong."
+        )
+        super().__init__(message)
+
+
+class MissingEnvironmentVariable(Exception):
+    """Exception raised when an environment variable is missing."""
+
+    def __init__(self, component_name: str, env_var_name: str) -> None:
+        message = f"""External resources check failed for component {component_name}. 
+                    Missing environment variable: {env_var_name}"""
         super().__init__(message)
 
 
 class ParameterError(Exception):
-    """Exception raised when a required parameter is missing for a pipeline component to function.
-    """
+    """Exception raised when a required parameter is missing for a pipeline component to function."""
 
     def __init__(self, component_name: str, param_name: str, error_type: str) -> None:
         """Initialise a parameter error.
@@ -31,8 +40,7 @@ class ParameterError(Exception):
 
 
 class OptionError(Exception):
-    """Exception raised when a required option is missing for a pipeline component to function.
-    """
+    """Exception raised when a required option is missing for a pipeline component to function."""
 
     def __init__(self, component_name: str, option_name: str, error_type: str) -> None:
         """Initialise an option error.
@@ -54,8 +62,7 @@ class OptionError(Exception):
 
 
 class EmptyCorpusError(Exception):
-    """Exception raised when the text corpus represented as spacy documents is empty.
-    """
+    """Exception raised when the text corpus represented as spacy documents is empty."""
 
     def __init__(self) -> None:
         message = f"Corpus is empty. No documents were given or the spacy pipe process failed."
@@ -63,17 +70,17 @@ class EmptyCorpusError(Exception):
 
 
 class PipelineCorpusInitialisationError(Exception):
-    """Exception raised when a pipeline is initialised without corpus nor corpus loader. 
-    """
+    """Exception raised when a pipeline is initialised without corpus nor corpus loader."""
 
     def __init__(self) -> None:
-        message = f"Pipeline can not be initialised without a corpus or a corpus loader."
+        message = (
+            f"Pipeline can not be initialised without a corpus or a corpus loader."
+        )
         super().__init__(message)
 
 
 class FileOrDirectoryNotFoundError(Exception):
-    """Exception raised when the corpus path is not a directory or a file.
-    """
+    """Exception raised when the corpus path is not a directory or a file."""
 
     def __init__(self, path: str) -> None:
         message = f"The corpus path {path} is not a valid directory or file."
@@ -81,8 +88,7 @@ class FileOrDirectoryNotFoundError(Exception):
 
 
 class NotCallableError(Exception):
-    """Exception raised when the argument passed as a function is not callable.
-    """
+    """Exception raised when the argument passed as a function is not callable."""
 
     def __init__(self, function_name: str) -> None:
         message = f"The function {function_name} is not callable."

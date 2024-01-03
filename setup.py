@@ -1,6 +1,9 @@
 from pathlib import Path
 
+from dotenv import load_dotenv
 from setuptools import find_packages, setup
+
+load_dotenv()
 
 ROOT = Path(__file__).parent
 PACKAGE_ROOT = ROOT / "olaf"
@@ -38,6 +41,7 @@ setup(
         "networkx==3.2.1",
         "nltk==3.8.1",
         "numpy==1.26.1",
+        "openai==1.6.1",
         "packaging==23.2",
         "pandas==2.1.2",
         "Pillow==10.1.0",
@@ -79,6 +83,6 @@ setup(
         "tzdata==2023.3",
         "urllib3==2.0.7",
         "wasabi==1.1.2",
-        "weasel==0.3.3"
-    ]
+        "weasel==0.3.3",
+    ],
 )
