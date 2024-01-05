@@ -5,8 +5,8 @@ from typing import Any, Callable, Dict, List, Optional, Set
 
 from spacy.tokens import Doc
 
-from ....commons.errors import MissingEnvironmentVariable
 from ....commons.llm_tools import LLMGenerator, OpenAIGenerator
+from ....commons.logging_config import logger
 from ....commons.prompts import prompt_concept_term_extraction
 from ....data_container.candidate_term_schema import CandidateTerm
 from .term_extraction_schema import TermExtractionPipelineComponent
@@ -52,8 +52,9 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
             else prompt_concept_term_extraction
         )
         self.llm_generator = (
-            self.llm_generator if llm_generator is not None else OpenAIGenerator()
+            llm_generator if llm_generator is not None else OpenAIGenerator()
         )
+        self._check_resources()
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]
@@ -63,9 +64,7 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
 
     def _check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
-        if isinstance(self.llm_generator, OpenAIGenerator):
-            if "OPENAI_API_KEY" not in os.environ:
-                raise MissingEnvironmentVariable(self.__class__, "OPENAI_API_KEY")
+        self.llm_generator.check_resources()
 
     def _compute_metrics(self) -> None:
         """A method to compute component performance metrics.
@@ -100,12 +99,22 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
         """
         doc_prompt = self.prompt_template(doc.text)
         llm_output = self.llm_generator.generate_text(doc_prompt)
-        ct_labels = set(ast.literal_eval(llm_output))
+        ct_labels = ast.literal_eval(llm_output)
+        if isinstance(ct_labels, List) and isinstance(ct_labels[0], str):
+            ct_labels = set(ct_labels)
+        else:
+            logger.error(
+                """LLM generator output is not in the expected format.
+                The candidate terms can not be processed.
+                \nDoc concerned : %s...""",
+                doc.text[:100],
+            )
+            ct_labels = set()
         return ct_labels
 
     def _update_candidate_terms(
-        self, doc: Doc, ct_labels: Set[str], candidate_terms: Set[CandidateTerm]
-    ) -> None:
+        self, doc: Doc, ct_labels: Set[str], ct_index: Dict[str, CandidateTerm]
+    ) -> Set[CandidateTerm]:
         """Update the candidate terms by adding new candidates if their labels appear in the corpus.
         Corpus occurrences are also found to create candidate term instance.
 
@@ -115,8 +124,8 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
             The spaCy doc used to validate candidate terms from.
         ct_labels: Set[str]
             The candidate term labels to validate.
-        candidate_terms: Set[CandidateTerm]
-            The set of already existing candidate terms to update.
+        ct_index: Dict[str, CandidateTerm]
+            The index of candidate terms with label as key and the candidate term object as value.
         """
         for label in ct_labels:
             if label in doc.text:
@@ -125,14 +134,10 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
                     occurrences.add(
                         doc.char_span(string_match.start(), string_match.end())
                     )
-                label_ct = next(
-                    (ct for ct in candidate_terms if ct.label == label),
-                    None,
-                )
-                if label_ct is None:
-                    candidate_terms.add(CandidateTerm(label, occurrences))
+                if label in ct_index.keys():
+                    ct_index[label].add_corpus_occurrences(occurrences)
                 else:
-                    label_ct.add_corpus_occurrences(occurrences)
+                    ct_index[label] = CandidateTerm(label, occurrences)
 
     def run(self, pipeline: Any) -> None:
         """Method that is responsible for the execution of the component.
@@ -142,10 +147,14 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
         pipeline: Pipeline
             The pipeline to run the component with.
         """
-        candidate_terms = set()
+        ct_index = {}
+        for ct in pipeline.candidate_terms:
+            ct_index[ct.label] = ct
+
         for doc in pipeline.corpus:
             ct_labels = self._generate_candidate_terms(doc)
-            self._update_candidate_terms(doc, ct_labels, candidate_terms)
+            self._update_candidate_terms(doc, ct_labels, ct_index)
 
-        candidate_terms = self.apply_post_processing(candidate_terms)
-        pipeline.candidate_terms.update(candidate_terms)
+        new_cts = set(ct_index.values())
+        new_cts = self.apply_post_processing(new_cts)
+        pipeline.candidate_terms.update(new_cts)

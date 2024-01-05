@@ -2,7 +2,10 @@ from typing import Dict, List
 
 import pytest
 
-from olaf.commons.prompts import prompt_concept_term_extraction
+from olaf.commons.prompts import (
+    prompt_concept_term_extraction,
+    prompt_relation_term_extraction,
+)
 
 
 @pytest.fixture(scope="function")
@@ -12,6 +15,14 @@ def context() -> str:
 
 def test_prompt_concept_term_extraction(context) -> None:
     prompt = prompt_concept_term_extraction(context)
+    assert isinstance(prompt, List)
+    for elem in prompt:
+        assert isinstance(elem, Dict)
+    assert prompt[-1]["content"] == f"Text: {context}"
+
+
+def test_prompt_relation_term_extraction(context) -> None:
+    prompt = prompt_relation_term_extraction(context)
     assert isinstance(prompt, List)
     for elem in prompt:
         assert isinstance(elem, Dict)

@@ -70,6 +70,7 @@ setup(
         "spacy-loggers==1.0.5",
         "srsly==2.4.8",
         "sympy==1.12",
+        "tenacity==8.2.3",
         "thinc==8.2.1",
         "threadpoolctl==3.2.0",
         "tokenizers==0.14.1",
