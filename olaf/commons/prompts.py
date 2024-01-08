@@ -51,3 +51,35 @@ def prompt_relation_term_extraction(context: str) -> List[Dict[str, str]]:
         {"role": "user", "content": f"Text: {context}"},
     ]
     return prompt_template
+
+
+def prompt_term_enrichment(context: str) -> List[Dict[str, str]]:
+    """Prompt template for term enrichment with ChatCompletion OpenAI model.
+
+    Parameters
+    ----------
+    context: str
+        The context to add in the prompt template.
+    """
+    prompt_template = [
+        {
+            "role": "system",
+            "content": "You are an helpful assistant helping building an ontology.",
+        },
+        {
+            "role": "user",
+            "content": 'Give synonyms, hypernyms, hyponyms and antonyms of the following term. The output should be in json format with "synonyms", "hypernyms", "hyponyms" and "antonyms" as keys and a list a string as values. ',
+        },
+        {
+            "role": "user",
+            "content": """Here is an example. Term : dog
+                {
+                    "synonyms": ["hound", "mutt"],
+                    "hypernyms":["animal", "mammal", "canine"]
+                    "hyponyms": ["labrador", "dalmatian"],
+                    "antonyms": [""]
+                }""",
+        },
+        {"role": "user", "content": f"Term: {context}"},
+    ]
+    return prompt_template
