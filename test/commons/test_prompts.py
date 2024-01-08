@@ -5,6 +5,7 @@ import pytest
 from olaf.commons.prompts import (
     prompt_concept_term_extraction,
     prompt_relation_term_extraction,
+    prompt_term_enrichment,
 )
 
 
@@ -27,3 +28,11 @@ def test_prompt_relation_term_extraction(context) -> None:
     for elem in prompt:
         assert isinstance(elem, Dict)
     assert prompt[-1]["content"] == f"Text: {context}"
+
+
+def test_prompt_term_enrichment(context) -> None:
+    prompt = prompt_term_enrichment(context)
+    assert isinstance(prompt, List)
+    for elem in prompt:
+        assert isinstance(elem, Dict)
+    assert prompt[-1]["content"] == f"Term: {context}"

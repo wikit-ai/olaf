@@ -84,16 +84,16 @@ class LLMBasedTermEnrichment(PipelineComponent):
         llm_output = self.llm_generator.generate_text(cterm_prompt)
         enrichment = ast.literal_eval(llm_output)
         if isinstance(enrichment, Dict):
-            cterm_enrichment = Enrichment()
+            if cterm.enrichment is None:
+                cterm.enrichment = Enrichment()
             if "synonyms" in enrichment.keys():
-                cterm_enrichment.add_synonyms(set(enrichment["synonyms"]))
+                cterm.enrichment.add_synonyms(set(enrichment["synonyms"]))
             if "hypernyms" in enrichment.keys():
-                cterm_enrichment.add_hypernyms(set(enrichment["hypernyms"]))
+                cterm.enrichment.add_hypernyms(set(enrichment["hypernyms"]))
             if "hyponyms" in enrichment.keys():
-                cterm_enrichment.add_hyponyms(set(enrichment["hyponyms"]))
+                cterm.enrichment.add_hyponyms(set(enrichment["hyponyms"]))
             if "antonyms" in enrichment.keys():
-                cterm_enrichment.add_antonyms(set(enrichment["antonyms"]))
-            cterm.enrichment = cterm_enrichment
+                cterm.enrichment.add_antonyms(set(enrichment["antonyms"]))
         else:
             logger.error(
                 """LLM generator output is not in the expected format.

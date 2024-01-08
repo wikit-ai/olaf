@@ -11,7 +11,7 @@ from olaf.pipeline.pipeline_component.term_extraction import LLMTermExtraction
 
 class MockLLMGenerator(LLMGenerator):
     def __init__(self) -> None:
-        super().__init__()
+        pass
 
     def check_resources(self) -> None:
         pass
@@ -22,7 +22,7 @@ class MockLLMGenerator(LLMGenerator):
 
 class MockWrongLLMGenerator(LLMGenerator):
     def __init__(self) -> None:
-        super().__init__()
+        pass
 
     def check_resources(self) -> None:
         pass
