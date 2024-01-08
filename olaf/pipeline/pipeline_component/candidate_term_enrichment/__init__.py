@@ -1,2 +1,3 @@
 from .knowledge_based_enrichment import KnowledgeBasedCTermEnrichment
+from .llm_based_enrichment import LLMBasedTermEnrichment
 from .semantic_based_enrichment import SemanticBasedEnrichment
