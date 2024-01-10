@@ -1,9 +1,9 @@
 import ast
 from typing import Any, Callable, Dict, List, Optional, Set
 
-from ....commons.llm_tools import LLMGenerator, OpenAIGenerator
+from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
-from ....commons.prompts import prompt_term_enrichment
+from ....commons.prompts import hf_prompt_term_enrichment
 from ....data_container import CandidateTerm, Enrichment
 from ..pipeline_component_schema import PipelineComponent
 
@@ -17,6 +17,7 @@ class LLMBasedTermEnrichment(PipelineComponent):
         Prompt template used to give instructions and context to the LLM.
     llm_generator: LLMGenerator
         The LLM model used to enrich the candidate terms.
+        By default, the zephyr-7b-beta HuggingFace model is used.
     """
 
     def __init__(
@@ -33,14 +34,16 @@ class LLMBasedTermEnrichment(PipelineComponent):
             By default the term enrichment prompt is used.
         llm_generator: LLMGenerator
             The LLM model used to generate the enrichment.
-            By default, the OpenAI gpt-3.5-turbo model is used.
+            By default, the zephyr-7b-beta HuggingFace model is used.
         """
 
         self.prompt_template = (
-            prompt_template if prompt_template is not None else prompt_term_enrichment
+            prompt_template
+            if prompt_template is not None
+            else hf_prompt_term_enrichment
         )
         self.llm_generator = (
-            llm_generator if llm_generator is not None else OpenAIGenerator()
+            llm_generator if llm_generator is not None else HuggingFaceGenerator()
         )
         self._check_resources()
 
@@ -80,26 +83,33 @@ class LLMBasedTermEnrichment(PipelineComponent):
         cterm: CandidateTerm
             The candidate term to enrich.
         """
-        cterm_prompt = prompt_term_enrichment(cterm.label)
+        cterm_prompt = self.prompt_template(cterm.label)
         llm_output = self.llm_generator.generate_text(cterm_prompt)
-        enrichment = ast.literal_eval(llm_output)
-        if isinstance(enrichment, Dict):
-            if cterm.enrichment is None:
-                cterm.enrichment = Enrichment()
-            if "synonyms" in enrichment.keys():
-                cterm.enrichment.add_synonyms(set(enrichment["synonyms"]))
-            if "hypernyms" in enrichment.keys():
-                cterm.enrichment.add_hypernyms(set(enrichment["hypernyms"]))
-            if "hyponyms" in enrichment.keys():
-                cterm.enrichment.add_hyponyms(set(enrichment["hyponyms"]))
-            if "antonyms" in enrichment.keys():
-                cterm.enrichment.add_antonyms(set(enrichment["antonyms"]))
-        else:
+        try:
+            enrichment = ast.literal_eval(llm_output)
+            if isinstance(enrichment, Dict):
+                if cterm.enrichment is None:
+                    cterm.enrichment = Enrichment()
+                if "synonyms" in enrichment.keys():
+                    cterm.enrichment.add_synonyms(set(enrichment["synonyms"]))
+                if "hypernyms" in enrichment.keys():
+                    cterm.enrichment.add_hypernyms(set(enrichment["hypernyms"]))
+                if "hyponyms" in enrichment.keys():
+                    cterm.enrichment.add_hyponyms(set(enrichment["hyponyms"]))
+                if "antonyms" in enrichment.keys():
+                    cterm.enrichment.add_antonyms(set(enrichment["antonyms"]))
+            else:
+                logger.error(
+                    """LLM generator output is not in the expected format. The candidate term %s can not be enriched.""",
+                    cterm.label,
+                )
+                enrichment = None
+        except Exception:
             logger.error(
-                """LLM generator output is not in the expected format.
-                The candidate term %s can not be enriched.""",
+                """LLM generator output is not in the expected format. The candidate term %s can not be enriched.""",
                 cterm.label,
             )
+            enrichment = None
 
     def run(self, pipeline: Any) -> None:
         """Method that is responsible for the execution of the component.

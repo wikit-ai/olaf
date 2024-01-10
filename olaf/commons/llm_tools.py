@@ -1,8 +1,9 @@
 import os
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import openai
+import requests
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -27,6 +28,36 @@ class LLMGenerator(ABC):
     @abstractmethod
     def generate_text(self, prompt: Any) -> str:
         """Method that generates a textual output based on a prompt with a LLM."""
+
+
+class HuggingFaceGenerator(LLMGenerator):
+    """Text generator base on Hugging Face inference API."""
+
+    def __init__(self, api_url: Optional[str] = None) -> None:
+        self.api_url = (
+            api_url
+            if api_url is not None
+            else "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
+        )
+
+    def check_resources(self) -> None:
+        """Check that the resources needed to use the HuggingFace Generator are available."""
+        if "HF_API_KEY" not in os.environ:
+            raise MissingEnvironmentVariable(self.__class__, "HF_API_KEY")
+
+    def generate_text(self, prompt: str) -> str:
+        """Generate text based on a chat completion prompt for an hugging face model."""
+        headers = {"Authorization": f"Bearer {os.getenv('HF_API_KEY')}"}
+        payload = {
+            "inputs": prompt,
+            "parameters": {"max_new_tokens": 1024, "temperature": 0.1},
+        }
+        response = requests.post(
+            self.api_url, headers=headers, json=payload, timeout=30
+        )
+        answer = response.json()[0]["generated_text"]
+        answer = answer.replace(prompt, "")
+        return answer
 
 
 class OpenAIGenerator(LLMGenerator):

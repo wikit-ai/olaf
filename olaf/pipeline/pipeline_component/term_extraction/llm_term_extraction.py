@@ -4,9 +4,9 @@ from typing import Any, Callable, Dict, List, Optional, Set
 
 from spacy.tokens import Doc
 
-from ....commons.llm_tools import LLMGenerator, OpenAIGenerator
+from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
-from ....commons.prompts import prompt_concept_term_extraction
+from ....commons.prompts import hf_prompt_concept_term_extraction
 from ....data_container.candidate_term_schema import CandidateTerm
 from .term_extraction_schema import TermExtractionPipelineComponent
 
@@ -42,16 +42,16 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
             By default the concept term extraction prompt is used.
         llm_generator: LLMGenerator
             The LLM model used to generate the candidate terms.
-            By default, the OpenAI gpt-3.5-turbo model is used.
+            By default, the zephyr-7b-beta HuggingFace model is used.
         """
         super().__init__(cts_post_processing_functions)
         self.prompt_template = (
             prompt_template
             if prompt_template is not None
-            else prompt_concept_term_extraction
+            else hf_prompt_concept_term_extraction
         )
         self.llm_generator = (
-            llm_generator if llm_generator is not None else OpenAIGenerator()
+            llm_generator if llm_generator is not None else HuggingFaceGenerator()
         )
         self._check_resources()
 
@@ -98,10 +98,17 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
         """
         doc_prompt = self.prompt_template(doc.text)
         llm_output = self.llm_generator.generate_text(doc_prompt)
-        ct_labels = ast.literal_eval(llm_output)
-        if isinstance(ct_labels, List) and isinstance(ct_labels[0], str):
-            ct_labels = set(ct_labels)
-        else:
+        try:
+            ct_labels = ast.literal_eval(llm_output)
+            if isinstance(ct_labels, List):
+                ct_labels = set(ct_labels)
+            else:
+                logger.error(
+                    """LLM generator output is not in the expected format. The candidate terms can not be processed.\nDoc concerned : %s...""",
+                    doc.text[:100],
+                )
+                ct_labels = set()
+        except Exception:
             logger.error(
                 """LLM generator output is not in the expected format.
                 The candidate terms can not be processed.
