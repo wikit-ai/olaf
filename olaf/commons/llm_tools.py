@@ -53,10 +53,18 @@ class HuggingFaceGenerator(LLMGenerator):
             "parameters": {"max_new_tokens": 1024, "temperature": 0.1},
         }
         response = requests.post(
-            self.api_url, headers=headers, json=payload, timeout=30
+            self.api_url, headers=headers, json=payload, timeout=60
         )
-        answer = response.json()[0]["generated_text"]
-        answer = answer.replace(prompt, "")
+        answer = ""
+        try:
+            answer = response.json()[0]["generated_text"]
+            answer = answer.replace(prompt, "")
+        except KeyError:
+            logger.error(
+                """Something went wrong the the HuggingFace API call.\n Message : %s""",
+                response.text,
+            )
+
         return answer
 
 
@@ -95,6 +103,7 @@ class OpenAIGenerator(LLMGenerator):
         client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         try:
             response = openai_call()
+            llm_output = response.choices[0].message.content
         except Exception as e:
             logger.error(
                 """Exception %s still occurred after retries on OpenAI API.
@@ -102,6 +111,62 @@ class OpenAIGenerator(LLMGenerator):
                 e,
                 prompt[-1]["content"][5:100],
             )
-        llm_output = response.choices[0].message.content
+
+        return llm_output
+
+
+class MistralAIGenerator(LLMGenerator):
+    """Text generator based on MiastralAI models."""
+
+    def __init__(self, model_name: Optional[str] = None) -> None:
+        self.model_name = model_name if model_name is not None else "mistral-tiny"
+        self.api_url = "https://api.mistral.ai/v1/chat/completions"
+
+    def check_resources(self) -> None:
+        """Check that the resources needed to use the MistralAI Generator are available."""
+        if "MISTRAL_API_KEY" not in os.environ:
+            raise MissingEnvironmentVariable(self.__class__, "MISTRAL_API_KEY")
+
+    def generate_text(self, prompt: List[Dict[str, str]]) -> str:
+        """Generate text based on a chat completion prompt for MistralAI model."""
+
+        @retry(
+            stop=stop_after_delay(15) | stop_after_attempt(3),
+            reraise=True,
+        )
+        def mistralai_call():
+            headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Bearer " + os.getenv("MISTRAL_API_KEY"),
+            }
+            json_data = {
+                "model": self.model_name,
+                "messages": prompt,
+                "temperature": 0.0,
+            }
+            response = requests.post(
+                self.api_url, headers=headers, json=json_data, timeout=30
+            )
+
+            return response
+
+        llm_output = ""
+        try:
+            response = mistralai_call()
+        except Exception as e:
+            logger.error(
+                """Exception %s still occurred after retries on MistralAI API.
+                         Skipping document %s...""",
+                e,
+                prompt[-1]["content"][5:100],
+            )
+        try:
+            llm_output = response.json()["choices"][0]["message"]["content"]
+        except KeyError:
+            logger.error(
+                """Something went wrong the the MistralAI API call.\n Message : %s""",
+                response.json()["message"],
+            )
 
         return llm_output
