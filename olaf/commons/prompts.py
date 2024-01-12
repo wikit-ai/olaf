@@ -127,3 +127,47 @@ def hf_prompt_term_enrichment(context: str) -> str:
     {{"synonyms": ["hound", "mutt"], "hypernyms":["animal", "mammal", "canine"], "hyponyms": ["labrador", "dalmatian"],"antonyms": []}}
     Term: {context}"""
     return prompt_template
+
+
+def openai_prompt_concept_extraction(
+    doc_context: str, ct_labels: str
+) -> List[Dict[str, str]]:
+    """Prompt template for concept extraction with ChatCompletion OpenAI model.
+
+    Parameters
+    ----------
+    doc_context: str
+        Extract of document contents to use as context.
+    ct_labels: str
+        The candidate terms to group into concepts.
+    """
+    prompt_template = [
+        {
+            "role": "system",
+            "content": "You are an helpful assistant helping building an ontology.",
+        },
+        {
+            "role": "user",
+            "content": "Based on the context given, group together the words listed below where each group should correspond to one concept. The result should be given as a python list of list of string with double quotes.",
+        },
+        {"role": "user", "content": f"Context: {doc_context} \nWords : {ct_labels}"},
+    ]
+    return prompt_template
+
+
+def hf_prompt_concept_extraction(doc_context: str, ct_labels: str) -> str:
+    """Prompt template for concept extraction with Hugging Face inference API.
+
+    Parameters
+    ----------
+    doc_context: str
+        Extract of document contents to use as context.
+    ct_labels: str
+        The candidate terms to group into concepts.
+    """
+    prompt_template = f"""You are an helpful assistant helping building an ontology.
+    Based on the context given, group together the words listed below where each group should correspond to one concept.
+    The result should be given as a python list of list of string with double quotes.
+    Context: {doc_context}
+    Words : {ct_labels}"""
+    return prompt_template
