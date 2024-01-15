@@ -19,141 +19,87 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
         and before assigning the extracted candidate terms to the pipeline. Default to None.
-    parameters : Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning. By default dict().
-    options : Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the
-        component performance. By default dict().
-    _token_sequences_doc_attribute : str
+    _token_sequences_doc_attribute : str, optional
         The name of the spaCy doc custom attribute containing the sequences of tokens to
         form the corpus for the c-value computation. Default is None which default to the full doc.
-    _candidate_term_threshold : float
+    _candidate_term_threshold : float, optional
         The c-value score threshold below which terms will be ignored.
-    _c_value_threshold : float
+    _c_value_threshold : float, optional
         The threshold used during the c-value scores computation process.
-    _max_term_token_length : int
+    _max_term_token_length : int, optional
         The maximum number of tokens a term can have.
     """
 
     def __init__(
         self,
+        candidate_term_threshold: Optional[float]=0.0,
+        max_term_token_length: Optional[int]=5,
+        token_sequences_doc_attribute: Optional[str]=None,
+        c_value_threshold: Optional[float] = None,
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
-        ] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
+        ] = None
     ) -> None:
         """Initialise C-value term extraction pipeline component instance.
 
         Parameters
         ----------
+        candidate_term_threshold : float, optional
+            The c-value score threshold below which terms will be ignored. Default to 0.0.
+        max_term_token_length : int, optional
+            The maximum number of tokens a term can have. Default to 5.
+        token_sequences_doc_attribute : str, optional
+            The name of the spaCy doc custom attribute containing the sequences of tokens to
+            form the corpus for the c-value computation. Default is None which default to the full doc.
+        c_value_threshold : float, optional
+            The threshold used during the c-value scores computation process. 
+            Default is None which default to the candidate_term_threshold.
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline. Default to None.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning. By default dict().
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance. By default dict().
         """
 
-        super().__init__(cts_post_processing_functions, parameters, options)
-        self._token_sequences_doc_attribute = None
+        super().__init__(cts_post_processing_functions)
+        self._token_sequences_doc_attribute = token_sequences_doc_attribute
 
-        self._candidate_term_threshold = None
-        self._c_value_threshold = None
-        self._max_term_token_length = None
+        self._candidate_term_threshold = candidate_term_threshold
+        self._c_value_threshold = c_value_threshold
+        self._max_term_token_length = max_term_token_length
 
-        self._check_parameters()
-        self._check_options()
-
-    def _check_parameters(self) -> None:
-        """Check wether required parameters are given and correct. If this is not the case,
-        suitable default ones are set.
-
-        For the CvalueTermExtraction pipeline component the parameter to check is
-        `token_sequence_doc_attribute`. If not correctly provided it will default to
-        the full doc.
-        """
-        user_defined_attribute_name = self.parameters.get(
-            "token_sequence_doc_attribute"
-        )
-
-        if user_defined_attribute_name:
-            if spacy.tokens.Doc.has_extension(user_defined_attribute_name):
-                self._token_sequences_doc_attribute = user_defined_attribute_name
-            else:
+        if self._token_sequences_doc_attribute is not None:
+            if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
                 logger.warning(
                     """User defined c-value token sequence attribute %s not set on spaCy Doc.
                     By default the system will use the entire content of the document.""",
-                    user_defined_attribute_name,
+                    self._token_sequences_doc_attribute,
                 )
-
+                self._token_sequences_doc_attribute = None
         else:
             logger.warning(
                 """C-value token sequence attribute not set by the user.
                 By default the system will use the entire content of the document."""
             )
 
-    def _check_options(self) -> None:
-        """Check wether the required tunable options are correctly provided and if not raise
-        the suitable exception.
-        Here there are 3 options:
-        - "threshold": the c-value score threshold below which terms will be ignored.
-        - "max_term_token_length": the maximum number of tokens a term can have.
-        - "c_value_threshold": the threshold used during the c-value scores computation process.
-
-        Raises
-        ------
-        OptionError
-            Exception raised when a required option is missing or a wrong value is provided.
-        """
-
-        candidate_term_threshold = self.options.get("threshold")
-        max_term_token_length = self.options.get("max_term_token_length")
-        c_value_threshold = self.options.get("c_value_threshold")
-
-        if candidate_term_threshold is not None:
-            if not isinstance(candidate_term_threshold, float):
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="threshold",
-                    error_type="Wrong value type",
-                )
-        else:
+        if not isinstance(self._candidate_term_threshold, float):
             raise OptionError(
                 component_name=self.__class__,
                 option_name="threshold",
-                error_type="Missing value",
+                error_type="Wrong value type",
             )
 
-        if max_term_token_length is not None:
-            if not isinstance(max_term_token_length, int):
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="max_term_token_length",
-                    error_type="Wrong value type",
-                )
-        else:
+        if not isinstance(self._max_term_token_length, int):
             raise OptionError(
                 component_name=self.__class__,
                 option_name="max_term_token_length",
-                error_type="Missing value",
+                error_type="Wrong value type",
             )
 
-        if (c_value_threshold is None) or not isinstance(c_value_threshold, float):
+        if (self._c_value_threshold is None) or not isinstance(self._c_value_threshold, float):
             logger.warning(
                 """No Correct value provided for the C-value algorithm threshold. 
                 The system will default to the provided C-value candidate term extraction threshold."""
             )
-            self._c_value_threshold = candidate_term_threshold
-        else:
-            self._c_value_threshold = c_value_threshold
-
-        self._candidate_term_threshold = candidate_term_threshold
-        self._max_term_token_length = max_term_token_length
+            self._c_value_threshold = self._candidate_term_threshold
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]
