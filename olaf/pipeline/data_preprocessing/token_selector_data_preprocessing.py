@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import Any, Callable, List, Union
+from typing import Any, Callable, List, Optional, Union
 
 import spacy
 
@@ -8,26 +7,18 @@ from ...commons.logging_config import logger
 from .data_preprocessing_schema import DataPreprocessing
 
 
-@dataclass
-class TokenSelectorDataPreprocessingConfig:
-    token_sequence_doc_attribute: str = "selected_tokens"
-
-    def __post_init__(self):
-        if self.token_sequence_doc_attribute == "selected_tokens":
-            logger.warning(
-                """Data preprocessing token sequence attribute not set by the user. 
-                By default the token sequence attribute selected_tokens will be used.""")
-
-        if not spacy.tokens.Doc.has_extension(self.token_sequence_doc_attribute):
-            spacy.tokens.Doc.set_extension(self.token_sequence_doc_attribute, default=[])
-
 class TokenSelectorDataPreprocessing (DataPreprocessing):
     """Preprocess data with token selector method.
+
+    Attributes
+    ----------
+    token_sequence_doc_attribute: Optional[str]
+        Name of the spaCy doc attribute containing the selected tokens. Default to "selected_tokens".
     """
 
     def __init__(self,
                  selector: Callable[[spacy.tokens.Token],bool],
-                 config: TokenSelectorDataPreprocessingConfig=TokenSelectorDataPreprocessingConfig()
+                 token_sequence_doc_attribute: Optional[str]= "selected_tokens"
                 ) -> None:
         """Initialise token selector data preprocessing pipeline component.
 
@@ -35,15 +26,25 @@ class TokenSelectorDataPreprocessing (DataPreprocessing):
         ----------
         selector : Callable[[spacy.tokens.Token],bool]
             Callable function that implements the token selection criterion.
+        token_sequence_doc_attribute: str, optional
+            Name of the spaCy doc attribute containing the selected tokens. Default to "selected_tokens".
 
         Raises
         ------
         NotCallableError
             Exception raised when an object is expected callable but is not.
         """
-        super().__init__(config)
+        super().__init__()
         self.corpus = None
-        self._token_sequence_doc_attribute = config.token_sequence_doc_attribute
+        self._token_sequence_doc_attribute = token_sequence_doc_attribute
+
+        if self._token_sequence_doc_attribute == "selected_tokens":
+            logger.warning(
+                """Data preprocessing token sequence attribute not set by the user. 
+                By default the token sequence attribute selected_tokens will be used.""")
+
+        if not spacy.tokens.Doc.has_extension(self._token_sequence_doc_attribute):
+            spacy.tokens.Doc.set_extension(self._token_sequence_doc_attribute, default=[])
 
         if not(isinstance(selector, Callable)):
             raise NotCallableError(str(selector))

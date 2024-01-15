@@ -1,4 +1,3 @@
-from random import sample
 from typing import Dict, List, Set, Tuple
 
 import pytest
@@ -6,9 +5,8 @@ import spacy.tokens
 
 from olaf.commons.errors import OptionError
 from olaf.commons.spacy_processing_tools import spacy_span_ngrams
-from olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction import (
-    CvalueTermExtraction,
-)
+from olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction import \
+    CvalueTermExtraction
 from olaf.pipeline.pipeline_schema import Pipeline
 
 custom_token_sequences_doc_attribute = "tokens_sequences_custom_attr"
@@ -38,7 +36,7 @@ def test_options() -> Dict[str, str]:
 
 @pytest.fixture(scope="session")
 def test_parameters() -> Dict[str, str]:
-    parameters = {"token_sequence_doc_attribute": custom_token_sequences_doc_attribute}
+    parameters = {"token_sequences_doc_attribute": custom_token_sequences_doc_attribute}
 
     return parameters
 
@@ -46,7 +44,7 @@ def test_parameters() -> Dict[str, str]:
 @pytest.fixture(scope="session")
 def unknown_doc_attr_parameters() -> Dict[str, str]:
     parameters = {
-        "token_sequence_doc_attribute": "unknown_custom_token_sequences_doc_attribute"
+        "token_sequences_doc_attribute": "unknown_custom_token_sequences_doc_attribute"
     }
 
     return parameters
@@ -74,13 +72,6 @@ def corpus_custom_doc_attr(example_texts, en_sm_spacy_model) -> List[spacy.token
 
 class TestCvalueTermExtractionOptions:
     @pytest.mark.parametrize(
-        "missing_val_options", [{"max_term_token_length": 5}, {"threshold": 150.3}]
-    )
-    def test_check_options_missing(self, missing_val_options):
-        with pytest.raises(OptionError):
-            c_val_term_extraction = CvalueTermExtraction(options=missing_val_options)
-
-    @pytest.mark.parametrize(
         "wrong_val_options",
         [
             {"threshold": 150.3, "max_term_token_length": 5.0},
@@ -89,7 +80,10 @@ class TestCvalueTermExtractionOptions:
     )
     def test_check_options_wrong_values(self, wrong_val_options):
         with pytest.raises(OptionError):
-            c_val_term_extraction = CvalueTermExtraction(options=wrong_val_options)
+            c_val_term_extraction = CvalueTermExtraction(
+                max_term_token_length=wrong_val_options["max_term_token_length"],
+                candidate_term_threshold=wrong_val_options["threshold"]
+            )
 
     @pytest.mark.parametrize(
         "options, expected_cval_threshold_val",
@@ -106,7 +100,11 @@ class TestCvalueTermExtractionOptions:
         ],
     )
     def test_check_options_c_val_threshold(self, options, expected_cval_threshold_val):
-        c_val_term_extraction = CvalueTermExtraction(options=options)
+        c_val_term_extraction = CvalueTermExtraction(
+            max_term_token_length=options["max_term_token_length"],
+            candidate_term_threshold=options["threshold"],
+            c_value_threshold=options.get("c_value_threshold")
+        )
 
         assert c_val_term_extraction._c_value_threshold == expected_cval_threshold_val
 
@@ -117,7 +115,9 @@ class TestCvalueTermExtractionParameters:
     ):
         caplog.clear()
         c_val_term_extraction = CvalueTermExtraction(
-            parameters=unknown_doc_attr_parameters, options=test_options
+            token_sequences_doc_attribute=unknown_doc_attr_parameters["token_sequences_doc_attribute"],
+            candidate_term_threshold=test_options["threshold"], 
+            max_term_token_length=test_options["max_term_token_length"]
         )
 
         log_messages = [rec.message for rec in caplog.records]
@@ -129,7 +129,8 @@ class TestCvalueTermExtractionParameters:
 
     def test_check_parameters_no_doc_attr_provided(self, test_options, caplog):
         caplog.clear()
-        c_val_term_extraction = CvalueTermExtraction(options=test_options)
+        c_val_term_extraction = CvalueTermExtraction(candidate_term_threshold=test_options["threshold"], 
+            max_term_token_length=test_options["max_term_token_length"])
 
         log_messages = [rec.message for rec in caplog.records]
         expected_log_msg = """C-value token sequence attribute not set by the user.
@@ -140,7 +141,8 @@ class TestCvalueTermExtractionParameters:
 
     def test_check_parameters_no_doc_attr_ok(self, test_parameters, test_options):
         c_val_term_extraction = CvalueTermExtraction(
-            parameters=test_parameters, options=test_options
+            token_sequences_doc_attribute=test_parameters["token_sequences_doc_attribute"], candidate_term_threshold=test_options["threshold"], 
+            max_term_token_length=test_options["max_term_token_length"]
         )
 
         assert (
@@ -151,7 +153,7 @@ class TestCvalueTermExtractionParameters:
 
 class TestCvalueTermExtractionMethods:
     @pytest.fixture(scope="class")
-    def example_pipeline(en_sm_spacy_model, corpus_custom_doc_attr) -> Pipeline:
+    def example_pipeline(self, en_sm_spacy_model, corpus_custom_doc_attr) -> Pipeline:
         pipeline = Pipeline(
             spacy_model=en_sm_spacy_model, corpus=corpus_custom_doc_attr
         )
@@ -173,7 +175,8 @@ class TestCvalueTermExtractionMethods:
         self, test_parameters, test_options
     ) -> CvalueTermExtraction:
         c_value_term_extraction_instance = CvalueTermExtraction(
-            parameters=test_parameters, options=test_options
+            token_sequences_doc_attribute=test_parameters["token_sequences_doc_attribute"], candidate_term_threshold=test_options["threshold"], 
+            max_term_token_length=test_options["max_term_token_length"]
         )
         return c_value_term_extraction_instance
 
@@ -209,7 +212,8 @@ class TestCvalueTermExtractionMethods:
     def test_extract_token_sequences_no_doc_attr_provided(
         self, corpus_raw, test_options, expected_token_sequences
     ):
-        c_value_term_extraction = CvalueTermExtraction(options=test_options)
+        c_value_term_extraction = CvalueTermExtraction(candidate_term_threshold=test_options["threshold"], 
+            max_term_token_length=test_options["max_term_token_length"])
 
         token_sequences = c_value_term_extraction._extract_token_sequences(corpus_raw)
 
