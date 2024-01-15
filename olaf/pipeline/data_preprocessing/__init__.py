@@ -1,1 +1,1 @@
-from .token_selector_data_preprocessing import TokenSelectorDataPreprocessing
+from .token_selector_data_preprocessing import TokenSelectorDataPreprocessing, TokenSelectorDataPreprocessingConfig
