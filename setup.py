@@ -1,9 +1,6 @@
 from pathlib import Path
 
-from dotenv import load_dotenv
 from setuptools import find_packages, setup
-
-load_dotenv()
 
 ROOT = Path(__file__).parent
 PACKAGE_ROOT = ROOT / "olaf"
@@ -53,6 +50,7 @@ setup(
         "pytest==7.4.3",
         "pytest-cov==4.1.0",
         "python-dateutil==2.8.2",
+        "python-dotenv==1.0.0",
         "pytz==2023.3.post1",
         "PyYAML==6.0.1",
         "rdflib==7.0.0",
