@@ -45,7 +45,7 @@ def corpus(en_sm_spacy_model) -> List[Doc]:
     texts = [
         "I like drinking wine when eating pizza.",
         "What do you prefer between water, sparkling water and wine ?",
-        "Sparkling water is just water with some gas."
+        "Sparkling water is just water with some gas.",
     ]
     return list(en_sm_spacy_model.pipe(texts))
 
@@ -92,8 +92,6 @@ def test_generate_doc_context(
     context = " ".join([doc.text for doc in doc_count.keys()]) + " "
 
     context_pred = llm_concept_extraction._generate_doc_context(doc_count)
-    print("context pred : ", context_pred)
-    print("context true : ", context)
     assert context_pred == context
 
     small_context_pred = small_context_llm_concept_extraction._generate_doc_context(

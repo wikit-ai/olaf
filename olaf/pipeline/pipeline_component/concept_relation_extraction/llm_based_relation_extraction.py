@@ -3,25 +3,31 @@ from typing import Any, Callable, Dict, List, Optional, Set
 
 from spacy.tokens import Doc
 
-from ....commons.candidate_term_tools import cts_to_concept
 from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
-from ....commons.prompts import hf_prompt_concept_extraction
+from ....commons.prompts import hf_prompt_relation_extraction
+from ....commons.relation_tools import crs_to_relation, cts_to_crs, group_cr_by_concepts
 from ....data_container.candidate_term_schema import CandidateTerm
 from ..pipeline_component_schema import PipelineComponent
 
 
-class LLMBasedConceptExtraction(PipelineComponent):
-    """LLM based concept extraction.
+class LLMBasedRelationExtraction(PipelineComponent):
+    """LLM based relation extraction.
 
     Attributes
     ----------
     prompt_template: Callable[[str], List[Dict[str, str]]]
         Prompt template used to give instructions and context to the LLM.
     llm_generator: LLMGenerator
-        The LLM model used to generate the concepts.
+        The LLM model used to generate the relation.
     doc_context_max_len: int
         Maximum number of characters for the document context in the prompt.
+    concept_max_distance: int, optional
+        The maximum distance between the candidate term and the concept sought.
+        Set to 5 by default if not specified.
+    scope: str
+        Scope used to search concepts. Can be "doc" for the entire document or "sent" for
+        the candidate term "sentence". Set to "doc" by default if not specified.
     """
 
     def __init__(
@@ -29,30 +35,40 @@ class LLMBasedConceptExtraction(PipelineComponent):
         prompt_template: Optional[Callable[[str], List[Dict[str, str]]]] = None,
         llm_generator: Optional[LLMGenerator] = None,
         doc_context_max_len: Optional[int] = 4000,
+        concept_max_distance: Optional[int] = 5,
+        scope: Optional[str] = "doc",
     ) -> None:
-        """Initialise LLM concept extraction pipeline component instance.
+        """Initialise LLM relation extraction pipeline component instance.
 
         Parameters
         ----------
         prompt_template: Callable[[str], List[Dict[str, str]]]
             Prompt template used to give instructions and context to the LLM.
-            By default the concept extraction prompt is used.
+            By default the relation extraction prompt is used.
         llm_generator: LLMGenerator
-            The LLM model used to generate the concepts.
+            The LLM model used to generate the relations.
             By default, the zephyr-7b-beta HuggingFace model is used.
         doc_context_max_len: int
             Maximum number of characters for the document context in the prompt.
             By default, it is set to 4000.
+        concept_max_distance: int, optional
+            The maximum distance between the candidate term and the concept sought.
+            Set to 5 by default if not specified.
+        scope: str
+            Scope used to search concepts. Can be "doc" for the entire document or "sent" for
+            the candidate term "sentence". Set to "doc" by default if not specified.
         """
         self.prompt_template = (
             prompt_template
             if prompt_template is not None
-            else hf_prompt_concept_extraction
+            else hf_prompt_relation_extraction
         )
         self.llm_generator = (
             llm_generator if llm_generator is not None else HuggingFaceGenerator()
         )
         self.doc_context_max_len = doc_context_max_len
+        self.concept_max_distance = concept_max_distance
+        self.scope = scope
         self._check_resources()
 
     def optimise(
@@ -64,6 +80,12 @@ class LLMBasedConceptExtraction(PipelineComponent):
     def _check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         self.llm_generator.check_resources()
+
+        if self.scope not in {"sent", "doc"}:
+            self.scope = "doc"
+            logger.warning(
+                """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
+            )
 
     def _compute_metrics(self) -> None:
         """A method to compute component performance metrics.
@@ -129,10 +151,10 @@ class LLMBasedConceptExtraction(PipelineComponent):
                 break
         return context
 
-    def _convert_llm_output_to_cc(
+    def _convert_llm_output_to_rc(
         self, llm_output: str, cterm_index: Dict[str, CandidateTerm]
     ) -> List[Set[CandidateTerm]]:
-        """Convert the output of the LLM to groups of candidate terms to merge as concepts.
+        """Convert the output of the LLM to groups of candidate terms to merge as relations.
 
         Parameters
         ----------
@@ -144,26 +166,26 @@ class LLMBasedConceptExtraction(PipelineComponent):
         Returns
         -------
         List[Set[CandidateTerm]]
-            Groups of candidate terms to merge as concepts.
+            Groups of candidate terms to merge as relations.
         """
-        concept_candidates = []
+        relation_candidates = []
         try:
-            cc_labels = ast.literal_eval(llm_output)
-            for cc_group in cc_labels:
-                cc_set = set()
-                for cc_label in cc_group:
-                    cc_set.add(cterm_index[cc_label])
-                concept_candidates.append(cc_set)
+            rc_labels = ast.literal_eval(llm_output)
+            for rc_group in rc_labels:
+                rc_set = set()
+                for rc_label in rc_group:
+                    rc_set.add(cterm_index[rc_label])
+                relation_candidates.append(rc_set)
         except (SyntaxError, ValueError):
             logger.error(
                 """LLM generator output is not in the expected format. 
-                The concepts can not be extracted."""
+                The relations can not be extracted."""
             )
-        return concept_candidates
+        return relation_candidates
 
     def run(self, pipeline: Any) -> None:
         """Method that is responsible for the execution of the component.
-        Concepts are created and candidate terms are purged.
+        Relations are created and candidate terms are purged.
 
         Parameters
         ----------
@@ -175,9 +197,19 @@ class LLMBasedConceptExtraction(PipelineComponent):
         ct_str_list = "\n".join(cterm_index.keys())
         prompt = self.prompt_template(doc_context, ct_str_list)
         llm_output = self.llm_generator.generate_text(prompt)
-        concept_candidates = self._convert_llm_output_to_cc(llm_output, cterm_index)
-        for concept_candidate in concept_candidates:
-            new_concept = cts_to_concept(concept_candidate)
-            pipeline.kr.concepts.add(new_concept)
+        relation_candidates = self._convert_llm_output_to_rc(llm_output, cterm_index)
+        concept_map = {concept.label: concept for concept in pipeline.kr.concepts}
+        for rc_group in relation_candidates:
+            crs = cts_to_crs(
+                rc_group,
+                concept_map,
+                pipeline.spacy_model,
+                self.concept_max_distance,
+                self.scope,
+            )
+            new_relations = group_cr_by_concepts(crs)
+            for new_relation in new_relations:
+                new_relation = crs_to_relation(new_relation)
+                pipeline.kr.relations.add(new_relation)
 
         pipeline.candidate_terms = set()
