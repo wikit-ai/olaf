@@ -1,6 +1,6 @@
+from itertools import combinations
 from typing import Any, Dict, Set
 
-from itertools import combinations
 from tqdm import tqdm
 
 from ....commons.logging_config import logger
@@ -23,7 +23,11 @@ class SubsumptionHierarchisation(PipelineComponent):
         Options are tunable parameters which will be updated to optimise the component performance, by default None.
     """
 
-    def __init__(self, parameters: Dict[str, Any] | None = None, options: Dict[str, Any] | None = None) -> None:
+    def __init__(
+        self,
+        parameters: Dict[str, Any] | None = None,
+        options: Dict[str, Any] | None = None,
+    ) -> None:
         """Initialise subsumption hierarchisation instance.
 
         Parameters
@@ -36,20 +40,23 @@ class SubsumptionHierarchisation(PipelineComponent):
         super().__init__(parameters, options)
         self.threshold = options.get("threshold", 0.5)
 
-    def optimise(self, validation_terms: Set[str], option_values_map: Set[float]) -> None:
-        """A method to optimise the pipeline component by tuning the options.
-        """
+    def optimise(
+        self, validation_terms: Set[str], option_values_map: Set[float]
+    ) -> None:
+        """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
     def _check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
-            This pipeline component does not need any access to any external resource.
+        This pipeline component does not need any access to any external resource.
         """
-        logger.info("Subsumption hierarchisation pipeline component has no external resource to check.")
+        logger.info(
+            "Subsumption hierarchisation pipeline component has no external resource to check."
+        )
 
     def _compute_metrics(self) -> None:
-        """A method to compute component performance metrics. 
+        """A method to compute component performance metrics.
         It is used by the optimise method to update the options.
         """
         raise NotImplementedError
@@ -66,7 +73,7 @@ class SubsumptionHierarchisation(PipelineComponent):
         """
         raise NotImplementedError
 
-    def _concept_occurrence_count(self, concept: Concept) -> int :
+    def _concept_occurrence_count(self, concept: Concept) -> int:
         """Count the total number of corpus occurrences of the concepts by adding the number of corpus occurrences for each linguistic realisation.
 
         Parameters
@@ -84,7 +91,9 @@ class SubsumptionHierarchisation(PipelineComponent):
             concept_occurrences += len(lr.corpus_occurrences)
         return concept_occurrences
 
-    def _concepts_cooccurrence_count(self, concept_1: Concept, concept_2: Concept) -> int :
+    def _concepts_cooccurrence_count(
+        self, concept_1: Concept, concept_2: Concept
+    ) -> int:
         """Count number of concepts cooccurrences in the corpus.
         Original corpus occurrences sentences are used.
 
@@ -113,7 +122,7 @@ class SubsumptionHierarchisation(PipelineComponent):
         concepts_cooccurrence = len(concept_1_sent & concept_2_sent)
 
         return concepts_cooccurrence
-    
+
     def _compute_subsumption(self, nb_cooccurrence: int, nb_occurrence: int) -> float:
         """Computation of the subsumption score.
 
@@ -130,12 +139,12 @@ class SubsumptionHierarchisation(PipelineComponent):
             Subsumption score.
         """
         if not (nb_occurrence == 0):
-            subsumption_score = nb_cooccurrence/nb_occurrence
+            subsumption_score = nb_cooccurrence / nb_occurrence
         else:
             subsumption_score = 0
         return subsumption_score
-    
-    def _is_sub_hierarchy(self, sub_score: float, inv_sub_score: float) -> bool :
+
+    def _is_sub_hierarchy(self, sub_score: float, inv_sub_score: float) -> bool:
         """Test if there is a subsumption relation.
         The subsumption score must be higher than the threshold defined.
         The subsumption score must be higher than the one calculated by the subsumption in the opposite order.
@@ -154,11 +163,10 @@ class SubsumptionHierarchisation(PipelineComponent):
         """
         sub_hierarchy = False
         if (sub_score > self.threshold) and (sub_score > inv_sub_score):
-            sub_hierarchy =  True
+            sub_hierarchy = True
         return sub_hierarchy
 
-    
-    def run(self, pipeline: Any) -> None :
+    def run(self, pipeline: Any) -> None:
         """Execution of the subsumption hierarchisation process on pipeline concepts.
         Generalisation metarelations are created.
 
@@ -168,23 +176,23 @@ class SubsumptionHierarchisation(PipelineComponent):
             The pipeline running.
         """
         concept_pairs = list(combinations(pipeline.kr.concepts, 2))
-        for concept_1,concept_2 in tqdm(concept_pairs):
+        for concept_1, concept_2 in tqdm(concept_pairs):
             concept_1_occ = self._concept_occurrence_count(concept_1)
             concept_2_occ = self._concept_occurrence_count(concept_2)
             concepts_cooc = self._concepts_cooccurrence_count(concept_1, concept_2)
             sub_score = self._compute_subsumption(concepts_cooc, concept_1_occ)
             inv_sub_score = self._compute_subsumption(concepts_cooc, concept_2_occ)
-            if self._is_sub_hierarchy(sub_score,inv_sub_score):
+            if self._is_sub_hierarchy(sub_score, inv_sub_score):
                 metarelation = Metarelation(
                     source_concept=concept_1,
                     destination_concept=concept_2,
-                    label="is_generalised_by"  
+                    label="is_generalised_by",
                 )
                 pipeline.kr.metarelations.add(metarelation)
             elif self._is_sub_hierarchy(inv_sub_score, sub_score):
                 metarelation = Metarelation(
                     source_concept=concept_2,
                     destination_concept=concept_1,
-                    label="is_generalised_by"  
+                    label="is_generalised_by",
                 )
-                pipeline.kr.metarelations.add(metarelation) 
+                pipeline.kr.metarelations.add(metarelation)

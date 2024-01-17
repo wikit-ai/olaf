@@ -1,6 +1,6 @@
 from collections import defaultdict
 from itertools import product
-from typing import Dict, Set
+from typing import Dict, List, Set
 
 import spacy
 from spacy.matcher import PhraseMatcher
@@ -9,6 +9,32 @@ from ..data_container.candidate_term_schema import CandidateRelation, CandidateT
 from ..data_container.concept_schema import Concept
 from ..data_container.linguistic_realisation_schema import RelationLR
 from ..data_container.relation_schema import Relation
+
+
+def group_cr_by_concepts(
+    candidate_relations: List[CandidateRelation],
+) -> List[Set[CandidateRelation]]:
+    """Group relation candidates with same source and destination concepts
+    Parameters
+    ----------
+    candidate_relations: List[CandidateRelation]
+        Candidate relations to group by their concepts
+    Returns
+    -------
+    List[Set[CandidateRelation]]
+        Groups of candidate relations with same source and destination concepts.
+    """
+    cr_groups = []
+    cr_source_groups = {}
+    for cr in candidate_relations:
+        cr_source_groups.setdefault(cr.source_concept, []).append(cr)
+    for cr_group in cr_source_groups.values():
+        cr_dest_groups = {}
+        for cr in cr_group:
+            cr_dest_groups.setdefault(cr.destination_concept, []).append(cr)
+        new_cr_groups = [set(group) for group in cr_dest_groups.values()]
+        cr_groups += new_cr_groups
+    return cr_groups
 
 
 def crs_to_relation(candidate_relations: Set[CandidateRelation]) -> Relation:

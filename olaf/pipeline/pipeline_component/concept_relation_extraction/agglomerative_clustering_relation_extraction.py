@@ -7,7 +7,7 @@ from ....algorithm.agglomerative_clustering import AgglomerativeClustering
 from ....commons.embedding_tools import sbert_embeddings
 from ....commons.errors import OptionError, ParameterError
 from ....commons.logging_config import logger
-from ....commons.relation_tools import crs_to_relation
+from ....commons.relation_tools import crs_to_relation, group_cr_by_concepts
 from ....data_container.candidate_term_schema import CandidateRelation
 from ....data_container.knowledge_representation_schema import KnowledgeRepresentation
 from ...pipeline_schema import Pipeline
@@ -188,32 +188,6 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def _group_cr_by_concepts(
-        self, candidate_relations: List[CandidateRelation]
-    ) -> List[Set[CandidateRelation]]:
-        """Group relation candidates with same source and destination concepts.
-
-        Parameters
-        ----------
-        candidate_relations: List[CandidateRelation]
-            Candidate relations to group by their concepts.
-
-        Returns
-        -------
-        List[Set[CandidateRelation]]
-            Groups of candidate relations with same source and destination concepts.
-        """
-        cr_groups = []
-        cr_source_groups = {}
-        for cr in candidate_relations:
-            cr_source_groups.setdefault(cr.source_concept, []).append(cr)
-        for cr_group in cr_source_groups.values():
-            cr_dest_groups = {}
-            for cr in cr_group:
-                cr_dest_groups.setdefault(cr.destination_concept, []).append(cr)
-            cr_groups += list(cr_dest_groups.values())
-        return cr_groups
-
     def _create_relations(
         self, clustering_labels: List[int], kr: KnowledgeRepresentation
     ) -> None:
@@ -232,7 +206,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         for label in labels:
             relation_indexes = np.where(clustering_labels == label)[0]
             candidate_relations = [self.candidate_terms[i] for i in relation_indexes]
-            cr_common_concepts = self._group_cr_by_concepts(candidate_relations)
+            cr_common_concepts = group_cr_by_concepts(candidate_relations)
             for cr_group in cr_common_concepts:
                 relation = crs_to_relation(cr_group)
                 kr.relations.add(relation)
