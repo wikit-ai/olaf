@@ -265,3 +265,67 @@ def hf_prompt_relation_extraction(doc_context: str, ct_labels: str) -> str:
     Context: {doc_context}
     Words : {ct_labels}"""
     return prompt_template
+
+
+def openai_prompt_hierarchisation(
+    c1_label: str, c2_label: str, doc_context: str
+) -> List[Dict[str, str]]:
+    """Prompt template for hierarchisation with ChatCompletion OpenAI model.
+
+    Parameters
+    ----------
+    c1_label: str
+        The fist concept label.
+    c2_label: str
+        The second concept label.
+    doc_context: str
+        Extract of document contents where concepts appear to use as context.
+
+    Returns
+    -------
+    List[Dict[str, str]]
+        ChatCompletion prompt template.
+    """
+    prompt_template = [
+        {
+            "role": "system",
+            "content": "You are an helpful assistant helping building an ontology.",
+        },
+        {
+            "role": "user",
+            "content": f"""Based on the context given, define if there is a hierarchy between concepts {c1_label} and {c2_label}.
+            Answer "1" if {c1_label} is more general than {c2_label}.
+            Answer "2" if {c2_label} is more general the {c1_label}.
+            Answer "3" if there is no hierarchical relation between {c1_label} and {c2_label}.
+            Just answer with the right number, do not add any explanation.""",
+        },
+        {"role": "user", "content": f"Context: {doc_context}"},
+    ]
+    return prompt_template
+
+
+def hf_prompt_hierarchisation(c1_label: str, c2_label: str, doc_context: str) -> str:
+    """Prompt template for hierarchisation with Hugging Face inference API.
+
+    Parameters
+    ----------
+    c1_label: str
+        The fist concept label.
+    c2_label: str
+        The second concept label.
+    doc_context: str
+        Extract of document contents where concepts appear to use as context.
+
+    Returns
+    -------
+    str
+        Completion prompt template.
+    """
+    prompt_template = f"""You are an helpful assistant helping building an ontology.
+    Based on the context given, define if there is a hierarchy between concepts {c1_label} and {c2_label}.
+    Answer "1" if {c1_label} is more general than {c2_label}.
+    Answer "2" if {c2_label} is more general the {c1_label}.
+    Answer "3" if there is no hierarchical relation between {c1_label} and {c2_label}.
+    Just answer with the right number, do not add any explanation.
+    Context: {doc_context}"""
+    return prompt_template
