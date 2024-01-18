@@ -24,6 +24,7 @@ class LLMBasedHierarchisation(PipelineComponent):
     doc_context_max_len: int
         Maximum number of characters for the document context in the prompt.
     """
+
     def __init__(
         self,
         prompt_template: Optional[Callable[[str], List[Dict[str, str]]]] = None,
@@ -84,7 +85,7 @@ class LLMBasedHierarchisation(PipelineComponent):
         raise NotImplementedError
 
     def _find_concept_cooc(self, concept_1: Concept, concept_2: Concept) -> Set[Doc]:
-        """Extract documents where both concepts appear. 
+        """Extract documents where both concepts appear.
 
         Parameters
         ----------
@@ -96,7 +97,7 @@ class LLMBasedHierarchisation(PipelineComponent):
         Returns
         -------
         Set[Doc]
-            Set of spaCy docs where the both concepts appear.      
+            Set of spaCy docs where the both concepts appear.
         """
         c1_docs = set()
         c2_docs = set()
@@ -138,7 +139,7 @@ class LLMBasedHierarchisation(PipelineComponent):
         Parameters
         ----------
         llm_output: str
-            Answer of the LLM for the hierarchy. 
+            Answer of the LLM for the hierarchy.
         c1: Concept
             First concept implied in the metarelation.
         C2: Concept
@@ -147,7 +148,7 @@ class LLMBasedHierarchisation(PipelineComponent):
         Returns
         -------
         Metarelation | None
-            The metarelation created or None if no relation is created. 
+            The metarelation created or None if no relation is created.
         """
         new_metarelation = None
         if llm_output == "1":
@@ -180,7 +181,7 @@ class LLMBasedHierarchisation(PipelineComponent):
             if len(concepts_docs) > 0:
                 context = self._generate_doc_context(concepts_docs)
                 prompt = self.prompt_template(concept_1.label, concept_2.label, context)
-                llm_output = self.llm_generator.generate_text(prompt)t
+                llm_output = self.llm_generator.generate_text(prompt)
                 new_metarelation = self._create_metarelation(
                     llm_output, concept_1, concept_2
                 )
