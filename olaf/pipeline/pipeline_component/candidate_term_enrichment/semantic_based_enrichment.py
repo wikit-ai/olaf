@@ -82,7 +82,7 @@ class SemanticBasedEnrichment(PipelineComponent):
             )
             for word_key, _, similarity_score in most_similar_words:
                 if similarity_score > self.threshold:
-                    synonyms.add(word_key)
+                    synonyms.add(spacy_model.vocab.strings[word_key])
                 else:
                     break
         else:
