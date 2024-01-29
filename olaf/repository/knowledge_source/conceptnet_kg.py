@@ -57,8 +57,8 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
                 self.check_sources = False
 
     def _check_resources(self) -> None:
+        # TODO
         """Method to check that the component has access to all its required resources."""
-        raise NotImplementedError
 
     def match_external_concepts(self, matching_terms: Set[str]) -> Set[str]:
         """Method to fetch external concepts matching the set of terms.

@@ -146,8 +146,8 @@ class WordNetKnowledgeResource(KnowledgeSource):
                 self.use_pos = False
 
     def _check_resources(self) -> None:
+        # TODO
         """Method to check that the component has access to all its required resources."""
-        raise NotImplementedError
 
     def _check_enrichment_domains_exist(self) -> bool:
         """Private method to test wether all the WordNet domains provided for enrichment
