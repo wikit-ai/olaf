@@ -17,8 +17,8 @@ class POSTermExtraction(TermExtractionPipelineComponent):
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
         and before assigning the extracted candidate terms to the pipeline. Default to None.
-    token_processing: Optional[Callable[[spacy.tokens.Token],str]]=None
-        A function to process token.
+    span_processing: Optional[Callable[[spacy.tokens.Span],str]]=None
+        A function to process span.
     _pos_selection: List[str]
         List of POS tags to select in the corpus.
     _token_sequences_doc_attribute: str
@@ -34,7 +34,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
     def __init__(
         self,
-        token_processing: Optional[Callable[[spacy.tokens.Token], str]] = None,
+        span_processing: Optional[Callable[[spacy.tokens.Span], str]] = None,
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
@@ -45,8 +45,8 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         Parameters
         ----------
-        token_processing: Optional[Callable[[spacy.tokens.Token],str]]
-            A function to process token.
+        span_processing: Optional[Callable[[spacy.tokens.Span],str]]
+            A function to process span.
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline. Default to None.
@@ -59,13 +59,13 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         """
         super().__init__(cts_post_processing_functions, parameters, options)
 
-        if (token_processing is None) or not callable(token_processing):
+        if (span_processing is None) or not callable(span_processing):
             logger.warning(
-                "No preprocessing function provided for tokens. Using the default one."
+                "No preprocessing function provided for spans. Using the default one."
             )
-            self.token_processing = lambda token: token.lower_
+            self.span_processing = lambda span: span.orth_.lower()
         else:
-            self.token_processing = token_processing
+            self.span_processing = span_processing
 
         self._pos_selection = None
         self._token_sequences_doc_attribute = None
@@ -155,7 +155,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         if self._token_sequences_doc_attribute:
             for doc in corpus:
                 doc_token_sequences = doc._.get(self._token_sequences_doc_attribute)
-                token_sequences.append(doc_token_sequences)
+                token_sequences += doc_token_sequences
         else:
             for doc in corpus:
                 # Extract the document tokens in a span instance for type consistency.
@@ -166,7 +166,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
     def _extract_candidate_tokens(
         self, token_sequences: Tuple[spacy.tokens.Span]
-    ) -> Tuple[spacy.tokens.Token]:
+    ) -> Tuple[spacy.tokens.Span]:
         """Extract candidate tokens from token sequences based on POS tagging selection.
 
         Parameters
@@ -176,7 +176,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         Returns
         -------
-        Tuple[spacy.tokens.Token]
+        Tuple[spacy.tokens.Span]
             Candidate tokens under interest.
         """
         candidate_tokens = []
@@ -184,31 +184,31 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         for token_sequence in token_sequences:
             for token in token_sequence:
                 if select_on_pos(token, self._pos_selection):
-                    candidate_tokens.append(token)
+                    candidate_tokens.append(token.doc[token.i : token.i + 1])
 
         return tuple(candidate_tokens)
 
     def _build_term_corpus_occ_map(
-        self, candidate_tokens: Tuple[spacy.tokens.Token]
-    ) -> Dict[str, Set[spacy.tokens.Token]]:
-        """Build a mapping between term string to be processed and the spaCy tokens
+        self, candidate_spans: Tuple[spacy.tokens.Span]
+    ) -> Dict[str, Set[spacy.tokens.Span]]:
+        """Build a mapping between term string to be processed and the spaCy spans
         they were extracted from.
 
         Parameters
         ----------
-        candidate_tokens : Tuple[spacy.tokens.Token]
-            The spaCy token candidates.
+        candidate_spns : Tuple[spacy.tokens.Span]
+            The spaCy span candidates.
 
         Returns
         -------
-        Dict[str, Set[spacy.tokens.Token]]
-            The mapping between term string to be processed spaCy tokens they were
+        Dict[str, Set[spacy.tokens.Span]]
+            The mapping between term string to be processed spaCy spans they were
             extracted from.
         """
         term_corpus_occ_mapping = defaultdict(set)
 
-        for token in candidate_tokens:
-            token_string = self.token_processing(token)
+        for token in candidate_spans:
+            token_string = self.span_processing(token)
             term_corpus_occ_mapping[token_string].add(token)
 
         return term_corpus_occ_mapping
@@ -223,8 +223,8 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         """
 
         token_sequences = self._extract_token_sequences(corpus=pipeline.corpus)
-        candidate_tokens = self._extract_candidate_tokens(token_sequences)
-        term_corpus_occ_map = self._build_term_corpus_occ_map(candidate_tokens)
+        candidate_spans = self._extract_candidate_tokens(token_sequences)
+        term_corpus_occ_map = self._build_term_corpus_occ_map(candidate_spans)
 
         candidate_terms = set()
         for term_label, term_occurrences in term_corpus_occ_map.items():

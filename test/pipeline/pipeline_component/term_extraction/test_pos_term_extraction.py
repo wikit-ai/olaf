@@ -41,9 +41,9 @@ def doc_attribute_corpus(en_sm_spacy_model) -> List[spacy.tokens.Span]:
     if not spacy.tokens.Doc.has_extension("selected_tokens"):
         spacy.tokens.Doc.set_extension("selected_tokens", default=[], force=True)
     corpus[0]._.set(
-        "selected_tokens", en_sm_spacy_model("I bought a car and bikes.")[:]
+        "selected_tokens", [en_sm_spacy_model("I bought a car and bikes.")[:]]
     )
-    corpus[1]._.set("selected_tokens", en_sm_spacy_model(" ")[:])
+    corpus[1]._.set("selected_tokens", [en_sm_spacy_model(" ")[:]])
 
     return corpus
 
@@ -61,11 +61,11 @@ def doc_attribute_sentences() -> List[spacy.tokens.Span]:
 
 
 @pytest.fixture(scope="session")
-def token_sequences(en_sm_spacy_model) -> List[spacy.tokens.Span]:
+def token_sequences(en_sm_spacy_model) -> Tuple[spacy.tokens.Span]:
     sentences = ["I bought a car and bikes.", "I eat vegetables and fruit."]
     corpus = list(en_sm_spacy_model.pipe(sentences))
 
-    token_seq = [doc[:] for doc in corpus]
+    token_seq = tuple([doc[:] for doc in corpus])
     return token_seq
 
 
@@ -78,7 +78,7 @@ def candidate_tokens(en_sm_spacy_model) -> Dict[str, List[spacy.tokens.Token]]:
     for doc in corpus:
         for token in doc:
             if token.pos_ == "NOUN":
-                cand_tokens.append(token)
+                cand_tokens.append(token.doc[token.i : token.i + 1])
     return cand_tokens
 
 
@@ -88,9 +88,9 @@ def attribute_pipeline(en_sm_spacy_model) -> Pipeline:
     corpus = list(en_sm_spacy_model.pipe(sentences))
 
     corpus[0]._.set(
-        "selected_tokens", en_sm_spacy_model("I bought a car and bikes.")[:]
+        "selected_tokens", [en_sm_spacy_model("I bought a car and bikes.")[:]]
     )
-    corpus[1]._.set("selected_tokens", en_sm_spacy_model(" ")[:])
+    corpus[1]._.set("selected_tokens", [en_sm_spacy_model(" ")[:]])
 
     pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=corpus)
     pipeline.candidate_terms = set()
