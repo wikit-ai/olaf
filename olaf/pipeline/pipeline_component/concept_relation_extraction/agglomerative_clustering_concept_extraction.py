@@ -3,10 +3,10 @@ from typing import Any, Dict, List
 import numpy as np
 
 from ....algorithm.agglomerative_clustering import AgglomerativeClustering
+from ....commons.candidate_term_tools import cts_to_concept
 from ....commons.embedding_tools import sbert_embeddings
 from ....commons.errors import OptionError, ParameterError
 from ....commons.logging_config import logger
-from ....data_container.concept_schema import Concept
 from ....data_container.knowledge_representation_schema import KnowledgeRepresentation
 from ..pipeline_component_schema import PipelineComponent
 
@@ -206,12 +206,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         for label in labels:
             concept_indexes = np.where(clustering_labels == label)[0]
             concept_candidates = [self.candidate_terms[i] for i in concept_indexes]
-            concept_lr = set()
-            for concept_candidate in concept_candidates:
-                concept_lr.update(concept_candidate.corpus_occurrences)
-            concept = Concept(
-                concept_candidates[0].label, linguistic_realisations=concept_lr
-            )
+            concept = cts_to_concept(concept_candidates)
             kr.concepts.add(concept)
 
     def run(self, pipeline: Any) -> None:
