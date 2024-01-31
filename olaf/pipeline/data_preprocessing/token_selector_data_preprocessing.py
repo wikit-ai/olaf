@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Optional, Union
+from typing import Any, Callable, List, Optional
 
 import spacy
 
@@ -7,7 +7,7 @@ from ...commons.logging_config import logger
 from .data_preprocessing_schema import DataPreprocessing
 
 
-class TokenSelectorDataPreprocessing (DataPreprocessing):
+class TokenSelectorDataPreprocessing(DataPreprocessing):
     """Preprocess data with token selector method.
 
     Attributes
@@ -16,10 +16,11 @@ class TokenSelectorDataPreprocessing (DataPreprocessing):
         Name of the spaCy doc attribute containing the selected tokens. Default to "selected_tokens".
     """
 
-    def __init__(self,
-                 selector: Callable[[spacy.tokens.Token],bool],
-                 token_sequence_doc_attribute: Optional[str]= "selected_tokens"
-                ) -> None:
+    def __init__(
+        self,
+        selector: Callable[[spacy.tokens.Token], bool],
+        token_sequence_doc_attribute: Optional[str] = "selected_tokens",
+    ) -> None:
         """Initialise token selector data preprocessing pipeline component.
 
         Parameters
@@ -41,44 +42,44 @@ class TokenSelectorDataPreprocessing (DataPreprocessing):
         if self._token_sequence_doc_attribute == "selected_tokens":
             logger.warning(
                 """Data preprocessing token sequence attribute not set by the user. 
-                By default the token sequence attribute selected_tokens will be used.""")
+                By default the token sequence attribute selected_tokens will be used."""
+            )
 
         if not spacy.tokens.Doc.has_extension(self._token_sequence_doc_attribute):
-            spacy.tokens.Doc.set_extension(self._token_sequence_doc_attribute, default=[])
+            spacy.tokens.Doc.set_extension(
+                self._token_sequence_doc_attribute, default=[]
+            )
 
-        if not(isinstance(selector, Callable)):
+        if not (isinstance(selector, Callable)):
             raise NotCallableError(str(selector))
 
         self.token_selector = selector
 
-
-
-    def _select_tokens(self,
-                       tokens: Union[spacy.tokens.Doc,List[spacy.tokens.Token]]
-                    ) -> List[spacy.tokens.Token] :
-        """Select tokens passed as input based on a criterion defined by the token selector 
+    def _select_tokens(
+        self, tokens: List[spacy.tokens.Span]
+    ) -> List[spacy.tokens.Span]:
+        """Select tokens passed as input based on a criterion defined by the token selector
         function.
 
         Parameters
         ----------
-        tokens : Union[spacy.tokens.doc.Doc,List[spacy.tokens.Token]]
-            Tokens to analyse. spaCy doc if a specific attribute is not defined, list of spaCy token 
-            instead.
+        tokens : List[spacy.tokens.Span]
+            Tokens to analyse.
 
         Returns
         -------
-        List[spacy.tokens.Token]
-            Token selected by the selector chosen.
+        List[spacy.tokens.Span]
+            Tokens selected by the selector chosen.
         """
         selected_tokens = []
-        for token in tokens :
-            if self.token_selector(token) :
-                selected_tokens.append(token)
+        for span in tokens:
+            for token in span:
+                if self.token_selector(token):
+                    selected_tokens.append(token.doc[token.i : token.i + 1])
         return selected_tokens
 
-
-    def run(self, pipeline: Any) -> None :
-        """Method that is responsible for the execution of the component to preprocess all corpus 
+    def run(self, pipeline: Any) -> None:
+        """Method that is responsible for the execution of the component to preprocess all corpus
         documents based on a token selector.
 
         Parameters
@@ -88,11 +89,11 @@ class TokenSelectorDataPreprocessing (DataPreprocessing):
         """
 
         self.corpus = pipeline.corpus
-        for doc in self.corpus :
+        for doc in self.corpus:
             selected_tokens = doc._.get(self._token_sequence_doc_attribute)
 
-            if not(selected_tokens):
-                selected_tokens = doc
+            if not (selected_tokens):
+                selected_tokens = [doc[:]]
             selected_tokens = self._select_tokens(selected_tokens)
 
             doc._.set(self._token_sequence_doc_attribute, selected_tokens)
