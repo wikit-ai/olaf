@@ -207,9 +207,9 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         """
         term_corpus_occ_mapping = defaultdict(set)
 
-        for token in candidate_spans:
-            token_string = self.span_processing(token)
-            term_corpus_occ_mapping[token_string].add(token)
+        for span in candidate_spans:
+            span_string = self.span_processing(span)
+            term_corpus_occ_mapping[span_string].add(span)
 
         return term_corpus_occ_mapping
 
