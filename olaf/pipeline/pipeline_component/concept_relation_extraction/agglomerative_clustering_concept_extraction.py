@@ -118,6 +118,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             logger.warning(
                 "No value given for nb_clusters option, default will be set to 2."
             )
+            self._nb_clusters = 2
 
         if metric:
             if not isinstance(metric, str):
@@ -131,6 +132,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             logger.warning(
                 "No value given for metric option, default will be set to cosine."
             )
+            self._metric = "cosine"
 
         if linkage:
             if not isinstance(metric, str):
@@ -144,6 +146,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             logger.warning(
                 "No value given for linkage option, default will be set to average."
             )
+            self._linkage = "average"
 
         if distance_threshold:
             if not isinstance(distance_threshold, float):
