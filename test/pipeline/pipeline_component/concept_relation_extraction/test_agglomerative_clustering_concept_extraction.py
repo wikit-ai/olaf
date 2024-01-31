@@ -88,9 +88,9 @@ class TestAgglomerativeClusteringExtractionParameters:
         agglo_clustering = AgglomerativeClusteringConceptExtraction(
             parameters=default_parameters, options=default_options
         )
-        assert agglo_clustering._nb_clusters is None
-        assert agglo_clustering._metric is None
-        assert agglo_clustering._linkage is None
+        assert agglo_clustering._nb_clusters == 2
+        assert agglo_clustering._metric == "cosine"
+        assert agglo_clustering._linkage == "average"
         assert agglo_clustering._distance_threshold is None
         assert agglo_clustering._embedding_model == "all-mpnet-base-v2"
 
