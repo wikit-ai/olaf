@@ -57,7 +57,9 @@ class WordNetKnowledgeResource(KnowledgeSource):
 
         self.wordnet_lang = fetch_wordnet_lang(self.lang)
         self.wordnet_domains_map: Dict[str, Set[str]] = None
-        self.enrichment_domains: Set[str] = parameters.get("enrichment_domains")
+        self.enrichment_domains: Set[str] = self.parameters.get(
+            "enrichment_domains", None
+        )
         self.wordnet_pos: Set[str] = None
 
         self._check_parameters()
@@ -71,7 +73,6 @@ class WordNetKnowledgeResource(KnowledgeSource):
             if self.enrichment_domains is None:
                 enrichment_domains_path = self.parameters.get("enrichment_domains_path")
                 if enrichment_domains_path is not None:
-                    print(enrichment_domains_path)
                     self.enrichment_domains = load_enrichment_wordnet_domains_from_file(
                         enrichment_domains_path
                     )
