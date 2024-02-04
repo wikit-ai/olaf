@@ -385,8 +385,11 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
 
         candidate_terms = set()
         for extracted_term in extracted_terms:
-            term_corpus_occurrences = self._get_corpus_occurrences(
-                term=extracted_term, term_corpus_occ_mapping=spaced_term_corpus_occ_map
+            term_corpus_occurrences = set(
+                self._get_corpus_occurrences(
+                    term=extracted_term,
+                    term_corpus_occ_mapping=spaced_term_corpus_occ_map,
+                )
             )
             candidate_term = CandidateTerm(
                 label=extracted_term, corpus_occurrences=term_corpus_occurrences
