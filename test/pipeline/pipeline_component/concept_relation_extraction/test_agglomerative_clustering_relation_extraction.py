@@ -1,10 +1,14 @@
 from typing import Any, Dict
 
 import pytest
-import spacy
 
 from olaf.commons.errors import OptionError, ParameterError
-from olaf.data_container import CandidateRelation, Concept, KnowledgeRepresentation
+from olaf.data_container import (
+    CandidateTerm,
+    Concept,
+    KnowledgeRepresentation,
+    LinguisticRealisation,
+)
 from olaf.pipeline.pipeline_component.concept_relation_extraction import (
     AgglomerativeClusteringRelationExtraction,
 )
@@ -72,29 +76,36 @@ def good_options() -> Dict[str, Any]:
 
 @pytest.fixture(scope="session")
 def person_concept() -> Concept:
-    person = Concept(label="person")
+    person = Concept(
+        label="person", linguistic_realisations=set([LinguisticRealisation("person")])
+    )
     return person
 
 
 @pytest.fixture(scope="session")
 def vegetable_concept() -> Concept:
-    vegetable = Concept(label="vegetable")
+    vegetable = Concept(
+        label="vegetable",
+        linguistic_realisations=set([LinguisticRealisation("vegetables")]),
+    )
     return vegetable
 
 
 @pytest.fixture(scope="session")
-def meet_concept() -> Concept:
-    meet = Concept(label="meet")
-    return meet
+def meat_concept() -> Concept:
+    meat = Concept(
+        label="meat", linguistic_realisations=set([LinguisticRealisation("meat")])
+    )
+    return meat
 
 
 @pytest.fixture(scope="session")
 def pipeline(
-    person_concept, vegetable_concept, meet_concept, en_sm_spacy_model
+    person_concept, vegetable_concept, meat_concept, en_sm_spacy_model
 ) -> Pipeline:
     corpus = [
         "Let's dance.",
-        "Person can eat both vegetables and meet.",
+        "A person can eat both vegetables and meat.",
         "This person has food with some vegetables.",
     ]
     docs = list(en_sm_spacy_model.pipe(corpus))
@@ -103,33 +114,19 @@ def pipeline(
     pipeline.kr = KnowledgeRepresentation()
     candidate_terms_set = set()
     candidate_terms_set.add(
-        CandidateRelation(label="dance", corpus_occurrences={(docs[0][2:3])})
+        CandidateTerm(label="dance", corpus_occurrences=set([docs[0][2:3]]))
     )
     candidate_terms_set.add(
-        CandidateRelation(
+        CandidateTerm(
             label="eat",
-            corpus_occurrences={(docs[1][0:1], docs[1][2:3], docs[1][4:5])},
-            source_concept=person_concept,
-            destination_concept=vegetable_concept,
+            corpus_occurrences=set([docs[1][3:4]]),
         )
     )
     candidate_terms_set.add(
-        CandidateRelation(
-            label="have food",
-            corpus_occurrences={docs[2][1:2], docs[2][2:4]},
-            source_concept=person_concept,
-            destination_concept=vegetable_concept,
-        )
-    )
-    candidate_terms_set.add(
-        CandidateRelation(
-            label="eat",
-            corpus_occurrences={(docs[1][0:1], docs[1][2:3], docs[1][6:7])},
-            source_concept=person_concept,
-            destination_concept=meet_concept,
-        )
+        CandidateTerm(label="have food", corpus_occurrences=set([docs[2][2:4]]))
     )
     pipeline.candidate_terms = candidate_terms_set
+    pipeline.kr.concepts = set([person_concept, vegetable_concept, meat_concept])
     return pipeline
 
 
@@ -177,7 +174,7 @@ class TestAgglomerativeClusteringExtractionProcess:
         pipeline,
         person_concept,
         vegetable_concept,
-        meet_concept,
+        meat_concept,
     ):
         agglo = AgglomerativeClusteringRelationExtraction(
             parameters=good_parameters, options=good_options
@@ -185,7 +182,6 @@ class TestAgglomerativeClusteringExtractionProcess:
         agglo.run(pipeline)
 
         relations = list(pipeline.kr.relations)
-
         assert len(relations) == 3
 
         for relation in relations:
@@ -199,7 +195,7 @@ class TestAgglomerativeClusteringExtractionProcess:
                 if relation.destination_concept == vegetable_concept:
                     assert len(relation.linguistic_realisations) == 2
                 else:
-                    assert relation.destination_concept == meet_concept
+                    assert relation.destination_concept == meat_concept
                     assert len(relation.linguistic_realisations) == 1
 
         assert len(pipeline.candidate_terms) == 0

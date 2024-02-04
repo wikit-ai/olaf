@@ -1,5 +1,4 @@
-from itertools import groupby
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -7,8 +6,7 @@ from ....algorithm.agglomerative_clustering import AgglomerativeClustering
 from ....commons.embedding_tools import sbert_embeddings
 from ....commons.errors import OptionError, ParameterError
 from ....commons.logging_config import logger
-from ....commons.relation_tools import crs_to_relation, group_cr_by_concepts
-from ....data_container.candidate_term_schema import CandidateRelation
+from ....commons.relation_tools import crs_to_relation, cts_to_crs, group_cr_by_concepts
 from ....data_container.knowledge_representation_schema import KnowledgeRepresentation
 from ...pipeline_schema import Pipeline
 from ..pipeline_component_schema import PipelineComponent
@@ -19,8 +17,8 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    candidate_terms: List[CandidateRelations]
-        List of candidate terms to extract relations from.
+    candidate_relations: List[CandidateRelations]
+        List of candidate relations to extract relations from.
     nb_clusters: int | None
         Number of clusters to find with the agglomerative clustering algorithm.
         It must be None if distance_threshold is not None.
@@ -39,6 +37,13 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
     embedding_model: str
         Name of the embedding model to use.
         The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html.
+    concept_max_distance: int, optional
+        The maximum distance between the candidate term and the concept sought.
+        Set to 5 by default if not specified.
+    scope: str
+        Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
+        candidate term "sentence".
+        Set to "doc" by default if not specified.
     parameters: Dict[str, Any]
         Parameters are fixed values to be defined when building the pipeline.
         They are necessary for the component functioning.
@@ -61,12 +66,16 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             Tunable options to use to optimise the component performance.
         """
         super().__init__(parameters, options)
-        self.candidate_terms = None
+        self.candidate_relations = None
         self._nb_clusters = None
         self._metric = None
         self._linkage = None
         self._distance_threshold = None
         self._embedding_model = None
+        self.concept_max_distance = (
+            parameters.get("concept_max_distance", 5) if parameters is not None else 5
+        )
+        self.scope = parameters.get("scope", "doc") if parameters is not None else "doc"
         self._check_parameters()
         self._check_options()
 
@@ -208,7 +217,9 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
 
         for label in labels:
             relation_indexes = np.where(clustering_labels == label)[0]
-            candidate_relations = [self.candidate_terms[i] for i in relation_indexes]
+            candidate_relations = [
+                self.candidate_relations[i] for i in relation_indexes
+            ]
             cr_common_concepts = group_cr_by_concepts(candidate_relations)
             for cr_group in cr_common_concepts:
                 relation = crs_to_relation(cr_group)
@@ -225,11 +236,23 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             The pipeline running.
         """
 
-        self.candidate_terms = list(pipeline.candidate_terms)
+        concepts_labels_map = dict()
+        for concept in pipeline.kr.concepts:
+            concepts_labels_map[concept.label] = concept
+
+        candidate_relations = cts_to_crs(
+            pipeline.candidate_terms,
+            concepts_labels_map,
+            pipeline.spacy_model,
+            self.concept_max_distance,
+            self.scope,
+        )
+
+        self.candidate_relations = list(candidate_relations)
 
         embeddings = sbert_embeddings(
             self._embedding_model,
-            [candidate.label for candidate in self.candidate_terms],
+            [candidate.label for candidate in self.candidate_relations],
         )
 
         agglo_clustering = AgglomerativeClustering(
