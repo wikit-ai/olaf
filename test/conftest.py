@@ -1,5 +1,20 @@
+import os
+import tempfile
+
 import pytest
 import spacy
+from pytest import MonkeyPatch
+
+
+@pytest.fixture(scope="session")
+def test_data_path():
+    with tempfile.TemporaryDirectory() as newpath:
+        old_cwd = os.getcwd()
+        os.chdir(newpath)
+        mp = MonkeyPatch()
+        mp.setenv("DATA_PATH", newpath)
+        yield
+        os.chdir(old_cwd)
 
 
 @pytest.fixture(scope="session")

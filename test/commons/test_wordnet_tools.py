@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from nltk.corpus.reader.wordnet import ADJ as WN_ADJ
 from nltk.corpus.reader.wordnet import ADV as WN_ADV
@@ -5,17 +7,14 @@ from nltk.corpus.reader.wordnet import NOUN as WN_NOUN
 from nltk.corpus.reader.wordnet import VERB as WN_VERB
 
 from olaf.commons.wordnet_tools import (
-    fetch_wordnet_lang,
-    load_enrichment_wordnet_domains_from_file,
-    load_wordnet_domains,
-    spacy2wordnet_pos,
-)
+    fetch_wordnet_lang, load_enrichment_wordnet_domains_from_file,
+    load_wordnet_domains, spacy2wordnet_pos)
 
 
-@pytest.fixture(scope="session")
-def sample_wordnet_domains_path(tmp_path_factory):
+@pytest.fixture(scope="module")
+def sample_wordnet_domains_path(test_data_path):
     wordnet_domains_fn = (
-        tmp_path_factory.mktemp("test_data") / "sample_wordnet_domains.txt"
+        os.path.join(os.getenv("DATA_PATH"), "sample_wordnet_domains.txt")
     )
 
     lines = [
@@ -44,8 +43,8 @@ def sample_wordnet_domains_path(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
-def sample_domains_path(tmp_path_factory):
-    wordnet_domains_fn = tmp_path_factory.mktemp("test_data") / "sample_domains.txt"
+def sample_domains_path(test_data_path):
+    wordnet_domains_fn = os.path.join(os.getenv("DATA_PATH"), "sample_domains.txt")
 
     lines = ["administration\n", "hydraulics"]
 
@@ -56,6 +55,7 @@ def sample_domains_path(tmp_path_factory):
 
 
 def test_load_wordnet_domains(sample_wordnet_domains_path) -> None:
+    
     wordnet_domains = load_wordnet_domains(
         wordnet_domains_path=sample_wordnet_domains_path
     )
