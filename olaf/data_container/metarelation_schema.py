@@ -1,11 +1,14 @@
-from typing import Literal, Optional, Set
+from typing import Optional, Set
+
+from rdflib import RDFS
 
 from .concept_schema import Concept
 from .linguistic_realisation_schema import LinguisticRealisation
 from .relation_schema import Relation
 
-# TODO: complete the set of metarelations types
-METARELATION_TYPE = Literal["RELATED_TO"]
+METARELATION_RDFS_OWL_MAP = {
+    "is_generalised_by": RDFS.subClassOf
+}
 
 
 class Metarelation(Relation):
@@ -39,7 +42,7 @@ class Metarelation(Relation):
         self,
         source_concept: Concept,
         destination_concept: Concept,
-        label: METARELATION_TYPE,
+        label: str,
         external_uids: Set[Optional[str]] = None,
         linguistic_realisations: Optional[Set[LinguisticRealisation]] = None,
     ) -> None:
