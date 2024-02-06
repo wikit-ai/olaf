@@ -333,9 +333,9 @@ def hf_prompt_hierarchisation(doc_context: str, concepts_description: str) -> st
 
 
 def hf_prompt_owl_axiom_extraction(
-    doc_context: str, kr_description: str, name_space: str
+    doc_context: str, kr_description: str, namespace: str
 ) -> str:
-    """Prompt template for axiomatisation with Hugging Face inference API.
+    """Prompt template for axiom extraction with Hugging Face inference API.
 
     Parameters
     ----------
@@ -351,7 +351,7 @@ def hf_prompt_owl_axiom_extraction(
     """
     prompt_template = f"""You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.
     Use the following text to construct an OWL ontology in the Turtle format based on the given concepts and relations.
-    Use the following namespace: {name_space}.
+    Use the following namespace: {namespace}.
     Include the RDF, RDFS, and OWL prefixes.
     Return only the turtle file.
 
@@ -363,9 +363,9 @@ def hf_prompt_owl_axiom_extraction(
 
 
 def openai_prompt_owl_axiom_extraction(
-    doc_context: str, kr_description: str, name_space: str
+    doc_context: str, kr_description: str, namespace: str
 ) -> List[Dict[str, str]]:
-    """Prompt template for axiomatisation with ChatCompletion OpenAI model.
+    """Prompt template for axiom extraction with ChatCompletion OpenAI model.
 
     Parameters
     ----------
@@ -387,7 +387,7 @@ def openai_prompt_owl_axiom_extraction(
         {
             "role": "user",
             "content": f"""Use the following text to construct an OWL ontology in the Turtle format based on the given concepts and relations.
-            Use the following namespace: {name_space}.
+            Use the following namespace: {namespace}.
             Include the RDF, RDFS, and OWL prefixes.
             Return only the turtle file.""",
         },
