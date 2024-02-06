@@ -329,3 +329,68 @@ def hf_prompt_hierarchisation(c1_label: str, c2_label: str, doc_context: str) ->
     Just answer with the right number, do not add any explanation.
     Context: {doc_context}"""
     return prompt_template
+
+
+def hf_prompt_owl_axiom_extraction(
+    doc_context: str, kr_description: str, name_space: str
+) -> str:
+    """Prompt template for axiomatisation with Hugging Face inference API.
+
+    Parameters
+    ----------
+    doc_context: str
+        Extract of popular document contents.
+    kr_description: str
+        Textual description of the knowledge representation.
+
+    Returns
+    -------
+    str
+        Completion prompt template.
+    """
+    prompt_template = f"""You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.
+    Use the following text to construct an OWL ontology in the Turtle format based on the given concepts and relations.
+    Use the following namespace: {name_space}.
+    Include the RDF, RDFS, and OWL prefixes.
+    Return only the turtle file.
+
+    Text: {doc_context}
+
+    {kr_description}
+    """
+    return prompt_template
+
+
+def openai_prompt_owl_axiom_extraction(
+    doc_context: str, kr_description: str, name_space: str
+) -> List[Dict[str, str]]:
+    """Prompt template for axiomatisation with ChatCompletion OpenAI model.
+
+    Parameters
+    ----------
+    doc_context: str
+        Extract of popular document contents.
+    kr_description: str
+        Textual description of the knowledge representation.
+
+    Returns
+    -------
+    List[Dict[str, str]]
+        ChatCompletion prompt template.
+    """
+    prompt_template = [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages..",
+        },
+        {
+            "role": "user",
+            "content": f"""Use the following text to construct an OWL ontology in the Turtle format based on the given concepts and relations.
+            Use the following namespace: {name_space}.
+            Include the RDF, RDFS, and OWL prefixes.
+            Return only the turtle file.""",
+        },
+        {"role": "user", "content": f"Text: {doc_context}"},
+        {"role": "user", "content": kr_description},
+    ]
+    return prompt_template

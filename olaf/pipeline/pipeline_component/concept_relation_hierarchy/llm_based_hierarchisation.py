@@ -20,7 +20,7 @@ class LLMBasedHierarchisation(PipelineComponent):
     prompt_template: Callable[[str], List[Dict[str, str]]]
         Prompt template used to give instructions and context to the LLM.
     llm_generator: LLMGenerator
-        The LLM model used to generate the concepts.
+        The LLM model used to generate the concept hierarchy.
     doc_context_max_len: int
         Maximum number of characters for the document context in the prompt.
     """
@@ -39,7 +39,7 @@ class LLMBasedHierarchisation(PipelineComponent):
             Prompt template used to give instructions and context to the LLM.
             By default the concept hierarchisation prompt is used.
         llm_generator: LLMGenerator
-            The LLM model used to generate the concepts.
+            The LLM model used to generate the hierarchy.
             By default, the zephyr-7b-beta HuggingFace model is used.
         doc_context_max_len: int
             Maximum number of characters for the document context in the prompt.
