@@ -1,8 +1,7 @@
-from itertools import combinations
+import ast
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from spacy.tokens import Doc
-from tqdm import tqdm
 
 from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
@@ -84,35 +83,16 @@ class LLMBasedHierarchisation(PipelineComponent):
         """
         raise NotImplementedError
 
-    def _find_concept_cooc(self, concept_1: Concept, concept_2: Concept) -> Set[Doc]:
-        """Extract documents where both concepts appear.
+    def _extract_popular_docs(self, docs: List[Doc]) -> Set[Doc]:
+        # TODO
+        return set(docs)
 
-        Parameters
-        ----------
-        concept_1: Concept
-            First concept to find the documents.
-        concept_2: Concept
-            Second concept to find the documents.
-
-        Returns
-        -------
-        Set[Doc]
-            Set of spaCy docs where the both concepts appear.
-        """
-        c1_docs = set()
-        c2_docs = set()
-        for lr in concept_1.linguistic_realisations:
-            c1_docs.update(lr.get_docs())
-        for lr in concept_2.linguistic_realisations:
-            c2_docs.update(lr.get_docs())
-        return c1_docs & c2_docs
-
-    def _generate_doc_context(self, concepts_docs: Set[Doc]) -> str:
+    def _generate_doc_context(self, popular_docs: Set[Doc]) -> str:
         """Create context from documents with a fix size.
 
         Parameters
         ----------
-        concepts_docs: Set[Doc]
+        popular_docs: Set[Doc]
             spaCy docs to fill the context with.
 
         Returns
@@ -121,7 +101,7 @@ class LLMBasedHierarchisation(PipelineComponent):
             Concatenation of document contents up to a fixed size.
         """
         context = ""
-        for doc in concepts_docs:
+        for doc in popular_docs:
             if len(doc.text) < self.doc_context_max_len - len(context):
                 context += doc.text
                 context += " "
@@ -130,42 +110,89 @@ class LLMBasedHierarchisation(PipelineComponent):
                 break
         return context
 
-    def _create_metarelation(
-        self, llm_output: str, c1: Concept, c2: Concept
-    ) -> Metarelation | None:
-        """Create a metarelation based on the LLM output.
-        If no metarelation is created, the output is None.
+    def _create_concepts_description(self, concepts: Set[Concept]) -> str:
+        """Create concepts textual description.
+
+        Parameters
+        ----------
+        concepts: Set[Concept]
+            Concepts to describe.
+
+        Returns
+        -------
+        str
+            Textual description of the concepts.
+        """
+        concepts_description = "Concepts:\n"
+        for concept in concepts:
+            lrs = [
+                lr.label
+                for lr in concept.linguistic_realisations
+                if not (lr.label == concept.label)
+            ]
+            if len(lrs):
+                concepts_description += f"{concept.label} ({', '.join(lrs)})\n"
+            else:
+                concepts_description += f"{concept.label}\n"
+        return concepts_description
+
+    def _find_concept_by_label(self, label: str, concepts: Set[Concept]) -> Concept:
+        """Find a concept based on its label.
+
+        Parameters
+        ----------
+        label: str
+            The label of the wanted concept.
+        concepts: Set[Concept]
+            The set of concepts to be searched.
+
+        Returns
+        -------
+        Concept
+            The concept with the wanted label.
+        """
+        selected_concept = None
+        for concept in concepts:
+            if concept.label == label:
+                selected_concept = concept
+                break
+        return selected_concept
+
+    def _create_metarelations(
+        self, llm_output: str, concepts: Set[Concept]
+    ) -> Set[Metarelation] | None:
+        """Create metarelations based on the LLM output.
 
         Parameters
         ----------
         llm_output: str
             Answer of the LLM for the hierarchy.
-        c1: Concept
-            First concept implied in the metarelation.
-        C2: Concept
-            Second concept implied in the metarelation.
+        concepts: Set[Concept]
+            The set of existing concepts.
 
         Returns
         -------
-        Metarelation | None
-            The metarelation created or None if no relation is created.
+        Set[Metarelation]
+            The metarelations created.
         """
-        new_metarelation = None
-        if llm_output == "1":
-            new_metarelation = Metarelation(
-                source_concept=c2, destination_concept=c1, label="is_generalised_by"
+        metarelations = set()
+        try:
+            list_metarelations = ast.literal_eval(llm_output)
+            for meta_tuple in list_metarelations:
+                source_concept = self._find_concept_by_label(meta_tuple[0], concepts)
+                destination_concept = self._find_concept_by_label(
+                    meta_tuple[2], concepts
+                )
+                new_metarelation = Metarelation(
+                    source_concept, destination_concept, "is_generalised_by"
+                )
+                metarelations.add(new_metarelation)
+        except (SyntaxError, ValueError):
+            logger.error(
+                """LLM generator output is not in the expected format. 
+                The metarelations can not be extracted."""
             )
-        elif llm_output == "2":
-            new_metarelation = Metarelation(
-                source_concept=c1, destination_concept=c2, label="is_generalised_by"
-            )
-        elif not (llm_output == "3"):
-            logger.warning(
-                "LLM generator output is not in the expected format. Hierarchical relations not extracted between concepts %s and %s.",
-                c1.label,
-                c2.label,
-            )
-        return new_metarelation
+        return metarelations
 
     def run(self, pipeline: Any) -> None:
         """Method that is responsible for the execution of the component.
@@ -175,15 +202,12 @@ class LLMBasedHierarchisation(PipelineComponent):
         ----------
         pipeline: Pipeline
             The pipeline to run the component with."""
-        concept_pairs = list(combinations(pipeline.kr.concepts, 2))
-        for concept_1, concept_2 in tqdm(concept_pairs):
-            concepts_docs = self._find_concept_cooc(concept_1, concept_2)
-            if len(concepts_docs) > 0:
-                context = self._generate_doc_context(concepts_docs)
-                prompt = self.prompt_template(concept_1.label, concept_2.label, context)
-                llm_output = self.llm_generator.generate_text(prompt)
-                new_metarelation = self._create_metarelation(
-                    llm_output, concept_1, concept_2
-                )
-                if new_metarelation is not None:
-                    pipeline.kr.metarelations.add(new_metarelation)
+
+        popular_docs = self._extract_popular_docs(pipeline.corpus)
+        context = self._generate_doc_context(popular_docs)
+        concepts_description = self._create_concepts_description(pipeline.kr.concepts)
+        prompt = self.prompt_template(context, concepts_description)
+        llm_output = self.llm_generator.generate_text(prompt)
+        metarelations = self._create_metarelations(llm_output, pipeline.kr.concepts)
+
+        pipeline.kr.metarelations.update(metarelations)
