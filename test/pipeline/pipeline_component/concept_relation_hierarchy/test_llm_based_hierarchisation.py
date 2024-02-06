@@ -20,7 +20,7 @@ class MockLLMGenerator(LLMGenerator):
         pass
 
     def generate_text(self, prompt: Any) -> str:
-        return "1"
+        return '[["dog","is_generalised_by","mammal"],["mammal", "is_generalised", "animal"]]'
 
 
 @pytest.fixture(scope="session")
@@ -73,6 +73,7 @@ def c_animal(corpus) -> Concept:
     c_animal.add_linguistic_realisation(
         LinguisticRealisation("animal", {corpus[0][5:6], corpus[1][6:7]})
     )
+    c_animal.add_linguistic_realisation(LinguisticRealisation("beast"))
     return c_animal
 
 
@@ -83,7 +84,7 @@ def c_wine() -> Concept:
 
 
 @pytest.fixture(scope="session")
-def pipeline(corpus, en_sm_spacy_model, c_dog, c_mammal, c_animal) -> Pipeline:
+def pipeline(corpus, en_sm_spacy_model, c_dog, c_mammal, c_animal, c_wine) -> Pipeline:
     pipeline = Pipeline(
         corpus=corpus,
         spacy_model=en_sm_spacy_model,
@@ -91,16 +92,8 @@ def pipeline(corpus, en_sm_spacy_model, c_dog, c_mammal, c_animal) -> Pipeline:
     pipeline.kr.concepts.add(c_dog)
     pipeline.kr.concepts.add(c_mammal)
     pipeline.kr.concepts.add(c_animal)
+    pipeline.kr.concepts.add(c_wine)
     return pipeline
-
-
-def test_find_concept_cooc(
-    c_dog, c_mammal, c_animal, c_wine, llm_concept_hierarchy, corpus
-) -> None:
-    assert llm_concept_hierarchy._find_concept_cooc(c_dog, c_mammal) == {corpus[2]}
-    assert llm_concept_hierarchy._find_concept_cooc(c_dog, c_animal) == {corpus[0]}
-    assert llm_concept_hierarchy._find_concept_cooc(c_mammal, c_animal) == {corpus[1]}
-    assert llm_concept_hierarchy._find_concept_cooc(c_dog, c_wine) == set()
 
 
 def test_generate_doc_context(corpus, small_context_llm_concept_hierarchy) -> None:
@@ -110,23 +103,59 @@ def test_generate_doc_context(corpus, small_context_llm_concept_hierarchy) -> No
     )
 
 
-def test_create_metarelation(c_dog, c_animal, llm_concept_hierarchy) -> None:
-    metarelation = llm_concept_hierarchy._create_metarelation("1", c_dog, c_animal)
-    assert metarelation.source_concept == c_animal
-    assert metarelation.destination_concept == c_dog
+def test_concepts_description(pipeline, llm_concept_hierarchy) -> None:
+    concepts_description = llm_concept_hierarchy._create_concepts_description(
+        pipeline.kr.concepts
+    )
+    assert "Concepts:" in concepts_description
+    assert "animal (beast)" in concepts_description
+    assert "wine" in concepts_description
+    assert "mammal" in concepts_description
+    assert "dog" in concepts_description
 
-    metarelation = llm_concept_hierarchy._create_metarelation("2", c_dog, c_animal)
-    assert metarelation.source_concept == c_dog
-    assert metarelation.destination_concept == c_animal
 
-    metarelation = llm_concept_hierarchy._create_metarelation("3", c_dog, c_animal)
-    assert metarelation is None
+def test_find_concept_by_label(pipeline, llm_concept_hierarchy, c_animal, c_mammal):
+    assert (
+        llm_concept_hierarchy._find_concept_by_label("animal", pipeline.kr.concepts)
+        == c_animal
+    )
+    assert (
+        llm_concept_hierarchy._find_concept_by_label("mammal", pipeline.kr.concepts)
+        == c_mammal
+    )
+    assert (
+        llm_concept_hierarchy._find_concept_by_label("flower", pipeline.kr.concepts)
+        is None
+    )
 
-    metarelation = llm_concept_hierarchy._create_metarelation("123", c_dog, c_animal)
-    assert metarelation is None
+
+def test_create_metarelations(
+    pipeline, llm_concept_hierarchy, c_dog, c_mammal, c_animal
+) -> None:
+    llm_output = (
+        '[["dog","is_generalised_by","mammal"],["mammal", "is_generalised", "animal"]]'
+    )
+    metarelations = llm_concept_hierarchy._create_metarelations(
+        llm_output, pipeline.kr.concepts
+    )
+
+    assert len(metarelations) == 2
+    for meta in metarelations:
+        assert meta.label == "is_generalised_by"
+        if meta.source_concept == c_dog:
+            assert meta.destination_concept == c_mammal
+        else:
+            assert meta.source_concept == c_mammal
+            assert meta.destination_concept == c_animal
+
+    wrong_llm_output = "This is a wrong llm output."
+    no_metarelations = llm_concept_hierarchy._create_metarelations(
+        wrong_llm_output, pipeline.kr.concepts
+    )
+    assert len(no_metarelations) == 0
 
 
 def test_run(pipeline, llm_concept_hierarchy) -> None:
     assert len(pipeline.kr.metarelations) == 0
     llm_concept_hierarchy.run(pipeline)
-    assert len(pipeline.kr.metarelations) == 3
+    assert len(pipeline.kr.metarelations) == 2
