@@ -168,7 +168,7 @@ class LLMBasedHierarchisation(PipelineComponent):
         llm_output: str
             Answer of the LLM for the hierarchy.
         concepts: Set[Concept]
-            The set of existin concepts.
+            The set of existing concepts.
 
         Returns
         -------
@@ -190,7 +190,7 @@ class LLMBasedHierarchisation(PipelineComponent):
         except (SyntaxError, ValueError):
             logger.error(
                 """LLM generator output is not in the expected format. 
-                The metarelationss can not be extracted."""
+                The metarelations can not be extracted."""
             )
         return metarelations
 
