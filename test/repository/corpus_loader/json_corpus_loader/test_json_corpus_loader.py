@@ -1,11 +1,10 @@
 import json
-import os.path
+import os
 
 import pytest
 import spacy.tokens
 
 from olaf.commons.errors import FileOrDirectoryNotFoundError
-from olaf.commons.paths import PROJECT_ROOT_PATH
 from olaf.repository.corpus_loader.json_corpus_loader import JsonCorpusLoader
 
 
@@ -73,8 +72,8 @@ def json_sample(tmp_path_factory):
     return path
 
 
-def test_read_corpus_invalid_path():
-    corpus_path = os.path.join(PROJECT_ROOT_PATH, "invalid_path")
+def test_read_corpus_invalid_path(test_data_path):
+    corpus_path = os.path.join(os.getenv("DATA_PATH"), "invalid_path")
     json_field = "content"
     corpus_loader = JsonCorpusLoader(corpus_path, json_field)
     with pytest.raises(FileOrDirectoryNotFoundError):

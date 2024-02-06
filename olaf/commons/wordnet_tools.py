@@ -1,4 +1,4 @@
-import os.path
+import os
 from typing import Dict, Optional, Set
 
 from nltk.corpus.reader.wordnet import ADJ as WN_ADJ
@@ -7,7 +7,6 @@ from nltk.corpus.reader.wordnet import NOUN as WN_NOUN
 from nltk.corpus.reader.wordnet import VERB as WN_VERB
 
 from .logging_config import logger
-from .paths import DATA_PATH
 
 
 def load_wordnet_domains(wordnet_domains_path: str) -> Dict[str, Set[str]]:
@@ -28,7 +27,7 @@ def load_wordnet_domains(wordnet_domains_path: str) -> Dict[str, Set[str]]:
     domain_file_path = wordnet_domains_path
 
     if not os.path.isabs(wordnet_domains_path):
-        domain_file_path = os.path.join(DATA_PATH, domain_file_path)
+        domain_file_path = os.path.join(os.getenv("DATA_PATH"), domain_file_path)
 
     domains_map = dict()
 
@@ -64,7 +63,7 @@ def load_enrichment_wordnet_domains_from_file(enrichment_domains_path: str) -> S
     """
 
     if not os.path.isabs(enrichment_domains_path):
-        enrichment_domains_path = os.path.join(DATA_PATH, enrichment_domains_path)
+        enrichment_domains_path = os.path.join(os.getenv("DATA_PATH"), enrichment_domains_path)
 
     enrichment_domains = set()
 
