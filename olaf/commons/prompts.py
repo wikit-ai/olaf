@@ -268,18 +268,16 @@ def hf_prompt_relation_extraction(doc_context: str, ct_labels: str) -> str:
 
 
 def openai_prompt_hierarchisation(
-    c1_label: str, c2_label: str, doc_context: str
+    doc_context: str, concepts_description: str
 ) -> List[Dict[str, str]]:
     """Prompt template for hierarchisation with ChatCompletion OpenAI model.
 
     Parameters
     ----------
-    c1_label: str
-        The fist concept label.
-    c2_label: str
-        The second concept label.
     doc_context: str
         Extract of document contents where concepts appear to use as context.
+    concepts_description: str
+        Textual description of the concepts.
 
     Returns
     -------
@@ -293,28 +291,29 @@ def openai_prompt_hierarchisation(
         },
         {
             "role": "user",
-            "content": f"""Based on the context given, define if there is a hierarchy between concepts {c1_label} and {c2_label}.
-            Answer "1" if {c1_label} is more general than {c2_label}.
-            Answer "2" if {c2_label} is more general the {c1_label}.
-            Answer "3" if there is no hierarchical relation between {c1_label} and {c2_label}.
-            Just answer with the right number, do not add any explanation.""",
+            "content": """Based on the context given, define if there is a hierarchy between the listed concepts.
+            The result should be given as a python list of list of string with double quotes.""",
+        },
+        {
+            "role": "user",
+            "content": """Here is an example. Concepts: animal, mammal, dog(canine), flower
+            [["mammal","is_generalised_by","animal"], ["dog","is_generalised_by","mammal"], ["dog","is_generalised_by","animal"]]""",
         },
         {"role": "user", "content": f"Context: {doc_context}"},
+        {"role": "user", "content": concepts_description},
     ]
     return prompt_template
 
 
-def hf_prompt_hierarchisation(c1_label: str, c2_label: str, doc_context: str) -> str:
+def hf_prompt_hierarchisation(doc_context: str, concepts_description: str) -> str:
     """Prompt template for hierarchisation with Hugging Face inference API.
 
     Parameters
     ----------
-    c1_label: str
-        The fist concept label.
-    c2_label: str
-        The second concept label.
     doc_context: str
         Extract of document contents where concepts appear to use as context.
+    concepts_description: str
+        Textual description of the concepts.
 
     Returns
     -------
@@ -322,10 +321,12 @@ def hf_prompt_hierarchisation(c1_label: str, c2_label: str, doc_context: str) ->
         Completion prompt template.
     """
     prompt_template = f"""You are an helpful assistant helping building an ontology.
-    Based on the context given, define if there is a hierarchy between concepts {c1_label} and {c2_label}.
-    Answer "1" if {c1_label} is more general than {c2_label}.
-    Answer "2" if {c2_label} is more general the {c1_label}.
-    Answer "3" if there is no hierarchical relation between {c1_label} and {c2_label}.
-    Just answer with the right number, do not add any explanation.
-    Context: {doc_context}"""
+    Based on the context given, define if there is a hierarchy between the listed concepts.
+    The result should be given as a python list of list of string with double quotes.
+
+    Here is an example. Concepts: animal, mammal, dog(canine), flower
+    [["mammal","is_generalised_by","animal"], ["dog","is_generalised_by","mammal"], ["dog","is_generalised_by","animal"]]
+    
+    Context: {doc_context}
+    {concepts_description}"""
     return prompt_template
