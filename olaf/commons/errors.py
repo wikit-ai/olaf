@@ -12,10 +12,9 @@ class MissingEnvironmentVariable(Exception):
     """Exception raised when an environment variable is missing."""
 
     def __init__(self, component_name: str, env_var_name: str) -> None:
-        message = f"""External resources check failed for component {component_name}. 
+        message = f"""External resources check failed for component {component_name}.
                     Missing environment variable: {env_var_name}"""
         super().__init__(message)
-
 
 class ParameterError(Exception):
     """Exception raised when a required parameter is missing for a pipeline component to function."""
