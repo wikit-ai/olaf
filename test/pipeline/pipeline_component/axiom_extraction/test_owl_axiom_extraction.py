@@ -74,7 +74,7 @@ def american_pizza_unsatisfiable_concept_uris() -> Set[str]:
         "http://www.ms2.org/o/example#American",
         "http://www.ms2.org/o/example#Cheese",
         "http://www.ms2.org/o/example#America",
-        "http://www.ms2.org/o/example#PeperoniSausage",
+        "http://www.ms2.org/o/example#PepperoniSausage",
     }
     return concept_uris
 
@@ -83,7 +83,7 @@ def american_pizza_owl_classes_frags() -> Set[Tuple[str]]:
     expected_class_fragments = {
             ("NonVegetarianPizza",), ("American",), ("Country",), ("Cheese",),
             ("Pizza",), ("CheesyPizza",), ("America",), ("Mozzarella",), ("Tomato",),
-            ("Topping",), ("PeperoniSausage",)
+            ("Topping",), ("PepperoniSausage",)
         }
     return expected_class_fragments
 
@@ -97,7 +97,7 @@ def american_pizza_domain_range_frags() -> Set[Tuple[str]]:
     expected_domain_range_fragments = {
             ("hasIngredient", "American", "Mozzarella"),
             ("hasIngredient", "American", "Tomato"),
-            ("hasIngredient", "American", "PeperoniSausage"),
+            ("hasIngredient", "American", "PepperoniSausage"),
             ("hasCountryOfOrigin", "American", "America")
         }
     return expected_domain_range_fragments
@@ -108,7 +108,7 @@ def american_pizza_subclasses_frags() -> Set[Tuple[str]]:
             ("American", "CheesyPizza"),
             ("Mozzarella", "Cheese"),
             ("Mozzarella", "Topping"),
-            ("PeperoniSausage", "Topping"),
+            ("PepperoniSausage", "Topping"),
             ("Cheese", "Topping"),
             ("America", "Country"),
             ("American", "Pizza")
@@ -120,7 +120,7 @@ def american_pizza_disjoint_classes_frags() -> Set[Tuple[str]]:
     disjoint_classes_fragments = {
             ("NonVegetarianPizza",), ("American",), ("Country",), ("Cheese",),
             ("Pizza",), ("CheesyPizza",), ("America",), ("Mozzarella",), ("Tomato",),
-            ("Topping",), ("PeperoniSausage",)
+            ("Topping",), ("PepperoniSausage",)
         }
     return disjoint_classes_fragments
 
@@ -283,7 +283,7 @@ class Test_build_graph_without_owl_instances:
         assert class_disjoint_axiom_extract_comp_disjoint_classes_fragments == {
             ("NonVegetarianPizza",), ("American",), ("Country",), ("Cheese",),
             ("Pizza",), ("CheesyPizza",), ("America",), ("Mozzarella",), ("Tomato",),
-            ("Topping",), ("PeperoniSausage",)
+            ("Topping",), ("PepperoniSausage",)
         }
 
     # TODO: test OWL named individuals
@@ -437,7 +437,7 @@ def test_get_concept_uris_from_error_output(base_axiom_extract_comp, american_pi
         2024-01-31 08:59:33,850 ERROR org.obolibrary.robot.ReasonerHelper -     unsatisfiable: http://www.ms2.org/o/example#American
         2024-01-31 08:59:33,850 ERROR org.obolibrary.robot.ReasonerHelper -     unsatisfiable: http://www.ms2.org/o/example#Cheese
         2024-01-31 08:59:33,850 ERROR org.obolibrary.robot.ReasonerHelper -     unsatisfiable: http://www.ms2.org/o/example#America
-        2024-01-31 08:59:33,850 ERROR org.obolibrary.robot.ReasonerHelper -     unsatisfiable: http://www.ms2.org/o/example#PeperoniSausage
+        2024-01-31 08:59:33,850 ERROR org.obolibrary.robot.ReasonerHelper -     unsatisfiable: http://www.ms2.org/o/example#PepperoniSausage
     """
     concept_uris = base_axiom_extract_comp._get_concept_uris_from_error_output(ex_error_output_unsatisfiable)
 
