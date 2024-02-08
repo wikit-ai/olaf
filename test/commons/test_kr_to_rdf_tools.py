@@ -13,7 +13,7 @@ from olaf.commons.kr_to_rdf_tools import (
 def test_owl_class_uri(ms2_base_uri) -> None:
     assert owl_class_uri(label="Mozzarella", base_uri=ms2_base_uri) == ms2_base_uri + "Mozzarella"
     assert owl_class_uri(label="mozzarella", base_uri=ms2_base_uri) == ms2_base_uri + "Mozzarella"
-    assert owl_class_uri(label="Peperoni Sausage", base_uri=ms2_base_uri) == ms2_base_uri + "PeperoniSausage"
+    assert owl_class_uri(label="Pepperoni Sausage", base_uri=ms2_base_uri) == ms2_base_uri + "PepperoniSausage"
     assert owl_class_uri(label="Non Vegetarian Pizza", base_uri=ms2_base_uri) == ms2_base_uri + "NonVegetarianPizza"
 
 def test_owl_obj_prop_uri(ms2_base_uri) -> None:
@@ -42,7 +42,7 @@ def test_kr_concepts_to_owl_classes(american_pizza_ex_kr, ms2_base_uri, owl_clas
     assert class_fragments == {
         ("NonVegetarianPizza",), ("American",), ("Country",), ("Cheese",),
         ("Pizza",), ("CheesyPizza",), ("America",), ("Mozzarella",), ("Tomato",),
-        ("Topping",), ("PeperoniSausage",)
+        ("Topping",), ("PepperoniSausage",)
     }
 
 def test_kr_relations_to_owl_obj_props(american_pizza_ex_kr, ms2_base_uri, owl_obj_props_sparql_q, ms2_ns, get_sparql_r_res) -> None:
@@ -85,7 +85,7 @@ def test_kr_metarelations_to_owl_domain_range(
     assert domain_range_fragments == {
         ("hasIngredient", "American", "Mozzarella"),
         ("hasIngredient", "American", "Tomato"),
-        ("hasIngredient", "American", "PeperoniSausage"),
+        ("hasIngredient", "American", "PepperoniSausage"),
         ("hasCountryOfOrigin", "American", "America")
     }
 
@@ -122,7 +122,7 @@ class Test_kr_metarelations_to_owl:
             ("American", "CheesyPizza"),
             ("Mozzarella", "Cheese"),
             ("Mozzarella", "Topping"),
-            ("PeperoniSausage", "Topping"),
+            ("PepperoniSausage", "Topping"),
             ("Cheese", "Topping"),
             ("America", "Country"),
             ("American", "Pizza")
@@ -150,7 +150,7 @@ class Test_kr_concepts_to_disjoint_classes:
         assert class_fragments == {
             ("NonVegetarianPizza",), ("American",), ("Country",), ("Cheese",),
             ("Pizza",), ("CheesyPizza",), ("America",), ("Mozzarella",), ("Tomato",),
-            ("Topping",), ("PeperoniSausage",)
+            ("Topping",), ("PepperoniSausage",)
         }
 
     def test_kr_metarelations_to_disjoint_classes(self, american_pizza_ex_kr, concept2Disjointclasses_g, disjoint_classes_sparql_q, ms2_ns, get_sparql_r_res) -> None:
@@ -165,7 +165,7 @@ class Test_kr_concepts_to_disjoint_classes:
         assert disjoint_classes_fragments == {
             ("NonVegetarianPizza",), ("American",), ("Country",), ("Cheese",),
             ("Pizza",), ("CheesyPizza",), ("America",), ("Mozzarella",), ("Tomato",),
-            ("Topping",), ("PeperoniSausage",)
+            ("Topping",), ("PepperoniSausage",)
         }
 
 class Test_kr_relations_to_anonymous_some_parent:
@@ -186,7 +186,7 @@ class Test_kr_relations_to_anonymous_some_parent:
             ns={"ms2": ms2_ns}
         )
         
-        assert class_fragments == {("American",), ("America",), ("Mozzarella",), ("Tomato",), ("PeperoniSausage",)}
+        assert class_fragments == {("American",), ("America",), ("Mozzarella",), ("Tomato",), ("PepperoniSausage",)}
 
     def test_kr_relations_to_anonymous_some_parent_obj_props(self, american_pizza_ex_kr, relations2subclassSome_g, owl_obj_props_sparql_q, ms2_ns, get_sparql_r_res) -> None:
         
@@ -212,7 +212,7 @@ class Test_kr_relations_to_anonymous_some_parent:
             ("American", "hasIngredient", "Mozzarella"),
             ("American", "hasIngredient", "Tomato"),
             ("American", "hasCountryOfOrigin", "America"),
-            ("American", "hasIngredient", "PeperoniSausage")
+            ("American", "hasIngredient", "PepperoniSausage")
         }
 
 class Test_kr_relations_to_anonymous_only_parent:
@@ -233,7 +233,7 @@ class Test_kr_relations_to_anonymous_only_parent:
             ns={"ms2": ms2_ns}
         )
         
-        assert class_fragments == {("American",), ("America",), ("Mozzarella",), ("Tomato",), ("PeperoniSausage",)}
+        assert class_fragments == {("American",), ("America",), ("Mozzarella",), ("Tomato",), ("PepperoniSausage",)}
 
     def test_kr_relations_to_anonymous_only_parent_obj_props(self, american_pizza_ex_kr, relations2subclassOnly_g, owl_obj_props_sparql_q, ms2_ns, get_sparql_r_res) -> None:
         
@@ -259,7 +259,7 @@ class Test_kr_relations_to_anonymous_only_parent:
             ("American", "hasIngredient", "Mozzarella"),
             ("American", "hasIngredient", "Tomato"),
             ("American", "hasCountryOfOrigin", "America"),
-            ("American", "hasIngredient", "PeperoniSausage")
+            ("American", "hasIngredient", "PepperoniSausage")
         }
 
 class Test_kr_relations_to_anonymous_some_equivalent:
@@ -280,7 +280,7 @@ class Test_kr_relations_to_anonymous_some_equivalent:
             ns={"ms2": ms2_ns}
         )
         
-        assert class_fragments == {("American",), ("America",), ("Mozzarella",), ("Tomato",), ("PeperoniSausage",)}
+        assert class_fragments == {("American",), ("America",), ("Mozzarella",), ("Tomato",), ("PepperoniSausage",)}
 
     def test_kr_relations_to_anonymous_some_equivalent_obj_props(self, american_pizza_ex_kr, relations2equivalentSome_g, owl_obj_props_sparql_q, ms2_ns, get_sparql_r_res) -> None:
         
@@ -306,5 +306,5 @@ class Test_kr_relations_to_anonymous_some_equivalent:
             ("American", "hasIngredient", "Mozzarella"),
             ("American", "hasIngredient", "Tomato"),
             ("American", "hasCountryOfOrigin", "America"),
-            ("American", "hasIngredient", "PeperoniSausage")
+            ("American", "hasIngredient", "PepperoniSausage")
         }
