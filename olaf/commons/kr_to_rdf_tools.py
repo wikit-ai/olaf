@@ -193,18 +193,21 @@ def kr_relations_to_domain_range_obj_props(
 
     for relation in kr.relations:
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
-        src_concept_uri = owl_class_uri(
-            label=relation.source_concept.label, base_uri=base_uri
-        )
-        dest_concept_uri = owl_class_uri(
-            label=relation.destination_concept.label, base_uri=base_uri
-        )
-
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
-        rdf_graph.add((rel_uri, RDFS.domain, src_concept_uri))
-        rdf_graph.add((rel_uri, RDFS.range, dest_concept_uri))
-        rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
-        rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+
+        if relation.source_concept:
+            src_concept_uri = owl_class_uri(
+                label=relation.source_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((rel_uri, RDFS.domain, src_concept_uri))
+            rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+
+        if relation.destination_concept:
+            dest_concept_uri = owl_class_uri(
+                label=relation.destination_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((rel_uri, RDFS.range, dest_concept_uri))
+            rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
 
     return rdf_graph
 
@@ -320,23 +323,26 @@ def kr_relations_to_anonymous_some_parent(
 
     for relation in kr.relations:
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
-        src_concept_uri = owl_class_uri(
-            label=relation.source_concept.label, base_uri=base_uri
-        )
-        dest_concept_uri = owl_class_uri(
-            label=relation.destination_concept.label, base_uri=base_uri
-        )
-
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
-        rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
-        rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
 
-        restriction_b_node, restriction_g = create_obj_prop_some_restriction_triples(
-            rel_uri=rel_uri, dest_concept_uri=dest_concept_uri
-        )
-        rdf_graph += restriction_g
+        if relation.source_concept:
+            src_concept_uri = owl_class_uri(
+                label=relation.source_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
 
-        rdf_graph.add((src_concept_uri, RDFS.subClassOf, restriction_b_node))
+        if relation.destination_concept:
+            dest_concept_uri = owl_class_uri(
+                label=relation.destination_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+
+        if relation.source_concept and relation.destination_concept:
+            restriction_b_node, restriction_g = create_obj_prop_some_restriction_triples(
+                rel_uri=rel_uri, dest_concept_uri=dest_concept_uri
+            )
+            rdf_graph += restriction_g
+            rdf_graph.add((src_concept_uri, RDFS.subClassOf, restriction_b_node))
 
     return rdf_graph
 
@@ -362,24 +368,28 @@ def kr_relations_to_anonymous_only_parent(
     rdf_graph = Graph()
 
     for relation in kr.relations:
+        
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
-        src_concept_uri = owl_class_uri(
-            label=relation.source_concept.label, base_uri=base_uri
-        )
-        dest_concept_uri = owl_class_uri(
-            label=relation.destination_concept.label, base_uri=base_uri
-        )
-
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
-        rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
-        rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
 
-        restriction_b_node, restriction_g = create_obj_prop_all_restriction_triples(
-            rel_uri=rel_uri, dest_concept_uri=dest_concept_uri
-        )
-        rdf_graph += restriction_g
+        if relation.source_concept:
+            src_concept_uri = owl_class_uri(
+                label=relation.source_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
 
-        rdf_graph.add((src_concept_uri, RDFS.subClassOf, restriction_b_node))
+        if relation.destination_concept:
+            dest_concept_uri = owl_class_uri(
+                label=relation.destination_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+        
+        if relation.source_concept and relation.destination_concept:
+            restriction_b_node, restriction_g = create_obj_prop_all_restriction_triples(
+                rel_uri=rel_uri, dest_concept_uri=dest_concept_uri
+            )
+            rdf_graph += restriction_g
+            rdf_graph.add((src_concept_uri, RDFS.subClassOf, restriction_b_node))
 
     return rdf_graph
 
@@ -406,24 +416,28 @@ def kr_relations_to_anonymous_some_equivalent(
     rdf_graph = Graph()
 
     for relation in kr.relations:
+
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
-        src_concept_uri = owl_class_uri(
-            label=relation.source_concept.label, base_uri=base_uri
-        )
-        dest_concept_uri = owl_class_uri(
-            label=relation.destination_concept.label, base_uri=base_uri
-        )
-
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
-        rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
-        rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
 
-        restriction_b_node, restriction_g = create_obj_prop_some_restriction_triples(
-            rel_uri=rel_uri, dest_concept_uri=dest_concept_uri
-        )
-        rdf_graph += restriction_g
+        if relation.source_concept:
+            src_concept_uri = owl_class_uri(
+                label=relation.source_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
 
-        rdf_graph.add((src_concept_uri, OWL.equivalentClass, restriction_b_node))
+        if relation.destination_concept:
+            dest_concept_uri = owl_class_uri(
+                label=relation.destination_concept.label, base_uri=base_uri
+            )
+            rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+
+        if relation.source_concept and relation.destination_concept:
+            restriction_b_node, restriction_g = create_obj_prop_some_restriction_triples(
+                rel_uri=rel_uri, dest_concept_uri=dest_concept_uri
+            )
+            rdf_graph += restriction_g
+            rdf_graph.add((src_concept_uri, OWL.equivalentClass, restriction_b_node))
 
     return rdf_graph
 
