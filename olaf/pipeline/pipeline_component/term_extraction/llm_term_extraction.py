@@ -137,9 +137,9 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
             if label in doc.text:
                 occurrences = set()
                 for string_match in re.finditer(label, doc.text):
-                    occurrences.add(
-                        doc.char_span(string_match.start(), string_match.end())
-                    )
+                    span = doc.char_span(string_match.start(), string_match.end())
+                    if span is not None:
+                        occurrences.add(span)
                 if label in ct_index.keys():
                     ct_index[label].add_corpus_occurrences(occurrences)
                 else:
