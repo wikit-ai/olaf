@@ -191,7 +191,7 @@ class OWLAxiomExtraction(PipelineComponent):
 
         for axiom_generator in self.owl_axiom_generators:
             if axiom_generator in self.individuals_axiom_generators:
-                graph += axiom_generator(kr, self.base_uri)
+                full_graph += axiom_generator(kr, self.base_uri)
 
         return full_graph
 

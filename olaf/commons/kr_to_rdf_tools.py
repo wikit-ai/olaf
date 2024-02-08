@@ -476,22 +476,24 @@ def concept_lrs_to_owl_individuals(
             rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
             rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
 
-            if relation.source_concept not in concepts_lrs_map:
-                for c_lr in relation.source_concept.linguistic_realisations:
-                    concepts_lrs_map[relation.source_concept].add(
-                        owl_instance_uri(label=c_lr.label, base_uri=base_uri)
-                    )
+            if relation.source_concept and relation.destination_concept:
+                
+                if relation.source_concept not in concepts_lrs_map:
+                    for c_lr in relation.source_concept.linguistic_realisations:
+                        concepts_lrs_map[relation.source_concept].add(
+                            owl_instance_uri(label=c_lr.label, base_uri=base_uri)
+                        )
 
-            if relation.destination_concept not in concepts_lrs_map:
-                for c_lr in relation.destination_concept.linguistic_realisations:
-                    concepts_lrs_map[relation.destination_concept].add(
-                        owl_instance_uri(label=c_lr.label, base_uri=base_uri)
-                    )
+                if relation.destination_concept not in concepts_lrs_map:
+                    for c_lr in relation.destination_concept.linguistic_realisations:
+                        concepts_lrs_map[relation.destination_concept].add(
+                            owl_instance_uri(label=c_lr.label, base_uri=base_uri)
+                        )
 
-            concepts_product = product(
-                concepts_lrs_map[relation.source_concept],
-                concepts_lrs_map[relation.destination_concept],
-            )
+                concepts_product = product(
+                    concepts_lrs_map[relation.source_concept],
+                    concepts_lrs_map[relation.destination_concept],
+                )
 
             for source_uri, dest_uri in concepts_product:
                 rdf_graph.add((source_uri, rel_uri, dest_uri))
