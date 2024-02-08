@@ -78,6 +78,7 @@ def american_pizza_ex_kr(american_cheesy_pizza_doc, en_sm_spacy_model) -> Knowle
         Relation(label="has ingredient", source_concept=american_pizza, destination_concept=peperoni_sausage_topping),
         Relation(label="has ingredient", source_concept=american_pizza, destination_concept=tomato_topping),
         Relation(label="has country of origin", source_concept=american_pizza, destination_concept=america_country),
+        Relation(label="has base"),
     }
 
     ex_metarelations = {

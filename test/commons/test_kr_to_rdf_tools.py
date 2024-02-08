@@ -56,7 +56,7 @@ def test_kr_relations_to_owl_obj_props(american_pizza_ex_kr, ms2_base_uri, owl_o
     )
     
     assert len(prop_fragments) == len({rel.label for rel in american_pizza_ex_kr.relations})
-    assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",)}
+    assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",), ("hasBase",)}
 
 def test_kr_metarelations_to_owl_domain_range(
         american_pizza_ex_kr, ms2_base_uri,
@@ -80,7 +80,7 @@ def test_kr_metarelations_to_owl_domain_range(
     )
     
     assert len(prop_fragments) == len({rel.label for rel in american_pizza_ex_kr.relations})
-    assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",)}
+    assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",), ("hasBase",)}
 
     assert domain_range_fragments == {
         ("hasIngredient", "American", "Mozzarella"),
@@ -197,7 +197,7 @@ class Test_kr_relations_to_anonymous_some_parent:
         )
     
         assert len(prop_fragments) == len({rel.label for rel in american_pizza_ex_kr.relations})
-        assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",)}
+        assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",), ("hasBase",)}
 
     def test_kr_relations_to_anonymous_some_parent_restriction(self, american_pizza_ex_kr, relations2subclassSome_g, anonymous_some_parent_sparql_q, ms2_ns, get_sparql_r_res) -> None:
         
@@ -207,7 +207,6 @@ class Test_kr_relations_to_anonymous_some_parent:
             ns={"ms2": ms2_ns}
         )
     
-        assert len(restriction_fragments) == len(american_pizza_ex_kr.relations)
         assert restriction_fragments == {
             ("American", "hasIngredient", "Mozzarella"),
             ("American", "hasIngredient", "Tomato"),
@@ -244,7 +243,7 @@ class Test_kr_relations_to_anonymous_only_parent:
         )
     
         assert len(prop_fragments) == len({rel.label for rel in american_pizza_ex_kr.relations})
-        assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",)}
+        assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",), ("hasBase",)}
 
     def test_kr_relations_to_anonymous_only_parent_restriction(self, american_pizza_ex_kr, relations2subclassOnly_g, anonymous_only_parent_sparql_q, ms2_ns, get_sparql_r_res) -> None:
         
@@ -254,7 +253,6 @@ class Test_kr_relations_to_anonymous_only_parent:
             ns={"ms2": ms2_ns}
         )
     
-        assert len(restriction_fragments) == len(american_pizza_ex_kr.relations)
         assert restriction_fragments == {
             ("American", "hasIngredient", "Mozzarella"),
             ("American", "hasIngredient", "Tomato"),
@@ -291,7 +289,7 @@ class Test_kr_relations_to_anonymous_some_equivalent:
         )
     
         assert len(prop_fragments) == len({rel.label for rel in american_pizza_ex_kr.relations})
-        assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",)}
+        assert prop_fragments == {("hasCountryOfOrigin",), ("hasIngredient",), ("hasBase",)}
 
     def test_kr_relations_to_anonymous_some_equivalent_restriction(self, american_pizza_ex_kr, relations2equivalentSome_g, anonymous_some_equivalent_sparql_q, ms2_ns, get_sparql_r_res) -> None:
         
@@ -301,7 +299,6 @@ class Test_kr_relations_to_anonymous_some_equivalent:
             ns={"ms2": ms2_ns}
         )
     
-        assert len(restriction_fragments) == len(american_pizza_ex_kr.relations)
         assert restriction_fragments == {
             ("American", "hasIngredient", "Mozzarella"),
             ("American", "hasIngredient", "Tomato"),

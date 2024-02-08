@@ -12,79 +12,7 @@ def kr_json() -> dict:
     kr_json_serialised = {
             "concepts": [
                 {
-                    "concept_id": 1749069318176,
-                    "label": "Pepperoni Sausage",
-                    "lrs": [
-                        {
-                            "label": "pepperoni sausage",
-                            "co_texts": [
-                                "pepperoni sausage"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069317696,
-                    "label": "Pizza",
-                    "lrs": [
-                        {
-                            "label": "pizza",
-                            "co_texts": [
-                                "pizza"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069318272,
-                    "label": "Tomato",
-                    "lrs": [
-                        {
-                            "label": "tomato",
-                            "co_texts": [
-                                "tomato"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069317792,
-                    "label": "Cheese",
-                    "lrs": [
-                        {
-                            "label": "cheese",
-                            "co_texts": [
-                                "cheese"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069318368,
-                    "label": "America",
-                    "lrs": [
-                        {
-                            "label": "america",
-                            "co_texts": [
-                                "America"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069317888,
-                    "label": "Cheesy Pizza",
-                    "lrs": [
-                        {
-                            "label": "cheesy pizza",
-                            "co_texts": [
-                                "cheesy pizza"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069318464,
+                    "concept_id": 1423639871008,
                     "label": "Country",
                     "lrs": [
                         {
@@ -96,31 +24,7 @@ def kr_json() -> dict:
                     ]
                 },
                 {
-                    "concept_id": 1749069317984,
-                    "label": "American",
-                    "lrs": [
-                        {
-                            "label": "american",
-                            "co_texts": [
-                                "American"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069318560,
-                    "label": "Non Vegetarian Pizza",
-                    "lrs": [
-                        {
-                            "label": "non vegetarian pizza",
-                            "co_texts": [
-                                "non vegetarian pizza"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "concept_id": 1749069318080,
+                    "concept_id": 1423639870528,
                     "label": "Mozzarella",
                     "lrs": [
                         {
@@ -132,7 +36,103 @@ def kr_json() -> dict:
                     ]
                 },
                 {
-                    "concept_id": 1749069317600,
+                    "concept_id": 1423639868512,
+                    "label": "Pepperoni Sausage",
+                    "lrs": [
+                        {
+                            "label": "pepperoni sausage",
+                            "co_texts": [
+                                "pepperoni sausage"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639871104,
+                    "label": "Cheese",
+                    "lrs": [
+                        {
+                            "label": "cheese",
+                            "co_texts": [
+                                "cheese"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639868128,
+                    "label": "Tomato",
+                    "lrs": [
+                        {
+                            "label": "tomato",
+                            "co_texts": [
+                                "tomato"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639870192,
+                    "label": "Non Vegetarian Pizza",
+                    "lrs": [
+                        {
+                            "label": "non vegetarian pizza",
+                            "co_texts": [
+                                "non vegetarian pizza"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639868224,
+                    "label": "America",
+                    "lrs": [
+                        {
+                            "label": "america",
+                            "co_texts": [
+                                "America"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639870336,
+                    "label": "Pizza",
+                    "lrs": [
+                        {
+                            "label": "pizza",
+                            "co_texts": [
+                                "pizza"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639870864,
+                    "label": "Cheesy Pizza",
+                    "lrs": [
+                        {
+                            "label": "cheesy pizza",
+                            "co_texts": [
+                                "cheesy pizza"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639869856,
+                    "label": "American",
+                    "lrs": [
+                        {
+                            "label": "american",
+                            "co_texts": [
+                                "American"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "concept_id": 1423639870384,
                     "label": "Topping",
                     "lrs": [
                         {
@@ -144,76 +144,82 @@ def kr_json() -> dict:
             ],
             "relations": [
                 {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069318368,
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639868512,
+                    "label": "has ingredient",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639870528,
+                    "label": "has ingredient",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639868224,
                     "label": "has country of origin",
                     "lrs": []
                 },
                 {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069318176,
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639868128,
                     "label": "has ingredient",
                     "lrs": []
                 },
                 {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069318080,
-                    "label": "has ingredient",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069318272,
-                    "label": "has ingredient",
+                    "source_concept_id": None,
+                    "destination_concept_id": None,
+                    "label": "has base",
                     "lrs": []
                 }
             ],
             "metarelations": [
                 {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069317696,
-                    "label": "is_generalised_by",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069318080,
-                    "destination_concept_id": 1749069317792,
-                    "label": "is_generalised_by",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069317792,
-                    "destination_concept_id": 1749069317600,
-                    "label": "is_generalised_by",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069317888,
-                    "label": "is_generalised_by",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069318176,
-                    "destination_concept_id": 1749069317600,
-                    "label": "is_generalised_by",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069318368,
-                    "destination_concept_id": 1749069318464,
-                    "label": "is_generalised_by",
-                    "lrs": []
-                },
-                {
-                    "source_concept_id": 1749069317984,
-                    "destination_concept_id": 1749069318560,
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639870192,
                     "label": "has kind",
                     "lrs": []
                 },
                 {
-                    "source_concept_id": 1749069318080,
-                    "destination_concept_id": 1749069317600,
+                    "source_concept_id": 1423639871104,
+                    "destination_concept_id": 1423639870384,
+                    "label": "is_generalised_by",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639868512,
+                    "destination_concept_id": 1423639870384,
+                    "label": "is_generalised_by",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639870528,
+                    "destination_concept_id": 1423639871104,
+                    "label": "is_generalised_by",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639870864,
+                    "label": "is_generalised_by",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639868224,
+                    "destination_concept_id": 1423639871008,
+                    "label": "is_generalised_by",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639869856,
+                    "destination_concept_id": 1423639870336,
+                    "label": "is_generalised_by",
+                    "lrs": []
+                },
+                {
+                    "source_concept_id": 1423639870528,
+                    "destination_concept_id": 1423639870384,
                     "label": "is_generalised_by",
                     "lrs": []
                 }

@@ -288,11 +288,11 @@ class OWLAxiomExtraction(PipelineComponent):
             source_concept_uri = str(owl_class_uri(
                     label=relation.source_concept.label,
                     base_uri=self.base_uri
-                ))
+                )) if relation.source_concept else None
             dest_concept_uri = str(owl_class_uri(
                     label=relation.destination_concept.label,
                     base_uri=self.base_uri
-                ))
+                )) if relation.destination_concept else None
 
             conditions = [
                 source_concept_uri in unsatisfiable_concept_uris,
@@ -300,8 +300,10 @@ class OWLAxiomExtraction(PipelineComponent):
             ]
             if not any(conditions):
                 new_relations.add(relation)
-                new_concepts.add(relation.source_concept)
-                new_concepts.add(relation.destination_concept)
+                if relation.source_concept:
+                    new_concepts.add(relation.source_concept)
+                if relation.destination_concept:
+                    new_concepts.add(relation.destination_concept)
 
         for relation in kr.metarelations:
             # Potential danger there:
