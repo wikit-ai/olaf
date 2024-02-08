@@ -89,7 +89,7 @@ def american_pizza_owl_classes_frags() -> Set[Tuple[str]]:
 
 @pytest.fixture(scope="module")
 def american_pizza_owl_obj_props_frags() -> Set[Tuple[str]]:
-    expected_rel_fragments = {("hasCountryOfOrigin",), ("hasIngredient",), ('hasKind',)}
+    expected_rel_fragments = {("hasCountryOfOrigin",), ("hasIngredient",), ('hasKind',), ("hasBase",)}
     return expected_rel_fragments
 
 @pytest.fixture(scope="module")
@@ -511,7 +511,7 @@ class Test_update_unsatisfiable_kr_owl_graph:
         )
 
         assert base_axiom_extract_comp_class_fragments == american_pizza_owl_classes_frags
-        assert len(base_axiom_extract_comp_prop_fragments) == 0
+        assert len(base_axiom_extract_comp_prop_fragments) == 1
         assert len(base_axiom_extract_comp_domain_range_fragments) == 0
         assert len(base_axiom_extract_comp_metaprop_fragments) == 0
         assert len(base_axiom_extract_comp_disjoint_classes_fragments) == 0
@@ -558,7 +558,7 @@ class Test_update_unsatisfiable_kr_owl_graph:
         )
 
         assert class_disjoint_axiom_extract_comp_class_fragments == american_pizza_owl_classes_frags
-        assert len(class_disjoint_axiom_extract_comp_prop_fragments) == 0
+        assert len(class_disjoint_axiom_extract_comp_prop_fragments) == 1
         assert len(class_disjoint_axiom_extract_comp_domain_range_fragments) == 0
         assert len(class_disjoint_axiom_extract_comp_metaprop_fragments) == 0
         assert class_disjoint_axiom_extract_comp_disjoint_classes_fragments == american_pizza_disjoint_classes_frags
@@ -566,8 +566,7 @@ class Test_update_unsatisfiable_kr_owl_graph:
 def test_update_kr_external_uris(
         base_axiom_extract_comp, 
         american_pizza_ex_kr,
-        american_pizza_owl_classes_frags,
-        american_pizza_owl_obj_props_frags
+        american_pizza_owl_classes_frags
     ) -> None:
     base_axiom_extract_comp._update_kr_external_uris(kr=american_pizza_ex_kr)
 
@@ -584,7 +583,7 @@ def test_update_kr_external_uris(
     concept_ext_uris_frags = {(uri.replace(base_uri_str, ""),) for uri in concept_ext_uris}
 
     assert concept_ext_uris_frags == american_pizza_owl_classes_frags
-    assert rel_ext_uris_frags == {("hasCountryOfOrigin",), ("hasIngredient",)}
+    assert rel_ext_uris_frags == {("hasCountryOfOrigin",), ("hasIngredient",), ("hasBase",)}
 
 # TODO
 # class Test_run:
