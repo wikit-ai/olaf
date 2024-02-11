@@ -183,10 +183,11 @@ class LLMBasedHierarchisation(PipelineComponent):
                 destination_concept = self._find_concept_by_label(
                     meta_tuple[2], concepts
                 )
-                new_metarelation = Metarelation(
-                    source_concept, destination_concept, "is_generalised_by"
-                )
-                metarelations.add(new_metarelation)
+                if source_concept is not None and destination_concept is not None:
+                    new_metarelation = Metarelation(
+                        source_concept, destination_concept, "is_generalised_by"
+                    )
+                    metarelations.add(new_metarelation)
         except (SyntaxError, ValueError):
             logger.error(
                 """LLM generator output is not in the expected format. 

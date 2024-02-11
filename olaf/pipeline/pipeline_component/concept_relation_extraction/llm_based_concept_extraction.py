@@ -152,7 +152,8 @@ class LLMBasedConceptExtraction(PipelineComponent):
             for cc_group in cc_labels:
                 cc_set = set()
                 for cc_label in cc_group:
-                    cc_set.add(cterm_index[cc_label])
+                    if cc_label in cterm_index.keys():
+                        cc_set.add(cterm_index[cc_label])
                 concept_candidates.append(cc_set)
         except (SyntaxError, ValueError):
             logger.error(

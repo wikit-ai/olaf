@@ -174,7 +174,8 @@ class LLMBasedRelationExtraction(PipelineComponent):
             for rc_group in rc_labels:
                 rc_set = set()
                 for rc_label in rc_group:
-                    rc_set.add(cterm_index[rc_label])
+                    if rc_label in cterm_index.keys():
+                        rc_set.add(cterm_index[rc_label])
                 relation_candidates.append(rc_set)
         except (SyntaxError, ValueError):
             logger.error(

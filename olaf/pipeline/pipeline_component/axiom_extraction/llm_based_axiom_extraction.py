@@ -31,7 +31,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         prompt_template: Optional[Callable[[str], List[Dict[str, str]]]] = None,
         llm_generator: Optional[LLMGenerator] = None,
         doc_context_max_len: Optional[int] = 4000,
-        namespace: Optional[str] = None
+        namespace: Optional[str] = None,
     ) -> None:
         """Initialise LLM-based OWL axiom extraction pipeline component instance.
 
@@ -50,13 +50,17 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
             The namespace used for axiom generation, by default "http://www.ms2.org/o/example#".
         """
         self.prompt_template = (
-            prompt_template if prompt_template is not None else hf_prompt_owl_axiom_extraction
+            prompt_template
+            if prompt_template is not None
+            else hf_prompt_owl_axiom_extraction
         )
         self.llm_generator = (
             llm_generator if llm_generator is not None else HuggingFaceGenerator()
         )
         self.doc_context_max_len = doc_context_max_len
-        self.namespace = namespace if namespace is not None else "http://www.ms2.org/o/example#"
+        self.namespace = (
+            namespace if namespace is not None else "http://www.ms2.org/o/example#"
+        )
         self._check_resources()
 
     def optimise(
@@ -210,7 +214,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         )
         kr_description += ", ".join([item.fragment for res in q_res for item in res])
         kr_description += "\nRelations:\n"
-        
+
         for meta in metarelations:
 
             kr_description = f"({meta.source_concept.label}, {METARELATION_RDFS_OWL_MAP[meta.label].replace('http://www.w3.org/2000/01/rdf-schema#','rdfs:')}, {meta.destination_concept.label})\n"
@@ -259,7 +263,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
 
         if len(pipeline.kr.concepts):
             kr_description = self._concepts_to_text(pipeline.kr.concepts)
-            prompt = self.prompt_template(context, kr_description, self.name)
+            prompt = self.prompt_template(context, kr_description, self.namespace)
             llm_output = self.llm_generator.generate_text(prompt)
             kr_owl_graph += self._llm_output_to_owl_graph(llm_output)
 
