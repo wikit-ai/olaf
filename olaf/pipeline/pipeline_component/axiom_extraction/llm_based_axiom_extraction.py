@@ -20,8 +20,6 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         Prompt template used to give instructions and context to the LLM.
     llm_generator: LLMGenerator
         The LLM model used to generate axioms.
-    doc_context_max_len: int
-        Maximum number of characters for the document context in the prompt.
     namespace: str
         The name space used for axiom generation, by default "http://www.ms2.org/o/example#".
     """
@@ -30,7 +28,6 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         self,
         prompt_template: Optional[Callable[[str], List[Dict[str, str]]]] = None,
         llm_generator: Optional[LLMGenerator] = None,
-        doc_context_max_len: Optional[int] = 4000,
         namespace: Optional[str] = None,
     ) -> None:
         """Initialise LLM-based OWL axiom extraction pipeline component instance.
@@ -43,9 +40,6 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         llm_generator: LLMGenerator, optional
             The LLM model used to generate the axioms.
             By default, the zephyr-7b-beta HuggingFace model is used.
-        doc_context_max_len: int, optional
-            Maximum number of characters for the document context in the prompt.
-            By default, it is set to 4000.
         namespace: str, optional
             The namespace used for axiom generation, by default "http://www.ms2.org/o/example#".
         """
@@ -57,7 +51,6 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         self.llm_generator = (
             llm_generator if llm_generator is not None else HuggingFaceGenerator()
         )
-        self.doc_context_max_len = doc_context_max_len
         self.namespace = (
             namespace if namespace is not None else "http://www.ms2.org/o/example#"
         )
@@ -90,33 +83,6 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
             The pipeline component performance report.
         """
         raise NotImplementedError
-
-    def _extract_popular_docs(self, docs: List[Doc]) -> Set[Doc]:
-        # TODO
-        return set(docs)
-
-    def _generate_doc_context(self, popular_docs: Set[Doc]) -> str:
-        """Create context from documents with a fix size.
-
-        Parameters
-        ----------
-        popular_docs: Set[Doc]
-            SpaCy docs to fill the context with.
-
-        Returns
-        -------
-        str
-            Concatenation of document contents up to a fixed size.
-        """
-        context = ""
-        for doc in popular_docs:
-            if len(doc.text) < self.doc_context_max_len - len(context):
-                context += doc.text
-                context += " "
-            else:
-                context += doc.text[: self.doc_context_max_len - len(context)]
-                break
-        return context
 
     def _concepts_to_text(self, concepts: Set[Concept]) -> str:
         """Create textual description of concepts.
@@ -214,10 +180,8 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         )
         kr_description += ", ".join([item.fragment for res in q_res for item in res])
         kr_description += "\nRelations:\n"
-
         for meta in metarelations:
-
-            kr_description = f"({meta.source_concept.label}, {METARELATION_RDFS_OWL_MAP[meta.label].replace('http://www.w3.org/2000/01/rdf-schema#','rdfs:')}, {meta.destination_concept.label})\n"
+            kr_description += f"({meta.source_concept.label}, {METARELATION_RDFS_OWL_MAP[meta.label].replace('http://www.w3.org/2000/01/rdf-schema#','rdfs:')}, {meta.destination_concept.label})\n"
 
         return kr_description
 
@@ -258,12 +222,9 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
 
         kr_owl_graph = Graph()
 
-        popular_docs = self._extract_popular_docs(pipeline.corpus)
-        context = self._generate_doc_context(popular_docs)
-
         if len(pipeline.kr.concepts):
             kr_description = self._concepts_to_text(pipeline.kr.concepts)
-            prompt = self.prompt_template(context, kr_description, self.namespace)
+            prompt = self.prompt_template(kr_description, self.namespace)
             llm_output = self.llm_generator.generate_text(prompt)
             kr_owl_graph += self._llm_output_to_owl_graph(llm_output)
 
@@ -271,7 +232,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
             kr_description = self._relations_to_text(
                 kr_owl_graph, pipeline.kr.relations
             )
-            prompt = self.prompt_template(context, kr_description, self.namespace)
+            prompt = self.prompt_template(kr_description, self.namespace)
             llm_output = self.llm_generator.generate_text(prompt)
             kr_owl_graph += self._llm_output_to_owl_graph(llm_output)
 
@@ -279,7 +240,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
             kr_description = self._metarelations_to_text(
                 kr_owl_graph, pipeline.kr.metarelations
             )
-            prompt = self.prompt_template(context, kr_description, self.namespace)
+            prompt = self.prompt_template(kr_description, self.namespace)
             llm_output = self.llm_generator.generate_text(prompt)
             kr_owl_graph += self._llm_output_to_owl_graph(llm_output)
 

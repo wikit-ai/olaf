@@ -326,23 +326,21 @@ def hf_prompt_hierarchisation(doc_context: str, concepts_description: str) -> st
 
     Here is an example. Concepts: animal, mammal, dog(canine), flower
     [["mammal","is_generalised_by","animal"], ["dog","is_generalised_by","mammal"], ["dog","is_generalised_by","animal"]]
-    
+ 
     Context: {doc_context}
     {concepts_description}"""
     return prompt_template
 
 
-def hf_prompt_owl_axiom_extraction(
-    doc_context: str, kr_description: str, namespace: str
-) -> str:
+def hf_prompt_owl_axiom_extraction(kr_description: str, namespace: str) -> str:
     """Prompt template for axiom extraction with Hugging Face inference API.
 
     Parameters
     ----------
-    doc_context: str
-        Extract of popular document contents.
     kr_description: str
         Textual description of the knowledge representation.
+    namespace: str
+        The name space used for axiom generation.
 
     Returns
     -------
@@ -350,12 +348,11 @@ def hf_prompt_owl_axiom_extraction(
         Completion prompt template.
     """
     prompt_template = f"""You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.
-    Use the following text to construct an OWL ontology in the Turtle format based on the given concepts and relations.
+    Use the following classes, individuals and relations to construct an OWL ontology in the Turtle.
     Use the following namespace: {namespace}.
     Include the RDF, RDFS, and OWL prefixes.
     Return only the turtle file.
 
-    Text: {doc_context}
 
     {kr_description}
     """
@@ -363,16 +360,16 @@ def hf_prompt_owl_axiom_extraction(
 
 
 def openai_prompt_owl_axiom_extraction(
-    doc_context: str, kr_description: str, namespace: str
+    kr_description: str, namespace: str
 ) -> List[Dict[str, str]]:
     """Prompt template for axiom extraction with ChatCompletion OpenAI model.
 
     Parameters
     ----------
-    doc_context: str
-        Extract of popular document contents.
     kr_description: str
         Textual description of the knowledge representation.
+    namespace: str
+        The name space used for axiom generation.
 
     Returns
     -------
@@ -386,12 +383,11 @@ def openai_prompt_owl_axiom_extraction(
         },
         {
             "role": "user",
-            "content": f"""Use the following text to construct an OWL ontology in the Turtle format based on the given concepts and relations.
+            "content": f"""Use the following classes, individuals and relations to construct an OWL ontology in the Turtle format.
             Use the following namespace: {namespace}.
             Include the RDF, RDFS, and OWL prefixes.
             Return only the turtle file.""",
         },
-        {"role": "user", "content": f"Text: {doc_context}"},
         {"role": "user", "content": kr_description},
     ]
     return prompt_template
