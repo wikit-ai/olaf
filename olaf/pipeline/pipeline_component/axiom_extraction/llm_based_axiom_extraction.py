@@ -180,9 +180,9 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
                     if not (lr.label == relation.label)
                 ]
                 if len(lrs):
-                    kr_description += f"({relation.source_concept.label}, {relation.label} ({', '.join(lrs)}), {relation.destination_concept.label})\n"
+                    kr_description += f"({relation.source_concept.label if relation.source_concept is not None else ''}, {relation.label} ({', '.join(lrs)}), {relation.destination_concept.label if relation.destination_concept is not None else ''})\n"
                 else:
-                    kr_description += f"({relation.source_concept.label}, {relation.label}, {relation.destination_concept.label})\n"
+                    kr_description += f"({relation.source_concept.label if relation.source_concept is not None else ''}, {relation.label}, {relation.destination_concept.label if relation.destination_concept is not None else ''})\n"
                 rel.add(relation.label)
 
         return kr_description
