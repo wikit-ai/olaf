@@ -19,7 +19,7 @@ class LLMBasedHierarchisation(PipelineComponent):
     prompt_template: Callable[[str], List[Dict[str, str]]]
         Prompt template used to give instructions and context to the LLM.
     llm_generator: LLMGenerator
-        The LLM model used to generate the concepts.
+        The LLM model used to generate the concept hierarchy.
     doc_context_max_len: int
         Maximum number of characters for the document context in the prompt.
     """
@@ -38,7 +38,7 @@ class LLMBasedHierarchisation(PipelineComponent):
             Prompt template used to give instructions and context to the LLM.
             By default the concept hierarchisation prompt is used.
         llm_generator: LLMGenerator
-            The LLM model used to generate the concepts.
+            The LLM model used to generate the hierarchy.
             By default, the zephyr-7b-beta HuggingFace model is used.
         doc_context_max_len: int
             Maximum number of characters for the document context in the prompt.
@@ -183,10 +183,11 @@ class LLMBasedHierarchisation(PipelineComponent):
                 destination_concept = self._find_concept_by_label(
                     meta_tuple[2], concepts
                 )
-                new_metarelation = Metarelation(
-                    source_concept, destination_concept, "is_generalised_by"
-                )
-                metarelations.add(new_metarelation)
+                if source_concept is not None and destination_concept is not None:
+                    new_metarelation = Metarelation(
+                        source_concept, destination_concept, "is_generalised_by"
+                    )
+                    metarelations.add(new_metarelation)
         except (SyntaxError, ValueError):
             logger.error(
                 """LLM generator output is not in the expected format. 
