@@ -3,7 +3,7 @@ from collections import defaultdict
 from itertools import product
 from typing import Tuple
 
-from rdflib import OWL, RDF, RDFS, BNode, Graph, URIRef
+from rdflib import OWL, RDF, RDFS, BNode, Graph, Literal, URIRef
 from rdflib.collection import Collection
 
 from ..data_container import KnowledgeRepresentation
@@ -95,6 +95,7 @@ def kr_concepts_to_owl_classes(kr: KnowledgeRepresentation, base_uri: URIRef) ->
     for concept in kr.concepts:
         concept_uri = owl_class_uri(label=concept.label, base_uri=base_uri)
         rdf_graph.add((concept_uri, RDF.type, OWL.Class))
+        rdf_graph.add((concept_uri, RDFS.label, Literal(concept.label)))
 
     return rdf_graph
 
@@ -121,6 +122,7 @@ def kr_relations_to_owl_obj_props(
     for relation in kr.relations:
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+        rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
 
     return rdf_graph
 
@@ -161,10 +163,28 @@ def kr_metarelations_to_owl(
             )
 
             rdf_graph.add((src_concept_uri, rel_uri, dest_concept_uri))
+            rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((src_concept_uri, RDFS.label, Literal(relation.source_concept.label)))
+            rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((dest_concept_uri, RDFS.label, Literal(relation.destination_concept.label)))
 
         else:
             rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
             rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+            rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
+
+            src_concept_uri = owl_class_uri(
+                label=relation.source_concept.label, base_uri=base_uri
+            )
+            dest_concept_uri = owl_class_uri(
+                label=relation.destination_concept.label, base_uri=base_uri
+            )
+
+            rdf_graph.add((src_concept_uri, rel_uri, dest_concept_uri))
+            rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((src_concept_uri, RDFS.label, Literal(relation.source_concept.label)))
+            rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((dest_concept_uri, RDFS.label, Literal(relation.destination_concept.label)))
 
     return rdf_graph
 
@@ -194,6 +214,7 @@ def kr_relations_to_domain_range_obj_props(
     for relation in kr.relations:
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+        rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
 
         if relation.source_concept:
             src_concept_uri = owl_class_uri(
@@ -201,6 +222,7 @@ def kr_relations_to_domain_range_obj_props(
             )
             rdf_graph.add((rel_uri, RDFS.domain, src_concept_uri))
             rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((src_concept_uri, RDFS.label, Literal(relation.source_concept.label)))
 
         if relation.destination_concept:
             dest_concept_uri = owl_class_uri(
@@ -208,6 +230,7 @@ def kr_relations_to_domain_range_obj_props(
             )
             rdf_graph.add((rel_uri, RDFS.range, dest_concept_uri))
             rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((dest_concept_uri, RDFS.label, Literal(relation.destination_concept.label)))
 
     return rdf_graph
 
@@ -237,6 +260,7 @@ def kr_concepts_to_disjoint_classes(
         concept_uri = owl_class_uri(label=concept.label, base_uri=base_uri)
         concept_uris.add(concept_uri)
         rdf_graph.add((concept_uri, RDF.type, OWL.Class))
+        rdf_graph.add((concept_uri, RDFS.label, Literal(concept.label)))
 
     rdf_collection = Collection(graph=rdf_graph, uri=BNode(), seq=list(concept_uris))
     b_node = BNode()
@@ -324,18 +348,21 @@ def kr_relations_to_anonymous_some_parent(
     for relation in kr.relations:
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+        rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
 
         if relation.source_concept:
             src_concept_uri = owl_class_uri(
                 label=relation.source_concept.label, base_uri=base_uri
             )
             rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((src_concept_uri, RDFS.label, Literal(relation.source_concept.label)))
 
         if relation.destination_concept:
             dest_concept_uri = owl_class_uri(
                 label=relation.destination_concept.label, base_uri=base_uri
             )
             rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((dest_concept_uri, RDFS.label, Literal(relation.destination_concept.label)))
 
         if relation.source_concept and relation.destination_concept:
             restriction_b_node, restriction_g = create_obj_prop_some_restriction_triples(
@@ -371,18 +398,21 @@ def kr_relations_to_anonymous_only_parent(
         
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+        rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
 
         if relation.source_concept:
             src_concept_uri = owl_class_uri(
                 label=relation.source_concept.label, base_uri=base_uri
             )
             rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((src_concept_uri, RDFS.label, Literal(relation.source_concept.label)))
 
         if relation.destination_concept:
             dest_concept_uri = owl_class_uri(
                 label=relation.destination_concept.label, base_uri=base_uri
             )
             rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((dest_concept_uri, RDFS.label, Literal(relation.destination_concept.label)))
         
         if relation.source_concept and relation.destination_concept:
             restriction_b_node, restriction_g = create_obj_prop_all_restriction_triples(
@@ -419,18 +449,21 @@ def kr_relations_to_anonymous_some_equivalent(
 
         rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
         rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+        rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
 
         if relation.source_concept:
             src_concept_uri = owl_class_uri(
                 label=relation.source_concept.label, base_uri=base_uri
             )
             rdf_graph.add((src_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((src_concept_uri, RDFS.label, Literal(relation.source_concept.label)))
 
         if relation.destination_concept:
             dest_concept_uri = owl_class_uri(
                 label=relation.destination_concept.label, base_uri=base_uri
             )
             rdf_graph.add((dest_concept_uri, RDF.type, OWL.Class))
+            rdf_graph.add((dest_concept_uri, RDFS.label, Literal(relation.destination_concept.label)))
 
         if relation.source_concept and relation.destination_concept:
             restriction_b_node, restriction_g = create_obj_prop_some_restriction_triples(
@@ -466,37 +499,39 @@ def concept_lrs_to_owl_individuals(
 
         concept_uri = owl_class_uri(label=concept.label, base_uri=base_uri)
         rdf_graph.add((concept_uri, RDF.type, OWL.Class))
+        rdf_graph.add((concept_uri, RDFS.label, Literal(concept.label)))
 
         for c_lr in concept.linguistic_realisations:
             instance_uri = owl_instance_uri(label=c_lr.label, base_uri=base_uri)
             rdf_graph.add((instance_uri, RDF.type, concept_uri))
+            rdf_graph.add((instance_uri, RDF.type, OWL.NamedIndividual))
+            rdf_graph.add((instance_uri, RDFS.label, Literal(c_lr.label)))
 
-        concepts_lrs_map = defaultdict(set)
-        for relation in kr.relations:
-            rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
-            rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+    concepts_lrs_map = defaultdict(set)
+    for relation in kr.relations:
+        rel_uri = owl_obj_prop_uri(label=relation.label, base_uri=base_uri)
+        rdf_graph.add((rel_uri, RDF.type, OWL.ObjectProperty))
+        rdf_graph.add((rel_uri, RDFS.label, Literal(relation.label)))
 
-            if relation.source_concept and relation.destination_concept:
-                
-                if relation.source_concept not in concepts_lrs_map:
-                    for c_lr in relation.source_concept.linguistic_realisations:
-                        concepts_lrs_map[relation.source_concept].add(
-                            owl_instance_uri(label=c_lr.label, base_uri=base_uri)
-                        )
-
-                if relation.destination_concept not in concepts_lrs_map:
-                    for c_lr in relation.destination_concept.linguistic_realisations:
-                        concepts_lrs_map[relation.destination_concept].add(
-                            owl_instance_uri(label=c_lr.label, base_uri=base_uri)
-                        )
-
-                concepts_product = product(
-                    concepts_lrs_map[relation.source_concept],
-                    concepts_lrs_map[relation.destination_concept],
+        if (relation.source_concept is not None) and (relation.source_concept not in concepts_lrs_map):
+            for c_lr in relation.source_concept.linguistic_realisations:
+                concepts_lrs_map[relation.source_concept].add(
+                    owl_instance_uri(label=c_lr.label, base_uri=base_uri)
                 )
 
-            for source_uri, dest_uri in concepts_product:
-                rdf_graph.add((source_uri, rel_uri, dest_uri))
+        if (relation.destination_concept) and (relation.destination_concept not in concepts_lrs_map):
+            for c_lr in relation.destination_concept.linguistic_realisations:
+                concepts_lrs_map[relation.destination_concept].add(
+                    owl_instance_uri(label=c_lr.label, base_uri=base_uri)
+                )
+
+        concepts_product = product(
+            concepts_lrs_map[relation.source_concept],
+            concepts_lrs_map[relation.destination_concept],
+        )
+
+        for source_uri, dest_uri in concepts_product:
+            rdf_graph.add((source_uri, rel_uri, dest_uri))
 
     return rdf_graph
 
@@ -524,10 +559,13 @@ def all_individuals_different(kr: KnowledgeRepresentation, base_uri: URIRef) -> 
     for concept in kr.concepts:
         concept_uri = owl_class_uri(label=concept.label, base_uri=base_uri)
         rdf_graph.add((concept_uri, RDF.type, OWL.Class))
+        rdf_graph.add((concept_uri, RDFS.label, Literal(concept.label)))
 
         for c_lr in concept.linguistic_realisations:
             instance_uri = owl_instance_uri(label=c_lr.label, base_uri=base_uri)
             rdf_graph.add((instance_uri, RDF.type, concept_uri))
+            rdf_graph.add((instance_uri, RDF.type, OWL.NamedIndividual))
+            rdf_graph.add((instance_uri, RDFS.label, Literal(c_lr.label)))
             instance_uris.add(instance_uri)
 
     rdf_collection = Collection(graph=rdf_graph, uri=BNode(), seq=list(instance_uris))
