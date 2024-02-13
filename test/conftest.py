@@ -132,10 +132,49 @@ def owl_classes_sparql_q() -> Namespace:
     return sparql_q
 
 @pytest.fixture(scope="session")
+def owl_classes_labels_sparql_q() -> Namespace:
+    sparql_q = """
+            SELECT ?label WHERE {
+                ?class rdf:type owl:Class ;
+                        rdfs:label ?label .
+            }
+        """
+    return sparql_q
+
+@pytest.fixture(scope="session")
 def owl_obj_props_sparql_q() -> Namespace:
     sparql_q = """
             SELECT ?prop WHERE {
                 ?prop rdf:type owl:ObjectProperty .
+            }
+        """
+    return sparql_q
+
+@pytest.fixture(scope="session")
+def owl_obj_props_labels_sparql_q() -> Namespace:
+    sparql_q = """
+            SELECT ?label WHERE {
+                ?prop rdf:type owl:ObjectProperty .
+                ?prop rdfs:label ?label .
+            }
+        """
+    return sparql_q
+
+@pytest.fixture(scope="session")
+def owl_named_individuals_sparql_q() -> Namespace:
+    sparql_q = """
+            SELECT ?ind WHERE {
+                ?ind rdf:type owl:NamedIndividual .
+            }
+        """
+    return sparql_q
+
+@pytest.fixture(scope="session")
+def owl_named_individuals_labels_sparql_q() -> Namespace:
+    sparql_q = """
+            SELECT ?label WHERE {
+                ?ind rdf:type owl:NamedIndividual .
+                ?ind rdfs:label ?label .
             }
         """
     return sparql_q
@@ -210,7 +249,18 @@ def disjoint_classes_sparql_q() -> Namespace:
     return sparql_q
 
 @pytest.fixture(scope="session")
-def get_sparql_r_res() -> Callable[[str, Graph, Dict[str, Namespace]], Set[Tuple]]:
+def all_diff_individuals_sparql_q() -> Namespace:
+    sparql_q = """
+        SELECT ?diff_ind WHERE {
+                [] rdf:type owl:AllDifferent ;
+                owl:distinctMembers/rdf:rest* ?node .
+                ?node rdf:first ?diff_ind .
+        }
+    """
+    return sparql_q
+
+@pytest.fixture(scope="session")
+def get_sparql_q_res_fragments() -> Callable[[str, Graph, Dict[str, Namespace]], Set[Tuple]]:
     
     def funct(sparql_q: str, graph: Graph, ns: Dict[str, Namespace]) -> Set[Tuple]:
         q_res = graph.query(sparql_q, initNs=ns)
@@ -218,4 +268,15 @@ def get_sparql_r_res() -> Callable[[str, Graph, Dict[str, Namespace]], Set[Tuple
         fragments = {tuple((item.fragment for item in res)) for res in q_res}
 
         return fragments
+    return funct
+
+@pytest.fixture(scope="session")
+def get_sparql_q_label_res() -> Callable[[str, Graph, Dict[str, Namespace]], Set[Tuple]]:
+    
+    def funct(sparql_q: str, graph: Graph, ns: Dict[str, Namespace]) -> Set[Tuple]:
+        q_res = graph.query(sparql_q, initNs=ns)
+
+        labels = {str(res[0]) for res in q_res}
+
+        return labels
     return funct

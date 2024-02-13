@@ -4,9 +4,9 @@ import pytest
 from rdflib import Graph, URIRef
 
 from olaf.commons.kr_to_rdf_tools import (
-    kr_concepts_to_disjoint_classes, kr_concepts_to_owl_classes,
-    kr_metarelations_to_owl, kr_relations_to_domain_range_obj_props,
-    kr_relations_to_owl_obj_props)
+    concept_lrs_to_owl_individuals, kr_concepts_to_disjoint_classes,
+    kr_concepts_to_owl_classes, kr_metarelations_to_owl,
+    kr_relations_to_domain_range_obj_props, kr_relations_to_owl_obj_props)
 from olaf.data_container import KnowledgeRepresentation
 from olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction import \
     OWLAxiomExtraction
@@ -47,6 +47,7 @@ def american_pizza_axiom_generators() -> Set[Callable[[KnowledgeRepresentation, 
         kr_relations_to_owl_obj_props,
         kr_relations_to_domain_range_obj_props,
         kr_metarelations_to_owl,
+        concept_lrs_to_owl_individuals
     }
 
     return axiom_generators
@@ -86,6 +87,24 @@ def american_pizza_owl_classes_frags() -> Set[Tuple[str]]:
             ("Topping",), ("PepperoniSausage",)
         }
     return expected_class_fragments
+
+@pytest.fixture(scope="module")
+def american_pizza_owl_named_individuals_frags() -> Set[Tuple[str]]:
+    expected_individuals_fragments = {
+            ("_nonVegetarianPizza",), ("_american",), ("_country",), ("_cheese",),
+            ("_pizza",), ("_cheesyPizza",), ("_america",), ("_mozzarella",), ("_tomato",),
+            ("_topping",), ("_pepperoniSausage",)
+        }
+    return expected_individuals_fragments
+
+@pytest.fixture(scope="module")
+def american_pizza_owl_named_individuals_labels() -> Set[Tuple[str]]:
+    expected_individuals_labels = {
+            "non vegetarian pizza", "american", "country", "cheese",
+            "pizza", "cheesy pizza", "america", "mozzarella", "tomato",
+            "topping", "pepperoni sausage"
+        }
+    return expected_individuals_labels
 
 @pytest.fixture(scope="module")
 def american_pizza_owl_obj_props_frags() -> Set[Tuple[str]]:
@@ -161,19 +180,19 @@ class Test_build_graph_without_owl_instances:
     def test_owl_classes(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          owl_classes_sparql_q,
                          ms2_ns,
                          american_pizza_ex_kr,
                          american_pizza_owl_classes_frags
                     ) -> None:
-        base_axiom_extract_comp_class_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_class_fragments = get_sparql_q_res_fragments(
             sparql_q=owl_classes_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
 
-        class_disjoint_axiom_extract_comp_class_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_class_fragments = get_sparql_q_res_fragments(
             sparql_q=owl_classes_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -189,19 +208,19 @@ class Test_build_graph_without_owl_instances:
     def test_owl_obj_props(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          owl_obj_props_sparql_q,
                          ms2_ns,
                          american_pizza_owl_obj_props_frags
                     ) -> None:
         
-        base_axiom_extract_comp_prop_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_prop_fragments = get_sparql_q_res_fragments(
                                     sparql_q=owl_obj_props_sparql_q,
                                     graph=base_axiom_extract_comp_graph,
                                     ns={"ms2": ms2_ns}
                                 )
         
-        class_disjoint_axiom_extract_comp_prop_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_prop_fragments = get_sparql_q_res_fragments(
                                     sparql_q=owl_obj_props_sparql_q,
                                     graph=class_disjoint_axiom_extract_comp_graph,
                                     ns={"ms2": ms2_ns}
@@ -213,18 +232,18 @@ class Test_build_graph_without_owl_instances:
     def test_domain_range(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          domain_range_sparql_q,
                          ms2_ns,
                          american_pizza_domain_range_frags
                     ) -> None:
 
-        base_axiom_extract_comp_domain_range_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_domain_range_fragments = get_sparql_q_res_fragments(
             sparql_q=domain_range_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
-        class_disjoint_axiom_extract_domain_range_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_domain_range_fragments = get_sparql_q_res_fragments(
             sparql_q=domain_range_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -236,19 +255,19 @@ class Test_build_graph_without_owl_instances:
     def test_owl_subclasses(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          subclasses_sparql_q,
                          ms2_ns,
                          american_pizza_subclasses_frags
                     ) -> None:
         
-        base_axiom_extract_comp_metaprop_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_metaprop_fragments = get_sparql_q_res_fragments(
             sparql_q=subclasses_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
 
-        class_disjoint_axiom_extract_comp_metaprop_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_metaprop_fragments = get_sparql_q_res_fragments(
             sparql_q=subclasses_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -261,19 +280,19 @@ class Test_build_graph_without_owl_instances:
     def test_disjoint_classes(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          disjoint_classes_sparql_q,
                          ms2_ns
                     ) -> None:
         
 
-        base_axiom_extract_comp_disjoint_classes_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_disjoint_classes_fragments = get_sparql_q_res_fragments(
             sparql_q=disjoint_classes_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
 
-        class_disjoint_axiom_extract_comp_disjoint_classes_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_disjoint_classes_fragments = get_sparql_q_res_fragments(
             sparql_q=disjoint_classes_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -302,19 +321,19 @@ class Test_build_full_graph:
     def test_owl_classes(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          owl_classes_sparql_q,
                          ms2_ns,
                          american_pizza_ex_kr,
                          american_pizza_owl_classes_frags
                     ) -> None:
-        base_axiom_extract_comp_class_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_class_fragments = get_sparql_q_res_fragments(
             sparql_q=owl_classes_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
 
-        class_disjoint_axiom_extract_comp_class_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_class_fragments = get_sparql_q_res_fragments(
             sparql_q=owl_classes_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -330,19 +349,19 @@ class Test_build_full_graph:
     def test_owl_obj_props(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          owl_obj_props_sparql_q,
                          ms2_ns,
                          american_pizza_owl_obj_props_frags
                     ) -> None:
         
-        base_axiom_extract_comp_prop_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_prop_fragments = get_sparql_q_res_fragments(
                                     sparql_q=owl_obj_props_sparql_q,
                                     graph=base_axiom_extract_comp_graph,
                                     ns={"ms2": ms2_ns}
                                 )
         
-        class_disjoint_axiom_extract_comp_prop_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_prop_fragments = get_sparql_q_res_fragments(
                                     sparql_q=owl_obj_props_sparql_q,
                                     graph=class_disjoint_axiom_extract_comp_graph,
                                     ns={"ms2": ms2_ns}
@@ -354,18 +373,18 @@ class Test_build_full_graph:
     def test_domain_range(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          domain_range_sparql_q,
                          ms2_ns,
                          american_pizza_domain_range_frags
                     ) -> None:
 
-        base_axiom_extract_comp_domain_range_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_domain_range_fragments = get_sparql_q_res_fragments(
             sparql_q=domain_range_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
-        class_disjoint_axiom_extract_domain_range_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_domain_range_fragments = get_sparql_q_res_fragments(
             sparql_q=domain_range_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -377,19 +396,19 @@ class Test_build_full_graph:
     def test_owl_subclasses(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          subclasses_sparql_q,
                          ms2_ns,
                          american_pizza_subclasses_frags
                     ) -> None:
         
-        base_axiom_extract_comp_metaprop_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_metaprop_fragments = get_sparql_q_res_fragments(
             sparql_q=subclasses_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
 
-        class_disjoint_axiom_extract_comp_metaprop_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_metaprop_fragments = get_sparql_q_res_fragments(
             sparql_q=subclasses_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -401,20 +420,20 @@ class Test_build_full_graph:
     def test_disjoint_classes(self,
                          base_axiom_extract_comp_graph, 
                          class_disjoint_axiom_extract_comp_graph, 
-                         get_sparql_r_res,
+                         get_sparql_q_res_fragments,
                          disjoint_classes_sparql_q,
                          ms2_ns,
                          american_pizza_disjoint_classes_frags
                     ) -> None:
         
 
-        base_axiom_extract_comp_disjoint_classes_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_disjoint_classes_fragments = get_sparql_q_res_fragments(
             sparql_q=disjoint_classes_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
 
-        class_disjoint_axiom_extract_comp_disjoint_classes_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_disjoint_classes_fragments = get_sparql_q_res_fragments(
             sparql_q=disjoint_classes_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -424,6 +443,31 @@ class Test_build_full_graph:
         assert class_disjoint_axiom_extract_comp_disjoint_classes_fragments == american_pizza_disjoint_classes_frags
 
     # TODO: test OWL named individuals
+    def test_owl_named_individuals(self,
+                                   base_axiom_extract_comp_graph, 
+                                    owl_named_individuals_sparql_q,
+                                    ms2_ns, get_sparql_q_res_fragments,
+                                    owl_named_individuals_labels_sparql_q,
+                                    get_sparql_q_label_res,
+                                    american_pizza_owl_named_individuals_frags,
+                                    american_pizza_owl_named_individuals_labels
+                                ) -> None:
+
+        individuals_fragments = get_sparql_q_res_fragments(
+            sparql_q=owl_named_individuals_sparql_q,
+            graph=base_axiom_extract_comp_graph,
+            ns={"ms2": ms2_ns}
+        )
+
+        individuals_labels = get_sparql_q_label_res(
+            sparql_q=owl_named_individuals_labels_sparql_q,
+            graph=base_axiom_extract_comp_graph,
+            ns={"ms2": ms2_ns}
+        )
+
+        assert individuals_fragments == american_pizza_owl_named_individuals_frags
+
+        assert individuals_labels == american_pizza_owl_named_individuals_labels
 
 # TODO
 # class Test_check_owl_graph_consistency:
@@ -473,7 +517,7 @@ class Test_update_unsatisfiable_kr_owl_graph:
     def test_base_axiom_extract_comp(
             self, 
             base_axiom_extract_comp_graph,
-            get_sparql_r_res,
+            get_sparql_q_res_fragments,
             owl_classes_sparql_q,
             owl_obj_props_sparql_q,
             domain_range_sparql_q,
@@ -483,28 +527,28 @@ class Test_update_unsatisfiable_kr_owl_graph:
             american_pizza_owl_classes_frags
         ) -> None:
 
-        base_axiom_extract_comp_class_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_class_fragments = get_sparql_q_res_fragments(
                                         sparql_q=owl_classes_sparql_q,
                                         graph=base_axiom_extract_comp_graph,
                                         ns={"ms2": ms2_ns}
                                     )
 
-        base_axiom_extract_comp_prop_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_prop_fragments = get_sparql_q_res_fragments(
                                     sparql_q=owl_obj_props_sparql_q,
                                     graph=base_axiom_extract_comp_graph,
                                     ns={"ms2": ms2_ns}
                                 )
-        base_axiom_extract_comp_domain_range_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_domain_range_fragments = get_sparql_q_res_fragments(
             sparql_q=domain_range_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
-        base_axiom_extract_comp_metaprop_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_metaprop_fragments = get_sparql_q_res_fragments(
             sparql_q=subclasses_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
-        base_axiom_extract_comp_disjoint_classes_fragments = get_sparql_r_res(
+        base_axiom_extract_comp_disjoint_classes_fragments = get_sparql_q_res_fragments(
             sparql_q=disjoint_classes_sparql_q,
             graph=base_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
@@ -519,7 +563,7 @@ class Test_update_unsatisfiable_kr_owl_graph:
     def test_class_disjoint_axiom_extract_comp(
             self, 
             class_disjoint_axiom_extract_comp_graph,
-            get_sparql_r_res,
+            get_sparql_q_res_fragments,
             owl_classes_sparql_q,
             owl_obj_props_sparql_q,
             domain_range_sparql_q,
@@ -530,28 +574,28 @@ class Test_update_unsatisfiable_kr_owl_graph:
             american_pizza_disjoint_classes_frags
         ) -> None:
 
-        class_disjoint_axiom_extract_comp_class_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_class_fragments = get_sparql_q_res_fragments(
                                         sparql_q=owl_classes_sparql_q,
                                         graph=class_disjoint_axiom_extract_comp_graph,
                                         ns={"ms2": ms2_ns}
                                     )
 
-        class_disjoint_axiom_extract_comp_prop_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_prop_fragments = get_sparql_q_res_fragments(
                                     sparql_q=owl_obj_props_sparql_q,
                                     graph=class_disjoint_axiom_extract_comp_graph,
                                     ns={"ms2": ms2_ns}
                                 )
-        class_disjoint_axiom_extract_comp_domain_range_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_domain_range_fragments = get_sparql_q_res_fragments(
             sparql_q=domain_range_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
-        class_disjoint_axiom_extract_comp_metaprop_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_metaprop_fragments = get_sparql_q_res_fragments(
             sparql_q=subclasses_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
         )
-        class_disjoint_axiom_extract_comp_disjoint_classes_fragments = get_sparql_r_res(
+        class_disjoint_axiom_extract_comp_disjoint_classes_fragments = get_sparql_q_res_fragments(
             sparql_q=disjoint_classes_sparql_q,
             graph=class_disjoint_axiom_extract_comp_graph,
             ns={"ms2": ms2_ns}
