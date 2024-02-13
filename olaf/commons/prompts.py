@@ -348,7 +348,7 @@ def hf_prompt_owl_axiom_extraction(kr_description: str, namespace: str) -> str:
         Completion prompt template.
     """
     prompt_template = f"""You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.
-    Use the following classes, individuals and relations to construct an OWL ontology in the Turtle.
+    Use the following classes, individuals and relations to construct an OWL ontology in the Turtle format.
     Use the following namespace: {namespace}.
     Include the RDF, RDFS, and OWL prefixes.
     Return only the turtle file.
@@ -379,7 +379,7 @@ def openai_prompt_owl_axiom_extraction(
     prompt_template = [
         {
             "role": "system",
-            "content": "You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages..",
+            "content": "You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.",
         },
         {
             "role": "user",
