@@ -45,9 +45,9 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         Parameters
         ----------
         candidate_term_threshold : float, optional
-            The c-value score threshold below which terms will be ignored. Default to 0.0.
+            The c-value score threshold below which terms will be ignored, by defaut 0.0.
         max_term_token_length : int, optional
-            The maximum number of tokens a term can have. Default to 5.
+            The maximum number of tokens a term can have, by defaut 5.
         token_sequences_doc_attribute : str, optional
             The name of the spaCy doc custom attribute containing the sequences of tokens to
             form the corpus for the c-value computation. Default is None which default to the full doc.
@@ -56,7 +56,7 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
             Default is None which default to the candidate_term_threshold.
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
-            and before assigning the extracted candidate terms to the pipeline. Default to None.
+            and before assigning the extracted candidate terms to the pipeline, by default None.
         """
 
         super().__init__(cts_post_processing_functions)

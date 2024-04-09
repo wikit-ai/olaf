@@ -26,12 +26,12 @@ class CTsToConceptExtraction(PipelineComponent):
 
         Parameters
         ----------
-        parameters : Optional[Dict[str, Any]]
+        parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning.
-        options : Optional[Dict[str, Any]]
+            They are necessary for the component functioning, by default None.
+        options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance.
+            component performance, by default None.
         """
         super().__init__(parameters, options)
 

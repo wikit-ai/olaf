@@ -29,10 +29,10 @@ class LLMBasedTermEnrichment(PipelineComponent):
 
         Parameters
         ----------
-        prompt_template: Callable[[str], List[Dict[str, str]]]
+        prompt_template: Callable[[str], List[Dict[str, str]]], optional
             Prompt template used to give instructions and context to the LLM.
             By default the term enrichment prompt is used.
-        llm_generator: LLMGenerator
+        llm_generator: LLMGenerator, optional
             The LLM model used to generate the enrichment.
             By default, the zephyr-7b-beta HuggingFace model is used.
         """

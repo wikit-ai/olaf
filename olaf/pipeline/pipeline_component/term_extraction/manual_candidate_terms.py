@@ -16,10 +16,10 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
     ----------
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
-        and before assigning the extracted candidate terms to the pipeline. Default to None.
+        and before assigning the extracted candidate terms to the pipeline, by default None.
     parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning. By default dict().
+        They are necessary for the component functioning, by default dict().
     options: Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the component performance.
         By default dict().
@@ -45,13 +45,13 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         ----------
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
-            and before assigning the extracted candidate terms to the pipeline. Default to None.
+            and before assigning the extracted candidate terms to the pipeline, by default None.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning. By default dict().
+            They are necessary for the component functioning, by default dict().
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance. By default dict().
+            component performance, by default dict().
         """
         super().__init__(cts_post_processing_functions, parameters, options)
 

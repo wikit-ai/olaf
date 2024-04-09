@@ -20,9 +20,9 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     options : Dict[str, Any] | None, optional
         Options are tunable parameters which will be updated to optimise the
         component performance, by default None.
-    use_synonyms: Optional[bool]
+    use_synonyms: bool, optional
         Wether to use the existing candidate terms synonyms, by default True.
-    enrichment_kinds: Optional[Set[str]]
+    enrichment_kinds: Set[str], optional
         The kinds of enrichments to perform. Accepted values are: 'synonyms' (default), 'antonyms',
         'hypernyms', and 'hyponyms'. Other values will be ignored.
     """
@@ -44,7 +44,7 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
             by default None.
         options : Dict[str, Any] | None, optional
             Options are tunable parameters which will be updated to optimise the
-            component performance, by default None
+            component performance, by default None.
         """
         super().__init__(parameters, options)
         self.knowledge_source = knowledge_source

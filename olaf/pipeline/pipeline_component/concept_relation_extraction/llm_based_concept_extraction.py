@@ -34,15 +34,14 @@ class LLMBasedConceptExtraction(PipelineComponent):
 
         Parameters
         ----------
-        prompt_template: Callable[[str], List[Dict[str, str]]]
+        prompt_template: Callable[[str], List[Dict[str, str]]], optional
             Prompt template used to give instructions and context to the LLM.
             By default the concept extraction prompt is used.
-        llm_generator: LLMGenerator
+        llm_generator: LLMGenerator, optional
             The LLM model used to generate the concepts.
             By default, the zephyr-7b-beta HuggingFace model is used.
-        doc_context_max_len: int
-            Maximum number of characters for the document context in the prompt.
-            By default, it is set to 4000.
+        doc_context_max_len: int, optional
+            Maximum number of characters for the document context in the prompt, by defaut 4000.
         """
         self.prompt_template = (
             prompt_template

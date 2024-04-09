@@ -54,7 +54,7 @@ class LLMBasedRelationExtraction(PipelineComponent):
         concept_max_distance: int, optional
             The maximum distance between the candidate term and the concept sought.
             Set to 5 by default if not specified.
-        scope: str
+        scope: str, optional
             Scope used to search concepts. Can be "doc" for the entire document or "sent" for
             the candidate term "sentence". Set to "doc" by default if not specified.
         """

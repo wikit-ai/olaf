@@ -33,9 +33,9 @@ class Concept(DataContainer):
         ----------
         label : str
             The concept human readable label.
-        external_uids : Optional[Set[str]]
+        external_uids : Set[str], optional
             External unique identifiers found for the concept, by default set().
-        linguistic_realisations : Optional[Set[LinguisticRealisation]]
+        linguistic_realisations : Set[LinguisticRealisation], optional
             The concept linguistic realisations, i.e. instances of the concept in the text corpus,
             by default None.
         """

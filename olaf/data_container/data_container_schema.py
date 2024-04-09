@@ -12,7 +12,7 @@ class DataContainer(ABC):
     ----------
     uid : str
         The unique identifier for the container.
-    external_uids : Optional[Set[str]]
+    external_uids : Set[str], optional
         External unique identifiers found for the data container.
     label : str
         The human readable label for the data container.
@@ -30,12 +30,12 @@ class DataContainer(ABC):
 
         Parameters
         ----------
-        label : Optional[str], optional
+        label : str, optional
             The unique identifier for the container, by default None
-        external_uids : Optional[Set[str]], optional
-            External unique identifiers found for the data container., by default set()
-        linguistic_realisations : Optional[Set[LinguisticRealisation]], optional
-            Instances or realisations of a concept or a relation in the text corpus.,
+        external_uids : Set[str], optional
+            External unique identifiers found for the data container, by default set()
+        linguistic_realisations : Set[LinguisticRealisation], optional
+            Instances or realisations of a concept or a relation in the text corpus,
             by default None
         """
         self.uid = str(uuid4())

@@ -27,7 +27,7 @@ class CandidateTerm:
             The candidate term human readable label.
         corpus_occurrences : Set[spacy.tokens.Span]
             Set of corpus occurrences for the candidate term.
-        enrichment : Optional[Enrichment]
+        enrichment : Enrichment, optional
             Enrichment information for the candidate term, by default None.
         """
         self.label = label

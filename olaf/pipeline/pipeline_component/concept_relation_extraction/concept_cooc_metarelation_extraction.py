@@ -52,10 +52,10 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
             create a metarelation. Default to co-occurrence count > self.threshold.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning.
+            They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance.
+            component performance, by default None.
         """
         super().__init__(parameters, options)
 
