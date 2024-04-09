@@ -23,7 +23,7 @@ git clone https://gitlab.insa-rouen.fr/msesboue/ontology-learning.git
 cd ontology-learning
 python3 -m venv ./venv
 source venv/bin/active
-pip install -r requirements.txt
+pip install .
 ```
 
 ## Quick-start
