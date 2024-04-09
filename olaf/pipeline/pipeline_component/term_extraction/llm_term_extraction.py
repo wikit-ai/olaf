@@ -20,6 +20,9 @@ class LLMTermExtraction(TermExtractionPipelineComponent):
         Prompt template used to give instructions and context to the LLM.
     llm_generator: LLMGenerator
         The LLM model used to generate the candidate terms.
+    cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
+        A list of candidate term post processing functions to run after candidate term extraction
+        and before assigning the extracted candidate terms to the pipeline. Default to None.
     """
 
     def __init__(
