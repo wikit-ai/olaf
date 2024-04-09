@@ -1,5 +1,6 @@
 annotated-types==0.6.0
 anyio==4.3.0
+anyio==4.3.0
 blis==0.7.11
 catalogue==2.0.10
 certifi==2023.7.22
@@ -10,12 +11,16 @@ confection==0.1.3
 coverage==7.3.2
 cymem==2.0.8
 distro==1.9.0
+distro==1.9.0
 en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.1/en_core_web_md-3.7.1-py3-none-any.whl
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0-py3-none-any.whl
 exceptiongroup==1.1.3
 filelock==3.13.1
 fr-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-3.7.0/fr_core_news_sm-3.7.0-py3-none-any.whl
 fsspec==2023.10.0
+h11==0.14.0
+httpcore==1.0.5
+httpx==0.27.0
 h11==0.14.0
 httpcore==1.0.5
 httpx==0.27.0
@@ -58,6 +63,7 @@ sentencepiece==0.1.99
 six==1.16.0
 smart-open==6.4.0
 sniffio==1.3.1
+sniffio==1.3.1
 spacy==3.7.2
 spacy-legacy==3.0.12
 spacy-loggers==1.0.5
@@ -72,6 +78,7 @@ torch==2.1.0
 torchvision==0.16.0
 tqdm==4.66.1
 transformers==4.35.0
+triton==2.1.0
 triton==2.1.0
 typer==0.9.0
 typing_extensions==4.8.0
