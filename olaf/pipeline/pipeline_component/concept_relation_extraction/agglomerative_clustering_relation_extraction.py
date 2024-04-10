@@ -17,38 +17,34 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    candidate_relations: List[CandidateRelations]
-        List of candidate relations to extract relations from.
-    nb_clusters: int
+    candidate_relations: List[CandidateRelations], optional
+        List of candidate relations to extract relations from, by default None.
+    nb_clusters: int, optional
         Number of clusters to find with the agglomerative clustering algorithm.
-        It must be None if distance_threshold is not None.
-        Set to 2 by default.
-    metric: str
+        It must be None if distance_threshold is not None, by default 2.
+    metric: str, optional
         Metric used to compute the linkage.
-        Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”.
-        If set to None then “cosine” is used.
-    linkage: str
+        Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default cosine.
+    linkage: str, optional
         Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.
-        Can be “ward”, “complete”, “average”, “single”.
-        If set to None then “average” is used.
-    distance_threshold: float
+        Can be “ward”, “complete”, “average”, “single”, by default "average".
+    distance_threshold: float, optional
         The linkage distance threshold at or above which clusters will not be merged.
-        If not None, n_clusters must be None.
-    embedding_model: str
+        If not None, n_clusters must be None, by default None.
+    embedding_model: str, optional
         Name of the embedding model to use.
-        The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html.
+        The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
+        by default None.
     concept_max_distance: int, optional
-        The maximum distance between the candidate term and the concept sought.
-        Set to 5 by default if not specified.
-    scope: str
+        The maximum distance between the candidate term and the concept sought, by defautl 5.
+    scope: str, optional
         Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
-        candidate term "sentence".
-        Set to "doc" by default if not specified.
-    parameters: Dict[str, Any]
+        candidate term "sentence", by default "sentence".
+    parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
+        They are necessary for the component functioning, by default None.
+    options: Dict[str, Any], optional
+        Options are tunable parameters which will be updated to optimise the component performance, by default None.
     """
 
     def __init__(
