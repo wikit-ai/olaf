@@ -21,7 +21,7 @@ class SemanticBasedEnrichment(PipelineComponent):
         By default the threshold is set to 0.9.
     """
 
-    def __init__(self, threshold: Optional[int] = None) -> None:
+    def __init__(self, threshold: Optional[int] = 0.9) -> None:
         """Initialise semantic based term enrichment instance.
 
         Parameters
@@ -32,7 +32,7 @@ class SemanticBasedEnrichment(PipelineComponent):
         """
         super().__init__()
 
-        self.threshold = 0.9 if threshold is None else threshold
+        self.threshold = threshold
         self._check_resources()
 
     def _check_resources(self) -> None:
