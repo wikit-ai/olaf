@@ -18,7 +18,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         A list of candidate term post processing functions to run after candidate term extraction
         and before assigning the extracted candidate terms to the pipeline, by default None.
     span_processing: Callable[[spacy.tokens.Span],str], optional
-        A function to process span, by default None, by default None.
+        A function to process span, by default None.
     _pos_selection: List[str]
         List of POS tags to select in the corpus.
     _token_sequences_doc_attribute: str
@@ -57,7 +57,6 @@ class POSTermExtraction(TermExtractionPipelineComponent):
             They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the component performance
-           , by default None.
            , by default None.
         """
         super().__init__(cts_post_processing_functions, parameters, options)
