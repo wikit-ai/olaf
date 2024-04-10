@@ -38,8 +38,8 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise part-of-speech term extraction pipeline component instance.
 

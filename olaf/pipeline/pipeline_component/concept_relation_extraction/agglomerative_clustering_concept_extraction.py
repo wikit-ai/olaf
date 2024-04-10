@@ -18,19 +18,19 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
     ----------
     candidate_terms: List[CandidateTerm]
         List of candidate terms to extract concepts from.
-    nb_clusters: int | None
+    nb_clusters: int 
         Number of clusters to find with the agglomerative clustering algorithm.
         It must be None if distance_threshold is not None.
         Set to 2 by default.
-    metric: str | None
+    metric: str 
         Metric used to compute the linkage.
         Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”.
         If set to None then “cosine” is used.
-    linkage: str | None
+    linkage: str 
         Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.
         Can be “ward”, “complete”, “average”, “single”.
         If set to None then “average” is used.
-    distance_threshold: float | None
+    distance_threshold: float 
         The linkage distance threshold at or above which clusters will not be merged.
         If not None, n_clusters must be None.
     embedding_model: str
@@ -45,16 +45,16 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
 
     def __init__(
         self,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any]  = None,
+        options: Dict[str, Any]  = None,
     ) -> None:
         """Initialise agglomerative clustering-based concept extraction instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any] | None, optional
+        parameters : Dict[str, Any] , optional
             Parameters used to configure the component.
-        options : Dict[str, Any] | None, optional
+        options : Dict[str, Any] , optional
             Tunable options to use to optimise the component performance.
         """
         super().__init__(parameters, options)

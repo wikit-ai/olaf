@@ -44,8 +44,8 @@ class DomainRangeOWLSerialiser(BaseOWLSerialiser):
     def __init__(
         self,
         base_uri: str,
-        metarelation_map: Dict[str, Namespace] | None = None,
-        keep_all_labels: bool | None = True,
+        metarelation_map: Dict[str, Namespace] = None,
+        keep_all_labels: bool = True,
     ) -> None:
         super().__init__(base_uri, metarelation_map, keep_all_labels)
 

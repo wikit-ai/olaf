@@ -17,14 +17,14 @@ class SynonymConceptExtraction(PipelineComponent):
         This component has no options to optimise.
     """
 
-    def __init__(self, parameters: Dict[str, Any] | None = None, options: Dict[str, Any] | None = None) -> None:
+    def __init__(self, parameters: Dict[str, Any] = None, options: Dict[str, Any] = None) -> None:
         """Initialise synonym grouping concept extraction instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any] | None, optional
+        parameters : Dict[str, Any], optional
             Parameters used to configure the component, by default None.
-        options : Dict[str, Any] | None, optional
+        options : Dict[str, Any], optional
             Tunable options to use to optimise the component performance, by default None.
         """
         super().__init__(parameters, options)

@@ -159,7 +159,7 @@ class LLMBasedHierarchisation(PipelineComponent):
 
     def _create_metarelations(
         self, llm_output: str, concepts: Set[Concept]
-    ) -> Set[Metarelation] | None:
+    ) -> Set[Metarelation]:
         """Create metarelations based on the LLM output.
 
         Parameters

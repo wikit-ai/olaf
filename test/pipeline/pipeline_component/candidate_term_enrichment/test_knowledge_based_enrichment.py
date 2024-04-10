@@ -70,7 +70,7 @@ def pipeline(candidate_terms, en_sm_spacy_model) -> Pipeline:
 
 
 class MockKnowledgeSource(KnowledgeSource):
-    def __init__(self, parameters: Dict[str, Any] | None = None) -> None:
+    def __init__(self, parameters: Dict[str, Any] = None) -> None:
         super().__init__(parameters)
 
     def _check_parameters(self) -> None:

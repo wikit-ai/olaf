@@ -19,10 +19,10 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
     ----------
     knowledge_source : KnowledgeSource
         The source of knowledge to use for relation matching.
-    parameters : Dict[str, Any] | None, optional
+    parameters : Dict[str, Any], optional
         Parameters are fixed values to be defined when building the knowledge source,
         by default None.
-    options : Dict[str, Any] | None, optional
+    options : Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the
         component performance, by default None.
     group_ct_on_synonyms: bool, optional
@@ -40,8 +40,8 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise knowledge based relation extraction instance.
 
@@ -49,10 +49,10 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         ----------
         knowledge_source : KnowledgeSource
             The source of knowledge to use for relation matching.
-        parameters : Dict[str, Any] | None, optional
+        parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the knowledge source,
             by default None.
-        options : Dict[str, Any] | None, optional
+        options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
             component performance, by default None.
         """
