@@ -12,7 +12,7 @@ class Concept(DataContainer):
     ----------
     uid : str
         The concept unique identifier.
-    external_uids : Set[str]
+    external_uids : Set[str], optional
         External unique identifiers found for the concept, by default None.
     label : str
         The concept human readable label.

@@ -69,7 +69,7 @@ class OWLAxiomExtraction(PipelineComponent):
             The function to generate the OWL axioms.
         base_uri : Union[str, URIRef], optional
             The base URI to use when creating the concepts and relations URIs, 
-            by "http://www.ms2.org/o/example#".
+            by default "http://www.ms2.org/o/example#".
         reasoner : str, optional
             The reasoner to use, by default "ELK".
             Reasoning is performed using the ROBOT CLI: <https://robot.obolibrary.org/reason>.

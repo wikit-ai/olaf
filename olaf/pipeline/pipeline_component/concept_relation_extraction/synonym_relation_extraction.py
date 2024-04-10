@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from ....commons.candidate_term_tools import group_cts_on_synonyms
 from ....commons.logging_config import logger
@@ -11,12 +11,12 @@ class SynonymRelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    parameters: Dict[str, Any]
+    parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        This component do not need parameters to run.
+        This component do not need parameters to run, by default None.
     options: Dict[str, Any]
         Options are tunable parameters which will be updated to optimise the component performance.
-        This component has no options to optimise.
+        This component has no options to optimise, by default None.
     concept_max_distance: int, optional
         The maximum distance between the candidate term and the concept sought.
         Set to 5 by default if not specified.
@@ -28,8 +28,8 @@ class SynonymRelationExtraction(PipelineComponent):
 
     def __init__(
         self,
-        parameters: Dict[str, Any] = None,
-        options: Dict[str, Any] = None,
+        parameters: Optional[Dict[str, Any]] = None,
+        options: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Initialise synonym grouping relation extraction instance.
 
