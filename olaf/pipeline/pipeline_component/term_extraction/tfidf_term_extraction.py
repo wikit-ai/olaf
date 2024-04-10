@@ -23,11 +23,11 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         and before assigning the extracted candidate terms to the pipeline, by default None.
     parameters : Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning, by default dict().
+        They are necessary for the component functioning, by default None.
     options : Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the
-        component performance, by default dict().
-    token_sequence_preprocessing : Optional[Callable[[spacy.tokens.span.Span],Tuple[str]]]
+        component performance, by default None.
+    token_sequence_preprocessing : Callable[[spacy.tokens.span.Span],Tuple[str]], optional
         By default None.
     _token_sequences_doc_attribute : str
         The name of the spaCy doc custom attribute containing the sequences of tokens to
@@ -67,17 +67,17 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         Parameters
         ----------
         token_sequence_preprocessing: Callable[[spacy.tokens.span.Span],Tuple[str]], optional
-            A function to preprocess token sequences composing the corpus.
+            A function to preprocess token sequences composing the corpus, by default None.
             The function should return a tuple of token texts.
         cts_post_processing_functions: Callable[[Set[CandidateTerm]], Set[CandidateTerm]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default dict().
+            They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance, by default dict().
+            component performance, by default None.
         """
 
         super().__init__(cts_post_processing_functions, parameters, options)

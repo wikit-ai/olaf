@@ -13,12 +13,12 @@ class TermExtractionPipelineComponent(PipelineComponent):
     ----------
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
-        and before assigning the extracted candidate terms to the pipeline.
-    parameters: Dict[str, Any]
+        and before assigning the extracted candidate terms to the pipeline, by default None.
+    parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
+        They are necessary for the component functioning, by default None.
+    options: Dict[str, Any], optional
+        Options are tunable parameters which will be updated to optimise the component performance, by default None.
     """
 
     def __init__(

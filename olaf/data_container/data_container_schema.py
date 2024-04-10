@@ -31,12 +31,12 @@ class DataContainer(ABC):
         Parameters
         ----------
         label : str, optional
-            The unique identifier for the container, by default None
+            The unique identifier for the container, by default None.
         external_uids : Set[str], optional
-            External unique identifiers found for the data container, by default set()
+            External unique identifiers found for the data container, by default None.
         linguistic_realisations : Set[LinguisticRealisation], optional
             Instances or realisations of a concept or a relation in the text corpus,
-            by default None
+            by default None.
         """
         self.uid = str(uuid4())
         self.external_uids = external_uids if external_uids is not None else set()
