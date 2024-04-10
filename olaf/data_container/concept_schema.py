@@ -13,7 +13,7 @@ class Concept(DataContainer):
     uid : str
         The concept unique identifier.
     external_uids : Set[str]
-        External unique identifiers found for the concept, by default set().
+        External unique identifiers found for the concept, by default None.
     label : str
         The concept human readable label.
     linguistic_realisations : Set[LinguisticRealisation]
@@ -34,7 +34,7 @@ class Concept(DataContainer):
         label : str
             The concept human readable label.
         external_uids : Set[str], optional
-            External unique identifiers found for the concept, by default set().
+            External unique identifiers found for the concept, by default None.
         linguistic_realisations : Set[LinguisticRealisation], optional
             The concept linguistic realisations, i.e. instances of the concept in the text corpus,
             by default None.

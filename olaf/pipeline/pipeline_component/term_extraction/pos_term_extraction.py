@@ -17,8 +17,8 @@ class POSTermExtraction(TermExtractionPipelineComponent):
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
         and before assigning the extracted candidate terms to the pipeline, by default None.
-    span_processing: Optional[Callable[[spacy.tokens.Span],str]]=None
-        A function to process span.
+    span_processing: Callable[[spacy.tokens.Span],str], optional
+        A function to process span, by default None.
     _pos_selection: List[str]
         List of POS tags to select in the corpus.
     _token_sequences_doc_attribute: str
@@ -26,10 +26,10 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         If None, the entire doc is used.
     parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning, by default dict().
+        They are necessary for the component functioning, by default None.
     options: Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the component performance
-       , by default dict().
+       , by default None.
     """
 
     def __init__(
@@ -45,17 +45,17 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         Parameters
         ----------
-        span_processing: Optional[Callable[[spacy.tokens.Span],str]]
+        span_processing: Callable[[spacy.tokens.Span],str], optional
             A function to process span.
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default dict().
+            They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the component performance
-           , by default dict().
+           , by default None.
         """
         super().__init__(cts_post_processing_functions, parameters, options)
 

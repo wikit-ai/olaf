@@ -32,8 +32,8 @@ class Metarelation(Relation):
     label : METARELATION_TYPE
         The metarelation type.
     external_uids : Set[str], optional
-        An external unique identifier for the metarelation, by default set().
-    linguistic_realisations : Set[LinguisticRealisation]
+        An external unique identifier for the metarelation, by default None.
+    linguistic_realisations : Set[LinguisticRealisation], optional
         The metarelation linguistic realisations, i.e. instances of the metarelation in the
         text corpus, by default None.
     """
@@ -43,7 +43,7 @@ class Metarelation(Relation):
         source_concept: Concept,
         destination_concept: Concept,
         label: str,
-        external_uids: Set[Optional[str]] = None,
+        external_uids: Optional[Set[str]] = None,
         linguistic_realisations: Optional[Set[LinguisticRealisation]] = None,
     ) -> None:
         """Initialise MetaRelation instance.
@@ -56,9 +56,9 @@ class Metarelation(Relation):
             The destination concept in the metarelation triple.
         label : METARELATION_TYPE
             The metarelation type.
-        external_uids: Set[Optional[str]], optional
-            An external unique identifier for the metarelation, by default set().
-        linguistic_realisations : Optional[Set[LinguisticRealisation]]
+        external_uids: Set[str], optional
+            An external unique identifier for the metarelation, by default None.
+        linguistic_realisations : Set[LinguisticRealisation], optional
             The metarelation linguistic realisations, by default None.
         """
         super().__init__(
