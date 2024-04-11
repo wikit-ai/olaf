@@ -86,7 +86,7 @@ def pipeline(en_sm_spacy_model) -> Pipeline:
 class TestAgglomerativeClusteringExtractionParameters:
     def test_default_values(self, default_parameters, default_options):
         agglo_clustering = AgglomerativeClusteringConceptExtraction(
-            parameters=default_parameters, options=default_options
+            **default_parameters, **default_options
         )
         assert agglo_clustering._nb_clusters == 2
         assert agglo_clustering._metric == "cosine"
@@ -96,33 +96,33 @@ class TestAgglomerativeClusteringExtractionParameters:
 
     def test_wrong_option_nb_clusters(self, wrong_option_nb_clusters):
         with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(options=wrong_option_nb_clusters)
+            AgglomerativeClusteringConceptExtraction(**wrong_option_nb_clusters)
 
     def test_wrong_option_metric(self, wrong_option_metric):
         with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(options=wrong_option_metric)
+            AgglomerativeClusteringConceptExtraction(**wrong_option_metric)
 
     def test_wrong_option_linkage(self, wrong_option_linkage):
         with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(options=wrong_option_linkage)
+            AgglomerativeClusteringConceptExtraction(**wrong_option_linkage)
 
     def test_wrong_option_distance_threshold(self, wrong_option_distance_threshold):
         with pytest.raises(OptionError):
             AgglomerativeClusteringConceptExtraction(
-                options=wrong_option_distance_threshold
+                **wrong_option_distance_threshold
             )
 
     def test_wrong_parameter_embedding_model(self, wrong_parameter_embedding_model):
         with pytest.raises(ParameterError):
             AgglomerativeClusteringConceptExtraction(
-                parameters=wrong_parameter_embedding_model
+                **wrong_parameter_embedding_model
             )
 
 
 class TestAgglomerativeClusteringExtractionProcess:
     def test_run(self, good_parameters, good_options, pipeline):
         agglo = AgglomerativeClusteringConceptExtraction(
-            parameters=good_parameters, options=good_options
+            **good_parameters, **good_options
         )
         agglo.run(pipeline)
 

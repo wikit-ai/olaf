@@ -24,8 +24,6 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        # parameters: Dict[str, Any] = None,
-        # options: Dict[str, Any] = None,
         use_synonyms : Optional[bool] = True,
         enrichment_kinds : Optional[Set[str]] = {"synonyms"}
     ) -> None:

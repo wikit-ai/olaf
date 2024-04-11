@@ -34,38 +34,46 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         Name of the embedding model to use.
         The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
         by default None.
-    parameters: Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the pipeline, by default None.
-        They are necessary for the component functioning.
-    options: Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the component performance,
-        by default None.
     """
 
     def __init__(
         self,
-        parameters: Dict[str, Any] = None,
-        options: Dict[str, Any] = None,
+        nb_clusters: Optional[int] = None,
+        metric: Optional[str] = "cosine",
+        linkage: Optional[str] = "average",
+        distance_threshold: Optional[float] = None,
+        embedding_model: Optional[str] = "all-mpnet-base-v2",
     ) -> None:
         """Initialise agglomerative clustering-based concept extraction instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any] , optional
-            Parameters used to configure the component, by default None.
-        options : Dict[str, Any] , optional
-            Tunable options to use to optimise the component performance, by default None.
+        nb_clusters: int, optional
+            Number of clusters to find with the agglomerative clustering algorithm.
+            It must be None if distance_threshold is not None, by default 2.
+        metric: str, optional
+            Metric used to compute the linkage.
+            Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default "cosine".
+        linkage: str, optional
+            Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.
+            Can be “ward”, “complete”, “average”, “single”, by default "average".
+        distance_threshold: float, optional
+            The linkage distance threshold at or above which clusters will not be merged.
+            If not None, n_clusters must be None, by default None.
+        embedding_model: str, optional
+            Name of the embedding model to use.
+            The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
+            by default None.
         """
-        super().__init__(parameters, options)
+        super().__init__({}, {})
         self.candidate_terms = None
-        self._nb_clusters = None
-        self._metric = None
-        self._linkage = None
-        self._distance_threshold = None
-        self._embedding_model = None
+        self._nb_clusters = nb_clusters
+        self._metric = metric
+        self._linkage = linkage
+        self._distance_threshold = distance_threshold
+        self._embedding_model = embedding_model
         self._check_parameters()
-        self._check_options()
-
+        
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set or errors are raised.
 
@@ -75,90 +83,68 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             Exception raised when a required parameter is missing or a wrong value is provided.
         """
 
-        embedding_model = self.parameters.get("embedding_model")
 
-        if embedding_model:
-            if not isinstance(embedding_model, str):
+        if self._embedding_model:
+            if not isinstance(self._embedding_model, str):
                 raise ParameterError(
                     component_name=self.__class__,
                     param_name="embedding_model",
                     error_type="Wrong value type",
                 )
-            self._embedding_model = embedding_model
         else:
             logger.warning(
                 "No value given for embedding_model parameter, default will be set to all-mpnet-base-v2."
             )
             self._embedding_model = "all-mpnet-base-v2"
 
-    def _check_options(self) -> None:
-        """Check wether required options are given and correct. If this is not the case, suitable default ones are set or errors are raised.
-
-        Raises
-        ------
-        OptionError
-            Exception raised when a required option is missing or a wrong value is provided.
-        """
-        nb_clusters = self.options.get("nb_clusters")
-        metric = self.options.get("metric")
-        linkage = self.options.get("linkage")
-        distance_threshold = self.options.get("distance_threshold")
-
-        if nb_clusters:
-            if not isinstance(nb_clusters, int):
+        if self._nb_clusters:
+            if not isinstance(self._nb_clusters, int):
                 raise OptionError(
                     component_name=self.__class__,
                     option_name="nb_clusters",
                     error_type="Wrong value type",
                 )
-            self._nb_clusters = nb_clusters
+            self._distance_threshold = None
 
-        elif not distance_threshold:
+        elif self._distance_threshold is None:
             logger.warning(
-                "No value given for nb_clusters option, default will be set to 2."
+                "No value given for both nb_clusters and distance_threshold options, default will be set to 2 for nb_cluster,"
+                "and None for distance_threshold"
             )
             self._nb_clusters = 2
+        else:
+            if not isinstance(self._distance_threshold, float):
+                raise OptionError(
+                    component_name=self.__class__,
+                    option_name="distance_threshold",
+                    error_type="Wrong value type",
+                )
 
-        if metric:
-            if not isinstance(metric, str):
+        if self._metric:
+            if  self._metric not in ["euclidean", "l1", "l2", "manhattan", "cosine", "precomputed"]:
                 raise OptionError(
                     component_name=self.__class__,
                     option_name="metric",
                     error_type="Wrong value type",
                 )
-            self._metric = metric
         else:
             logger.warning(
                 "No value given for metric option, default will be set to cosine."
             )
             self._metric = "cosine"
 
-        if linkage:
-            if not isinstance(metric, str):
+        if self._linkage:
+            if self._linkage not in ["ward", "complete", "average", "single"]:
                 raise OptionError(
                     component_name=self.__class__,
                     option_name="linkage",
                     error_type="Wrong value type",
                 )
-            self._linkage = linkage
         else:
             logger.warning(
                 "No value given for linkage option, default will be set to average."
             )
             self._linkage = "average"
-
-        if distance_threshold:
-            if not isinstance(distance_threshold, float):
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="distance_threshold",
-                    error_type="Wrong value type",
-                )
-            self._distance_threshold = distance_threshold
-        else:
-            logger.warning(
-                "No value given for distance_threshold option, default will be set to None."
-            )
 
     def optimise(self) -> None:
         # TODO
