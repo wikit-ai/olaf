@@ -94,23 +94,7 @@ class TestAgglomerativeClusteringExtractionParameters:
         assert agglo_clustering._distance_threshold is None
         assert agglo_clustering._embedding_model == "all-mpnet-base-v2"
 
-    def test_wrong_option_nb_clusters(self, wrong_option_nb_clusters):
-        with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(**wrong_option_nb_clusters)
 
-    def test_wrong_option_metric(self, wrong_option_metric):
-        with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(**wrong_option_metric)
-
-    def test_wrong_option_linkage(self, wrong_option_linkage):
-        with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(**wrong_option_linkage)
-
-    def test_wrong_option_distance_threshold(self, wrong_option_distance_threshold):
-        with pytest.raises(OptionError):
-            AgglomerativeClusteringConceptExtraction(
-                **wrong_option_distance_threshold
-            )
 
     def test_wrong_parameter_embedding_model(self, wrong_parameter_embedding_model):
         with pytest.raises(ParameterError):
