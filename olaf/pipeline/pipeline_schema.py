@@ -51,16 +51,16 @@ class Pipeline():
         ----------
         spacy_model: spacy.language.Language
             The spacy model used to represent text corpus.
-        pipeline_components: Optional[List[PipelineComponent]] 
-            The ontology learning pipeline components that build the knowledge representation from the corpus.
-        preprocessing_components: Optional[List[DataPreprocessing]]
-            The pipeline components specific to preprocessing.
+        pipeline_components: List[PipelineComponent], optional 
+            The ontology learning pipeline components that build the knowledge representation from the corpus, by default None.
+        preprocessing_components: List[DataPreprocessing], optional
+            The pipeline components specific to preprocessing, by default None.
         corpus_loader: CorpusLoader
             The component that loads the text corpus in the format used by the framework, i.e., a List[spacy.tokens.doc.Doc].
-        corpus: Optional[List[spacy.tokens.doc.Doc]]
-            The preprocessed corpus the knowledge representation is built from.
-        seed_kr: Optional[KnowledgeRepresentation]
-            An initial knowledge representation to work with.
+        corpus: List[spacy.tokens.doc.Doc], optional
+            The preprocessed corpus the knowledge representation is built from, by default None.
+        seed_kr: KnowledgeRepresentation, optional
+            An initial knowledge representation to work with, by default None.
         """
         self.pipeline_components = pipeline_components
         self.preprocessing_components = preprocessing_components

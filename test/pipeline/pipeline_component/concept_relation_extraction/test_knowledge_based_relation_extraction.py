@@ -83,7 +83,7 @@ def pipeline(
 
 
 class MockKnowledgeSource(KnowledgeSource):
-    def __init__(self, parameters: Dict[str, Any] | None = None) -> None:
+    def __init__(self, parameters: Dict[str, Any] = None) -> None:
         super().__init__(parameters)
 
     def _check_parameters(self) -> None:

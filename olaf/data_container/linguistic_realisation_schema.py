@@ -30,8 +30,8 @@ class LinguisticRealisation(ABC):
         label : str
             The linguistic realisation human readable label.
             The string should appear in one of the corpus occurrences or be a metarelation type.
-        corpus_occurrences : Optional[Set[CORPUS_OCCURRENCE]]
-            The linguistic realisation occurrences in the corpus.
+        corpus_occurrences : Set[CORPUS_OCCURRENCE], optional
+            The linguistic realisation occurrences in the corpus, by default None.
         """
         self.label = label
         self.corpus_occurrences = corpus_occurrences if corpus_occurrences else set()
@@ -93,8 +93,8 @@ class ConceptLR(LinguisticRealisation):
         label : str
             The linguistic realisation human readable label.
             The string should appear in one of the corpus occurrences.
-        corpus_occurrences : Optional[Set[spacy.tokens.Span]]
-            The concept linguistic realisation occurrences in the corpus.
+        corpus_occurrences : Set[spacy.tokens.Span], optional
+            The concept linguistic realisation occurrences in the corpus, by default None.
         """
         super().__init__(label, corpus_occurrences)
 
@@ -147,8 +147,8 @@ class RelationLR(LinguisticRealisation):
         label : str
             The linguistic realisation human readable label.
             The string should appear in one of the corpus occurrences.
-        corpus_occurrences : Optional[Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]]
-            The relation linguistic realisation occurrences in the corpus.
+        corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]], optional
+            The relation linguistic realisation occurrences in the corpus, by defautl None.
         """
         super().__init__(label, corpus_occurrences)
 
@@ -198,8 +198,8 @@ class MetaRelationLR(LinguisticRealisation):
         label : str
             The linguistic realisation human readable label.
             The string should be a metarelation type.
-        corpus_occurrences : Optional[Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]]
-            The relation linguistic realisation occurrences in the corpus.
+        corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]], optional
+            The relation linguistic realisation occurrences in the corpus, by default None.
         """
         super().__init__(label, corpus_occurrences)
 

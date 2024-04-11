@@ -19,9 +19,9 @@ class Relation(DataContainer):
         The source concept in the relation triple, by default None.
     destination_concept : Concept, optional
         The destination concept in the relation triple, by default None.
-    external_uids : Set[str]
-        External unique identifiers found for the relation., by default set().
-    linguistic_realisations : Set[LinguisticRealisation]
+    external_uids : Set[str], optional
+        External unique identifiers found for the relation, by default None.
+    linguistic_realisations : Set[LinguisticRealisation], optional
         The relation linguistic realisations, i.e. instances of the relation in the text corpus,
         by default None.
     """
@@ -45,7 +45,7 @@ class Relation(DataContainer):
         destination_concept : Concept, optional
             The destination concept in the relation triple, by default None.
         external_uids : Set[str], optional
-            External unique identifiers found for the relation., by default set().
+            External unique identifiers found for the relation., by default None.
         linguistic_realisations : Set[LinguisticRealisation], optional
             The relation linguistic realisations, by default None.
         """

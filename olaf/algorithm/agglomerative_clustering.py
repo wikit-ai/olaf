@@ -20,14 +20,14 @@ class AgglomerativeClustering:
         ----------
         training_instances: List[Any]
             List of value to cluster.
-        nb_clusters: Optional[int] = 2
-            Number of cluster to find.
-        metric: Optional[str] = "cosine",
-            Metric used to compute similarity between values.
-        linkage: Optional[str] = "average",
-            Type of linkage used for the algorithm.
-        distance_threshold: Optional[float] = None
-            Distance threshold to stop the clustering.
+        nb_clusters: int, optional
+            Number of cluster to find, by default 2.
+        metric: str, optional
+            Metric used to compute similarity between values, by default "cosine".
+        linkage: str, optional
+            Type of linkage used for the algorithm, by default "average".
+        distance_threshold: float, optional
+            Distance threshold to stop the clustering, by default None.
 
         Raises
         ------

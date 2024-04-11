@@ -16,20 +16,21 @@ class POSTermExtraction(TermExtractionPipelineComponent):
     ----------
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
-        and before assigning the extracted candidate terms to the pipeline. Default to None.
-    span_processing: Optional[Callable[[spacy.tokens.Span],str]]=None
-        A function to process span.
+        and before assigning the extracted candidate terms to the pipeline, by default None.
+    span_processing: Callable[[spacy.tokens.Span],str], optional
+        A function to process span, by default None.
     _pos_selection: List[str]
         List of POS tags to select in the corpus.
-    _token_sequences_doc_attribute: str
+    _token_sequences_doc_attribute: str, optional
         Attribute indicating which sequences to use for processing.
         If None, the entire doc is used.
     parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning. By default dict().
+        They are necessary for the component functioning, by default None.
+        They are necessary for the component functioning, by default None.
     options: Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the component performance.
-        By default dict().
+        Options are tunable parameters which will be updated to optimise the component performance
+       , by default None.
     """
 
     def __init__(
@@ -38,24 +39,24 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise part-of-speech term extraction pipeline component instance.
 
         Parameters
         ----------
-        span_processing: Optional[Callable[[spacy.tokens.Span],str]]
-            A function to process span.
+        span_processing: Callable[[spacy.tokens.Span],str], optional
+            A function to process span, default to spaCy orth_.lower().
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
-            and before assigning the extracted candidate terms to the pipeline. Default to None.
+            and before assigning the extracted candidate terms to the pipeline, by default None.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning. By default dict().
+            They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the component performance.
-            By default dict().
+            Options are tunable parameters which will be updated to optimise the component performance,
+            by default None.
         """
         super().__init__(cts_post_processing_functions, parameters, options)
 
@@ -83,14 +84,14 @@ class POSTermExtraction(TermExtractionPipelineComponent):
             else:
                 logger.warning(
                     """User defined POS term extraction token sequence attribute %s not set on spaCy Doc.
-                    By default the system will use the entire content of the document.""",
+                   By default the system will use the entire content of the document.""",
                     user_defined_attribute_name,
                 )
 
         else:
             logger.warning(
                 """POS term extraction token sequence attribute not set by the user.
-                By default the system will use the entire content of the document."""
+               By default the system will use the entire content of the document."""
             )
 
         pos_selection = self.parameters.get("pos_selection")
@@ -100,7 +101,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         else:
             logger.warning(
                 """POS selection not set by the user.
-                By default the system will use the NOUN part-of-speech tag."""
+               By default the system will use the NOUN part-of-speech tag."""
             )
             self._pos_selection = ["NOUN"]
 

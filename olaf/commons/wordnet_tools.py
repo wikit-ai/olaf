@@ -149,7 +149,7 @@ def spacy2wordnet_pos(spacy_pos: str) -> Optional[str]:
 
     Returns
     -------
-    Optional[str]
+    str, optional
         The WordNet POS tag.
     """
     return _WN_POS_MAPPING.get(spacy_pos)

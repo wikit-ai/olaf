@@ -14,15 +14,15 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     ----------
     knowledge_source : KnowledgeSource
         The source of knowledge to use for enrichment.
-    parameters : Dict[str, Any] | None, optional
+    parameters : Dict[str, Any], optional
         Parameters are fixed values to be defined when building the knowledge source,
         by default None.
-    options : Dict[str, Any] | None, optional
+    options : Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the
         component performance, by default None.
-    use_synonyms: Optional[bool]
+    use_synonyms: bool, optional
         Wether to use the existing candidate terms synonyms, by default True.
-    enrichment_kinds: Optional[Set[str]]
+    enrichment_kinds: Set[str], optional
         The kinds of enrichments to perform. Accepted values are: 'synonyms' (default), 'antonyms',
         'hypernyms', and 'hyponyms'. Other values will be ignored.
     """
@@ -30,8 +30,8 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise knowledge based concept extraction instance.
 
@@ -39,12 +39,12 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
         ----------
         knowledge_source : KnowledgeSource
             The source of knowledge to use for concept matching.
-        parameters : Dict[str, Any] | None, optional
+        parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the knowledge source,
             by default None.
-        options : Dict[str, Any] | None, optional
+        options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance, by default None
+            component performance, by default None.
         """
         super().__init__(parameters, options)
         self.knowledge_source = knowledge_source

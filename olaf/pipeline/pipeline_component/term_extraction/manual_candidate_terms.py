@@ -16,13 +16,13 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
     ----------
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
-        and before assigning the extracted candidate terms to the pipeline. Default to None.
+        and before assigning the extracted candidate terms to the pipeline, by default None.
     parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning. By default dict().
+        They are necessary for the component functioning, by default None.
     options: Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the component performance.
-        By default dict().
+        By default None.
     ct_label_strings_map: Dict[str, Set[str]]
         The mapping of candidate term label and their matching strings.
         Optional only if a custom spaCy phrase matcher is provided.
@@ -45,13 +45,13 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         ----------
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
-            and before assigning the extracted candidate terms to the pipeline. Default to None.
+            and before assigning the extracted candidate terms to the pipeline, by default None.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning. By default dict().
+            They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance. By default dict().
+            component performance, by default None.
         """
         super().__init__(cts_post_processing_functions, parameters, options)
 

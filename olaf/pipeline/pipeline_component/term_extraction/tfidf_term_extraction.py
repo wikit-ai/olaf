@@ -20,24 +20,24 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
     ----------
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
-        and before assigning the extracted candidate terms to the pipeline. Default to None.
+        and before assigning the extracted candidate terms to the pipeline, by default None.
     parameters : Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning. By default dict().
+        They are necessary for the component functioning, by default None.
     options : Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the
-        component performance. By default dict().
-    token_sequence_preprocessing : Optional[Callable[[spacy.tokens.span.Span],Tuple[str]]]
-        Default to None.
+        component performance, by default None.
+    token_sequence_preprocessing : Callable[[spacy.tokens.span.Span],Tuple[str]], optional
+        By default None.
     _token_sequences_doc_attribute : str
         The name of the spaCy doc custom attribute containing the sequences of tokens to
         form the corpus for the c-value computation. Default is None which default to the full doc.
     _max_term_token_length : int
         The maximum number of tokens a term can have.
     tfidf_agg_type : Union["MEAN", "MAX"]
-        The operation to use to aggregate TF-IDF values of candidate terms. Default to "MEAN".
+        The operation to use to aggregate TF-IDF values of candidate terms, by default "MEAN".
     candidate_term_threshold : float
-        The TF-IDF score threshold below which terms will be ignored. Default to 0.0.
+        The TF-IDF score threshold below which terms will be ignored, by default 0.0.
     _ngram_range : Tuple[int, int]
         The ngram range for the TF-IDF vectorizer.
     _custom_tokenizer : Callable[[str], List[str]]
@@ -66,18 +66,18 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
 
         Parameters
         ----------
-        token_sequence_preprocessing: Optional[Callable[[spacy.tokens.span.Span],Tuple[str]]]
-            A function to preprocess token sequences composing the corpus.
+        token_sequence_preprocessing: Callable[[spacy.tokens.span.Span],Tuple[str]], optional
+            A function to preprocess token sequences composing the corpus, by default None.
             The function should return a tuple of token texts.
-        cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
+        cts_post_processing_functions: Callable[[Set[CandidateTerm]], Set[CandidateTerm]], optional
             A list of candidate term post processing functions to run after candidate term extraction
-            and before assigning the extracted candidate terms to the pipeline. Default to None.
+            and before assigning the extracted candidate terms to the pipeline, by default None.
         parameters : Dict[str, Any], optional
             Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning. By default dict().
+            They are necessary for the component functioning, by default None.
         options : Dict[str, Any], optional
             Options are tunable parameters which will be updated to optimise the
-            component performance. By default dict().
+            component performance, by default None.
         """
 
         super().__init__(cts_post_processing_functions, parameters, options)

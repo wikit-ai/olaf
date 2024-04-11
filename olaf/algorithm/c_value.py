@@ -48,12 +48,12 @@ class Cvalue:
         corpus_terms: List[str]
             The list of strings extracted from the corpus to extract the terms from.
             The strings should be space-tokenised.
-        max_term_token_length : Optional[int]
+        max_term_token_length : int, optional
             The maximum number of tokens a term can have, by default None.
             If not provided, the default value will be set to the maximum token length of candidate terms.
-        stop_list : Optional[Set[str]]
+        stop_list : Set[str], optional
             A set of stop words that should not appear in a term, by default set().
-        c_value_threshold : Optional[float]
+        c_value_threshold : float, optional
             A threshold to decide wether or not a term should be added to the candidate terms, by default 0.0.
             The default value is set to 0.0 if there is no threshold.
         """

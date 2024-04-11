@@ -290,7 +290,7 @@ class BaseOWLSerialiser:
         file_path : str
             The file path where the RDF graph will be exported.
         rdf_format : str, optional
-            The RDF serialization format, e.g., 'turtle', 'xml', 'json-ld'. Defaults to 'turtle'.
+            The RDF serialization format, e.g., 'turtle', 'xml', 'json-ld', by default 'turtle'.
         """
         if not self._graph:
             logger.warning(

@@ -12,8 +12,8 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
 
     Attributes
     ----------
-    token_sequence_doc_attribute: Optional[str]
-        Name of the spaCy doc attribute containing the selected tokens. Default to "selected_tokens".
+    token_sequence_doc_attribute: str, Optional
+        Name of the spaCy doc attribute containing the selected tokens, by default "selected_tokens".
     """
 
     def __init__(
@@ -28,7 +28,7 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
         selector : Callable[[spacy.tokens.Token],bool]
             Callable function that implements the token selection criterion.
         token_sequence_doc_attribute: str, optional
-            Name of the spaCy doc attribute containing the selected tokens. Default to "selected_tokens".
+            Name of the spaCy doc attribute containing the selected tokens, by default to "selected_tokens".
 
         Raises
         ------

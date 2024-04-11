@@ -16,25 +16,25 @@ class SubsumptionHierarchisation(PipelineComponent):
     ----------
     threshold : float, optional
         Threshold used to validate the subsumption relation or not, by default 0.5.
-    parameters: Dict[str, Any] | None, optional
+    parameters: Dict[str, Any], optional
         Parameters are fixed values to be defined when building the pipeline, by default None.
         This component do not need parameters to run.
-    options: Dict[str, Any] | None, optional
+    options: Dict[str, Any], optional
         Options are tunable parameters which will be updated to optimise the component performance, by default None.
     """
 
     def __init__(
         self,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise subsumption hierarchisation instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any] | None, optional
+        parameters : Dict[str, Any], optional
             Parameters used to configure the component, by default None.
-        options : Dict[str, Any] | None, optional
+        options : Dict[str, Any], optional
             Tunable options to use to optimise the component performance, by default None.
         """
         super().__init__(parameters, options)

@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -18,44 +18,43 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
     ----------
     candidate_terms: List[CandidateTerm]
         List of candidate terms to extract concepts from.
-    nb_clusters: int | None
+    nb_clusters: int, optional
         Number of clusters to find with the agglomerative clustering algorithm.
-        It must be None if distance_threshold is not None.
-        Set to 2 by default.
-    metric: str | None
+        It must be None if distance_threshold is not None, by default 2.
+    metric: str, optional
         Metric used to compute the linkage.
-        Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”.
-        If set to None then “cosine” is used.
-    linkage: str | None
+        Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default "cosine".
+    linkage: str, optional
         Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.
-        Can be “ward”, “complete”, “average”, “single”.
-        If set to None then “average” is used.
-    distance_threshold: float | None
+        Can be “ward”, “complete”, “average”, “single”, by default "average".
+    distance_threshold: float, optional
         The linkage distance threshold at or above which clusters will not be merged.
-        If not None, n_clusters must be None.
-    embedding_model: str
+        If not None, n_clusters must be None, by default None.
+    embedding_model: str, optional
         Name of the embedding model to use.
-        The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html.
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
+        The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
+        by default None.
+    parameters: Dict[str, Any], optional
+        Parameters are fixed values to be defined when building the pipeline, by default None.
         They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
+    options: Dict[str, Any], optional
+        Options are tunable parameters which will be updated to optimise the component performance,
+        by default None.
     """
 
     def __init__(
         self,
-        parameters: Dict[str, Any] | None = None,
-        options: Dict[str, Any] | None = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise agglomerative clustering-based concept extraction instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any] | None, optional
-            Parameters used to configure the component.
-        options : Dict[str, Any] | None, optional
-            Tunable options to use to optimise the component performance.
+        parameters : Dict[str, Any] , optional
+            Parameters used to configure the component, by default None.
+        options : Dict[str, Any] , optional
+            Tunable options to use to optimise the component performance, by default None.
         """
         super().__init__(parameters, options)
         self.candidate_terms = None

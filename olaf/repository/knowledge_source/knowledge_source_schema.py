@@ -16,8 +16,9 @@ class KnowledgeSource(ABC):
 
         Parameters
         ----------
-        parameters : Optional[Dict[str, Any]]
-            Parameters are fixed values to be defined when building the knowledge source.
+        parameters : Dict[str, Any], optional
+            Parameters are fixed values to be defined when building the knowledge source,
+            by default None.
         """
         self.parameters = parameters if parameters else dict()
 
