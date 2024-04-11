@@ -58,8 +58,8 @@ def custom_tfidf_term_extraction(
         token_sequence_preprocessing=lambda span: [
             token.lower_.strip() for token in span
         ],
-        parameters=example_params,
-        options=example_options,
+        **example_params,
+        **example_options,
     )
     return term_extraction
 
@@ -202,8 +202,8 @@ class TestTFIDFprocess:
             token_sequence_preprocessing=lambda span: [
                 token.lower_.strip() for token in span
             ],
-            parameters=example_params,
-            options=example_options,
+            **example_params,
+            **example_options,
         )
 
         pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=example_corpus)

@@ -19,18 +19,11 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         and before assigning the extracted candidate terms to the pipeline, by default None.
     span_processing: Callable[[spacy.tokens.Span],str], optional
         A function to process span, by default None.
-    _pos_selection: List[str]
-        List of POS tags to select in the corpus.
+    _pos_selection: List[str]; optional
+        List of POS tags to select in the corpus, by default ["NOUN"].
     _token_sequences_doc_attribute: str, optional
         Attribute indicating which sequences to use for processing.
         If None, the entire doc is used.
-    parameters: Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning, by default None.
-        They are necessary for the component functioning, by default None.
-    options: Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the component performance
-       , by default None.
     """
 
     def __init__(
@@ -39,8 +32,8 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        parameters: Dict[str, Any] = None,
-        options: Dict[str, Any] = None,
+        pos_selection: Optional[List[str]] = ["NOUN"],
+        token_sequences_doc_attribute: Optional[str] = None
     ) -> None:
         """Initialise part-of-speech term extraction pipeline component instance.
 
@@ -51,14 +44,13 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the component performance,
-            by default None.
+        pos_selection: List[str], optional
+            List of POS tags to select in the corpus, by default ["NOUN"].
+        token_sequences_doc_attribute: str, optional
+            Attribute indicating which sequences to use for processing.
+            If None, the entire doc is used.
         """
-        super().__init__(cts_post_processing_functions, parameters, options)
+        super().__init__(cts_post_processing_functions)
 
         if (span_processing is None) or not callable(span_processing):
             logger.warning(
@@ -68,37 +60,28 @@ class POSTermExtraction(TermExtractionPipelineComponent):
         else:
             self.span_processing = span_processing
 
-        self._pos_selection = None
-        self._token_sequences_doc_attribute = None
+        self._pos_selection = pos_selection
+        self._token_sequences_doc_attribute = token_sequences_doc_attribute
         self._check_parameters()
 
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set."""
-        user_defined_attribute_name = self.parameters.get(
-            "token_sequence_doc_attribute"
-        )
-
-        if user_defined_attribute_name:
-            if spacy.tokens.Doc.has_extension(user_defined_attribute_name):
-                self._token_sequences_doc_attribute = user_defined_attribute_name
-            else:
+        if user_defined_attribute_name := self._token_sequences_doc_attribute:
+            if not spacy.tokens.Doc.has_extension(user_defined_attribute_name):
                 logger.warning(
                     """User defined POS term extraction token sequence attribute %s not set on spaCy Doc.
                    By default the system will use the entire content of the document.""",
                     user_defined_attribute_name,
                 )
-
         else:
             logger.warning(
                 """POS term extraction token sequence attribute not set by the user.
                By default the system will use the entire content of the document."""
             )
 
-        pos_selection = self.parameters.get("pos_selection")
 
-        if pos_selection:
-            self._pos_selection = pos_selection
-        else:
+
+        if not self._pos_selection:
             logger.warning(
                 """POS selection not set by the user.
                By default the system will use the NOUN part-of-speech tag."""

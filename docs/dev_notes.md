@@ -105,8 +105,6 @@ classDiagram
 
 	class PipelineComponent{
 		<<abstract>>
-		+dict[str, Any] parameters
-		+dict[str, Any] options
 
 		-check_resources()
 		+optimise()

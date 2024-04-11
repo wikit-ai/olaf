@@ -65,7 +65,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
             by default None.
         """
-        super().__init__({}, {})
+        super().__init__()
         self.candidate_terms = None
         self._nb_clusters = nb_clusters
         self._metric = metric

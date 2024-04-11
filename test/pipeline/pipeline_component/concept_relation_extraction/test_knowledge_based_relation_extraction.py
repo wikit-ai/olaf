@@ -171,7 +171,7 @@ class TestKnowledgeBasedRelationExtractionNoMerge:
     ) -> KnowledgeBasedRelationExtraction:
         params = {"group_ct_on_synonyms": False}
         relation_extraction = KnowledgeBasedRelationExtraction(
-            mock_knowledge_source, parameters=params
+            mock_knowledge_source, **params
         )
         return relation_extraction
 

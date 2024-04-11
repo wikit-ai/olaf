@@ -1,38 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 
 class PipelineComponent(ABC):
     """A pipeline component is part of a pipeline performing one specific task.
-
-    Attributes
-    ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
     """
 
     def __init__(
         self,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
+        #*kwargs
     ) -> None:
         """Initialise PipelineComponent instance.
-
-        Parameters
-        ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
         """
-
-        self.parameters = parameters if parameters else dict()
-        self.options = options if options else dict()
 
     @abstractmethod
     def _check_resources(self) -> None:

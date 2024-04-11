@@ -15,24 +15,19 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
     metarelation_creation_metric: Callable[[int], bool], optional
         The function to define based on the concept co-occurrence count whether or not to create a
-        metarelation. Default to co-occurrence count > self.threshold.
+        metarelation, by default co-occurrence count > self.threshold.
     window_size: int, optional
-        The token window size to consider for concept co-occurrence. Minimum is 2. Default to None.
+        The token window size to consider for concept co-occurrence. Minimum is 2, by default None.
     threshold: int, optional
-        The co-occurrence minimum count threshold for metarelation construction. Default to 0.
+        The co-occurrence minimum count threshold for metarelation construction, by default 0.
     scope: str, optional
-        The corpus scope to consider. Either 'doc' (default) or 'sent'.
+        The corpus scope to consider. Either 'doc' or 'sent', by default 'doc'.
     metarelation_label: str, optional
-        The metarelation label to use. Default to 'RELATED_TO'.
+        The metarelation label to use, by default 'RELATED_TO'.
     create_symmetric_metarelation: bool, optional
-        Whether to create the symmetric metarelation. Default to False.
+        Whether to create the symmetric metarelation, by default False.
         WARNING! this option can create a lot of metarelation that can easily be created in a later
         process.
     """
@@ -40,8 +35,11 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
     def __init__(
         self,
         custom_metarelation_creation_metric: Optional[Callable[[int], bool]] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
+        window_size: Optional[int] = None,
+        threshold: Optional[int] = 0,
+        scope: Optional[str] = "doc",
+        metarelation_label : Optional[str] = "RELATED_TO",
+        create_symmetric_metarelation: Optional[bool] = False
     ) -> None:
         """Initialise ConceptCoocMetarelationExtraction pipeline component instance.
 
@@ -49,30 +47,32 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
         ----------
         custom_metarelation_creation_metric: Callable[[int], bool], optional
             The function to define based on the concept co-occurrence count whether or not to
-            create a metarelation. Default to co-occurrence count > self.threshold.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+            create a metarelation, by default co-occurrence count > self.threshold.
+        window_size: int, optional
+            The token window size to consider for concept co-occurrence. Minimum is 2, by default None.
+        threshold: int, optional
+            The co-occurrence minimum count threshold for metarelation construction, by default 0.
+        scope: str, optional
+            The corpus scope to consider. Either 'doc' (default) or 'sent'.
+        metarelation_label: str, optional
+            The metarelation label to use, by default 'RELATED_TO'.
+        create_symmetric_metarelation: bool, optional
+            Whether to create the symmetric metarelation, by default False.
+            WARNING! this option can create a lot of metarelation that can easily be created in a later
+            process.
         """
-        super().__init__(parameters, options)
+        super().__init__()
 
-        self.window_size: Optional[int] = self.options.get("window_size")
-        self.threshold: Optional[int] = self.options.get("threshold", 0)
+        self.window_size = window_size
+        self.threshold = threshold
         self.metarelation_creation_metric = (
             custom_metarelation_creation_metric
             if custom_metarelation_creation_metric is not None
             else lambda freq: freq > self.threshold
         )
-        self.scope: Optional[str] = self.parameters.get("scope", "doc")
-        self.metarelation_label: Optional[str] = self.parameters.get(
-            "metarelation_label", "RELATED_TO"
-        )
-        self.create_symmetric_metarelation: Optional[bool] = self.parameters.get(
-            "create_symmetric_metarelation", False
-        )
+        self.scope = scope
+        self.metarelation_label = metarelation_label
+        self.create_symmetric_metarelation = create_symmetric_metarelation
 
         self._check_parameters()
 
@@ -82,20 +82,6 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
 
         This method affects the self.scope attribute.
         """
-        if self.scope not in {"sent", "doc"}:
-            self.scope = "doc"
-            logger.warning(
-                """Wrong scope value. Possible values are 'sent' or 'doc'.
-                            Default to scope = 'doc'.
-                           """
-            )
-
-    def _check_options(self) -> None:
-        """Check whether the required tunable options are correctly provided and if not raise
-        the suitable exception.
-        Here the option to check is window_size.
-        This method affects the self.window_size attribute.
-        """
         if self.window_size is not None:
             if self.window_size < 2:
                 self.window_size = 2
@@ -104,6 +90,14 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
                                 Default to window size = 2.
                             """
                 )
+
+        if self.scope not in {"sent", "doc"}:
+            self.scope = "doc"
+            logger.warning(
+                """Wrong scope value. Possible values are 'sent' or 'doc'.
+                            Default to scope = 'doc'.
+                           """
+            )
 
     def optimise(self) -> None:
         """A method to optimise the pipeline component by tuning the options."""
