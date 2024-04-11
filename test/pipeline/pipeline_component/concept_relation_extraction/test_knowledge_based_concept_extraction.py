@@ -168,9 +168,9 @@ class TestKnowledgeBasedConceptExtractionNoMerge:
     def kg_based_concept_extraction_no_merge_syn(
         self, mock_knowledge_source
     ) -> KnowledgeBasedConceptExtraction:
-        params = {"merge_ct_on_synonyms": False}
+        params = {"group_ct_on_synonyms": False}
         concept_extraction = KnowledgeBasedConceptExtraction(
-            mock_knowledge_source, parameters=params
+            mock_knowledge_source, **params
         )
         return concept_extraction
 

@@ -236,7 +236,7 @@ class TestConceptCoocMetarelationExtractionCustom:
         params = {"scope": "sent", "metarelation_label": "custom relation"}
         opts = {"window_size": 4, "threshold": 3}
         rel_extract = ConceptCoocMetarelationExtraction(
-            custom_relation_creation_metric, parameters=params, options=opts
+            custom_relation_creation_metric, **params, **opts
         )
 
         return rel_extract

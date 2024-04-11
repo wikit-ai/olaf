@@ -24,8 +24,10 @@ class CTsToRelationExtraction(PipelineComponent):
 
     def __init__(
         self,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
+        concept_max_distance: Optional[int] = 5,
+        scope: Optional[str] = "doc"
+        # parameters: Optional[Dict[str, Any]] = None,
+        # options: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Initialise CTsToRelationExtraction pipeline component instance.
 
@@ -38,11 +40,9 @@ class CTsToRelationExtraction(PipelineComponent):
             Options are tunable parameters which will be updated to optimise the
             component performance, by default None.
         """
-        super().__init__(parameters, options)
-        self.concept_max_distance = (
-            parameters.get("concept_max_distance", 5) if parameters is not None else 5
-        )
-        self.scope = parameters.get("scope", "doc") if parameters is not None else "doc"
+        super().__init__()
+        self.concept_max_distance = concept_max_distance
+        self.scope = scope
 
         self._check_parameters()
 
@@ -52,6 +52,13 @@ class CTsToRelationExtraction(PipelineComponent):
 
         This method affects the self.scope attribute.
         """
+
+        if not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+
         if self.scope not in {"sent", "doc"}:
             self.scope = "doc"
             logger.warning(

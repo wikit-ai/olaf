@@ -6,28 +6,12 @@ from ..pipeline_component_schema import PipelineComponent
 
 class SynonymConceptExtraction(PipelineComponent):
     """Extract concepts based on synonyms grouping.
-
-    Attributes
-    ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline. 
-        This component do not need parameters to run.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
-        This component has no options to optimise.
     """
 
-    def __init__(self, parameters: Dict[str, Any] = None, options: Dict[str, Any] = None) -> None:
+    def __init__(self) -> None:
         """Initialise synonym grouping concept extraction instance.
-
-        Parameters
-        ----------
-        parameters : Dict[str, Any], optional
-            Parameters used to configure the component, by default None.
-        options : Dict[str, Any], optional
-            Tunable options to use to optimise the component performance, by default None.
         """
-        super().__init__(parameters, options)
+        super().__init__()
 
     def optimise(self) -> None:
         """A method to optimise the pipeline component by tuning the options.

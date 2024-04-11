@@ -17,13 +17,7 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
     cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
         A list of candidate term post processing functions to run after candidate term extraction
         and before assigning the extracted candidate terms to the pipeline, by default None.
-    parameters: Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning, by default None.
-    options: Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the component performance.
-        By default None.
-    ct_label_strings_map: Dict[str, Set[str]]
+    ct_label_strings_map: Dict[str, Set[str]], optional
         The mapping of candidate term label and their matching strings.
         Optional only if a custom spaCy phrase matcher is provided.
     phrase_matcher: PhraseMatcher, optional
@@ -36,8 +30,9 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
+        ct_label_strings_map: Optional[Dict[str, Set[str]]] = None,
+        phrase_matcher: Optional[PhraseMatcher] = None
+
     ) -> None:
         """Initialise ManualCandidateTermExtraction pipeline component instance.
 
@@ -46,19 +41,17 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+        ct_label_strings_map: Dict[str, Set[str]], optional
+            The mapping of candidate term label and their matching strings.
+            Optional only if a custom spaCy phrase matcher is provided.
+        phrase_matcher: PhraseMatcher, optional
+            The spaCy phrase matcher for new candidate term corpus occurrence matching.
+            Default to matching the label provided strings.
         """
-        super().__init__(cts_post_processing_functions, parameters, options)
+        super().__init__(cts_post_processing_functions)
 
-        self.ct_label_strings_map: Dict[str, Set[str]] = self.parameters.get(
-            "ct_label_strings_map"
-        )
-        self.phrase_matcher: PhraseMatcher = self.parameters.get("custom_matcher")
+        self.ct_label_strings_map = ct_label_strings_map
+        self.phrase_matcher = phrase_matcher
 
         self._check_parameters()
 

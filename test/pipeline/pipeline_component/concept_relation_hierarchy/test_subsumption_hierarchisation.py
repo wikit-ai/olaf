@@ -77,7 +77,7 @@ def pipeline(en_sm_spacy_model, corpus, concepts):
 @pytest.fixture(scope="session")
 def subsumption():
     options = {}
-    subsumption = SubsumptionHierarchisation(options=options)
+    subsumption = SubsumptionHierarchisation(**options)
     return subsumption
 
 

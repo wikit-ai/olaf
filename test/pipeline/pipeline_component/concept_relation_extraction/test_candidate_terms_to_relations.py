@@ -97,7 +97,8 @@ def test_cts_to_relation_default_parameters(pipeline) -> None:
 
 def test_cts_to_relation(pipeline) -> None:
     cts_to_relation = CTsToRelationExtraction(
-        parameters={"concept_max_distance": 2, "scope": "sent"}
+        concept_max_distance=2, 
+        scope="sent"
     )
     assert cts_to_relation.concept_max_distance == 2
     assert cts_to_relation.scope == "sent"

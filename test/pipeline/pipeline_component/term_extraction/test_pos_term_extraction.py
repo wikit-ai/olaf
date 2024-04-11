@@ -115,7 +115,7 @@ def candidate_terms() -> List[str]:
 
 class TestPOSTermExtractionParameters:
     def test_default_parameters_value(self, default_parameters):
-        pos_based_term_extraction = POSTermExtraction(parameters=default_parameters)
+        pos_based_term_extraction = POSTermExtraction(**default_parameters)
         assert pos_based_term_extraction._token_sequences_doc_attribute is None
         assert pos_based_term_extraction._pos_selection == ["NOUN"]
 
@@ -125,7 +125,7 @@ class TestPOSTermExtractionFunctions:
         self, token_processing, default_parameters, corpus, sentences
     ) -> Tuple[spacy.tokens.Span]:
         pos_based_term_extraction = POSTermExtraction(
-            token_processing, parameters=default_parameters
+            token_processing, **default_parameters
         )
         token_sequences = pos_based_term_extraction._extract_token_sequences(corpus)
         assert len(token_sequences) == 2
@@ -142,7 +142,7 @@ class TestPOSTermExtractionFunctions:
         doc_attribute_sentences,
     ):
         pos_based_term_extraction = POSTermExtraction(
-            token_processing, parameters=doc_attribute_parameters
+            token_processing, **doc_attribute_parameters
         )
         token_sequences = pos_based_term_extraction._extract_token_sequences(
             doc_attribute_corpus
@@ -158,7 +158,7 @@ class TestPOSTermExtractionFunctions:
         self, token_processing, default_parameters, token_sequences, candidate_tokens
     ) -> List[spacy.tokens.Token]:
         pos_based_term_extraction = POSTermExtraction(
-            token_processing, parameters=default_parameters
+            token_processing, **default_parameters
         )
         cand_tokens = pos_based_term_extraction._extract_candidate_tokens(
             token_sequences
@@ -172,7 +172,7 @@ class TestPOSTermExtractionFunctions:
         self, token_processing, default_parameters, candidate_tokens, candidate_terms
     ) -> Dict[str, List[spacy.tokens.Token]]:
         pos_based_term_extraction = POSTermExtraction(
-            token_processing, parameters=default_parameters
+            token_processing, **default_parameters
         )
         term_corpus_occ_map = pos_based_term_extraction._build_term_corpus_occ_map(
             candidate_tokens
@@ -189,7 +189,7 @@ class TestPOSTermExtractionProcess:
         self, token_processing, default_parameters, doc_pipeline, candidate_terms
     ):
         pos_based_term_extraction = POSTermExtraction(
-            token_processing, parameters=default_parameters
+            token_processing, **default_parameters
         )
         pos_based_term_extraction.run(doc_pipeline)
         assert len(doc_pipeline.candidate_terms) == 4
@@ -207,7 +207,7 @@ class TestPOSTermExtractionProcess:
         candidate_terms,
     ):
         pos_based_term_extraction = POSTermExtraction(
-            token_processing, parameters=doc_attribute_parameters
+            token_processing, **doc_attribute_parameters
         )
         pos_based_term_extraction.run(attribute_pipeline)
         assert len(attribute_pipeline.candidate_terms) == 2

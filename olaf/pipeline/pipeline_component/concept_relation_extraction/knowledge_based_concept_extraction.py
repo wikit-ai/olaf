@@ -1,4 +1,4 @@
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, Optional
 
 from ....commons.candidate_term_tools import cts_to_concept, group_cts_on_synonyms
 from ....data_container.candidate_term_schema import CandidateTerm
@@ -14,12 +14,6 @@ class KnowledgeBasedConceptExtraction(PipelineComponent):
     ----------
     knowledge_source : KnowledgeSource
         The source of knowledge to use for concept matching.
-    parameters : Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the knowledge source,
-        by default None.
-    options : Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the
-        component performance, by default None.
     group_ct_on_synonyms: bool, optional
         Wether or not to group the candidate terms on synonyms before proceeding to the
         concept matching with the external source of knowledge, by default True.
@@ -28,8 +22,7 @@ class KnowledgeBasedConceptExtraction(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        parameters: Dict[str, Any] = None,
-        options: Dict[str, Any] = None,
+        group_ct_on_synonyms: Optional[bool] = True
     ) -> None:
         """Initialise knowledge based concept extraction instance.
 
@@ -37,20 +30,13 @@ class KnowledgeBasedConceptExtraction(PipelineComponent):
         ----------
         knowledge_source : KnowledgeSource
             The source of knowledge to use for concept matching.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the knowledge source,
-            by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+        group_ct_on_synonyms: bool, optional
+            Wether or not to group the candidate terms on synonyms before proceeding to the
+            concept matching with the external source of knowledge, by default True.
         """
-        super().__init__(parameters, options)
+        super().__init__()
         self.knowledge_source = knowledge_source
-        self.group_ct_on_synonyms = (
-            parameters.get("group_ct_on_synonyms", True)
-            if parameters is not None
-            else True
-        )
+        self.group_ct_on_synonyms = group_ct_on_synonyms
 
         self._check_resources()
 
