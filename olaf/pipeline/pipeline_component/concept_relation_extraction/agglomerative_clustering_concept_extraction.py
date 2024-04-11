@@ -18,7 +18,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
     ----------
     candidate_terms: List[CandidateTerm]
         List of candidate terms to extract concepts from.
-    nb_clusters: int, optional 
+    nb_clusters: int, optional
         Number of clusters to find with the agglomerative clustering algorithm.
         It must be None if distance_threshold is not None, by default 2.
     metric: str, optional
@@ -34,26 +34,27 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         Name of the embedding model to use.
         The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
         by default None.
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
+    parameters: Dict[str, Any], optional
+        Parameters are fixed values to be defined when building the pipeline, by default None.
         They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
+    options: Dict[str, Any], optional
+        Options are tunable parameters which will be updated to optimise the component performance,
+        by default None.
     """
 
     def __init__(
         self,
-        parameters: Dict[str, Any]  = None,
-        options: Dict[str, Any]  = None,
+        parameters: Dict[str, Any] = None,
+        options: Dict[str, Any] = None,
     ) -> None:
         """Initialise agglomerative clustering-based concept extraction instance.
 
         Parameters
         ----------
         parameters : Dict[str, Any] , optional
-            Parameters used to configure the component.
+            Parameters used to configure the component, by default None.
         options : Dict[str, Any] , optional
-            Tunable options to use to optimise the component performance.
+            Tunable options to use to optimise the component performance, by default None.
         """
         super().__init__(parameters, options)
         self.candidate_terms = None

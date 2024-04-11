@@ -26,7 +26,7 @@ class SemanticBasedEnrichment(PipelineComponent):
 
         Parameters
         ----------
-        threshold : int, optional
+        threshold : float, optional
             The threshold defines the minimum similarity score required to be synonymous.
             By default the threshold is set to 0.9.
         """

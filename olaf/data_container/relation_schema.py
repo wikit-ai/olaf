@@ -21,7 +21,7 @@ class Relation(DataContainer):
         The destination concept in the relation triple, by default None.
     external_uids : Set[str], optional
         External unique identifiers found for the relation, by default None.
-    linguistic_realisations : Set[LinguisticRealisation]
+    linguistic_realisations : Set[LinguisticRealisation], optional
         The relation linguistic realisations, i.e. instances of the relation in the text corpus,
         by default None.
     """

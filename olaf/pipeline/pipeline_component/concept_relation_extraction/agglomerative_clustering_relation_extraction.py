@@ -57,9 +57,9 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         Parameters
         ----------
         parameters : Dict[str, Any], optional
-            Parameters used to configure the component.
+            Parameters used to configure the component, by default None.
         options : Dict[str, Any], optional
-            Tunable options to use to optimise the component performance.
+            Tunable options to use to optimise the component performance, by default None.
         """
         super().__init__(parameters, options)
         self.candidate_relations = None
