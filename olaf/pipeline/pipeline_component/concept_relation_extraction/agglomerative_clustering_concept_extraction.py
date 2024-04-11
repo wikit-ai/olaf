@@ -97,54 +97,15 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             )
             self._embedding_model = "all-mpnet-base-v2"
 
-        if self._nb_clusters:
-            if not isinstance(self._nb_clusters, int):
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="nb_clusters",
-                    error_type="Wrong value type",
-                )
-            self._distance_threshold = None
 
-        elif self._distance_threshold is None:
+        if self._nb_clusters is None and self._distance_threshold is None:
             logger.warning(
-                "No value given for both nb_clusters and distance_threshold options, default will be set to 2 for nb_cluster,"
+                "No value given for both nb_clusters and distance_threshold options, default will be set to 2 for nb_cluster "
                 "and None for distance_threshold"
             )
             self._nb_clusters = 2
-        else:
-            if not isinstance(self._distance_threshold, float):
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="distance_threshold",
-                    error_type="Wrong value type",
-                )
 
-        if self._metric:
-            if  self._metric not in ["euclidean", "l1", "l2", "manhattan", "cosine", "precomputed"]:
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="metric",
-                    error_type="Wrong value type",
-                )
-        else:
-            logger.warning(
-                "No value given for metric option, default will be set to cosine."
-            )
-            self._metric = "cosine"
 
-        if self._linkage:
-            if self._linkage not in ["ward", "complete", "average", "single"]:
-                raise OptionError(
-                    component_name=self.__class__,
-                    option_name="linkage",
-                    error_type="Wrong value type",
-                )
-        else:
-            logger.warning(
-                "No value given for linkage option, default will be set to average."
-            )
-            self._linkage = "average"
 
     def optimise(self) -> None:
         # TODO
