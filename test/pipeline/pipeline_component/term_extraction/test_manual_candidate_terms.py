@@ -76,7 +76,7 @@ class TestManualCandidateTermExtractionCustomMatcher:
 
     @pytest.fixture(scope="class")
     def manual_ct_extract(self, custom_matcher) -> ManualCandidateTermExtraction:
-        params = {"custom_matcher": custom_matcher}
+        params = {"phrase_matcher": custom_matcher}
         ct_extract = ManualCandidateTermExtraction(**params)
         return ct_extract
 

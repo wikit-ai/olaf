@@ -40,13 +40,13 @@ def example_pipeline(en_sm_spacy_model, example_corpus) -> Pipeline:
 
 @pytest.fixture(scope="session")
 def example_params() -> Dict[str, Any]:
-    parameters = {"token_sequence_doc_attribute": custom_token_sequence_doc_attribute}
+    parameters = {"token_sequences_doc_attribute": custom_token_sequence_doc_attribute}
     return parameters
 
 
 @pytest.fixture(scope="session")
 def example_options() -> Dict[str, Any]:
-    options = {"threshold": 0.35, "max_term_token_length": 2, "tfidf_agg_type": "MAX"}
+    options = {"candidate_term_threshold": 0.35, "max_term_token_length": 2, "tfidf_agg_type": "MAX"}
     return options
 
 
