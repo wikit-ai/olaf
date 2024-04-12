@@ -71,7 +71,11 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         self._c_value_threshold = c_value_threshold
         self._max_term_token_length = max_term_token_length
         self._stop_token_list = stop_token_list if stop_token_list is not  None else set()
+        self.check_parameters()
 
+        
+
+    def check_parameters(self) -> None:
         if self._token_sequences_doc_attribute is not None:
             if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
                 logger.warning(
@@ -106,6 +110,7 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
                 The system will default to the provided C-value candidate term extraction threshold."""
             )
             self._c_value_threshold = self._candidate_term_threshold
+        
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]
