@@ -62,8 +62,8 @@ def preprocessing() -> TokenSelectorDataPreprocessing:
 
 @pytest.fixture(scope="function")
 def component() -> POSTermExtraction:
-    parameters = {"token_sequence_doc_attribute": "selected_tokens"}
-    component = POSTermExtraction(parameters=parameters)
+    parameters = {"token_sequences_doc_attribute": "selected_tokens"}
+    component = POSTermExtraction(**parameters)
     return component
 
 
