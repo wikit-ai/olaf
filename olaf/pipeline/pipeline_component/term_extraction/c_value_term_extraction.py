@@ -38,7 +38,9 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         c_value_threshold: Optional[float] = None,
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
-        ] = None
+        ] = None,
+        stop_token_list: Set[str] = None
+
     ) -> None:
         """Initialise C-value term extraction pipeline component instance.
 
@@ -57,6 +59,9 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
+        stop_token_list: Set[str], optional
+            A set of stop words that should not appear in a term.
+            _terms_string_tokens: Tuple[Tuple[str]], by default None.
         """
 
         super().__init__(cts_post_processing_functions)
@@ -65,6 +70,7 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         self._candidate_term_threshold = candidate_term_threshold
         self._c_value_threshold = c_value_threshold
         self._max_term_token_length = max_term_token_length
+        self._stop_token_list = stop_token_list if stop_token_list is not  None else set()
 
         if self._token_sequences_doc_attribute is not None:
             if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
@@ -244,7 +250,7 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         c_value = Cvalue(
             corpus_terms=terms,
             max_term_token_length=self._max_term_token_length,
-            stop_list=self.parameters.get("stop_token_list", set()),
+            stop_list=self._stop_token_list,
             c_value_threshold=self._c_value_threshold,
         )
 
