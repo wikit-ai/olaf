@@ -114,12 +114,30 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             )
             self._embedding_model = "all-mpnet-base-v2"
 
-        if self._nb_clusters is None and self._distance_threshold is None:
+        if not self._nb_clusters:
+            if not self._distance_threshold:
+                logger.warning(
+                    "No value given for nb_clusters option, default will be set to 2."
+                )
+                self._nb_clusters = 2
+        elif self._distance_threshold:
+            self._distance_threshold = None
             logger.warning(
-                "No value given for both nb_clusters and distance_threshold options, default will be set to 2 for nb_cluster "
-                "and None for distance_threshold"
+                    "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
+                )
+
+        if not self._metric:
+            logger.warning(
+                "No value given for metric option, default will be set to cosine."
             )
-            self._nb_clusters = 2
+            self._metric = "cosine"
+
+        if not self._linkage:
+            logger.warning(
+                "No value given for linkage option, default will be set to average."
+            )
+
+            self._linkage = "average"
     
         if not isinstance(self.concept_max_distance, int):
             self.concept_max_distance = 5
