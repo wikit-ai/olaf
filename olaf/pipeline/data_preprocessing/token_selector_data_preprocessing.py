@@ -12,6 +12,10 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
 
     Attributes
     ----------
+    corpus: spacy.tokens.Doc
+        spaCy corpus to process.
+    token_selector: Callable[[spacy.tokens.Token], bool]
+        Callable function that implements the token selection criterion.
     token_sequence_doc_attribute: str, Optional
         Name of the spaCy doc attribute containing the selected tokens, by default "selected_tokens".
     """
