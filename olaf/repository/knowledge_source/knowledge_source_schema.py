@@ -7,20 +7,11 @@ class KnowledgeSource(ABC):
 
     Attributes
     ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the knowledge source.
     """
 
-    def __init__(self, parameters: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self) -> None:
         """Initialise KnowledgeSource instance.
-
-        Parameters
-        ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the knowledge source,
-            by default None.
         """
-        self.parameters = parameters if parameters else dict()
 
     @abstractmethod
     def _check_resources(self) -> None:

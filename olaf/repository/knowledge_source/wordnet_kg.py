@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Set
+from typing import Dict, Optional, Set
 
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Lemma, Synset
@@ -20,9 +20,6 @@ class WordNetKnowledgeResource(KnowledgeSource):
 
     Attributes
     ----------
-    parameters : Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the WordNet
-        external KG instance, by default None.
     lang: str, optional
         Language ISO code for the terms to find concepts and terms for, by default 'en'.
     use_domains: bool, optional
@@ -40,27 +37,55 @@ class WordNetKnowledgeResource(KnowledgeSource):
         Mandatory when use_pos is True, by default to None.
     """
 
-    def __init__(self, parameters: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(
+            self,
+            lang: Optional[str] = "en",
+            use_domains: Optional[bool] = False,
+            use_pos: Optional[bool] = False,
+            wordnet_domains_map: Optional[Dict[str, Set[str]]] = None,
+            wordnet_domains_path: Optional[str] = None,
+            enrichment_domains: Optional[Set[str]] = None,
+            enrichment_domains_path: Optional[str] = None,
+            wordnet_pos: Optional[Set[str]] = None
+        ) -> None:
         """Initialise WordNet knowledge resource instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the WordNet knowledge
-            resource instance, by default None.
+        lang: str, optional
+            Language ISO code for the terms to find concepts and terms for, by default 'en'.
+        use_domains: bool, optional
+            Wether or not to filter the matchings on provided domains, by default False.
+        use_pos: bool, optional
+            Wether or not to filter the matchings on provided part of speech tags, by default False.
+        wordnet_domains_path : str, optional
+            The full or relative path to wordnet domains synsets mapping file, by default None.
+        wordnet_domains_map: Dict[str, Set[str]], optional
+            The mapping between WordNet synsets ids and domains ids, by default None.
+            The expected file can be found at <https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt>
+        wordnet_domains_path : str, optional
+            The full or relative path to wordnet domains synsets mapping file, by default None.
+        enrichment_domains: Set[str], optional
+            The set of enrichment domains strings to use for matching.
+            Mandatory when use_domains is True, by default to None.
+        enrichment_domains_path : str, optional
+            The full or relative path to the file containing wordnet domains to use for enrichment, by default None.
+        wordnet_pos: Set[str], optional
+            The set of part of speech tags to use for matching.
+            Mandatory when use_pos is True, by default to None.
         """
-        super().__init__(parameters)
+        super().__init__()
 
-        self.lang = self.parameters.get("lang", "en")
-        self.use_domains = self.parameters.get("use_domains", False)
-        self.use_pos = self.parameters.get("use_pos", False)
+        self.lang = lang
+        self.use_domains = use_domains
+        self.use_pos = use_pos
 
         self.wordnet_lang = fetch_wordnet_lang(self.lang)
-        self.wordnet_domains_map: Dict[str, Set[str]] = None
-        self.enrichment_domains: Set[str] = self.parameters.get(
-            "enrichment_domains", None
-        )
-        self.wordnet_pos: Set[str] = None
+        self.wordnet_domains_map = wordnet_domains_map
+        self.wordnet_domains_path = wordnet_domains_path
+        self.enrichment_domains = enrichment_domains
+        self.enrichment_domains_path = enrichment_domains_path
+        self.wordnet_pos = wordnet_pos
 
         self._check_parameters()
 
@@ -71,18 +96,17 @@ class WordNetKnowledgeResource(KnowledgeSource):
 
         if self.use_domains:
             if self.enrichment_domains is None:
-                enrichment_domains_path = self.parameters.get("enrichment_domains_path")
-                if enrichment_domains_path is not None:
-                    self.enrichment_domains = load_enrichment_wordnet_domains_from_file(
-                        enrichment_domains_path
-                    )
-                else:
+                if self.enrichment_domains_path is None:
                     logger.warning(
                         """Using enrichment wordnet domains but file path not provided in parameters (key `enrichment_domains`). 
                                 Defaulting to NOT using wordnet domains.
                             """
                     )
 
+                else:
+                    self.enrichment_domains = load_enrichment_wordnet_domains_from_file(
+                        self.enrichment_domains_path
+                    )
             if not self.enrichment_domains:
                 self.use_domains = False
                 self.enrichment_domains = None
@@ -93,42 +117,32 @@ class WordNetKnowledgeResource(KnowledgeSource):
                         Defaulting to NOT using wordnet domains.
                         """
                 )
-            else:
-                wordnet_domains_path = self.parameters.get("wordnet_domains_path")
-                if wordnet_domains_path is not None:
-                    self.wordnet_domains_map = load_wordnet_domains(
-                        wordnet_domains_path
-                    )
-                else:
-                    logger.warning(
-                        """Using enrichment wordnet domains (use_domains = True) but config parameter
+            elif self.wordnet_domains_path is None:
+                self._extracted_from__check_parameters_35(
+                    """Using enrichment wordnet domains (use_domains = True) but config parameter
                         `wordnet_domains_path` is not provided.
                         Defaulting to not using wordnet domains.
                         """
-                    )
-                    self.use_domains = False
-                    self.enrichment_domains = None
-
+                )
+            else:
+                self.wordnet_domains_map = load_wordnet_domains(
+                    self.wordnet_domains_path
+                )
             if not self.wordnet_domains_map:
-                logger.warning(
+                self._extracted_from__check_parameters_35(
                     """Using enrichment wordnet domains (use_domains = True) but could not find in the 
                         parameters nor load from file any wordNet domains mapping.
                         See parameter 'wordnet_domains_path'.
                         Defaulting to not using wordnet domains.
                         """
                 )
-                self.use_domains = False
-                self.enrichment_domains = None
-
         if self.use_domains and not self._check_enrichment_domains_exist():
             logger.warning(
                 """Some Wordnet domains have not been found in the mappings."""
             )
 
         if self.use_pos:
-            spacy_pos = self.parameters.get("wordnet_pos")
-
-            if spacy_pos:
+            if spacy_pos := self.wordnet_pos:
                 self.wordnet_pos = {spacy2wordnet_pos(pos) for pos in spacy_pos}
             else:
                 logger.warning(
@@ -145,6 +159,12 @@ class WordNetKnowledgeResource(KnowledgeSource):
                     """
                 )
                 self.use_pos = False
+
+    # TODO Rename this here and in `_check_parameters`
+    def _extracted_from__check_parameters_35(self, arg0):
+        logger.warning(arg0)
+        self.use_domains = False
+        self.enrichment_domains = None
 
     def _check_resources(self) -> None:
         # TODO

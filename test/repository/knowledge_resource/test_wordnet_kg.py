@@ -80,7 +80,7 @@ class TestDefaultWordNetKG:
     def default_wordnet_kg(self) -> WordNetKnowledgeResource:
         params = {}
 
-        kg = WordNetKnowledgeResource(parameters=params)
+        kg = WordNetKnowledgeResource(**params)
 
         return kg
 
@@ -196,7 +196,7 @@ class TestWordNetKGWithDomains:
             "enrichment_domains_path": sample_enrichment_domains_path,
         }
 
-        kg = WordNetKnowledgeResource(parameters=params)
+        kg = WordNetKnowledgeResource(**params)
 
         return kg
 
@@ -255,7 +255,7 @@ class TestWordNetKGWithPOS:
             "wordnet_pos": {"NOUN", "VERB"},
         }
 
-        kg = WordNetKnowledgeResource(parameters=params)
+        kg = WordNetKnowledgeResource(**params)
 
         return kg
 
