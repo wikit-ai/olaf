@@ -39,7 +39,7 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
             The kinds of enrichments to perform. Accepted values are: 'synonyms' (default), 'antonyms',
             'hypernyms', and 'hyponyms'. Other values will be ignored.
         """
-        super().__init__({}, {})
+        super().__init__()
         self.knowledge_source = knowledge_source
 
         self.use_synonyms = use_synonyms
