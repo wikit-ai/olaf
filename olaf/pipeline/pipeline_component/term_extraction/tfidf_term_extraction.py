@@ -46,6 +46,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         token_sequence_preprocessing: Optional[
             Callable[[spacy.tokens.span.Span], Tuple[str]]
         ] = None,
+        token_sequences_doc_attribute : Optional[str] = None,
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
@@ -66,6 +67,9 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         token_sequence_preprocessing: Callable[[spacy.tokens.span.Span],Tuple[str]], optional
             A function to preprocess token sequences composing the corpus, by default None.
             The function should return a tuple of token texts.
+        token_sequences_doc_attribute : str, optional
+            The name of the spaCy doc custom attribute containing the sequences of tokens to
+            form the corpus for the c-value computation. Default is None which default to the full doc.
         cts_post_processing_functions: Callable[[Set[CandidateTerm]], Set[CandidateTerm]], optional
             A list of candidate term post processing functions to run after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
@@ -82,7 +86,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
 
         super().__init__(cts_post_processing_functions)
         self.token_sequence_preprocessing = token_sequence_preprocessing
-        self._token_sequences_doc_attribute = None
+        self._token_sequences_doc_attribute = token_sequences_doc_attribute
 
         self._max_term_token_length = max_term_token_length
         self.tfidf_agg_type = tfidf_agg_type
