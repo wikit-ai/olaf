@@ -57,7 +57,7 @@ class TestManualCandidateTermWithPostProcessing:
     @pytest.fixture(scope="class")
     def manual_ct_extract(self, ct_string_map) -> ManualCandidateTermExtraction:
         params = {"ct_label_strings_map": ct_string_map}
-        ct_extract = ManualCandidateTermExtraction(parameters=params)
+        ct_extract = ManualCandidateTermExtraction(**params)
         return ct_extract
 
     def test_no_post_process(self, manual_ct_extract, pipeline, ct_string_map) -> None:
@@ -75,7 +75,7 @@ class TestManualCandidateTermWithPostProcessing:
         with pytest.raises(NotCallableError):
             ct_extract = ManualCandidateTermExtraction(
                 cts_post_processing_functions=post_processing_functions,
-                parameters=params,
+                **params,
             )
 
     def test_ct_post_process_on_first_token(self, manual_ct_extract, pipeline) -> None:

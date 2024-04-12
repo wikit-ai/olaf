@@ -17,7 +17,7 @@ def default_parameters() -> Dict[str, Any]:
 
 @pytest.fixture(scope="session")
 def doc_attribute_parameters() -> Dict[str, Any]:
-    parameters = {"token_sequence_doc_attribute": "selected_tokens"}
+    parameters = {"token_sequences_doc_attribute": "selected_tokens"}
     return parameters
 
 
