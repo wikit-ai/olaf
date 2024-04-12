@@ -28,7 +28,8 @@ class WordNetKnowledgeResource(KnowledgeSource):
         Wether or not to filter the matchings on provided part of speech tags, by default False.
     wordnet_domains_map: Dict[str, Set[str]], optional
         The mapping between WordNet synsets ids and domains ids, by default None.
-        The expected file can be found at <https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt>
+        The expected file can be found at
+        <https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt>
     enrichment_domains: Set[str], optional
         The set of enrichment domains strings to use for matching.
         Mandatory when use_domains is True, by default to None.
@@ -38,16 +39,16 @@ class WordNetKnowledgeResource(KnowledgeSource):
     """
 
     def __init__(
-            self,
-            lang: Optional[str] = "en",
-            use_domains: Optional[bool] = False,
-            use_pos: Optional[bool] = False,
-            wordnet_domains_map: Optional[Dict[str, Set[str]]] = None,
-            wordnet_domains_path: Optional[str] = None,
-            enrichment_domains: Optional[Set[str]] = None,
-            enrichment_domains_path: Optional[str] = None,
-            wordnet_pos: Optional[Set[str]] = None
-        ) -> None:
+        self,
+        lang: Optional[str] = "en",
+        use_domains: Optional[bool] = False,
+        use_pos: Optional[bool] = False,
+        wordnet_domains_map: Optional[Dict[str, Set[str]]] = None,
+        wordnet_domains_path: Optional[str] = None,
+        enrichment_domains: Optional[Set[str]] = None,
+        enrichment_domains_path: Optional[str] = None,
+        wordnet_pos: Optional[Set[str]] = None,
+    ) -> None:
         """Initialise WordNet knowledge resource instance.
 
         Parameters
@@ -62,14 +63,16 @@ class WordNetKnowledgeResource(KnowledgeSource):
             The full or relative path to wordnet domains synsets mapping file, by default None.
         wordnet_domains_map: Dict[str, Set[str]], optional
             The mapping between WordNet synsets ids and domains ids, by default None.
-            The expected file can be found at <https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt>
+            The expected file can be found at
+            <https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt>
         wordnet_domains_path : str, optional
             The full or relative path to wordnet domains synsets mapping file, by default None.
         enrichment_domains: Set[str], optional
             The set of enrichment domains strings to use for matching.
             Mandatory when use_domains is True, by default to None.
         enrichment_domains_path : str, optional
-            The full or relative path to the file containing wordnet domains to use for enrichment, by default None.
+            The full or relative path to the file containing wordnet domains to use for enrichment,
+            by default None.
         wordnet_pos: Set[str], optional
             The set of part of speech tags to use for matching.
             Mandatory when use_pos is True, by default to None.
@@ -360,9 +363,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
         Set[str]
             The set of domains associated with the synset.
         """
-        ssid = "{}-{}".format(
-            str(synset.offset()).zfill(WORDNET_DOMAINS_SSID_NUM_SIZE), synset.pos()
-        )
+        ssid = f"{str(synset.offset()).zfill(WORDNET_DOMAINS_SSID_NUM_SIZE)}-{synset.pos()}"
         synset_domains = self.wordnet_domains_map.get(ssid, set())
 
         return synset_domains
