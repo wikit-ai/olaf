@@ -33,12 +33,11 @@ class LLMGenerator(ABC):
 class HuggingFaceGenerator(LLMGenerator):
     """Text generator base on Hugging Face inference API."""
 
-    def __init__(self, api_url: Optional[str] = None) -> None:
-        self.api_url = (
-            api_url
-            if api_url is not None
-            else "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
-        )
+    def __init__(
+            self, 
+            api_url: Optional[str] = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
+        ) -> None:
+        self.api_url = api_url
 
     def check_resources(self) -> None:
         """Check that the resources needed to use the HuggingFace Generator are available."""
@@ -118,8 +117,8 @@ class OpenAIGenerator(LLMGenerator):
 class MistralAIGenerator(LLMGenerator):
     """Text generator based on MiastralAI models."""
 
-    def __init__(self, model_name: Optional[str] = None) -> None:
-        self.model_name = model_name if model_name is not None else "mistral-tiny"
+    def __init__(self, model_name: Optional[str] = "mistral-tiny") -> None:
+        self.model_name = model_name 
         self.api_url = "https://api.mistral.ai/v1/chat/completions"
 
     def check_resources(self) -> None:
