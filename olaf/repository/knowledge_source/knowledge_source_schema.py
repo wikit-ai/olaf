@@ -1,17 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Set
+from typing import Set
 
 
 class KnowledgeSource(ABC):
-    """Knowledge sources are any external sources of knowledge.
-
-    Attributes
-    ----------
-    """
+    """Knowledge sources are any external sources of knowledge."""
 
     def __init__(self) -> None:
-        """Initialise KnowledgeSource instance.
-        """
+        """Initialise KnowledgeSource instance."""
 
     @abstractmethod
     def _check_resources(self) -> None:

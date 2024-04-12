@@ -1,6 +1,7 @@
-from typing import Any, Dict, Set
+from typing import Set
 
 import pytest
+from spacy.language import Language
 import spacy.tokens
 
 from olaf.data_container.candidate_term_schema import CandidateTerm
@@ -13,14 +14,14 @@ from olaf.repository.knowledge_source.knowledge_source_schema import KnowledgeSo
 
 
 @pytest.fixture(scope="session")
-def c_terms_spacy_doc(en_sm_spacy_model) -> spacy.tokens.Doc:
+def c_terms_spacy_doc(en_sm_spacy_model: Language) -> spacy.tokens.Doc:
     c_terms_text = "car bicycle bike cycle tandem velocipede cycle wine drink beer"
     c_terms_doc = en_sm_spacy_model(c_terms_text)
     return c_terms_doc
 
 
 @pytest.fixture(scope="session")
-def c_term_bike_enrich(c_terms_spacy_doc) -> CandidateTerm:
+def c_term_bike_enrich(c_terms_spacy_doc: spacy.tokens.Doc) -> CandidateTerm:
     candidate_term = CandidateTerm(
         label="bike",
         corpus_occurrences={c_terms_spacy_doc[2]},
@@ -30,7 +31,7 @@ def c_term_bike_enrich(c_terms_spacy_doc) -> CandidateTerm:
 
 
 @pytest.fixture(scope="session")
-def c_term_bicycle(c_terms_spacy_doc) -> CandidateTerm:
+def c_term_bicycle(c_terms_spacy_doc: spacy.tokens.Doc) -> CandidateTerm:
     candidate_term = CandidateTerm(
         label="bicycle",
         corpus_occurrences={c_terms_spacy_doc[1]},
@@ -39,7 +40,7 @@ def c_term_bicycle(c_terms_spacy_doc) -> CandidateTerm:
 
 
 @pytest.fixture(scope="session")
-def c_term_tandem_enrich(c_terms_spacy_doc) -> CandidateTerm:
+def c_term_tandem_enrich(c_terms_spacy_doc: spacy.tokens.Doc) -> CandidateTerm:
     candidate_term = CandidateTerm(
         label="tandem",
         corpus_occurrences={c_terms_spacy_doc[4]},
@@ -49,7 +50,7 @@ def c_term_tandem_enrich(c_terms_spacy_doc) -> CandidateTerm:
 
 
 @pytest.fixture(scope="session")
-def c_term_wine_enrich(c_terms_spacy_doc) -> CandidateTerm:
+def c_term_wine_enrich(c_terms_spacy_doc: spacy.tokens.Doc) -> CandidateTerm:
     candidate_term = CandidateTerm(
         label="wine",
         corpus_occurrences={c_terms_spacy_doc[7]},
@@ -60,10 +61,10 @@ def c_term_wine_enrich(c_terms_spacy_doc) -> CandidateTerm:
 
 @pytest.fixture(scope="session")
 def candidate_terms(
-    c_term_bicycle,
-    c_term_tandem_enrich,
-    c_term_bike_enrich,
-    c_term_wine_enrich,
+    c_term_bicycle: CandidateTerm,
+    c_term_tandem_enrich: CandidateTerm,
+    c_term_bike_enrich: CandidateTerm,
+    c_term_wine_enrich: CandidateTerm,
 ) -> Set[CandidateTerm]:
     c_terms = {
         c_term_wine_enrich,
@@ -75,7 +76,7 @@ def candidate_terms(
 
 
 @pytest.fixture(scope="session")
-def pipeline(candidate_terms, en_sm_spacy_model) -> Pipeline:
+def pipeline(candidate_terms: Set[CandidateTerm], en_sm_spacy_model: Language) -> Pipeline:
     pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=[])
     pipeline.candidate_terms = candidate_terms
     return pipeline
@@ -138,12 +139,12 @@ def mock_knowledge_source() -> KnowledgeSource:
 class TestKnowledgeBasedConceptExtraction:
     @pytest.fixture(scope="class")
     def kg_based_concept_extraction(
-        self, mock_knowledge_source
+        self, mock_knowledge_source: KnowledgeSource
     ) -> KnowledgeBasedConceptExtraction:
         concept_extraction = KnowledgeBasedConceptExtraction(mock_knowledge_source)
         return concept_extraction
 
-    def test_pipeline_cts(self, kg_based_concept_extraction, pipeline) -> None:
+    def test_pipeline_cts(self, kg_based_concept_extraction: KnowledgeBasedConceptExtraction, pipeline: Pipeline) -> None:
         kg_based_concept_extraction.run(pipeline)
 
         concepts_ext_udis = set()
@@ -166,7 +167,7 @@ class TestKnowledgeBasedConceptExtraction:
 class TestKnowledgeBasedConceptExtractionNoMerge:
     @pytest.fixture(scope="class")
     def kg_based_concept_extraction_no_merge_syn(
-        self, mock_knowledge_source
+        self, mock_knowledge_source: KnowledgeSource
     ) -> KnowledgeBasedConceptExtraction:
         params = {"group_ct_on_synonyms": False}
         concept_extraction = KnowledgeBasedConceptExtraction(
@@ -175,7 +176,7 @@ class TestKnowledgeBasedConceptExtractionNoMerge:
         return concept_extraction
 
     def test_pipeline_cts_empty(
-        self, kg_based_concept_extraction_no_merge_syn, pipeline
+        self, kg_based_concept_extraction_no_merge_syn: KnowledgeBasedConceptExtraction, pipeline: Pipeline
     ) -> None:
         kg_based_concept_extraction_no_merge_syn.run(pipeline)
 
