@@ -31,8 +31,7 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
         ct_label_strings_map: Optional[Dict[str, Set[str]]] = None,
-        phrase_matcher: Optional[PhraseMatcher] = None
-
+        phrase_matcher: Optional[PhraseMatcher] = None,
     ) -> None:
         """Initialise ManualCandidateTermExtraction pipeline component instance.
 
@@ -65,11 +64,6 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
             Exception raised when a required parameter is missing or a wrong value is provided.
         """
         if self.ct_label_strings_map is None and self.phrase_matcher is None:
-            logger.error(
-                """Missing parameter for manual candidate term extraction. 
-                Either parameter 'ct_label_strings_map' or 'custom_matcher' should be provided.
-                """
-            )
             raise ParameterError(
                 component_name="Manual candidate term extraction",
                 param_name="ct_label_strings_map or custom_matcher",

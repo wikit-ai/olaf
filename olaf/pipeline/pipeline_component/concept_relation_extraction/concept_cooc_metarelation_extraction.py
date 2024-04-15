@@ -37,7 +37,7 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
         custom_metarelation_creation_metric: Optional[Callable[[int], bool]] = None,
         window_size: Optional[int] = None,
         threshold: Optional[int] = None,
-        scope: Optional[str] = None,
+        scope: Optional[str] = "doc",
         metarelation_label: Optional[str] = "RELATED_TO",
         create_symmetric_metarelation: Optional[bool] = False,
     ) -> None:
@@ -83,17 +83,15 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
         if self.window_size is not None and self.window_size < 2:
             self.window_size = 2
             logger.warning(
-                """Wrong window size value. Window size can not be lower than 2.
+                """Wrong window size value. Window size cannot be None or lower than 2.
                             Default to window size = 2.
                         """
             )
 
-        if self.threshold is not None:
-            self.thr = 2
+        if not self.threshold:
+            self.threshold = 0
             logger.warning(
-                """Wrong threshold value. thresold can't be None.
-                            Default to threshold = 0.
-                        """
+                """Wrong threshold value, cannot be None. Default to threshold = 0."""
             )
 
         if self.scope not in {"sent", "doc"}:

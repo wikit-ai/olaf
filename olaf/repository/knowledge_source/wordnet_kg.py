@@ -104,10 +104,12 @@ class WordNetKnowledgeResource(KnowledgeSource):
                                 Defaulting to NOT using wordnet domains.
                             """
                     )
+                    self.use_domains = False
                 else:
                     self.enrichment_domains = load_enrichment_wordnet_domains_from_file(
                         self.enrichment_domains_path
                     )
+
             if not self.enrichment_domains:
                 self.use_domains = False
                 self.enrichment_domains = None
@@ -125,6 +127,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
                         Defaulting to not using wordnet domains.
                         """
                 )
+                self.use_domains = False
             else:
                 self.wordnet_domains_map = load_wordnet_domains(
                     self.wordnet_domains_path
@@ -137,13 +140,15 @@ class WordNetKnowledgeResource(KnowledgeSource):
                         Defaulting to not using wordnet domains.
                         """
                 )
+                self.use_domains = False
         if self.use_domains and not self._check_enrichment_domains_exist():
             logger.warning(
                 """Some Wordnet domains have not been found in the mappings."""
             )
 
         if self.use_pos:
-            if spacy_pos := self.wordnet_pos:
+            spacy_pos = self.wordnet_pos
+            if spacy_pos:
                 self.wordnet_pos = {spacy2wordnet_pos(pos) for pos in spacy_pos}
             else:
                 logger.warning(

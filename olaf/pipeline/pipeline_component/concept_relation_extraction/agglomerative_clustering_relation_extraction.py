@@ -50,7 +50,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         distance_threshold: Optional[float] = None,
         embedding_model: Optional[str] = None,
         concept_max_distance: Optional[int] = None,
-        scope: Optional[str] = None,
+        scope: Optional[str] = "doc",
     ) -> None:
         """Initialise agglomerative clustering-based relation extraction instance.
 
@@ -130,10 +130,15 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             )
             self._metric = "cosine"
 
-        if not isinstance(self.concept_max_distance, int):
+        if self.concept_max_distance is None:
             self.concept_max_distance = 5
             logger.warning(
                 "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+        elif not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "Incorrect type given for concept_max_distance parameter, default will be set to 5."
             )
 
         if self.scope not in {"sent", "doc"}:

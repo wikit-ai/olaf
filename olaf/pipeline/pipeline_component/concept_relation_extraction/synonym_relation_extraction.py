@@ -21,7 +21,7 @@ class SynonymRelationExtraction(PipelineComponent):
     """
 
     def __init__(
-        self, concept_max_distance: Optional[int] = None, scope: Optional[str] = None
+        self, concept_max_distance: Optional[int] = None, scope: Optional[str] = "doc"
     ) -> None:
         """Initialise synonym grouping relation extraction instance.
 
@@ -52,10 +52,15 @@ class SynonymRelationExtraction(PipelineComponent):
                 """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
             )
 
-        if not isinstance(self.concept_max_distance, int):
+        if self.concept_max_distance is None:
             self.concept_max_distance = 5
             logger.warning(
                 "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+        elif not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "Incorrect type given for concept_max_distance parameter, default will be set to 5."
             )
 
     def optimise(self) -> None:

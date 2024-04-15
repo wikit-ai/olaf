@@ -36,7 +36,7 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         knowledge_source: KnowledgeSource,
         group_ct_on_synonyms: Optional[bool] = True,
         concept_max_distance: Optional[int] = None,
-        scope: Optional[str] = None,
+        scope: Optional[str] = "doc",
     ) -> None:
         """Initialise knowledge based relation extraction instance.
 
@@ -69,10 +69,15 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
 
         This method affects the self.scope attribute.
         """
-        if not isinstance(self.concept_max_distance, int):
+        if self.concept_max_distance is None:
             self.concept_max_distance = 5
             logger.warning(
                 "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+        elif not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "Incorrect type given for concept_max_distance parameter, default will be set to 5."
             )
 
         if self.scope not in {"sent", "doc"}:

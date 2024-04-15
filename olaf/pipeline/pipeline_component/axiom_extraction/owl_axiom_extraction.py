@@ -8,9 +8,12 @@ from rdflib import Graph, URIRef
 from olaf.pipeline.pipeline_schema import Pipeline
 
 from ....commons.errors import MissingEnvironmentVariable
-from ....commons.kr_to_rdf_tools import (all_individuals_different,
-                                         concept_lrs_to_owl_individuals,
-                                         owl_class_uri, owl_obj_prop_uri)
+from ....commons.kr_to_rdf_tools import (
+    all_individuals_different,
+    concept_lrs_to_owl_individuals,
+    owl_class_uri,
+    owl_obj_prop_uri,
+)
 from ....commons.logging_config import logger
 from ....data_container import KnowledgeRepresentation
 from ....data_container.metarelation_schema import METARELATION_RDFS_OWL_MAP
@@ -18,7 +21,7 @@ from ..pipeline_component_schema import PipelineComponent
 
 
 class OWLAxiomExtraction(PipelineComponent):
-    """The OWL axiom extraction component inductively construct OWL axioms from the knowledge 
+    """The OWL axiom extraction component inductively construct OWL axioms from the knowledge
     representation based on some OWL ontology modeling patterns.
 
     The component generates the OWL ontology based on the provided patterns, test its semantic
@@ -33,7 +36,7 @@ class OWLAxiomExtraction(PipelineComponent):
     owl_axiom_generators : Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]
         The function to generate the OWL axioms.
     base_uri : Union[str, URIRef], optional
-        The base URI to use when creating the concepts and relations URIs, 
+        The base URI to use when creating the concepts and relations URIs,
         by default "http://www.ms2.org/o/example#".
     reasoner : str, optional
         The reasoner to use, by default "ELK".
@@ -44,7 +47,7 @@ class OWLAxiomExtraction(PipelineComponent):
     robot_jar: str
         Environment variable path to the ROBOT CLI .jar file.
     graph_to_test_temp_file: PathLike
-        Temporary file path to store intermediate RDF graphs for consistency check. 
+        Temporary file path to store intermediate RDF graphs for consistency check.
     tested_graph_temp_file: PathLike
         Temporary file path for the inferred triples.
     _pattern_nb_classes: str
@@ -56,11 +59,11 @@ class OWLAxiomExtraction(PipelineComponent):
     """
 
     def __init__(
-            self,
-            owl_axiom_generators: Set[Callable[[KnowledgeRepresentation, URIRef], Graph]],
-            base_uri: Optional[Union[str, URIRef]]=None,
-            reasoner: Optional[str]="ELK"
-        ) -> None:
+        self,
+        owl_axiom_generators: Set[Callable[[KnowledgeRepresentation, URIRef], Graph]],
+        base_uri: Optional[Union[str, URIRef]] = None,
+        reasoner: Optional[str] = "ELK",
+    ) -> None:
         """Initialiser for the OWL axiom extraction component.
 
         Parameters
@@ -68,7 +71,7 @@ class OWLAxiomExtraction(PipelineComponent):
         owl_axiom_generators : Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]
             The function to generate the OWL axioms.
         base_uri : Union[str, URIRef], optional
-            The base URI to use when creating the concepts and relations URIs, 
+            The base URI to use when creating the concepts and relations URIs,
             by default "http://www.ms2.org/o/example#".
         reasoner : str, optional
             The reasoner to use, by default "ELK".
@@ -80,6 +83,10 @@ class OWLAxiomExtraction(PipelineComponent):
 
         if base_uri is None:
             self.base_uri = URIRef("http://www.ms2.org/o/example#")
+            logger.warning(
+                """No value given for base_uri parameter, default will be set to http://www.ms2.org/o/example#.
+                """
+            )
         elif isinstance(base_uri, URIRef):
             self.base_uri = base_uri
         else:
@@ -90,17 +97,25 @@ class OWLAxiomExtraction(PipelineComponent):
         self.java_exe = os.getenv("JAVA_EXE")
         self.robot_jar = os.getenv("ROBOT_JAR")
 
-        self.graph_to_test_temp_file = os.path.join(os.getenv("DATA_PATH"), "kr_owl_to_check.owl")
-        self.tested_graph_temp_file = os.path.join(os.getenv("DATA_PATH"), "kr_owl_consistency_check.owl")
+        self.graph_to_test_temp_file = os.path.join(
+            os.getenv("DATA_PATH"), "kr_owl_to_check.owl"
+        )
+        self.tested_graph_temp_file = os.path.join(
+            os.getenv("DATA_PATH"), "kr_owl_consistency_check.owl"
+        )
 
         self._check_resources()
 
-        self._pattern_nb_classes = re.compile("There are (?P<nb_classes>\\d+) unsatisfiable classes in the ontology\\.")
-        self._pattern_unsatisfiable_classes = re.compile("unsatisfiable: (?P<class_uri>.+)\\n")
+        self._pattern_nb_classes = re.compile(
+            "There are (?P<nb_classes>\\d+) unsatisfiable classes in the ontology\\."
+        )
+        self._pattern_unsatisfiable_classes = re.compile(
+            "unsatisfiable: (?P<class_uri>.+)\\n"
+        )
 
         self.individuals_axiom_generators = {
             concept_lrs_to_owl_individuals,
-            all_individuals_different
+            all_individuals_different,
         }
 
     def _check_resources(self) -> None:
@@ -108,20 +123,18 @@ class OWLAxiomExtraction(PipelineComponent):
 
         The OWL axiom extraction component requires the environment variables:
         - "JAVA_EXE"
-        - "ROBOT_JAR" 
+        - "ROBOT_JAR"
         """
         if not self.java_exe:
             raise MissingEnvironmentVariable(
-                    component_name="OWLaxiomExtraction",
-                    env_var_name="JAVA_EXE"
-                )
+                component_name="OWLaxiomExtraction", env_var_name="JAVA_EXE"
+            )
 
         if not self.robot_jar:
             raise MissingEnvironmentVariable(
-                    component_name="OWLaxiomExtraction",
-                    env_var_name="ROBOT_JAR"
-                )
-        
+                component_name="OWLaxiomExtraction", env_var_name="ROBOT_JAR"
+            )
+
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]
     ) -> None:
@@ -152,7 +165,7 @@ class OWLAxiomExtraction(PipelineComponent):
 
     def build_graph_without_owl_instances(self, kr: KnowledgeRepresentation) -> Graph:
         """Build the RDF graph based on the provided OWL axiom generators omitting
-        the ones creating OWL named instances. 
+        the ones creating OWL named instances.
 
         Parameters
         ----------
@@ -211,10 +224,7 @@ class OWLAxiomExtraction(PipelineComponent):
             The ROBOT CLI error message if any, else None.
         """
 
-        graph.serialize(
-            destination=self.graph_to_test_temp_file,
-            format="xml"
-        )
+        graph.serialize(destination=self.graph_to_test_temp_file, format="xml")
 
         robot_command = [
             self.java_exe,
@@ -226,14 +236,13 @@ class OWLAxiomExtraction(PipelineComponent):
             "--input",
             self.graph_to_test_temp_file,
             "--output",
-            self.tested_graph_temp_file
+            self.tested_graph_temp_file,
         ]
 
         error_output = None
 
         try:
-            _ = subprocess.check_output(
-                robot_command, stderr=subprocess.STDOUT)
+            _ = subprocess.check_output(robot_command, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             error_output = e.output.decode()
 
@@ -252,26 +261,31 @@ class OWLAxiomExtraction(PipelineComponent):
         Set[str]
             The extracted concept URIs.
         """
-        
-        nb_unsatisfiable_concepts = int(self._pattern_nb_classes.search(error_output).group("nb_classes"))
-        unsatisfiable_concept_uris = set(self._pattern_unsatisfiable_classes.findall(error_output))
+
+        nb_unsatisfiable_concepts = int(
+            self._pattern_nb_classes.search(error_output).group("nb_classes")
+        )
+        unsatisfiable_concept_uris = set(
+            self._pattern_unsatisfiable_classes.findall(error_output)
+        )
 
         if len(unsatisfiable_concept_uris) != nb_unsatisfiable_concepts:
-            logger.warning("""OWL axiom extraction: Something might have gone wrong while extracting unsatisfiable concept IDs.
+            logger.warning(
+                """OWL axiom extraction: Something might have gone wrong while extracting unsatisfiable concept IDs.
                                 We found %i unsatisfiable concepts but only got %i concept IDs.
                             """,
-                            nb_unsatisfiable_concepts, len(unsatisfiable_concept_uris)
-                        )
+                nb_unsatisfiable_concepts,
+                len(unsatisfiable_concept_uris),
+            )
 
         return unsatisfiable_concept_uris
 
-    def _update_unsatisfiable_kr_owl_graph(self,
-                                           kr: KnowledgeRepresentation,
-                                           unsatisfiable_concept_uris: Set[str]
-                                        ) -> Graph:
+    def _update_unsatisfiable_kr_owl_graph(
+        self, kr: KnowledgeRepresentation, unsatisfiable_concept_uris: Set[str]
+    ) -> Graph:
         """Update the Knowledge Representation OWL graph inconsistencies.
             The strategy adopted here is to skip OWL axioms generation for concepts leading
-            to unsatisfiable classes.  
+            to unsatisfiable classes.
 
         Parameters
         ----------
@@ -285,18 +299,28 @@ class OWLAxiomExtraction(PipelineComponent):
         for relation in kr.relations:
             # Potential danger there:
             # URIs should be generated exactly the same as it is done in OWl axiom generators
-            source_concept_uri = str(owl_class_uri(
-                    label=relation.source_concept.label,
-                    base_uri=self.base_uri
-                )) if relation.source_concept else None
-            dest_concept_uri = str(owl_class_uri(
-                    label=relation.destination_concept.label,
-                    base_uri=self.base_uri
-                )) if relation.destination_concept else None
+            source_concept_uri = (
+                str(
+                    owl_class_uri(
+                        label=relation.source_concept.label, base_uri=self.base_uri
+                    )
+                )
+                if relation.source_concept
+                else None
+            )
+            dest_concept_uri = (
+                str(
+                    owl_class_uri(
+                        label=relation.destination_concept.label, base_uri=self.base_uri
+                    )
+                )
+                if relation.destination_concept
+                else None
+            )
 
             conditions = [
                 source_concept_uri in unsatisfiable_concept_uris,
-                dest_concept_uri in unsatisfiable_concept_uris
+                dest_concept_uri in unsatisfiable_concept_uris,
             ]
             if not any(conditions):
                 new_relations.add(relation)
@@ -308,18 +332,20 @@ class OWLAxiomExtraction(PipelineComponent):
         for relation in kr.metarelations:
             # Potential danger there:
             # URIs should be generated exactly the same as it is done in OWl axiom generators
-            source_concept_uri = str(owl_class_uri(
-                    label=relation.source_concept.label,
-                    base_uri=self.base_uri
-                ))
-            dest_concept_uri = str(owl_class_uri(
-                    label=relation.destination_concept.label,
-                    base_uri=self.base_uri
-                ))
+            source_concept_uri = str(
+                owl_class_uri(
+                    label=relation.source_concept.label, base_uri=self.base_uri
+                )
+            )
+            dest_concept_uri = str(
+                owl_class_uri(
+                    label=relation.destination_concept.label, base_uri=self.base_uri
+                )
+            )
 
             conditions = [
                 source_concept_uri in unsatisfiable_concept_uris,
-                dest_concept_uri in unsatisfiable_concept_uris
+                dest_concept_uri in unsatisfiable_concept_uris,
             ]
             if not any(conditions):
                 new_meta_relations.add(relation)
@@ -329,7 +355,7 @@ class OWLAxiomExtraction(PipelineComponent):
         kr_for_owl_graph = KnowledgeRepresentation(
             concepts=kr.concepts.union(new_concepts),
             relations=new_relations,
-            metarelations=new_meta_relations
+            metarelations=new_meta_relations,
         )
 
         updated_kr_owl_graph = self.build_full_graph(kr=kr_for_owl_graph)
@@ -358,13 +384,12 @@ class OWLAxiomExtraction(PipelineComponent):
         for relation in kr.metarelations:
             metarel_uri = METARELATION_RDFS_OWL_MAP.get(
                 relation.label,
-                str(owl_obj_prop_uri(label=relation.label, base_uri=self.base_uri))
+                str(owl_obj_prop_uri(label=relation.label, base_uri=self.base_uri)),
             )
             relation.external_uids.add(metarel_uri)
 
     def run(self, pipeline: Pipeline) -> None:
-        """Create the OWL file containing the valid axiomatised Knowledge Representation instance.
-        """
+        """Create the OWL file containing the valid axiomatised Knowledge Representation instance."""
         reasoner_output = "start testing"
 
         kr_owl_graph = self.build_full_graph(kr=pipeline.kr)
@@ -381,33 +406,42 @@ class OWLAxiomExtraction(PipelineComponent):
                 # An OWL ontology is either inconsistent or it contains some unsatisfiable classes.
                 if "The ontology is inconsistent." in reasoner_output:
                     logger.warning(msg="Inconsistent ontology")
-                    logger.warning("""
+                    logger.warning(
+                        """
                                     Reasoner output: 
                                    %s.
-                                """, reasoner_output)
+                                """,
+                        reasoner_output,
+                    )
                     # An inconsistent OWL ontology is often due to instances of unsatisfiable classes.
                     kr_owl_graph = self.build_graph_without_owl_instances(
-                                            kr=pipeline.kr
-                                        )
+                        kr=pipeline.kr
+                    )
 
                 elif "unsatisfiable classes in the ontology." in reasoner_output:
                     logger.warning(msg="Unsatisfiable ontology")
-                    logger.warning("""
+                    logger.warning(
+                        """
                                     Reasoner output: 
                                    %s.
-                                """, reasoner_output)
-                    unsatisfiable_concept_uris = self._get_concept_uris_from_error_output(
-                        reasoner_output)
+                                """,
+                        reasoner_output,
+                    )
+                    unsatisfiable_concept_uris = (
+                        self._get_concept_uris_from_error_output(reasoner_output)
+                    )
                     kr_owl_graph = self._update_unsatisfiable_kr_owl_graph(
-                                            kr=pipeline.kr,
-                                            unsatisfiable_concept_uris=unsatisfiable_concept_uris
-                                        )
-                    
+                        kr=pipeline.kr,
+                        unsatisfiable_concept_uris=unsatisfiable_concept_uris,
+                    )
+
         if kr_graph_trial == 5:
-            logger.warning(msg="""
+            logger.warning(
+                msg="""
                         The OWL axiom extractor did not manage to make the ontology consistent.
                         We will create the full inconsistent ontology.
-                    """)
+                    """
+            )
             kr_owl_graph = self.build_full_graph(kr=pipeline.kr)
         else:
             logger.info("The constructed ontology is consistent.")

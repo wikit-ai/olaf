@@ -99,13 +99,13 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         if not self._nb_clusters:
             if not self._distance_threshold:
                 logger.warning(
-                    "No value given for nb_clusters option, default will be set to 2."
+                    "No value given for nb_clusters or distance_threshold, default to nb_clusters=2"
                 )
                 self._nb_clusters = 2
         elif self._distance_threshold:
             self._distance_threshold = None
             logger.warning(
-                "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
+                "Both nb_clusters and distance_threshold options cannot be set together, distance_threshold is ignored"
             )
 
         if not self._metric:

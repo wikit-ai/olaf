@@ -35,10 +35,15 @@ class SubsumptionHierarchisation(PipelineComponent):
 
         This method affects the self.scope attribute.
         """
-        if not isinstance(self.threshold, int):
+        if not self.threshold:
             self.threshold = 0.5
             logger.warning(
                 "No value given for threshold parameter, default will be set to 0.5."
+            )
+        elif not isinstance(self.threshold, float):
+            self.threshold = 0.5
+            logger.warning(
+                "Incorrect value given for threshold parameter, default will be set to 0.5."
             )
 
     def optimise(
