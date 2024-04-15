@@ -36,10 +36,10 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
         self,
         custom_metarelation_creation_metric: Optional[Callable[[int], bool]] = None,
         window_size: Optional[int] = None,
-        threshold: Optional[int] = 0,
-        scope: Optional[str] = "doc",
-        metarelation_label : Optional[str] = "RELATED_TO",
-        create_symmetric_metarelation: Optional[bool] = False
+        threshold: Optional[int] = None,
+        scope: Optional[str] = None,
+        metarelation_label: Optional[str] = "RELATED_TO",
+        create_symmetric_metarelation: Optional[bool] = False,
     ) -> None:
         """Initialise ConceptCoocMetarelationExtraction pipeline component instance.
 
@@ -61,8 +61,6 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
             WARNING! this option can create a lot of metarelation that can easily be created in a later
             process.
         """
-        super().__init__()
-
         self.window_size = window_size
         self.threshold = threshold
         self.metarelation_creation_metric = (
@@ -82,14 +80,21 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
 
         This method affects the self.scope attribute.
         """
-        if self.window_size is not None:
-            if self.window_size < 2:
-                self.window_size = 2
-                logger.warning(
-                    """Wrong window size value. Window size can not be lower than 2.
-                                Default to window size = 2.
-                            """
-                )
+        if self.window_size is not None and self.window_size < 2:
+            self.window_size = 2
+            logger.warning(
+                """Wrong window size value. Window size can not be lower than 2.
+                            Default to window size = 2.
+                        """
+            )
+
+        if self.threshold is not None:
+            self.thr = 2
+            logger.warning(
+                """Wrong threshold value. thresold can't be None.
+                            Default to threshold = 0.
+                        """
+            )
 
         if self.scope not in {"sent", "doc"}:
             self.scope = "doc"

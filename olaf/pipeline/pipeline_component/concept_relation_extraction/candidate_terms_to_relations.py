@@ -25,10 +25,8 @@ class CTsToRelationExtraction(PipelineComponent):
 
     def __init__(
         self,
-        concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc",
-        # parameters: Optional[Dict[str, Any]] = None,
-        # options: Optional[Dict[str, Any]] = None,
+        concept_max_distance: Optional[int] = None,
+        scope: Optional[str] = None,
     ) -> None:
         """Initialise CTsToRelationExtraction pipeline component instance.
 
@@ -41,7 +39,6 @@ class CTsToRelationExtraction(PipelineComponent):
             Options are tunable parameters which will be updated to optimise the
             component performance, by default None.
         """
-        super().__init__()
         self.concept_max_distance = concept_max_distance
         self.scope = scope
 

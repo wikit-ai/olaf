@@ -21,7 +21,7 @@ class SynonymRelationExtraction(PipelineComponent):
     """
 
     def __init__(
-        self, concept_max_distance: Optional[int] = 5, scope: Optional[str] = "doc"
+        self, concept_max_distance: Optional[int] = None, scope: Optional[str] = None
     ) -> None:
         """Initialise synonym grouping relation extraction instance.
 
@@ -35,7 +35,6 @@ class SynonymRelationExtraction(PipelineComponent):
             candidate term "sentence".
             Set to "doc" by default if not specified.
         """
-        super().__init__()
         self.concept_max_distance = concept_max_distance
         self.scope = scope
 

@@ -30,7 +30,6 @@ class TermExtractionPipelineComponent(PipelineComponent):
             A list of candidate term post processing functions to after candidate term extraction
             and before assigning the extracted candidate terms to the pipeline, by default None.
         """
-        super().__init__()
 
         self.cts_post_processing_functions = cts_post_processing_functions
 

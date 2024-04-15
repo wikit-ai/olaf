@@ -35,8 +35,8 @@ class LLMBasedRelationExtraction(PipelineComponent):
         prompt_template: Optional[Callable[[str], List[Dict[str, str]]]] = None,
         llm_generator: Optional[LLMGenerator] = None,
         doc_context_max_len: Optional[int] = 4000,
-        concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc",
+        concept_max_distance: Optional[int] = None,
+        scope: Optional[str] = None,
     ) -> None:
         """Initialise LLM relation extraction pipeline component instance.
 
@@ -69,7 +69,26 @@ class LLMBasedRelationExtraction(PipelineComponent):
         self.doc_context_max_len = doc_context_max_len
         self.concept_max_distance = concept_max_distance
         self.scope = scope
+        self.check_parameters()
         self._check_resources()
+
+    def check_parameters(self) -> None:
+        """Check whether required parameters are given and correct.
+        If this is not the case, suitable default ones are set or errors are raised.
+
+        This method affects the self.scope attribute.
+        """
+        if not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+
+        if self.scope not in {"sent", "doc"}:
+            self.scope = "doc"
+            logger.warning(
+                """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
+            )
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]

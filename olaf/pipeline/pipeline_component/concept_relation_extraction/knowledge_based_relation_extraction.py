@@ -35,8 +35,8 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         self,
         knowledge_source: KnowledgeSource,
         group_ct_on_synonyms: Optional[bool] = True,
-        concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc"
+        concept_max_distance: Optional[int] = None,
+        scope: Optional[str] = None,
     ) -> None:
         """Initialise knowledge based relation extraction instance.
 
@@ -55,7 +55,6 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
             candidate term "sentence".
             Set to "doc" by default if not specified.
         """
-        super().__init__()
         self.knowledge_source = knowledge_source
         self.group_ct_on_synonyms = group_ct_on_synonyms
         self.concept_max_distance = concept_max_distance
@@ -70,6 +69,12 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
 
         This method affects the self.scope attribute.
         """
+        if not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+
         if self.scope not in {"sent", "doc"}:
             self.scope = "doc"
             logger.warning(

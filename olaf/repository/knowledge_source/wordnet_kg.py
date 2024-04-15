@@ -77,7 +77,6 @@ class WordNetKnowledgeResource(KnowledgeSource):
             The set of part of speech tags to use for matching.
             Mandatory when use_pos is True, by default to None.
         """
-        super().__init__()
 
         self.lang = lang
         self.use_domains = use_domains
@@ -105,7 +104,6 @@ class WordNetKnowledgeResource(KnowledgeSource):
                                 Defaulting to NOT using wordnet domains.
                             """
                     )
-
                 else:
                     self.enrichment_domains = load_enrichment_wordnet_domains_from_file(
                         self.enrichment_domains_path

@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 import spacy.tokens.doc
@@ -50,9 +50,9 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        max_term_token_length: Optional[int] = 1,
+        max_term_token_length: Optional[int] = None,
         tfidf_agg_type: Optional[str] = "MEAN",
-        candidate_term_threshold: Optional[float] = 0.0,
+        candidate_term_threshold: Optional[float] = None,
         tfidf_vectorizer: Optional[TfidfVectorizer] = None,
     ) -> None:
         """Initialise TF-IDF term extraction pipeline component instance.

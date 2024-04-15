@@ -45,12 +45,12 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
     def __init__(
         self,
         nb_clusters: Optional[int] = None,
-        metric: Optional[str] = "cosine",
+        metric: Optional[str] = None,
         linkage: Optional[str] = "average",
         distance_threshold: Optional[float] = None,
-        embedding_model: Optional[str] = "all-mpnet-base-v2",
-        concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc",
+        embedding_model: Optional[str] = None,
+        concept_max_distance: Optional[int] = None,
+        scope: Optional[str] = None,
     ) -> None:
         """Initialise agglomerative clustering-based relation extraction instance.
 
@@ -80,7 +80,6 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
             candidate term "sentence", by default "sentence".
         """
-        super().__init__()
         self.candidate_relations = None
         self._nb_clusters = nb_clusters
         self._metric = metric
@@ -130,13 +129,6 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
                 "No value given for metric option, default will be set to cosine."
             )
             self._metric = "cosine"
-
-        if not self._linkage:
-            logger.warning(
-                "No value given for linkage option, default will be set to average."
-            )
-
-            self._linkage = "average"
 
         if not isinstance(self.concept_max_distance, int):
             self.concept_max_distance = 5

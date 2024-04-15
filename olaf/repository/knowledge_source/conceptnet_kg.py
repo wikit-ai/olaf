@@ -25,7 +25,7 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
     def __init__(
         self,
         lang: Optional[str] = "en",
-        api_resp_batch_size: Optional[int] = 1000,
+        api_resp_batch_size: Optional[int] = None,
         check_sources: Optional[bool] = False,
         validation_sources: Optional[Set[str]] = None,
     ) -> None:
