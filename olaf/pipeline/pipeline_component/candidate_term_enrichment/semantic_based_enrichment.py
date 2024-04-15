@@ -21,7 +21,7 @@ class SemanticBasedEnrichment(PipelineComponent):
         By default the threshold is set to 0.9.
     """
 
-    def __init__(self, threshold: Optional[float] = 0.9) -> None:
+    def __init__(self, threshold: Optional[float] = None) -> None:
         """Initialise semantic based term enrichment instance.
 
         Parameters
@@ -44,7 +44,7 @@ class SemanticBasedEnrichment(PipelineComponent):
         ParameterError
             Exception raised when a required parameter is missing or a wrong value is provided.
         """
-        if not isinstance(self.threshold, int):
+        if not self.threshold:
             self.threshold = 0.9
             logger.warning(
                 "No value given for threshold parameter, default will be set to 0.9."
