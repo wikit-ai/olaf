@@ -5,7 +5,7 @@ import numpy as np
 from ....algorithm.agglomerative_clustering import AgglomerativeClustering
 from ....commons.candidate_term_tools import cts_to_concept
 from ....commons.embedding_tools import sbert_embeddings
-from ....commons.errors import OptionError, ParameterError
+from ....commons.errors import ParameterError
 from ....commons.logging_config import logger
 from ....data_container.knowledge_representation_schema import KnowledgeRepresentation
 from ..pipeline_component_schema import PipelineComponent
@@ -73,7 +73,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         self._distance_threshold = distance_threshold
         self._embedding_model = embedding_model
         self._check_parameters()
-        
+
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set or errors are raised.
 
@@ -82,7 +82,6 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         ParameterError
             Exception raised when a required parameter is missing or a wrong value is provided.
         """
-
 
         if self._embedding_model:
             if not isinstance(self._embedding_model, str):
@@ -106,8 +105,8 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         elif self._distance_threshold:
             self._distance_threshold = None
             logger.warning(
-                    "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
-                )
+                "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
+            )
 
         if not self._metric:
             logger.warning(
@@ -121,9 +120,6 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             )
 
             self._linkage = "average"
-
-
-
 
     def optimise(self) -> None:
         # TODO

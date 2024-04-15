@@ -3,15 +3,10 @@ from typing import Any, Dict
 
 
 class PipelineComponent(ABC):
-    """A pipeline component is part of a pipeline performing one specific task.
-    """
+    """A pipeline component is part of a pipeline performing one specific task."""
 
-    def __init__(
-        self,
-        #*kwargs
-    ) -> None:
-        """Initialise PipelineComponent instance.
-        """
+    def __init__(self) -> None:
+        """Initialise PipelineComponent instance."""
 
     @abstractmethod
     def _check_resources(self) -> None:

@@ -32,15 +32,14 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
 
     def __init__(
         self,
-        candidate_term_threshold: Optional[float]=0.0,
-        max_term_token_length: Optional[int]=5,
-        token_sequences_doc_attribute: Optional[str]=None,
+        candidate_term_threshold: Optional[float] = 0.0,
+        max_term_token_length: Optional[int] = 5,
+        token_sequences_doc_attribute: Optional[str] = None,
         c_value_threshold: Optional[float] = None,
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        stop_token_list: Set[str] = None
-
+        stop_token_list: Set[str] = None,
     ) -> None:
         """Initialise C-value term extraction pipeline component instance.
 
@@ -54,7 +53,7 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
             The name of the spaCy doc custom attribute containing the sequences of tokens to
             form the corpus for the c-value computation. Default is None which default to the full doc.
         c_value_threshold : float, optional
-            The threshold used during the c-value scores computation process. 
+            The threshold used during the c-value scores computation process.
             Default is None which default to the candidate_term_threshold.
         cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional
             A list of candidate term post processing functions to run after candidate term extraction
@@ -70,10 +69,10 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         self._candidate_term_threshold = candidate_term_threshold
         self._c_value_threshold = c_value_threshold
         self._max_term_token_length = max_term_token_length
-        self._stop_token_list = stop_token_list if stop_token_list is not  None else set()
+        self._stop_token_list = (
+            stop_token_list if stop_token_list is not None else set()
+        )
         self.check_parameters()
-
-        
 
     def check_parameters(self) -> None:
         if self._token_sequences_doc_attribute is not None:
@@ -104,13 +103,14 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
                 error_type="Wrong value type",
             )
 
-        if (self._c_value_threshold is None) or not isinstance(self._c_value_threshold, float):
+        if (self._c_value_threshold is None) or not isinstance(
+            self._c_value_threshold, float
+        ):
             logger.warning(
                 """No Correct value provided for the C-value algorithm threshold. 
                 The system will default to the provided C-value candidate term extraction threshold."""
             )
             self._c_value_threshold = self._candidate_term_threshold
-        
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]

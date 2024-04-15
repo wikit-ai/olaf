@@ -4,6 +4,7 @@ from ....commons.logging_config import logger
 from ....commons.relation_tools import crs_to_relation, cts_to_crs
 from ..pipeline_component_schema import PipelineComponent
 
+
 class CTsToRelationExtraction(PipelineComponent):
     """A pipeline component to create relations directly from the candidate terms.
 
@@ -25,7 +26,7 @@ class CTsToRelationExtraction(PipelineComponent):
     def __init__(
         self,
         concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc"
+        scope: Optional[str] = "doc",
         # parameters: Optional[Dict[str, Any]] = None,
         # options: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -103,7 +104,7 @@ class CTsToRelationExtraction(PipelineComponent):
             The pipeline running.
         """
 
-        concepts_labels_map = dict()
+        concepts_labels_map = {}
         for concept in pipeline.kr.concepts:
             concepts_labels_map[concept.label] = concept
 

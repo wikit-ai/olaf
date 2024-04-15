@@ -6,7 +6,8 @@ from rdflib.namespace import OWL, RDF, RDFS, XSD, Namespace
 from ....data_container.metarelation_schema import Metarelation
 from ....data_container.relation_schema import Relation
 
-from.base_owl_serialiser import BaseOWLSerialiser
+from .base_owl_serialiser import BaseOWLSerialiser
+
 
 class DomainRangeOWLSerialiser(BaseOWLSerialiser):
     """

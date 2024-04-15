@@ -33,7 +33,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
         pos_selection: Optional[List[str]] = ["NOUN"],
-        token_sequences_doc_attribute: Optional[str] = None
+        token_sequences_doc_attribute: Optional[str] = None,
     ) -> None:
         """Initialise part-of-speech term extraction pipeline component instance.
 
@@ -78,8 +78,6 @@ class POSTermExtraction(TermExtractionPipelineComponent):
                 """POS term extraction token sequence attribute not set by the user.
                By default the system will use the entire content of the document."""
             )
-
-
 
         if not self._pos_selection:
             logger.warning(

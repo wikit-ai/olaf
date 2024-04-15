@@ -4,7 +4,7 @@ import numpy as np
 
 from ....algorithm.agglomerative_clustering import AgglomerativeClustering
 from ....commons.embedding_tools import sbert_embeddings
-from ....commons.errors import OptionError, ParameterError
+from ....commons.errors import ParameterError
 from ....commons.logging_config import logger
 from ....commons.relation_tools import crs_to_relation, cts_to_crs, group_cr_by_concepts
 from ....data_container.knowledge_representation_schema import KnowledgeRepresentation
@@ -50,7 +50,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         distance_threshold: Optional[float] = None,
         embedding_model: Optional[str] = "all-mpnet-base-v2",
         concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc"
+        scope: Optional[str] = "doc",
     ) -> None:
         """Initialise agglomerative clustering-based relation extraction instance.
 
@@ -87,10 +87,9 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         self._linkage = linkage
         self._distance_threshold = distance_threshold
         self._embedding_model = embedding_model
-        self.concept_max_distance = concept_max_distance 
+        self.concept_max_distance = concept_max_distance
         self.scope = scope
         self._check_parameters()
-
 
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set or errors are raised.
@@ -123,8 +122,8 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         elif self._distance_threshold:
             self._distance_threshold = None
             logger.warning(
-                    "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
-                )
+                "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
+            )
 
         if not self._metric:
             logger.warning(
@@ -138,7 +137,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             )
 
             self._linkage = "average"
-    
+
         if not isinstance(self.concept_max_distance, int):
             self.concept_max_distance = 5
             logger.warning(
@@ -152,7 +151,6 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             )
 
     def optimise(self) -> None:
-        # TODO
         """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
@@ -214,7 +212,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             The pipeline running.
         """
 
-        concepts_labels_map = dict()
+        concepts_labels_map = {}
         for concept in pipeline.kr.concepts:
             concepts_labels_map[concept.label] = concept
 

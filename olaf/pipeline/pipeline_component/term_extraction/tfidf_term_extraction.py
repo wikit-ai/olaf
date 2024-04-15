@@ -46,14 +46,14 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         token_sequence_preprocessing: Optional[
             Callable[[spacy.tokens.span.Span], Tuple[str]]
         ] = None,
-        token_sequences_doc_attribute : Optional[str] = None,
+        token_sequences_doc_attribute: Optional[str] = None,
         cts_post_processing_functions: Optional[
             List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]]
         ] = None,
-        max_term_token_length : Optional[int] = 1,
-        tfidf_agg_type : Optional[str] = "MEAN",
-        candidate_term_threshold : Optional[float] = 0.0,
-        tfidf_vectorizer : Optional[TfidfVectorizer] = None
+        max_term_token_length: Optional[int] = 1,
+        tfidf_agg_type: Optional[str] = "MEAN",
+        candidate_term_threshold: Optional[float] = 0.0,
+        tfidf_vectorizer: Optional[TfidfVectorizer] = None,
     ) -> None:
         """Initialise TF-IDF term extraction pipeline component instance.
 
@@ -94,11 +94,15 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
 
         self._check_parameters()
 
-        self._ngram_range = (1, self._max_term_token_length) 
+        self._ngram_range = (1, self._max_term_token_length)
         self._custom_tokenizer = lambda text: [t.strip() for t in text.split()]
 
-        self.tfidf_vectorizer = tfidf_vectorizer if tfidf_vectorizer is not None else TfidfVectorizer(
-            tokenizer=self._custom_tokenizer, ngram_range=self._ngram_range
+        self.tfidf_vectorizer = (
+            tfidf_vectorizer
+            if tfidf_vectorizer is not None
+            else TfidfVectorizer(
+                tokenizer=self._custom_tokenizer, ngram_range=self._ngram_range
+            )
         )
 
     def _check_parameters(self) -> None:
@@ -133,7 +137,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
             self.token_sequence_preprocessing = lambda span: [
                 token.lower_.strip() for token in span
             ]
-        
+
         if self._max_term_token_length is None:
             logger.debug(
                 "No max token length for extracted terms provided. Defaulting to unigram."
@@ -370,9 +374,9 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         candidate_terms = set()
         for extracted_term in extracted_terms:
             term_corpus_occurrences = self._get_corpus_occurrences(
-                    term=extracted_term,
-                    term_corpus_occ_mapping=spaced_term_corpus_occ_map,
-                )
+                term=extracted_term,
+                term_corpus_occ_mapping=spaced_term_corpus_occ_map,
+            )
             candidate_term = CandidateTerm(
                 label=extracted_term, corpus_occurrences=term_corpus_occurrences
             )

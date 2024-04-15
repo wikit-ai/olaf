@@ -23,12 +23,12 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
     """
 
     def __init__(
-            self, 
-            lang: Optional[str] = "en",
-            api_resp_batch_size: Optional[int] = 1000,
-            check_sources: Optional[bool] = False,
-            validation_sources: Optional[Set[str]] = None
-        ) -> None:
+        self,
+        lang: Optional[str] = "en",
+        api_resp_batch_size: Optional[int] = 1000,
+        check_sources: Optional[bool] = False,
+        validation_sources: Optional[Set[str]] = None,
+    ) -> None:
         """Initialise ConceptNet knowledge resource instance.
 
         Parameters
@@ -41,8 +41,7 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
             Wether or not to filter the concepts based on provided sources, default False.
         validation_sources: Set[str], optional
             The sources to use to filter the concepts, default set().
-                """
-        super().__init__()
+        """
 
         self.lang = lang
 
@@ -60,7 +59,7 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
                 "No value given for lang parameter, default will be set to 'en'"
             )
             self.lang = "en"
-        
+
         if not self.api_resp_batch_size:
             logger.warning(
                 "No value given for api_resp_batch_size parameter, default will be set to 1000"

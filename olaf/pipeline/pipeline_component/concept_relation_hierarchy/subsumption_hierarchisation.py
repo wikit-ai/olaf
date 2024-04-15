@@ -18,10 +18,7 @@ class SubsumptionHierarchisation(PipelineComponent):
         Threshold used to validate the subsumption relation or not, by default 0.5.
     """
 
-    def __init__(
-        self,
-        threshold : Optional[float] = 0.5
-    ) -> None:
+    def __init__(self, threshold: Optional[float] = 0.5) -> None:
         """Initialise subsumption hierarchisation instance.
 
         Parameters
@@ -130,7 +127,7 @@ class SubsumptionHierarchisation(PipelineComponent):
         float
             Subsumption score.
         """
-        if not (nb_occurrence == 0):
+        if not nb_occurrence == 0:
             subsumption_score = nb_cooccurrence / nb_occurrence
         else:
             subsumption_score = 0

@@ -6,15 +6,10 @@ from ..pipeline_component_schema import PipelineComponent
 
 
 class CTsToConceptExtraction(PipelineComponent):
-    """A pipeline component to create concepts directly from the candidate terms.
-    """
+    """A pipeline component to create concepts directly from the candidate terms."""
 
-    def __init__(
-        self
-    ) -> None:
-        """Initialise CTsToConceptExtraction pipeline component instance.
-        """
-        super().__init__()
+    def __init__(self) -> None:
+        """Initialise CTsToConceptExtraction pipeline component instance."""
 
     def optimise(self) -> None:
         """A method to optimise the pipeline component by tuning the options."""

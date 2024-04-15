@@ -21,9 +21,7 @@ class SynonymRelationExtraction(PipelineComponent):
     """
 
     def __init__(
-        self,
-        concept_max_distance: Optional[int] = 5,
-        scope: Optional[str] = "doc"
+        self, concept_max_distance: Optional[int] = 5, scope: Optional[str] = "doc"
     ) -> None:
         """Initialise synonym grouping relation extraction instance.
 
@@ -54,7 +52,7 @@ class SynonymRelationExtraction(PipelineComponent):
             logger.warning(
                 """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
             )
-        
+
         if not isinstance(self.concept_max_distance, int):
             self.concept_max_distance = 5
             logger.warning(
@@ -101,10 +99,9 @@ class SynonymRelationExtraction(PipelineComponent):
             The pipeline running.
         """
 
-        concepts_labels_map = dict()
-        for concept in pipeline.kr.concepts:
-            concepts_labels_map[concept.label] = concept
-
+        concepts_labels_map = {
+            concept.label: concept for concept in pipeline.kr.concepts
+        }
         candidate_relations = cts_to_crs(
             pipeline.candidate_terms,
             concepts_labels_map,
