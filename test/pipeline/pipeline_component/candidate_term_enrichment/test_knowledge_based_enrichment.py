@@ -145,7 +145,7 @@ class TestKnowledgeBasedCTsEnrichmentNoSynonyms:
         self, mock_knowledge_source
     ) -> KnowledgeBasedCTermEnrichment:
         cts_enrichmment = KnowledgeBasedCTermEnrichment(
-            mock_knowledge_source, 
+            mock_knowledge_source,
             use_synonyms=False,
             enrichment_kinds={"antonyms", "hypernyms"}
         )
