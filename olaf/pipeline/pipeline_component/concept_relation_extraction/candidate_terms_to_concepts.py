@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from ....commons.candidate_term_tools import cts_to_concept
 from ....commons.logging_config import logger
@@ -6,34 +6,10 @@ from ..pipeline_component_schema import PipelineComponent
 
 
 class CTsToConceptExtraction(PipelineComponent):
-    """A pipeline component to create concepts directly from the candidate terms.
+    """A pipeline component to create concepts directly from the candidate terms."""
 
-    Attributes
-    ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
-    """
-
-    def __init__(
-        self,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
-    ) -> None:
-        """Initialise CTsToConceptExtraction pipeline component instance.
-
-        Parameters
-        ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
-        """
-        super().__init__(parameters, options)
+    def __init__(self) -> None:
+        """Initialise CTsToConceptExtraction pipeline component instance."""
 
     def optimise(self) -> None:
         """A method to optimise the pipeline component by tuning the options."""

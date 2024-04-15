@@ -11,12 +11,6 @@ class SynonymRelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    parameters: Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the pipeline.
-        This component do not need parameters to run, by default None.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
-        This component has no options to optimise, by default None.
     concept_max_distance: int, optional
         The maximum distance between the candidate term and the concept sought.
         Set to 5 by default if not specified.
@@ -27,24 +21,23 @@ class SynonymRelationExtraction(PipelineComponent):
     """
 
     def __init__(
-        self,
-        parameters: Optional[Dict[str, Any]] = None,
-        options: Optional[Dict[str, Any]] = None,
+        self, concept_max_distance: Optional[int] = 5, scope: Optional[str] = "doc"
     ) -> None:
         """Initialise synonym grouping relation extraction instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any], optional
-            Parameters used to configure the component, by default None.
-        options : Dict[str, Any], optional
-            Tunable options to use to optimise the component performance, by default None.
+        concept_max_distance: int, optional
+            The maximum distance between the candidate term and the concept sought.
+            Set to 5 by default if not specified.
+        scope: str
+            Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
+            candidate term "sentence".
+            Set to "doc" by default if not specified.
         """
-        super().__init__(parameters, options)
-        self.concept_max_distance = (
-            parameters.get("concept_max_distance", 5) if parameters is not None else 5
-        )
-        self.scope = parameters.get("scope", "doc") if parameters is not None else "doc"
+        super().__init__()
+        self.concept_max_distance = concept_max_distance
+        self.scope = scope
 
         self._check_parameters()
 
@@ -58,6 +51,12 @@ class SynonymRelationExtraction(PipelineComponent):
             self.scope = "doc"
             logger.warning(
                 """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
+            )
+
+        if not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "No value given for concept_max_distance parameter, default will be set to 5."
             )
 
     def optimise(self) -> None:
@@ -100,10 +99,9 @@ class SynonymRelationExtraction(PipelineComponent):
             The pipeline running.
         """
 
-        concepts_labels_map = dict()
-        for concept in pipeline.kr.concepts:
-            concepts_labels_map[concept.label] = concept
-
+        concepts_labels_map = {
+            concept.label: concept for concept in pipeline.kr.concepts
+        }
         candidate_relations = cts_to_crs(
             pipeline.candidate_terms,
             concepts_labels_map,

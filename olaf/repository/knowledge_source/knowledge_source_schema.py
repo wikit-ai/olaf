@@ -1,26 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Set
+from typing import Set
 
 
 class KnowledgeSource(ABC):
-    """Knowledge sources are any external sources of knowledge.
+    """Knowledge sources are any external sources of knowledge."""
 
-    Attributes
-    ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the knowledge source.
-    """
-
-    def __init__(self, parameters: Optional[Dict[str, Any]] = None) -> None:
-        """Initialise KnowledgeSource instance.
-
-        Parameters
-        ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the knowledge source,
-            by default None.
-        """
-        self.parameters = parameters if parameters else dict()
+    def __init__(self) -> None:
+        """Initialise KnowledgeSource instance."""
 
     @abstractmethod
     def _check_resources(self) -> None:

@@ -46,13 +46,18 @@ class TextCorpusLoader(CorpusLoader):
                     with open(file_path, "r", encoding="utf-8") as file:
                         text_corpus.append(file.read())
 
-        elif os.path.isfile(self.corpus_path) and (self.corpus_path.split(".")[-1] == "txt"):
+        elif os.path.isfile(self.corpus_path) and (
+            self.corpus_path.split(".")[-1] == "txt"
+        ):
             with open(self.corpus_path, "r", encoding="utf-8") as file:
                 for line in file.readlines():
                     if len(line.strip()):
                         text_corpus.append(line)
         else:
-            logger.error("Corpus path %s is invalid, or the file extension is not '.txt'.", self.corpus_path)
+            logger.error(
+                "Corpus path %s is invalid, or the file extension is not '.txt'.",
+                self.corpus_path,
+            )
             raise FileOrDirectoryNotFoundError(self.corpus_path)
 
         return text_corpus

@@ -1,4 +1,4 @@
-from typing import Any, Dict, Set
+from typing import Set
 
 import pytest
 import spacy.tokens
@@ -70,8 +70,8 @@ def pipeline(candidate_terms, en_sm_spacy_model) -> Pipeline:
 
 
 class MockKnowledgeSource(KnowledgeSource):
-    def __init__(self, parameters: Dict[str, Any] = None) -> None:
-        super().__init__(parameters)
+    def __init__(self) -> None:
+        super().__init__()
 
     def _check_parameters(self) -> None:
         raise NotImplementedError
@@ -144,9 +144,10 @@ class TestKnowledgeBasedCTsEnrichmentNoSynonyms:
     def kg_based_cts_enrichmment_no_syn(
         self, mock_knowledge_source
     ) -> KnowledgeBasedCTermEnrichment:
-        params = {"use_synonyms": False, "enrichment_kinds": {"antonyms", "hypernyms"}}
         cts_enrichmment = KnowledgeBasedCTermEnrichment(
-            mock_knowledge_source, parameters=params
+            mock_knowledge_source,
+            use_synonyms=False,
+            enrichment_kinds={"antonyms", "hypernyms"}
         )
         return cts_enrichmment
 
@@ -182,9 +183,9 @@ class TestKnowledgeBasedCTsEnrichment:
     def kg_based_cts_enrichmment(
         self, mock_knowledge_source
     ) -> KnowledgeBasedCTermEnrichment:
-        params = {"enrichment_kinds": {"antonyms", "hypernyms"}}
         cts_enrichmment = KnowledgeBasedCTermEnrichment(
-            mock_knowledge_source, parameters=params
+            mock_knowledge_source,
+            enrichment_kinds={"antonyms", "hypernyms"}
         )
         return cts_enrichmment
 

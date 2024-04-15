@@ -14,5 +14,4 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
-
 }

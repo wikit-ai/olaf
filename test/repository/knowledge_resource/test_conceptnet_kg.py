@@ -17,7 +17,7 @@ class TestDefaultConceptNetKG:
     def default_conceptnet_kg(self) -> ConceptNetKnowledgeResource:
         params = {}
 
-        kg = ConceptNetKnowledgeResource(parameters=params)
+        kg = ConceptNetKnowledgeResource(**params)
 
         return kg
 
@@ -107,7 +107,7 @@ class TestConceptNetKGParams:
             "validation_sources": {"dbpedia.org", "en.wiktionary.org"},
         }
 
-        kg = ConceptNetKnowledgeResource(parameters=params)
+        kg = ConceptNetKnowledgeResource(**params)
 
         return kg
 
@@ -148,7 +148,7 @@ class TestConceptNetKGFrench:
     def fr_conceptnet_kg(self) -> ConceptNetKnowledgeResource:
         params = {"lang": "fr"}
 
-        kg = ConceptNetKnowledgeResource(parameters=params)
+        kg = ConceptNetKnowledgeResource(**params)
 
         return kg
 

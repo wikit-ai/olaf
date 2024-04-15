@@ -1,4 +1,4 @@
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, Optional
 
 from ....commons.logging_config import logger
 from ....data_container.enrichment_schema import Enrichment
@@ -14,12 +14,6 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     ----------
     knowledge_source : KnowledgeSource
         The source of knowledge to use for enrichment.
-    parameters : Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the knowledge source,
-        by default None.
-    options : Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the
-        component performance, by default None.
     use_synonyms: bool, optional
         Wether to use the existing candidate terms synonyms, by default True.
     enrichment_kinds: Set[str], optional
@@ -30,8 +24,8 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        parameters: Dict[str, Any] = None,
-        options: Dict[str, Any] = None,
+        use_synonyms : Optional[bool] = True,
+        enrichment_kinds : Optional[Set[str]] = {"synonyms"}
     ) -> None:
         """Initialise knowledge based concept extraction instance.
 
@@ -39,20 +33,17 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
         ----------
         knowledge_source : KnowledgeSource
             The source of knowledge to use for concept matching.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the knowledge source,
-            by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+        use_synonyms: bool, optional
+            Wether to use the existing candidate terms synonyms, by default True.
+        enrichment_kinds: Set[str], optional
+            The kinds of enrichments to perform. Accepted values are: 'synonyms' (default), 'antonyms',
+            'hypernyms', and 'hyponyms'. Other values will be ignored.
         """
-        super().__init__(parameters, options)
+        super().__init__()
         self.knowledge_source = knowledge_source
 
-        self.use_synonyms: bool = self.parameters.get("use_synonyms", True)
-        self.enrichment_kinds: Set[str] = self.parameters.get(
-            "enrichment_kinds", {"synonyms"}
-        )
+        self.use_synonyms = use_synonyms
+        self.enrichment_kinds = enrichment_kinds
 
         self._check_resources()
 

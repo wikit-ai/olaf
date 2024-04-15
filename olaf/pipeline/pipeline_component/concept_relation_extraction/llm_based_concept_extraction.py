@@ -119,7 +119,7 @@ class LLMBasedConceptExtraction(PipelineComponent):
         sorted_doc_count = dict(
             sorted(doc_count.items(), key=lambda x: x[1], reverse=True)
         )
-        for doc, _ in sorted_doc_count.items():
+        for doc in sorted_doc_count:
             if len(doc.text) < self.doc_context_max_len - len(context):
                 context += doc.text
                 context += " "
@@ -149,10 +149,11 @@ class LLMBasedConceptExtraction(PipelineComponent):
         try:
             cc_labels = ast.literal_eval(llm_output)
             for cc_group in cc_labels:
-                cc_set = set()
-                for cc_label in cc_group:
-                    if cc_label in cterm_index.keys():
-                        cc_set.add(cterm_index[cc_label])
+                cc_set = {
+                    cterm_index[cc_label]
+                    for cc_label in cc_group
+                    if cc_label in cterm_index
+                }
                 concept_candidates.append(cc_set)
         except (SyntaxError, ValueError):
             logger.error(

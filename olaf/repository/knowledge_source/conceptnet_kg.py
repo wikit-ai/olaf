@@ -12,49 +12,73 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
 
     Attributes
     ----------
-    parameters : Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the ConceptNet
-        external KG instance, by default None.
     lang: str, optional
         Language ISO code for the terms to find concepts for, by default 'en'.
     api_resp_batch_size: int, optional
         Batch size for the ConceptNet API when fetching data, by default 1000.
-    check_sources: Bool, optional
+    check_sources: bool, optional
         Wether or not to filter the concepts based on provided sources, default False.
     validation_sources: Set[str], optional
         The sources to use to filter the concepts, default set().
     """
 
-    def __init__(self, parameters: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(
+        self,
+        lang: Optional[str] = "en",
+        api_resp_batch_size: Optional[int] = 1000,
+        check_sources: Optional[bool] = False,
+        validation_sources: Optional[Set[str]] = None,
+    ) -> None:
         """Initialise ConceptNet knowledge resource instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the ConceptNet
-            knowledge resource instance, by default None.
+        lang: str, optional
+            Language ISO code for the terms to find concepts for, by default 'en'.
+        api_resp_batch_size: int, optional
+            Batch size for the ConceptNet API when fetching data, by default 1000.
+        check_sources: bool, optional
+            Wether or not to filter the concepts based on provided sources, default False.
+        validation_sources: Set[str], optional
+            The sources to use to filter the concepts, default set().
         """
-        super().__init__(parameters)
 
-        self.lang = self.parameters.get("lang", "en")
+        self.lang = lang
 
-        self.api_resp_batch_size = self.parameters.get("api_resp_batch_size", 1000)
-        self.check_sources = self.parameters.get("check_sources", False)
-        self.validation_sources = self.parameters.get("validation_sources", set())
+        self.api_resp_batch_size = api_resp_batch_size
+        self.check_sources = check_sources
+        self.validation_sources = validation_sources
+        self._check_parameters()
 
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """
+        if not self.lang:
+            logger.warning(
+                "No value given for lang parameter, default will be set to 'en'"
+            )
+            self.lang = "en"
 
-        if self.check_sources:
-            if len(self.validation_sources) == 0:
-                logger.warning(
-                    """Using sources checking (check_sources = True) but no source tags provided in parameter `validation_sources`.
-                    Defaulting to not checking sources.
-                    """
-                )
-                self.check_sources = False
+        if not self.api_resp_batch_size:
+            logger.warning(
+                "No value given for api_resp_batch_size parameter, default will be set to 1000"
+            )
+            self.api_resp_batch_size = 1000
+
+        if not self.validation_sources:
+            logger.warning(
+                "No value given for validation_sources parameter, default will be set to []"
+            )
+            self.validation_sources = []
+
+        if self.check_sources and len(self.validation_sources) == 0:
+            logger.warning(
+                """Using sources checking (check_sources = True) but no source tags provided in parameter `validation_sources`.
+                Defaulting to not checking sources.
+                """
+            )
+            self.check_sources = False
 
     def _check_resources(self) -> None:
         # TODO

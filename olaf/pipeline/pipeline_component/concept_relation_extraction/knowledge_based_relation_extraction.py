@@ -1,4 +1,4 @@
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, Optional
 
 from ....commons.candidate_term_tools import group_cts_on_synonyms
 from ....commons.logging_config import logger
@@ -19,12 +19,6 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
     ----------
     knowledge_source : KnowledgeSource
         The source of knowledge to use for relation matching.
-    parameters : Dict[str, Any], optional
-        Parameters are fixed values to be defined when building the knowledge source,
-        by default None.
-    options : Dict[str, Any], optional
-        Options are tunable parameters which will be updated to optimise the
-        component performance, by default None.
     group_ct_on_synonyms: bool, optional
         Whether or not to group the candidate terms on synonyms before proceeding to the
         relation matching with the external source of knowledge, by default True.
@@ -40,8 +34,9 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        parameters: Dict[str, Any] = None,
-        options: Dict[str, Any] = None,
+        group_ct_on_synonyms: Optional[bool] = True,
+        concept_max_distance: Optional[int] = 5,
+        scope: Optional[str] = "doc"
     ) -> None:
         """Initialise knowledge based relation extraction instance.
 
@@ -49,25 +44,22 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         ----------
         knowledge_source : KnowledgeSource
             The source of knowledge to use for relation matching.
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the knowledge source,
-            by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+        group_ct_on_synonyms: bool, optional
+            Whether or not to group the candidate terms on synonyms before proceeding to the
+            relation matching with the external source of knowledge, by default True.
+        concept_max_distance: int, optional
+            The maximum distance between the candidate term and the concept sought.
+            Set to 5 by default if not specified.
+        scope: str, optional
+            Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
+            candidate term "sentence".
+            Set to "doc" by default if not specified.
         """
-        super().__init__(parameters, options)
+        super().__init__()
         self.knowledge_source = knowledge_source
-        self.group_ct_on_synonyms = (
-            parameters.get("group_ct_on_synonyms", True)
-            if parameters is not None
-            else True
-        )
-        self.concept_max_distance = (
-            parameters.get("concept_max_distance", 5) if parameters is not None else 5
-        )
-        self.scope = parameters.get("scope", "doc") if parameters is not None else "doc"
-
+        self.group_ct_on_synonyms = group_ct_on_synonyms
+        self.concept_max_distance = concept_max_distance
+        self.scope = scope
         self._check_parameters()
 
         self._check_resources()

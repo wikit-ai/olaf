@@ -6,8 +6,7 @@ from rdflib.namespace import OWL, RDF, RDFS, SKOS, XSD, Namespace
 
 from ....commons.logging_config import logger
 from ....data_container.concept_schema import Concept
-from ....data_container.knowledge_representation_schema import \
-    KnowledgeRepresentation
+from ....data_container.knowledge_representation_schema import KnowledgeRepresentation
 from ....data_container.metarelation_schema import Metarelation
 from ....data_container.relation_schema import Relation
 

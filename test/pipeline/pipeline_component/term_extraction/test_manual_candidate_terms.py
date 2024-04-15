@@ -39,7 +39,7 @@ class TestManualCandidateTermExtractionDefault:
     @pytest.fixture(scope="class")
     def default_manual_ct_extract(self, ct_string_map) -> ManualCandidateTermExtraction:
         params = {"ct_label_strings_map": ct_string_map}
-        ct_extract = ManualCandidateTermExtraction(parameters=params)
+        ct_extract = ManualCandidateTermExtraction(**params)
         return ct_extract
 
     def test_default_params(self, default_manual_ct_extract) -> None:
@@ -76,8 +76,8 @@ class TestManualCandidateTermExtractionCustomMatcher:
 
     @pytest.fixture(scope="class")
     def manual_ct_extract(self, custom_matcher) -> ManualCandidateTermExtraction:
-        params = {"custom_matcher": custom_matcher}
-        ct_extract = ManualCandidateTermExtraction(parameters=params)
+        params = {"phrase_matcher": custom_matcher}
+        ct_extract = ManualCandidateTermExtraction(**params)
         return ct_extract
 
     def test_params(self, manual_ct_extract, custom_matcher) -> None:
