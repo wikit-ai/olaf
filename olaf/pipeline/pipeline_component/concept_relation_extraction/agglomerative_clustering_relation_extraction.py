@@ -45,11 +45,11 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
     def __init__(
         self,
         nb_clusters: Optional[int] = None,
-        metric: Optional[str] = "cosine",
+        metric: Optional[str] = None,
         linkage: Optional[str] = "average",
         distance_threshold: Optional[float] = None,
-        embedding_model: Optional[str] = "all-mpnet-base-v2",
-        concept_max_distance: Optional[int] = 5,
+        embedding_model: Optional[str] = None,
+        concept_max_distance: Optional[int] = None,
         scope: Optional[str] = "doc",
     ) -> None:
         """Initialise agglomerative clustering-based relation extraction instance.
@@ -73,14 +73,13 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         embedding_model: str, optional
             Name of the embedding model to use.
             The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
-            by default None.
+            by default all-mpnet-base-v2.
         concept_max_distance: int, optional
             The maximum distance between the candidate term and the concept sought, by defautl 5.
         scope: str, optional
             Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
             candidate term "sentence", by default "sentence".
         """
-        super().__init__()
         self.candidate_relations = None
         self._nb_clusters = nb_clusters
         self._metric = metric
@@ -131,17 +130,15 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
             )
             self._metric = "cosine"
 
-        if not self._linkage:
-            logger.warning(
-                "No value given for linkage option, default will be set to average."
-            )
-
-            self._linkage = "average"
-
-        if not isinstance(self.concept_max_distance, int):
+        if self.concept_max_distance is None:
             self.concept_max_distance = 5
             logger.warning(
                 "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+        elif not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "Incorrect type given for concept_max_distance parameter, default will be set to 5."
             )
 
         if self.scope not in {"sent", "doc"}:

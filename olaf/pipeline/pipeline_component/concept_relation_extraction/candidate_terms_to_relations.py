@@ -10,38 +10,30 @@ class CTsToRelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
     concept_max_distance: int, optional
-        The maximum distance between the candidate term and the concept sought.
-        Set to 5 by default if not specified.
-    scope: str
+        The maximum distance between the candidate term and the concept sought,
+        by default 5.
+    scope: str, optional
         Scope used to search concepts. Can be "doc" for the entire document or "sent" for
-        the candidate term "sentence". Set to "doc" by default if not specified.
+        the candidate term "sentence", by default "doc".
     """
 
     def __init__(
         self,
-        concept_max_distance: Optional[int] = 5,
+        concept_max_distance: Optional[int] = None,
         scope: Optional[str] = "doc",
-        # parameters: Optional[Dict[str, Any]] = None,
-        # options: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Initialise CTsToRelationExtraction pipeline component instance.
 
         Parameters
         ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+        concept_max_distance: int, optional
+            The maximum distance between the candidate term and the concept sought,
+            by default 5.
+        scope: str, optional
+            Scope used to search concepts. Can be "doc" for the entire document or "sent" for
+            the candidate term "sentence", by default "doc".
         """
-        super().__init__()
         self.concept_max_distance = concept_max_distance
         self.scope = scope
 
@@ -54,10 +46,15 @@ class CTsToRelationExtraction(PipelineComponent):
         This method affects the self.scope attribute.
         """
 
-        if not isinstance(self.concept_max_distance, int):
+        if self.concept_max_distance is None:
             self.concept_max_distance = 5
             logger.warning(
                 "No value given for concept_max_distance parameter, default will be set to 5."
+            )
+        elif not isinstance(self.concept_max_distance, int):
+            self.concept_max_distance = 5
+            logger.warning(
+                "Incorrect type given for concept_max_distance parameter, default will be set to 5."
             )
 
         if self.scope not in {"sent", "doc"}:

@@ -40,7 +40,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
 
     def __init__(
         self,
-        lang: Optional[str] = "en",
+        lang: Optional[str] = None,
         use_domains: Optional[bool] = False,
         use_pos: Optional[bool] = False,
         wordnet_domains_map: Optional[Dict[str, Set[str]]] = None,
@@ -77,13 +77,10 @@ class WordNetKnowledgeResource(KnowledgeSource):
             The set of part of speech tags to use for matching.
             Mandatory when use_pos is True, by default to None.
         """
-        super().__init__()
 
         self.lang = lang
         self.use_domains = use_domains
         self.use_pos = use_pos
-
-        self.wordnet_lang = fetch_wordnet_lang(self.lang)
         self.wordnet_domains_map = wordnet_domains_map
         self.wordnet_domains_path = wordnet_domains_path
         self.enrichment_domains = enrichment_domains
@@ -91,11 +88,17 @@ class WordNetKnowledgeResource(KnowledgeSource):
         self.wordnet_pos = wordnet_pos
 
         self._check_parameters()
+        self.wordnet_lang = fetch_wordnet_lang(self.lang)
 
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """
+        if not self.lang:
+            logger.warning(
+                "No value given for lang parameter, default will be set to 'en'"
+            )
+            self.lang = "en"
 
         if self.use_domains:
             if self.enrichment_domains is None:
@@ -105,11 +108,12 @@ class WordNetKnowledgeResource(KnowledgeSource):
                                 Defaulting to NOT using wordnet domains.
                             """
                     )
-
+                    self.use_domains = False
                 else:
                     self.enrichment_domains = load_enrichment_wordnet_domains_from_file(
                         self.enrichment_domains_path
                     )
+
             if not self.enrichment_domains:
                 self.use_domains = False
                 self.enrichment_domains = None
@@ -127,6 +131,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
                         Defaulting to not using wordnet domains.
                         """
                 )
+                self.use_domains = False
             else:
                 self.wordnet_domains_map = load_wordnet_domains(
                     self.wordnet_domains_path
@@ -139,6 +144,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
                         Defaulting to not using wordnet domains.
                         """
                 )
+                self.use_domains = False
         if self.use_domains and not self._check_enrichment_domains_exist():
             logger.warning(
                 """Some Wordnet domains have not been found in the mappings."""

@@ -39,10 +39,10 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
     def __init__(
         self,
         nb_clusters: Optional[int] = None,
-        metric: Optional[str] = "cosine",
+        metric: Optional[str] = None,
         linkage: Optional[str] = "average",
         distance_threshold: Optional[float] = None,
-        embedding_model: Optional[str] = "all-mpnet-base-v2",
+        embedding_model: Optional[str] = None,
     ) -> None:
         """Initialise agglomerative clustering-based concept extraction instance.
 
@@ -63,9 +63,8 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         embedding_model: str, optional
             Name of the embedding model to use.
             The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
-            by default None.
+            by default all-mpnet-base-v2.
         """
-        super().__init__()
         self.candidate_terms = None
         self._nb_clusters = nb_clusters
         self._metric = metric
@@ -75,7 +74,8 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         self._check_parameters()
 
     def _check_parameters(self) -> None:
-        """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set or errors are raised.
+        """Check wether required parameters are given and correct. If this is not the case,
+        suitable default ones are set or errors are raised.
 
         Raises
         ------
@@ -99,13 +99,13 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         if not self._nb_clusters:
             if not self._distance_threshold:
                 logger.warning(
-                    "No value given for nb_clusters option, default will be set to 2."
+                    "No value given for nb_clusters or distance_threshold, default to nb_clusters=2"
                 )
                 self._nb_clusters = 2
         elif self._distance_threshold:
             self._distance_threshold = None
             logger.warning(
-                "both nb_clusters and distance_threshold options should be set, distance_threshold is ignored"
+                "Both nb_clusters and distance_threshold options cannot be set together, distance_threshold is ignored"
             )
 
         if not self._metric:
@@ -113,13 +113,6 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
                 "No value given for metric option, default will be set to cosine."
             )
             self._metric = "cosine"
-
-        if not self._linkage:
-            logger.warning(
-                "No value given for linkage option, default will be set to average."
-            )
-
-            self._linkage = "average"
 
     def optimise(self) -> None:
         # TODO

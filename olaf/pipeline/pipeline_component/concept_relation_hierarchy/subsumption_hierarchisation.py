@@ -18,7 +18,7 @@ class SubsumptionHierarchisation(PipelineComponent):
         Threshold used to validate the subsumption relation or not, by default 0.5.
     """
 
-    def __init__(self, threshold: Optional[float] = 0.5) -> None:
+    def __init__(self, threshold: Optional[float] = None) -> None:
         """Initialise subsumption hierarchisation instance.
 
         Parameters
@@ -26,8 +26,25 @@ class SubsumptionHierarchisation(PipelineComponent):
         threshold : float, optional
             Threshold used to validate the subsumption relation or not, by default 0.5.
         """
-        super().__init__()
         self.threshold = threshold
+        self.check_parameters()
+
+    def check_parameters(self) -> None:
+        """Check whether required parameters are given and correct.
+        If this is not the case, suitable default ones are set or errors are raised.
+
+        This method affects the self.scope attribute.
+        """
+        if not self.threshold:
+            self.threshold = 0.5
+            logger.warning(
+                "No value given for threshold parameter, default will be set to 0.5."
+            )
+        elif not isinstance(self.threshold, float):
+            self.threshold = 0.5
+            logger.warning(
+                "Incorrect value given for threshold parameter, default will be set to 0.5."
+            )
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]

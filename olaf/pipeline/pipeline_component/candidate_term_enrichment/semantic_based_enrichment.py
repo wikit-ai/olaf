@@ -21,7 +21,7 @@ class SemanticBasedEnrichment(PipelineComponent):
         By default the threshold is set to 0.9.
     """
 
-    def __init__(self, threshold: Optional[float] = 0.9) -> None:
+    def __init__(self, threshold: Optional[float] = None) -> None:
         """Initialise semantic based term enrichment instance.
 
         Parameters
@@ -30,10 +30,25 @@ class SemanticBasedEnrichment(PipelineComponent):
             The threshold defines the minimum similarity score required to be synonymous.
             By default the threshold is set to 0.9.
         """
-        super().__init__()
 
         self.threshold = threshold
+        self.check_parameters()
         self._check_resources()
+
+    def check_parameters(self) -> None:
+        """Check wether required parameters are given and correct. If this is not the case,
+        suitable default ones are set or errors are raised.
+
+        Raises
+        ------
+        ParameterError
+            Exception raised when a required parameter is missing or a wrong value is provided.
+        """
+        if not self.threshold:
+            self.threshold = 0.9
+            logger.warning(
+                "No value given for threshold parameter, default will be set to 0.9."
+            )
 
     def _check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
@@ -102,7 +117,7 @@ class SemanticBasedEnrichment(PipelineComponent):
         pipeline : Pipeline
             The pipeline running.
         """
-        if not (pipeline.spacy_model.vocab.has_vector("test")):
+        if not pipeline.spacy_model.vocab.has_vector("test"):
             logger.error(
                 """No vectors loaded with the spaCy model. 
                 Consider use another model or another enrichment component."""
