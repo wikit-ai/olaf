@@ -62,9 +62,9 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         self._pos_selection = pos_selection
         self._token_sequences_doc_attribute = token_sequences_doc_attribute
-        self._check_parameters()
+        self.check_parameters()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set."""
         if user_defined_attribute_name := self._token_sequences_doc_attribute:
             if not spacy.tokens.Doc.has_extension(user_defined_attribute_name):

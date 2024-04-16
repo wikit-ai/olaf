@@ -87,10 +87,10 @@ class WordNetKnowledgeResource(KnowledgeSource):
         self.enrichment_domains_path = enrichment_domains_path
         self.wordnet_pos = wordnet_pos
 
-        self._check_parameters()
+        self.check_parameters()
         self.wordnet_lang = fetch_wordnet_lang(self.lang)
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """
@@ -169,7 +169,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
                 )
                 self.use_pos = False
 
-    # TODO Rename this here and in `_check_parameters`
+    # TODO Rename this here and in `check_parameters`
     def _extracted_from__check_parameters_35(self, arg0):
         logger.warning(arg0)
         self.use_domains = False

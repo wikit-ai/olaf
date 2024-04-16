@@ -76,7 +76,9 @@ def candidate_terms(
 
 
 @pytest.fixture(scope="session")
-def pipeline(candidate_terms: Set[CandidateTerm], en_sm_spacy_model: Language) -> Pipeline:
+def pipeline(
+    candidate_terms: Set[CandidateTerm], en_sm_spacy_model: Language
+) -> Pipeline:
     pipeline = Pipeline(spacy_model=en_sm_spacy_model, corpus=[])
     pipeline.candidate_terms = candidate_terms
     return pipeline
@@ -86,7 +88,7 @@ class MockKnowledgeSource(KnowledgeSource):
     def __init__(self) -> None:
         super().__init__()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """
@@ -144,7 +146,11 @@ class TestKnowledgeBasedConceptExtraction:
         concept_extraction = KnowledgeBasedConceptExtraction(mock_knowledge_source)
         return concept_extraction
 
-    def test_pipeline_cts(self, kg_based_concept_extraction: KnowledgeBasedConceptExtraction, pipeline: Pipeline) -> None:
+    def test_pipeline_cts(
+        self,
+        kg_based_concept_extraction: KnowledgeBasedConceptExtraction,
+        pipeline: Pipeline,
+    ) -> None:
         kg_based_concept_extraction.run(pipeline)
 
         concepts_ext_udis = set()
@@ -176,7 +182,9 @@ class TestKnowledgeBasedConceptExtractionNoMerge:
         return concept_extraction
 
     def test_pipeline_cts_empty(
-        self, kg_based_concept_extraction_no_merge_syn: KnowledgeBasedConceptExtraction, pipeline: Pipeline
+        self,
+        kg_based_concept_extraction_no_merge_syn: KnowledgeBasedConceptExtraction,
+        pipeline: Pipeline,
     ) -> None:
         kg_based_concept_extraction_no_merge_syn.run(pipeline)
 

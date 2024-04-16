@@ -47,9 +47,9 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
         self.api_resp_batch_size = api_resp_batch_size
         self.check_sources = check_sources
         self.validation_sources = validation_sources
-        self._check_parameters()
+        self.check_parameters()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """

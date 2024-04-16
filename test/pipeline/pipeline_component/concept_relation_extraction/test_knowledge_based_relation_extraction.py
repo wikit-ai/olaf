@@ -86,7 +86,7 @@ class MockKnowledgeSource(KnowledgeSource):
     def __init__(self) -> None:
         super().__init__()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """

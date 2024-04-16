@@ -72,9 +72,9 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
         self.metarelation_label = metarelation_label
         self.create_symmetric_metarelation = create_symmetric_metarelation
 
-        self._check_parameters()
+        self.check_parameters()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check whether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 

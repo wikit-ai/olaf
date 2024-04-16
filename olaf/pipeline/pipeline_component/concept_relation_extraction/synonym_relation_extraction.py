@@ -36,9 +36,9 @@ class SynonymRelationExtraction(PipelineComponent):
         self.concept_max_distance = concept_max_distance
         self.scope = scope
 
-        self._check_parameters()
+        self.check_parameters()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check whether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 

@@ -52,9 +52,9 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         self.ct_label_strings_map = ct_label_strings_map
         self.phrase_matcher = phrase_matcher
 
-        self._check_parameters()
+        self.check_parameters()
 
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 

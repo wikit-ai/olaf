@@ -13,7 +13,7 @@ class KnowledgeSource(ABC):
         """Method to check that the component has access to all its required resources."""
 
     @abstractmethod
-    def _check_parameters(self) -> None:
+    def check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
         """
