@@ -23,11 +23,11 @@ class LLMBasedRelationExtraction(PipelineComponent):
     doc_context_max_len: int, optional
         Maximum number of characters for the document context in the prompt, by default 4000.
     concept_max_distance: int, optional
-        The maximum distance between the candidate term and the concept sought.
-        Set to 5 by default if not specified.
+        The maximum distance between the candidate term and the concept sought,
+        by default 5.
     scope: str, optional
         Scope used to search concepts. Can be "doc" for the entire document or "sent" for
-        the candidate term "sentence". Set to "doc" by default if not specified.
+        the candidate term "sentence", by default "doc".
     """
 
     def __init__(
@@ -52,11 +52,11 @@ class LLMBasedRelationExtraction(PipelineComponent):
             Maximum number of characters for the document context in the prompt.
             By default, it is set to 4000.
         concept_max_distance: int, optional
-            The maximum distance between the candidate term and the concept sought.
-            Set to 5 by default if not specified.
+            The maximum distance between the candidate term and the concept sought,
+            by default 5.
         scope: str, optional
             Scope used to search concepts. Can be "doc" for the entire document or "sent" for
-            the candidate term "sentence". Set to "doc" by default if not specified.
+            the candidate term "sentence", by default "doc".
         """
         self.prompt_template = (
             prompt_template

@@ -12,12 +12,11 @@ class SynonymRelationExtraction(PipelineComponent):
     Attributes
     ----------
     concept_max_distance: int, optional
-        The maximum distance between the candidate term and the concept sought.
-        Set to 5 by default if not specified.
+        The maximum distance between the candidate term and the concept sought,
+        by default 5.
     scope: str
         Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
-        candidate term "sentence".
-        Set to "doc" by default if not specified.
+        candidate term "sentence", by default "doc".
     """
 
     def __init__(
@@ -28,12 +27,11 @@ class SynonymRelationExtraction(PipelineComponent):
         Parameters
         ----------
         concept_max_distance: int, optional
-            The maximum distance between the candidate term and the concept sought.
-            Set to 5 by default if not specified.
+            The maximum distance between the candidate term and the concept sought,
+            by default 5.
         scope: str
             Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
-            candidate term "sentence".
-            Set to "doc" by default if not specified.
+            candidate term "sentence", by default "doc".
         """
         self.concept_max_distance = concept_max_distance
         self.scope = scope

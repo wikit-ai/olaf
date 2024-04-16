@@ -23,12 +23,11 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         Whether or not to group the candidate terms on synonyms before proceeding to the
         relation matching with the external source of knowledge, by default True.
     concept_max_distance: int, optional
-        The maximum distance between the candidate term and the concept sought.
-        Set to 5 by default if not specified.
+        The maximum distance between the candidate term and the concept sought,
+        by default 5.
     scope: str
         Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
-        candidate term "sentence".
-        Set to "doc" by default if not specified.
+        candidate term "sentence", by default "doc".
     """
 
     def __init__(
@@ -48,12 +47,11 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
             Whether or not to group the candidate terms on synonyms before proceeding to the
             relation matching with the external source of knowledge, by default True.
         concept_max_distance: int, optional
-            The maximum distance between the candidate term and the concept sought.
-            Set to 5 by default if not specified.
+            The maximum distance between the candidate term and the concept sought,
+            by default 5.
         scope: str, optional
             Scope used to search concepts. Can be "doc" for the entire document or "sent" for the
-            candidate term "sentence".
-            Set to "doc" by default if not specified.
+            candidate term "sentence", by default "doc".
         """
         self.knowledge_source = knowledge_source
         self.group_ct_on_synonyms = group_ct_on_synonyms
