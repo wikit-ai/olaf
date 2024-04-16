@@ -73,7 +73,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         embedding_model: str, optional
             Name of the embedding model to use.
             The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
-            by default None.
+            by default all-mpnet-base-v2.
         concept_max_distance: int, optional
             The maximum distance between the candidate term and the concept sought, by defautl 5.
         scope: str, optional

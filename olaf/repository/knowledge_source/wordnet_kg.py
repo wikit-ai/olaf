@@ -147,8 +147,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
             )
 
         if self.use_pos:
-            spacy_pos = self.wordnet_pos
-            if spacy_pos:
+            if spacy_pos := self.wordnet_pos:
                 self.wordnet_pos = {spacy2wordnet_pos(pos) for pos in spacy_pos}
             else:
                 logger.warning(

@@ -63,7 +63,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         embedding_model: str, optional
             Name of the embedding model to use.
             The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,
-            by default None.
+            by default all-mpnet-base-v2.
         """
         self.candidate_terms = None
         self._nb_clusters = nb_clusters

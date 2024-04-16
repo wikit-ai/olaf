@@ -76,7 +76,7 @@ class OWLAxiomExtraction(PipelineComponent):
         reasoner : str, optional
             The reasoner to use, by default "ELK".
             Reasoning is performed using the ROBOT CLI: <https://robot.obolibrary.org/reason>.
-            Hence, possible values are: "hermit", "jfact", "whelk", "emr", "structural".
+            Hence, possible values are: "ELK", "hermit", "jfact", "whelk", "emr", "structural".
         """
 
         self.owl_axiom_generators = owl_axiom_generators

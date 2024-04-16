@@ -27,7 +27,7 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
         lang: Optional[str] = None,
         api_resp_batch_size: Optional[int] = 1000,
         check_sources: Optional[bool] = False,
-        validation_sources: Optional[Set[str]] = None,
+        validation_sources: Optional[Set[str]] = set(),
     ) -> None:
         """Initialise ConceptNet knowledge resource instance.
 
@@ -44,7 +44,6 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
         """
 
         self.lang = lang
-
         self.api_resp_batch_size = api_resp_batch_size
         self.check_sources = check_sources
         self.validation_sources = validation_sources
@@ -59,12 +58,6 @@ class ConceptNetKnowledgeResource(KnowledgeSource):
                 "No value given for lang parameter, default will be set to 'en'"
             )
             self.lang = "en"
-
-        if not self.validation_sources:
-            logger.warning(
-                "No value given for validation_sources parameter, default will be set to []"
-            )
-            self.validation_sources = []
 
         if self.check_sources and len(self.validation_sources) == 0:
             logger.warning(

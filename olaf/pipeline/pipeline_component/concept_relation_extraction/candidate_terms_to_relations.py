@@ -10,15 +10,10 @@ class CTsToRelationExtraction(PipelineComponent):
 
     Attributes
     ----------
-    parameters: Dict[str, Any]
-        Parameters are fixed values to be defined when building the pipeline.
-        They are necessary for the component functioning.
-    options: Dict[str, Any]
-        Options are tunable parameters which will be updated to optimise the component performance.
     concept_max_distance: int, optional
         The maximum distance between the candidate term and the concept sought.
         Set to 5 by default if not specified.
-    scope: str
+    scope: str, optional
         Scope used to search concepts. Can be "doc" for the entire document or "sent" for
         the candidate term "sentence". Set to "doc" by default if not specified.
     """
@@ -32,12 +27,12 @@ class CTsToRelationExtraction(PipelineComponent):
 
         Parameters
         ----------
-        parameters : Dict[str, Any], optional
-            Parameters are fixed values to be defined when building the pipeline.
-            They are necessary for the component functioning, by default None.
-        options : Dict[str, Any], optional
-            Options are tunable parameters which will be updated to optimise the
-            component performance, by default None.
+        concept_max_distance: int, optional
+            The maximum distance between the candidate term and the concept sought.
+            Set to 5 by default if not specified.
+        scope: str, optional
+            Scope used to search concepts. Can be "doc" for the entire document or "sent" for
+            the candidate term "sentence". Set to "doc" by default if not specified.
         """
         self.concept_max_distance = concept_max_distance
         self.scope = scope
