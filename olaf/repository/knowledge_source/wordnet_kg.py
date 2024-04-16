@@ -81,8 +81,6 @@ class WordNetKnowledgeResource(KnowledgeSource):
         self.lang = lang
         self.use_domains = use_domains
         self.use_pos = use_pos
-
-        self.wordnet_lang = fetch_wordnet_lang(self.lang)
         self.wordnet_domains_map = wordnet_domains_map
         self.wordnet_domains_path = wordnet_domains_path
         self.enrichment_domains = enrichment_domains
@@ -90,6 +88,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
         self.wordnet_pos = wordnet_pos
 
         self._check_parameters()
+        self.wordnet_lang = fetch_wordnet_lang(self.lang)
 
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
