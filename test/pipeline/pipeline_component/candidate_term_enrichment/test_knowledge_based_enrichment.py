@@ -76,7 +76,7 @@ class MockKnowledgeSource(KnowledgeSource):
     def _check_parameters(self) -> None:
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         pass
 
     def match_external_concepts(self, matching_terms: Set[str]) -> Set[str]:
@@ -147,7 +147,7 @@ class TestKnowledgeBasedCTsEnrichmentNoSynonyms:
         cts_enrichmment = KnowledgeBasedCTermEnrichment(
             mock_knowledge_source,
             use_synonyms=False,
-            enrichment_kinds={"antonyms", "hypernyms"}
+            enrichment_kinds={"antonyms", "hypernyms"},
         )
         return cts_enrichmment
 
@@ -184,8 +184,7 @@ class TestKnowledgeBasedCTsEnrichment:
         self, mock_knowledge_source
     ) -> KnowledgeBasedCTermEnrichment:
         cts_enrichmment = KnowledgeBasedCTermEnrichment(
-            mock_knowledge_source,
-            enrichment_kinds={"antonyms", "hypernyms"}
+            mock_knowledge_source, enrichment_kinds={"antonyms", "hypernyms"}
         )
         return cts_enrichmment
 

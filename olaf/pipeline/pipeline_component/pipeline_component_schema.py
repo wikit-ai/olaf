@@ -9,7 +9,7 @@ class PipelineComponent(ABC):
         """Initialise PipelineComponent instance."""
 
     @abstractmethod
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
 
     @abstractmethod

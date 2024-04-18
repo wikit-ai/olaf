@@ -86,7 +86,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
             )
             self._pos_selection = ["NOUN"]
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
         This pipeline component does not need any access to any external resource.

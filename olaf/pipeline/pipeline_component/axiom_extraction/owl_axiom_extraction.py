@@ -104,7 +104,7 @@ class OWLAxiomExtraction(PipelineComponent):
             os.getenv("DATA_PATH"), "kr_owl_consistency_check.owl"
         )
 
-        self._check_resources()
+        self.check_resources()
 
         self._pattern_nb_classes = re.compile(
             "There are (?P<nb_classes>\\d+) unsatisfiable classes in the ontology\\."
@@ -118,7 +118,7 @@ class OWLAxiomExtraction(PipelineComponent):
             all_individuals_different,
         }
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
         The OWL axiom extraction component requires the environment variables:

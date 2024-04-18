@@ -92,7 +92,7 @@ class MockKnowledgeSource(KnowledgeSource):
         """
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         pass
 
     def match_external_concepts(self, matching_terms: Set[str]) -> Set[str]:

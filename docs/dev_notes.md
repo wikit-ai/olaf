@@ -106,7 +106,7 @@ classDiagram
 	class PipelineComponent{
 		<<abstract>>
 
-		-check_resources()
+		+check_resources()
 		+optimise()
 		-compute_metrics()
 		+get_performance_report() Dict[str, Any]
@@ -130,7 +130,7 @@ classDiagram
 		<<abstract>>
         +dict[str, Any] parameters
         
-        -check_resources()
+        +check_resources()
         -check_parameters()
 		+match_external_concepts(term: CandidateTerm) Set[str]
         +enrich_term(term: CandidateTerm)

@@ -22,7 +22,7 @@ class KnowledgeBasedConceptExtraction(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        group_ct_on_synonyms: Optional[bool] = True
+        group_ct_on_synonyms: Optional[bool] = True,
     ) -> None:
         """Initialise knowledge based concept extraction instance.
 
@@ -38,12 +38,12 @@ class KnowledgeBasedConceptExtraction(PipelineComponent):
         self.knowledge_source = knowledge_source
         self.group_ct_on_synonyms = group_ct_on_synonyms
 
-        self._check_resources()
+        self.check_resources()
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
 
-        self.knowledge_source._check_resources()
+        self.knowledge_source.check_resources()
 
     def optimise(self) -> None:
         # TODO

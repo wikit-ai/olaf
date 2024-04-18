@@ -151,7 +151,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         logger.info(
             "Agglomerative clustering-based relation extraction pipeline component has no external resources to check."

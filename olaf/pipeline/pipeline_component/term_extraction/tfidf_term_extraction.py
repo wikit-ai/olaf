@@ -173,7 +173,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
         This pipeline component does not need any access to any external resource.

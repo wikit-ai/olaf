@@ -67,7 +67,7 @@ class SynonymRelationExtraction(PipelineComponent):
             "Synonym grouping concept extraction pipeline component cannot be optimise."
         )
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         logger.info(
             "Synonym grouping relation extraction pipeline component has no external resources to check."

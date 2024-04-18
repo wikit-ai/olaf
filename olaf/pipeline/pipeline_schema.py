@@ -3,17 +3,14 @@ from typing import List, Optional
 import spacy
 
 from ..commons.errors import PipelineCorpusInitialisationError
-from ..data_container.knowledge_representation_schema import \
-    KnowledgeRepresentation
-from .data_preprocessing.data_preprocessing_schema import \
-    DataPreprocessing
-from .pipeline_component.pipeline_component_schema import \
-    PipelineComponent
+from ..data_container.knowledge_representation_schema import KnowledgeRepresentation
+from .data_preprocessing.data_preprocessing_schema import DataPreprocessing
+from .pipeline_component.pipeline_component_schema import PipelineComponent
 from ..repository.corpus_loader.corpus_loader_schema import CorpusLoader
 
 
-class Pipeline():
-    """A Pipeline is the library main class. It orchestrates the pipeline starting 
+class Pipeline:
+    """A Pipeline is the library main class. It orchestrates the pipeline starting
     from raw texts to build the final knowledge representation.
 
     The corpus loader is responsible for the conversion for raw text to spacy document.
@@ -37,21 +34,22 @@ class Pipeline():
         The candidate terms extracted and processed to create concept and relations.
     """
 
-    def __init__(self,
-                 spacy_model: spacy.language.Language,
-                 pipeline_components: Optional[List[PipelineComponent]] = None,
-                 preprocessing_components: Optional[List[DataPreprocessing]] = None,
-                 corpus_loader: Optional[CorpusLoader] = None,
-                 corpus: Optional[List[spacy.tokens.doc.Doc]] = None,
-                 seed_kr: Optional[KnowledgeRepresentation] = None
-                 ) -> None:
+    def __init__(
+        self,
+        spacy_model: spacy.language.Language,
+        pipeline_components: Optional[List[PipelineComponent]] = None,
+        preprocessing_components: Optional[List[DataPreprocessing]] = None,
+        corpus_loader: Optional[CorpusLoader] = None,
+        corpus: Optional[List[spacy.tokens.doc.Doc]] = None,
+        seed_kr: Optional[KnowledgeRepresentation] = None,
+    ) -> None:
         """Initialise Pipeline instance.
 
         Parameters
         ----------
         spacy_model: spacy.language.Language
             The spacy model used to represent text corpus.
-        pipeline_components: List[PipelineComponent], optional 
+        pipeline_components: List[PipelineComponent], optional
             The ontology learning pipeline components that build the knowledge representation from the corpus, by default None.
         preprocessing_components: List[DataPreprocessing], optional
             The pipeline components specific to preprocessing, by default None.
@@ -72,8 +70,8 @@ class Pipeline():
 
         if self.preprocessing_components is None:
             self.preprocessing_components = []
-        
-        if self.pipeline_components is None :
+
+        if self.pipeline_components is None:
             self.pipeline_components = []
 
         if self.corpus is None:
@@ -87,14 +85,16 @@ class Pipeline():
 
     def build(self) -> None:
         """Effectively build the pipeline, making the instance runnable.
-            This method check each components and the constrained order.
+        This method check each components and the constrained order.
         """
         # TODO : Check that the order of the pipeline components is valid.
 
-        for component in self.pipeline_components : 
-            component._check_resources()
+        for component in self.pipeline_components:
+            component.check_resources()
 
-    def add_preprocessing_component(self, preprocessing_component: DataPreprocessing) -> None:
+    def add_preprocessing_component(
+        self, preprocessing_component: DataPreprocessing
+    ) -> None:
         """Add a preprocessing component to the pipeline.
 
         Parameters
@@ -104,7 +104,9 @@ class Pipeline():
         """
         self.preprocessing_components.append(preprocessing_component)
 
-    def remove_preprocessing_component(self, preprocessing_component: DataPreprocessing) -> None:
+    def remove_preprocessing_component(
+        self, preprocessing_component: DataPreprocessing
+    ) -> None:
         """Remove a preprocessing component from the pipeline.
 
         Parameters
@@ -135,11 +137,11 @@ class Pipeline():
         self.pipeline_components.remove(pipeline_component)
 
     def run(self) -> None:
-        """Run the pipeline. The method hence run each pipeline components in 
-            the determined order filling the Knowledge Representation.
+        """Run the pipeline. The method hence run each pipeline components in
+        the determined order filling the Knowledge Representation.
         """
         for component in self.preprocessing_components:
             component.run(self)
-            
-        for component in self.pipeline_components :
+
+        for component in self.pipeline_components:
             component.run(self)

@@ -24,8 +24,8 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
     def __init__(
         self,
         knowledge_source: KnowledgeSource,
-        use_synonyms : Optional[bool] = True,
-        enrichment_kinds : Optional[Set[str]] = {"synonyms"}
+        use_synonyms: Optional[bool] = True,
+        enrichment_kinds: Optional[Set[str]] = {"synonyms"},
     ) -> None:
         """Initialise knowledge based concept extraction instance.
 
@@ -45,12 +45,12 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
         self.use_synonyms = use_synonyms
         self.enrichment_kinds = enrichment_kinds
 
-        self._check_resources()
+        self.check_resources()
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
 
-        self.knowledge_source._check_resources()
+        self.knowledge_source.check_resources()
 
     def optimise(self) -> None:
         # TODO

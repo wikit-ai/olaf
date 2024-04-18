@@ -72,9 +72,9 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         self._stop_token_list = (
             stop_token_list if stop_token_list is not None else set()
         )
-        self.check_parameters()
+        self._check_parameters()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         if self._token_sequences_doc_attribute is not None:
             if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
                 logger.warning(
@@ -122,7 +122,7 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
         This pipeline component does not need any access to any external resource.

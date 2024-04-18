@@ -59,7 +59,7 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         self.scope = scope
         self._check_parameters()
 
-        self._check_resources()
+        self.check_resources()
 
     def _check_parameters(self) -> None:
         """Check whether required parameters are given and correct.
@@ -84,10 +84,10 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
                 """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
             )
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
 
-        self.knowledge_source._check_resources()
+        self.knowledge_source.check_resources()
 
     def optimise(self) -> None:
         # TODO

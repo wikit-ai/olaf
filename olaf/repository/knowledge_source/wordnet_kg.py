@@ -175,7 +175,7 @@ class WordNetKnowledgeResource(KnowledgeSource):
         self.use_domains = False
         self.enrichment_domains = None
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         # TODO
         """Method to check that the component has access to all its required resources."""
 
