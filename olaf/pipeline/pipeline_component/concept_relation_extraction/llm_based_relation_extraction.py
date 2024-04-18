@@ -69,10 +69,10 @@ class LLMBasedRelationExtraction(PipelineComponent):
         self.doc_context_max_len = doc_context_max_len
         self.concept_max_distance = concept_max_distance
         self.scope = scope
-        self.check_parameters()
-        self._check_resources()
+        self._check_parameters()
+        self.check_resources()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check whether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 
@@ -101,7 +101,7 @@ class LLMBasedRelationExtraction(PipelineComponent):
         """A method to optimise the pipeline component by tuning the configuration."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         self.llm_generator.check_resources()
 

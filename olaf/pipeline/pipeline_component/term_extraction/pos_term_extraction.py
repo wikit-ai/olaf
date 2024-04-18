@@ -62,9 +62,9 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         self._pos_selection = pos_selection
         self._token_sequences_doc_attribute = token_sequences_doc_attribute
-        self.check_parameters()
+        self._check_parameters()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set."""
         if user_defined_attribute_name := self._token_sequences_doc_attribute:
             if not spacy.tokens.Doc.has_extension(user_defined_attribute_name):
@@ -86,7 +86,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
             )
             self._pos_selection = ["NOUN"]
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
         This pipeline component does not need any access to any external resource.

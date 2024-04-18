@@ -52,7 +52,7 @@ class LLMBasedConceptExtraction(PipelineComponent):
             llm_generator if llm_generator is not None else HuggingFaceGenerator()
         )
         self.doc_context_max_len = doc_context_max_len
-        self._check_resources()
+        self.check_resources()
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]
@@ -60,7 +60,7 @@ class LLMBasedConceptExtraction(PipelineComponent):
         """A method to optimise the pipeline component by tuning the configuration."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         self.llm_generator.check_resources()
 

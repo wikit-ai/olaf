@@ -52,9 +52,9 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         self.ct_label_strings_map = ct_label_strings_map
         self.phrase_matcher = phrase_matcher
 
-        self.check_parameters()
+        self._check_parameters()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 
@@ -74,7 +74,7 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
         """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         logger.info(
             "Manual candidate term extraction pipeline component has no external resources to check."

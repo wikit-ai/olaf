@@ -73,10 +73,10 @@ class MockKnowledgeSource(KnowledgeSource):
     def __init__(self) -> None:
         super().__init__()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         pass
 
     def match_external_concepts(self, matching_terms: Set[str]) -> Set[str]:

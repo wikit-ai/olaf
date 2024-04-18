@@ -54,7 +54,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         self.namespace = (
             namespace if namespace is not None else "http://www.ms2.org/o/example#"
         )
-        self._check_resources()
+        self.check_resources()
 
     def optimise(
         self, validation_terms: Set[str], option_values_map: Set[float]
@@ -62,7 +62,7 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
         """A method to optimise the pipeline component by tuning the configuration."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         self.llm_generator.check_resources()
 

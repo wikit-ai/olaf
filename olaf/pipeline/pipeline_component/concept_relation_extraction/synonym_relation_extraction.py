@@ -36,9 +36,9 @@ class SynonymRelationExtraction(PipelineComponent):
         self.concept_max_distance = concept_max_distance
         self.scope = scope
 
-        self.check_parameters()
+        self._check_parameters()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check whether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 
@@ -67,7 +67,7 @@ class SynonymRelationExtraction(PipelineComponent):
             "Synonym grouping concept extraction pipeline component cannot be optimise."
         )
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         logger.info(
             "Synonym grouping relation extraction pipeline component has no external resources to check."

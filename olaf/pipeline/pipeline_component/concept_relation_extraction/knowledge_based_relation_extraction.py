@@ -57,11 +57,11 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
         self.group_ct_on_synonyms = group_ct_on_synonyms
         self.concept_max_distance = concept_max_distance
         self.scope = scope
-        self.check_parameters()
+        self._check_parameters()
 
-        self._check_resources()
+        self.check_resources()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check whether required parameters are given and correct.
         If this is not the case, suitable default ones are set or errors are raised.
 
@@ -84,10 +84,10 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
                 """Wrong scope value. Possible values are 'sent' or 'doc'. Default to scope = 'doc'."""
             )
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
 
-        self.knowledge_source._check_resources()
+        self.knowledge_source.check_resources()
 
     def optimise(self) -> None:
         # TODO

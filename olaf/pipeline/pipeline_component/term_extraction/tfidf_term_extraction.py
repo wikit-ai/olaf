@@ -92,7 +92,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         self.tfidf_agg_type = tfidf_agg_type
         self.candidate_term_threshold = candidate_term_threshold
 
-        self.check_parameters()
+        self._check_parameters()
 
         self._ngram_range = (1, self._max_term_token_length)
         self._custom_tokenizer = lambda text: [t.strip() for t in text.split()]
@@ -105,7 +105,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
             )
         )
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set.
 
@@ -173,7 +173,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
         """A method to optimise the pipeline component by tuning the options."""
         raise NotImplementedError
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources.
 
         This pipeline component does not need any access to any external resource.

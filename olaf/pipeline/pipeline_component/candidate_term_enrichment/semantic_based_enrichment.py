@@ -32,10 +32,10 @@ class SemanticBasedEnrichment(PipelineComponent):
         """
 
         self.threshold = threshold
-        self.check_parameters()
-        self._check_resources()
+        self._check_parameters()
+        self.check_resources()
 
-    def check_parameters(self) -> None:
+    def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case,
         suitable default ones are set or errors are raised.
 
@@ -50,7 +50,7 @@ class SemanticBasedEnrichment(PipelineComponent):
                 "No value given for threshold parameter, default will be set to 0.9."
             )
 
-    def _check_resources(self) -> None:
+    def check_resources(self) -> None:
         """Method to check that the component has access to all its required resources."""
         logger.info(
             "Semantic based enrichment pipeline component has no external resources to check."
