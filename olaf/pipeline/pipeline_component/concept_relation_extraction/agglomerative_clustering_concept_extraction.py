@@ -173,20 +173,25 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
 
         self.candidate_terms = list(pipeline.candidate_terms)
 
-        embeddings = sbert_embeddings(
-            self._embedding_model,
-            [candidate.label for candidate in self.candidate_terms],
-        )
+        if not self.candidate_terms:
+            logger.warning(
+                """No candidat terms found on pipeline : Agglomerative clustering-based concept ignored
+                """
+            )
+        else:
+            embeddings = sbert_embeddings(
+                self._embedding_model,
+                [candidate.label for candidate in self.candidate_terms],
+            )
+            agglo_clustering = AgglomerativeClustering(
+                embeddings,
+                self._nb_clusters,
+                self._metric,
+                self._linkage,
+                self._distance_threshold,
+            )
+            agglo_clustering.compute_agglomerative_clustering()
 
-        agglo_clustering = AgglomerativeClustering(
-            embeddings,
-            self._nb_clusters,
-            self._metric,
-            self._linkage,
-            self._distance_threshold,
-        )
-        agglo_clustering.compute_agglomerative_clustering()
-
-        self._create_concepts(agglo_clustering.clustering_labels, pipeline.kr)
+            self._create_concepts(agglo_clustering.clustering_labels, pipeline.kr)
 
         pipeline.candidate_terms = set()

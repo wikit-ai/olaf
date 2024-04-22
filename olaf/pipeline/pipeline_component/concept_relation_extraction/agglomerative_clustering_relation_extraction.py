@@ -223,20 +223,26 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
 
         self.candidate_relations = list(candidate_relations)
 
-        embeddings = sbert_embeddings(
-            self._embedding_model,
-            [candidate.label for candidate in self.candidate_relations],
-        )
+        if not self.candidate_relations:
+            logger.warning(
+                """No relation candidats found on pipeline : Agglomerative clustering-based relation ignored
+                """
+            )
+        else:
+            embeddings = sbert_embeddings(
+                self._embedding_model,
+                [candidate.label for candidate in self.candidate_relations],
+            )
 
-        agglo_clustering = AgglomerativeClustering(
-            embeddings,
-            self._nb_clusters,
-            self._metric,
-            self._linkage,
-            self._distance_threshold,
-        )
-        agglo_clustering.compute_agglomerative_clustering()
+            agglo_clustering = AgglomerativeClustering(
+                embeddings,
+                self._nb_clusters,
+                self._metric,
+                self._linkage,
+                self._distance_threshold,
+            )
+            agglo_clustering.compute_agglomerative_clustering()
 
-        self._create_relations(agglo_clustering.clustering_labels, pipeline.kr)
+            self._create_relations(agglo_clustering.clustering_labels, pipeline.kr)
 
         pipeline.candidate_terms = set()
