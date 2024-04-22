@@ -75,3 +75,12 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# demonstator  file
+/demonstrators/*.ttl
+/demonstrators/*.owl
+/demonstrators/*.rdf
+
+/demonstrators/*.txt
+/demonstrators/*.json
+/demonstrators/*.csv
