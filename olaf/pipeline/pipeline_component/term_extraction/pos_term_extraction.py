@@ -66,13 +66,14 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
     def _check_parameters(self) -> None:
         """Check wether required parameters are given and correct. If this is not the case, suitable default ones are set."""
-        if user_defined_attribute_name := self._token_sequences_doc_attribute:
-            if not spacy.tokens.Doc.has_extension(user_defined_attribute_name):
+        if self._token_sequences_doc_attribute:
+            if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
                 logger.warning(
                     """User defined POS term extraction token sequence attribute %s not set on spaCy Doc.
                    By default the system will use the entire content of the document.""",
-                    user_defined_attribute_name,
+                    self._token_sequences_doc_attribute,
                 )
+                self._token_sequences_doc_attribute = None
         else:
             logger.warning(
                 """POS term extraction token sequence attribute not set by the user.

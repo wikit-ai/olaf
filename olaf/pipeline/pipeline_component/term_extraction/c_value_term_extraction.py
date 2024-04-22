@@ -75,19 +75,19 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
         self._check_parameters()
 
     def _check_parameters(self) -> None:
-        if self._token_sequences_doc_attribute is not None:
-            if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
-                logger.warning(
-                    """User defined c-value token sequence attribute %s not set on spaCy Doc.
-                    By default the system will use the entire content of the document.""",
-                    self._token_sequences_doc_attribute,
-                )
-                self._token_sequences_doc_attribute = None
-        else:
+        if self._token_sequences_doc_attribute is None:
             logger.warning(
                 """C-value token sequence attribute not set by the user.
                 By default the system will use the entire content of the document."""
             )
+
+        elif not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
+            logger.warning(
+                """User defined c-value token sequence attribute %s not set on spaCy Doc.
+                    By default the system will use the entire content of the document.""",
+                self._token_sequences_doc_attribute,
+            )
+            self._token_sequences_doc_attribute = None
 
         if not isinstance(self._candidate_term_threshold, float):
             raise OptionError(

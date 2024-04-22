@@ -23,7 +23,7 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
     def __init__(
         self,
         selector: Callable[[spacy.tokens.Token], bool],
-        token_sequence_doc_attribute: Optional[str] = "selected_tokens",
+        token_sequence_doc_attribute: Optional[str] = None,
     ) -> None:
         """Initialise token selector data preprocessing pipeline component.
 
@@ -43,7 +43,8 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
         self.corpus = None
         self._token_sequence_doc_attribute = token_sequence_doc_attribute
 
-        if self._token_sequence_doc_attribute == "selected_tokens":
+        if self._token_sequence_doc_attribute is None:
+            self._token_sequence_doc_attribute = "selected_tokens"
             logger.warning(
                 """Data preprocessing token sequence attribute not set by the user. 
                 By default the token sequence attribute selected_tokens will be used."""

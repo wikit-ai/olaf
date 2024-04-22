@@ -114,13 +114,14 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
             the token sequences to focus on.
         - token_sequence_preprocessing: the function to use for text preprocessing.
         """
-        if user_defined_attribute_name := self._token_sequences_doc_attribute:
-            if not spacy.tokens.Doc.has_extension(user_defined_attribute_name):
+        if self._token_sequences_doc_attribute:
+            if not spacy.tokens.Doc.has_extension(self._token_sequences_doc_attribute):
                 logger.warning(
                     """User defined selected token sequence document attribute %s not set on spaCy Doc.
                     By default the system will use the entire content of the document.""",
-                    user_defined_attribute_name,
+                    self._token_sequences_doc_attribute,
                 )
+                self._token_sequences_doc_attribute = None
 
         else:
             logger.warning(
