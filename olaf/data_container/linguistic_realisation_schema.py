@@ -44,7 +44,6 @@ class LinguisticRealisation(ABC):
         new_corpus_occurrences : Set[Any]
             New corpus occurrences to add for the linguistic realisation.
         """
-        
         self.corpus_occurrences.update(new_corpus_occurrences)
 
     def get_docs(self) -> Set[spacy.tokens.Doc]:
@@ -66,6 +65,12 @@ class LinguisticRealisation(ABC):
             corpus_occurrences_docs.add(doc)
 
         return corpus_occurrences_docs
+
+    def __repr__(self) -> str:
+        return self.label
+
+    def __str__(self) -> str:
+        return self.label
 
 
 class ConceptLR(LinguisticRealisation):

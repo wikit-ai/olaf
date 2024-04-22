@@ -92,3 +92,6 @@ class Relation(DataContainer):
             The LinguisticRealisation instance to remove.
         """
         self.linguistic_realisations.remove(linguistic_realisation)
+
+    def __repr__(self) -> str:
+        return f"{self.source_concept} -> {self.label} -> {self.destination_concept}"

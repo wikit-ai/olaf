@@ -68,3 +68,9 @@ class DataContainer(ABC):
         linguistic_realisation : LinguisticRealisation
             The linguistic realisation instance to remove.
         """
+
+    def __repr__(self) -> str:
+        return self.label
+
+    def __str__(self) -> str:
+        return self.label
