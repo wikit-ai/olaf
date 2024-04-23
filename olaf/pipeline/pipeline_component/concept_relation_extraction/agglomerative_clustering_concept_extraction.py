@@ -170,15 +170,14 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         pipeline : Pipeline
             The pipeline running.
         """
-
-        self.candidate_terms = list(pipeline.candidate_terms)
-
-        if not self.candidate_terms:
+        if len(pipeline.candidate_terms) <= 1:
             logger.warning(
-                """No candidat terms found on pipeline : Agglomerative clustering-based concept ignored
+                """No enough candidat terms to run this component : Agglomerative clustering-based concept ignored
                 """
             )
         else:
+            self.candidate_terms = list(pipeline.candidate_terms)
+
             embeddings = sbert_embeddings(
                 self._embedding_model,
                 [candidate.label for candidate in self.candidate_terms],

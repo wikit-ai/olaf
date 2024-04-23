@@ -208,27 +208,26 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         pipeline : Pipeline
             The pipeline running.
         """
-
-        concepts_labels_map = {}
-        for concept in pipeline.kr.concepts:
-            concepts_labels_map[concept.label] = concept
-
-        candidate_relations = cts_to_crs(
-            pipeline.candidate_terms,
-            concepts_labels_map,
-            pipeline.spacy_model,
-            self.concept_max_distance,
-            self.scope,
-        )
-
-        self.candidate_relations = list(candidate_relations)
-
-        if not self.candidate_relations:
+        if len(pipeline.candidate_terms) <= 1:
             logger.warning(
-                """No relation candidats found on pipeline : Agglomerative clustering-based relation ignored
+                """No enough relation candidats found on pipeline : Agglomerative clustering-based relation ignored
                 """
             )
         else:
+            concepts_labels_map = {}
+            for concept in pipeline.kr.concepts:
+                concepts_labels_map[concept.label] = concept
+
+            candidate_relations = cts_to_crs(
+                pipeline.candidate_terms,
+                concepts_labels_map,
+                pipeline.spacy_model,
+                self.concept_max_distance,
+                self.scope,
+            )
+
+            self.candidate_relations = list(candidate_relations)
+
             embeddings = sbert_embeddings(
                 self._embedding_model,
                 [candidate.label for candidate in self.candidate_relations],
