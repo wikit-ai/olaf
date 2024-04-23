@@ -268,3 +268,12 @@ Setting up project dependencies :
 
 - install the project dependencies by running `pip install -r requirements.txt` (from within the virtual environment)
 - update the requirements after new downloads by running `pip freeze > requirements.txt`
+
+### Generate Doc
+
+- install sphinx via pip `pip install sphinx`
+- move to docs folder `cd docs`
+- initialize docs `sphinx-quickstart`
+- go back to the root folder `cd ..`
+- generate markdown `sphinx-apidocs -o docs olaf/`
+- and then genrate html `cd docs && make html`
