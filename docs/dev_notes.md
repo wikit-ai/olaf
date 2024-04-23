@@ -276,4 +276,5 @@ Setting up project dependencies :
 - initialize docs `sphinx-quickstart`
 - go back to the root folder `cd ..`
 - generate markdown `sphinx-apidocs -o docs olaf/`
-- and then genrate html `cd docs && make html`
+- and then genrate html `cd docs && make 
+`
