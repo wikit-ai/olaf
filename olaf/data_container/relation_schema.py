@@ -57,6 +57,9 @@ class Relation(DataContainer):
         self.source_concept = source_concept
         self.destination_concept = destination_concept
 
+    def __repr__(self) -> str:
+        return f"({self.source_concept.label}, {self.label}, {self.destination_concept.label})"
+
     def add_linguistic_realisation(
         self, linguistic_realisation: LinguisticRealisation
     ) -> None:

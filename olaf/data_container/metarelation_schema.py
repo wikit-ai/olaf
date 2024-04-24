@@ -6,9 +6,7 @@ from .concept_schema import Concept
 from .linguistic_realisation_schema import LinguisticRealisation
 from .relation_schema import Relation
 
-METARELATION_RDFS_OWL_MAP = {
-    "is_generalised_by": RDFS.subClassOf
-}
+METARELATION_RDFS_OWL_MAP = {"is_generalised_by": RDFS.subClassOf}
 
 
 class Metarelation(Relation):
@@ -68,3 +66,6 @@ class Metarelation(Relation):
             external_uids=external_uids,
             linguistic_realisations=linguistic_realisations,
         )
+
+    def __repr__(self) -> str:
+        return f"meta : {super().__repr__()}"
