@@ -163,7 +163,8 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             kr.concepts.add(concept)
 
     def run(self, pipeline: Any) -> None:
-        """Execution of the agglomerative clustering algorithm on candidate terms embedded. Concepts creation and candidate terms purge.
+        """Execution of the agglomerative clustering algorithm on candidate terms embedded.
+        Concepts creation and candidate terms purge.
 
         Parameters
         ----------
@@ -172,7 +173,8 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
         """
         if len(pipeline.candidate_terms) <= 1:
             logger.warning(
-                """No enough candidat terms to run this component : Agglomerative clustering-based concept ignored
+                """No enough candidate terms to run this component :
+                agglomerative clustering-based concept extraction ignored.
                 """
             )
         else:
@@ -193,4 +195,4 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
 
             self._create_concepts(agglo_clustering.clustering_labels, pipeline.kr)
 
-        pipeline.candidate_terms = set()
+            pipeline.candidate_terms = set()

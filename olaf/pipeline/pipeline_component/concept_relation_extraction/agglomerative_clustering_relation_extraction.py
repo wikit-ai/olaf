@@ -210,7 +210,8 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         """
         if len(pipeline.candidate_terms) <= 1:
             logger.warning(
-                """No enough relation candidats found on pipeline : Agglomerative clustering-based relation ignored
+                """No enough candidate terms found to run this component :
+                agglomerative clustering-based relation extraction ignored.
                 """
             )
         else:
@@ -244,4 +245,4 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
 
             self._create_relations(agglo_clustering.clustering_labels, pipeline.kr)
 
-        pipeline.candidate_terms = set()
+            pipeline.candidate_terms = set()
