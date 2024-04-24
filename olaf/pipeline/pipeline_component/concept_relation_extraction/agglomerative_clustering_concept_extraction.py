@@ -163,30 +163,36 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             kr.concepts.add(concept)
 
     def run(self, pipeline: Any) -> None:
-        """Execution of the agglomerative clustering algorithm on candidate terms embedded. Concepts creation and candidate terms purge.
+        """Execution of the agglomerative clustering algorithm on candidate terms embedded.
+        Concepts creation and candidate terms purge.
 
         Parameters
         ----------
         pipeline : Pipeline
             The pipeline running.
         """
+        if len(pipeline.candidate_terms) <= 1:
+            logger.warning(
+                """No enough candidate terms to run this component :
+                agglomerative clustering-based concept extraction ignored.
+                """
+            )
+        else:
+            self.candidate_terms = list(pipeline.candidate_terms)
 
-        self.candidate_terms = list(pipeline.candidate_terms)
+            embeddings = sbert_embeddings(
+                self._embedding_model,
+                [candidate.label for candidate in self.candidate_terms],
+            )
+            agglo_clustering = AgglomerativeClustering(
+                embeddings,
+                self._nb_clusters,
+                self._metric,
+                self._linkage,
+                self._distance_threshold,
+            )
+            agglo_clustering.compute_agglomerative_clustering()
 
-        embeddings = sbert_embeddings(
-            self._embedding_model,
-            [candidate.label for candidate in self.candidate_terms],
-        )
+            self._create_concepts(agglo_clustering.clustering_labels, pipeline.kr)
 
-        agglo_clustering = AgglomerativeClustering(
-            embeddings,
-            self._nb_clusters,
-            self._metric,
-            self._linkage,
-            self._distance_threshold,
-        )
-        agglo_clustering.compute_agglomerative_clustering()
-
-        self._create_concepts(agglo_clustering.clustering_labels, pipeline.kr)
-
-        pipeline.candidate_terms = set()
+            pipeline.candidate_terms = set()

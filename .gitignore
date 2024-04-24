@@ -56,6 +56,11 @@ venv.bak/
 demonstrators/short_tests.ipynb
 data/data_files/*
 
+# ide file
+
+.vscode
+.idea
+
 # Distribution / packaging
 .Python
 build/

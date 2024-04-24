@@ -208,35 +208,41 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
         pipeline : Pipeline
             The pipeline running.
         """
+        if len(pipeline.candidate_terms) <= 1:
+            logger.warning(
+                """No enough candidate terms found to run this component :
+                agglomerative clustering-based relation extraction ignored.
+                """
+            )
+        else:
+            concepts_labels_map = {}
+            for concept in pipeline.kr.concepts:
+                concepts_labels_map[concept.label] = concept
 
-        concepts_labels_map = {}
-        for concept in pipeline.kr.concepts:
-            concepts_labels_map[concept.label] = concept
+            candidate_relations = cts_to_crs(
+                pipeline.candidate_terms,
+                concepts_labels_map,
+                pipeline.spacy_model,
+                self.concept_max_distance,
+                self.scope,
+            )
 
-        candidate_relations = cts_to_crs(
-            pipeline.candidate_terms,
-            concepts_labels_map,
-            pipeline.spacy_model,
-            self.concept_max_distance,
-            self.scope,
-        )
+            self.candidate_relations = list(candidate_relations)
 
-        self.candidate_relations = list(candidate_relations)
+            embeddings = sbert_embeddings(
+                self._embedding_model,
+                [candidate.label for candidate in self.candidate_relations],
+            )
 
-        embeddings = sbert_embeddings(
-            self._embedding_model,
-            [candidate.label for candidate in self.candidate_relations],
-        )
+            agglo_clustering = AgglomerativeClustering(
+                embeddings,
+                self._nb_clusters,
+                self._metric,
+                self._linkage,
+                self._distance_threshold,
+            )
+            agglo_clustering.compute_agglomerative_clustering()
 
-        agglo_clustering = AgglomerativeClustering(
-            embeddings,
-            self._nb_clusters,
-            self._metric,
-            self._linkage,
-            self._distance_threshold,
-        )
-        agglo_clustering.compute_agglomerative_clustering()
+            self._create_relations(agglo_clustering.clustering_labels, pipeline.kr)
 
-        self._create_relations(agglo_clustering.clustering_labels, pipeline.kr)
-
-        pipeline.candidate_terms = set()
+            pipeline.candidate_terms = set()
