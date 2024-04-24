@@ -45,6 +45,12 @@ class DataContainer(ABC):
             linguistic_realisations if linguistic_realisations else set()
         )
 
+    def __repr__(self) -> str:
+        return self.label
+
+    def __str__(self) -> str:
+        return self.label
+
     @abstractmethod
     def add_linguistic_realisation(
         self, linguistic_realisation: LinguisticRealisation
@@ -68,9 +74,3 @@ class DataContainer(ABC):
         linguistic_realisation : LinguisticRealisation
             The linguistic realisation instance to remove.
         """
-
-    def __repr__(self) -> str:
-        return self.label
-
-    def __str__(self) -> str:
-        return self.label
