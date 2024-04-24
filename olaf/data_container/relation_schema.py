@@ -94,4 +94,4 @@ class Relation(DataContainer):
         self.linguistic_realisations.remove(linguistic_realisation)
 
     def __repr__(self) -> str:
-        return f"{self.source_concept} -> {self.label} -> {self.destination_concept}"
+        return f"({self.source_concept}, {self.label}, {self.destination_concept})"
