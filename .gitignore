@@ -91,8 +91,8 @@ MANIFEST
 /demonstrators/*.csv
 
 # Generated documentation
-/docs/*.rst
-/docs/_*
-/docs/make.bat
-/docs/Makefile
-/docs/conf.py
+# /docs/*.rst
+# /docs/_*
+# /docs/make.bat
+# /docs/Makefile
+# /docs/conf.py
