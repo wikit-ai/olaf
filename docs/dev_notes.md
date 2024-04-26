@@ -277,3 +277,8 @@ Setting up project dependencies :
 - go back to the root folder `cd ..`
 - generate sphinx markdown `sphinx-apidocs -o docs olaf/`
 - and then generate html pages `cd docs && make html`
+
+### upadte doc hosted with github-pages
+- move to gh-pages `git checkout gh-pages`
+- rebase gh-pages to the main `git rebase main` 
+- and then push `git push`
