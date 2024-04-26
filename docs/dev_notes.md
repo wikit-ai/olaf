@@ -270,10 +270,10 @@ Setting up project dependencies :
 - update the requirements after new downloads by running `pip freeze > requirements.txt`
 
 ### Generate Doc
-
+- move to gh-pages `git checkout gh-pages`
 - install sphinx via pip `pip install sphinx`
 - move to docs folder `cd docs`
 - initialize docs `sphinx-quickstart`
 - go back to the root folder `cd ..`
 - generate markdown `sphinx-apidocs -o docs olaf/`
-- and then generate html `cd docs && make`
+- and then generate html `cd docs && make html`
