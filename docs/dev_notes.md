@@ -129,7 +129,7 @@ classDiagram
     class KnowledgeSource{
 		<<abstract>>
         +dict[str, Any] parameters
-        
+
         +check_resources()
         -check_parameters()
 		+match_external_concepts(term: CandidateTerm) Set[str]
@@ -268,3 +268,21 @@ Setting up project dependencies :
 
 - install the project dependencies by running `pip install -r requirements.txt` (from within the virtual environment)
 - update the requirements after new downloads by running `pip freeze > requirements.txt`
+
+### Documentation
+
+Generate documentation :
+
+- move to gh-pages `git checkout gh-pages`
+- install sphinx via pip `pip install sphinx`
+- move to docs folder `cd docs`
+- initialize docs `sphinx-quickstart`
+- go back to the root folder `cd ..`
+- generate sphinx markdown `sphinx-apidocs -o docs olaf/`
+- and then generate html pages `cd docs && make html`
+
+Update documentation hosted with github-pages :
+
+- move to gh-pages `git checkout gh-pages`
+- rebase gh-pages to the main `git rebase main`
+- and then push `git push origin gh-pages`
