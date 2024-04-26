@@ -155,7 +155,6 @@
 <span class="sd">        new_corpus_occurrences : Set[Any]</span>
 <span class="sd">            New corpus occurrences to add for the linguistic realisation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
         <span class="bp">self</span><span class="o">.</span><span class="n">corpus_occurrences</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_corpus_occurrences</span><span class="p">)</span></div>
 
 
@@ -180,7 +179,13 @@
             <span class="n">corpus_occurrences_docs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">corpus_occurrences_docs</span></div>
-</div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span></div>
 
 
 

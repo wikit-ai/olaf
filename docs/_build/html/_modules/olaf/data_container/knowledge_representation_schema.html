@@ -119,13 +119,13 @@
 <a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">KnowledgeRepresentation</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The knowledge representation is the data structure that contains the information learned from the text corpus. </span>
-<span class="sd">    It is composed of concepts, relations and metarelations. </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The knowledge representation is the data structure that contains the information learned from the text corpus.</span>
+<span class="sd">    It is composed of concepts, relations and metarelations.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    concepts : Set[Concept]</span>
-<span class="sd">        The set of concepts under interest. </span>
+<span class="sd">        The set of concepts under interest.</span>
 <span class="sd">        Empty set by default if it is initialised without concept.</span>
 <span class="sd">    relations : Set[Relation]</span>
 <span class="sd">        The set of relations under interest.</span>
@@ -137,6 +137,7 @@
 <span class="sd">        An RDF graph corresponding to the knowledge representation.</span>
 <span class="sd">        Default to an empty graph.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">concepts</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Concept</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
     <span class="n">relations</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Relation</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
     <span class="n">metarelations</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Metarelation</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>

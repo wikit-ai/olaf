@@ -113,9 +113,7 @@
 <span class="kn">from</span> <span class="nn">.linguistic_realisation_schema</span> <span class="kn">import</span> <span class="n">LinguisticRealisation</span>
 <span class="kn">from</span> <span class="nn">.relation_schema</span> <span class="kn">import</span> <span class="n">Relation</span>
 
-<span class="n">METARELATION_RDFS_OWL_MAP</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;is_generalised_by&quot;</span><span class="p">:</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span>
-<span class="p">}</span>
+<span class="n">METARELATION_RDFS_OWL_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;is_generalised_by&quot;</span><span class="p">:</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="Metarelation">
@@ -176,7 +174,10 @@
             <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
             <span class="n">external_uids</span><span class="o">=</span><span class="n">external_uids</span><span class="p">,</span>
             <span class="n">linguistic_realisations</span><span class="o">=</span><span class="n">linguistic_realisations</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;meta : </span><span class="si">{</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 </pre></div>
 

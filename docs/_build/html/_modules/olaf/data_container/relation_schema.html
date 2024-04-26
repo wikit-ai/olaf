@@ -166,6 +166,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">source_concept</span> <span class="o">=</span> <span class="n">source_concept</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">destination_concept</span> <span class="o">=</span> <span class="n">destination_concept</span>
 
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">)&quot;</span>
+
 <div class="viewcode-block" id="Relation.add_linguistic_realisation">
 <a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.relation_schema.Relation.add_linguistic_realisation">[docs]</a>
     <span class="k">def</span> <span class="nf">add_linguistic_realisation</span><span class="p">(</span>

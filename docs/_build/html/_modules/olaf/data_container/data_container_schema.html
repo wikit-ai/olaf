@@ -154,6 +154,12 @@
             <span class="n">linguistic_realisations</span> <span class="k">if</span> <span class="n">linguistic_realisations</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
         <span class="p">)</span>
 
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+
 <div class="viewcode-block" id="DataContainer.add_linguistic_realisation">
 <a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.data_container_schema.DataContainer.add_linguistic_realisation">[docs]</a>
     <span class="nd">@abstractmethod</span>
