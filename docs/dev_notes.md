@@ -281,4 +281,4 @@ Setting up project dependencies :
 ### upadte doc hosted with github-pages
 - move to gh-pages `git checkout gh-pages`
 - rebase gh-pages to the main `git rebase main` 
-- and then push `git push`
+- and then push `git push origin gh-pages`
