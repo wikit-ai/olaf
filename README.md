@@ -12,17 +12,17 @@ Resources:
 For usage :
 
 ```
-pip install git+https://gitlab.insa-rouen.fr/msesboue/ontology-learning
+pip install git+https://github.com/wikit-ai/olaf
 
 ```
 
 For contribution :
 
 ```
-git clone https://gitlab.insa-rouen.fr/msesboue/ontology-learning.git
-cd ontology-learning
+git clone https://github.com/wikit-ai/olaf.git
+cd olaf
 python3 -m venv ./venv
-source venv/bin/active
+source venv/bin/activate
 pip install .
 ```
 
