@@ -90,9 +90,9 @@ MANIFEST
 /demonstrators/*.json
 /demonstrators/*.csv
 
-# Generated documentation
-/docs/*.rst
-/docs/_*
-/docs/make.bat
-/docs/Makefile
-/docs/conf.py
+# # Generated documentation
+# /docs/*.rst
+# /docs/_*
+# /docs/make.bat
+# /docs/Makefile
+# /docs/conf.py
