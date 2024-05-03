@@ -30,7 +30,7 @@ jobs:
 
       - name: Rebase gh-pages onto main
         run: |
-          git checkout gh-pages
+          git checkout origin/gh-pages
           git pull --rebase origin main
           git push --force origin gh-pages
 
