@@ -15,22 +15,10 @@ release = "1.0.0"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 
-extensions = [
-    "sphinx.ext.viewcode",
-    "sphinx.ext.autodoc",
-    "myst_parser",
-    "sphinxcontrib.mermaid",
-]
+extensions = ["sphinx.ext.viewcode", "sphinx.ext.autodoc"]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
-
-source_suffix = {
-    ".md": "markdown",
-    ".rst": "restructuredtext",
-    ".txt": "restructuredtext",
-}
 
 
 # -- Options for HTML output -------------------------------------------------
