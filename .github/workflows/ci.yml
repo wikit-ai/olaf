@@ -41,6 +41,11 @@ jobs:
           ref: gh-pages
 
       - name: Rebase gh-pages onto main
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+
+      - name: Rebase gh-pages onto main
         run: |
           git config --global user.email "omarba2015@gmail.com"
           git config --global user.name "ba-talibe"
