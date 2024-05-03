@@ -26,11 +26,13 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v2
         with:
-           python-version: "3.10"
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+          python-version: "3.10"
 
+      - name: Rebase gh-pages onto main
+        run: |
+          git checkout gh-pages
+          git pull --rebase origin main
+          git push --force origin gh-pages
 
       - name: Install dependencies
         run: | 
@@ -38,17 +40,18 @@ jobs:
           pip install sphinx
           pip install sphinx-press-theme
           pip install ghp-import
+
       - name: Build HTML
         run: | 
           sphinx-apidoc -o docs olaf/
           cd docs/
           make clean
           make html
+
       - name: Run ghp-import
         run: | 
-          ghp-import -n docs/_build/html
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+          ghp-import -n -p -f docs/_build/html
+
+      - name: Switch back to main
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          git checkout main
