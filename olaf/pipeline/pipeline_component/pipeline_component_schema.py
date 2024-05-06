@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+from typing import Any, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..pipeline_schema import Pipeline
 
 
 class PipelineComponent(ABC):
@@ -35,7 +38,7 @@ class PipelineComponent(ABC):
         """
 
     @abstractmethod
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters
