@@ -12,6 +12,10 @@ Welcome to OLAF's documentation!
 
    modules
 
+
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
+
 Indices and tables
 ==================
 
