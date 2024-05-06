@@ -58,7 +58,3 @@ jobs:
       - name: Run ghp-import
         run: | 
           ghp-import -n -p -f docs/_build/html
-
-      - name: Switch back to main
-        run: |
-          git checkout main
