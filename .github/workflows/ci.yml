@@ -58,6 +58,7 @@ jobs:
           pip install sphinx
           pip install sphinx-press-theme
           pip install ghp-import
+          pip install .
 
       - name: Build HTML
         run: | 
