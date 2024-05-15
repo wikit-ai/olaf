@@ -103,7 +103,11 @@ def main():
     elif args.command == "list":
         list_pipeline(args)
     elif args.command == "show":
-        show_pipeline(args)
+        if args.pipeline == "all":
+            for pipeline in list_pipeline_names("olaf.scripts"):
+                show_pipeline(pipeline)
+        else:
+            show_pipeline(args)
 
 
 if __name__ == "__main__":
