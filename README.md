@@ -26,6 +26,13 @@ source venv/bin/activate
 pip install .
 ```
 
+For demonstration : 
+
+`olaf list` to display all pipeline demonstrations
+`olaf show pipeline_demo_name` to display all pipeline components
+`olaf run  all` to run all available pipeline demonstations
+`olaf run  pipeline_demo_name` to run the specified pipeline demonstration
+
 ## Quick-start
 
 A demo on how the library can be used is available in `demontrators/demo_test.ipynb`.
