@@ -20,7 +20,6 @@ def list_pipeline_names(module_name):
     module_dir = os.path.dirname(module.__file__)
 
     # List files in the module directory
-    pipelines = []
     for filename in os.listdir(module_dir):
         # Check if the file is a Python module and doesn't match the pattern
         if (
@@ -29,18 +28,7 @@ def list_pipeline_names(module_name):
             and filename[:-3] != "runner"
         ):
             module_name = filename[:-3]  # Remove the ".py" extension
-        pipelines.append(module_name)
-
-    pipelines = [
-        filename[:-3]
-        for filename in os.listdir(module_dir)
-        if (
-            filename.endswith(".py")
-            and not re.match(r"(__\w+__|_\w+)\.py", filename)
-            and filename[:-3] != "runner"
-        )
-    ]
-    return pipelines
+            print("\t", module_name)
 
 
 def run_pipeline(pipeline_name):
@@ -57,8 +45,7 @@ def run_pipeline(pipeline_name):
 
 def list_pipeline(args):
     print("Listing pipelines...")
-    for pipeline in list_pipeline_names("olaf.scripts"):
-        print("\t", pipeline)
+    list_pipeline_names("olaf.scripts")
 
 
 def show_pipeline(pipeline_name):
