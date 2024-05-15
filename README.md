@@ -28,10 +28,11 @@ pip install .
 
 For demonstration : 
 
-`olaf list` to display all pipeline demonstrations
-`olaf show pipeline_demo_name` to display all pipeline components
-`olaf run  all` to run all available pipeline demonstations
-`olaf run  pipeline_demo_name` to run the specified pipeline demonstration
+`olaf list` to display all pipeline demo
+`olaf show all` to display all pipeline components of all available demo
+`olaf show pipeline_demo_name` to display all pipeline components in the selected demo
+`olaf run  all` to run all available pipeline demo
+`olaf run  pipeline_demo_name` to run the specified pipeline demo
 
 ## Quick-start
 
