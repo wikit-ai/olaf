@@ -41,3 +41,5 @@ class Runner(ABC):
         print("Pipeline components: ")
         for component in self.pipeline.pipeline_components:
             print("\t", component.__class__.__name__)
+
+        print()
