@@ -158,21 +158,10 @@ class PipelineRunner(Runner):
         self.pipeline.run()
 
         kr_serialiser = KRJSONSerialiser()
-<<<<<<< HEAD
         kr_serialisation_path = os.path.join(os.getcwd(), "llm_pipeline_kr.json")
         kr_serialiser.serialise(kr=self.pipeline.kr, file_path=kr_serialisation_path)
 
         kr_rdf_graph_path = os.path.join(os.getcwd(), "llm_pipeline_kr_rdf_graph.ttl")
-=======
-        kr_serialisation_path = os.path.join(
-            os.getenv("RESULTS_PATH"), "llm_pipeline", "llm_pipeline_kr.json"
-        )
-        kr_serialiser.serialise(kr=self.pipeline.kr, file_path=kr_serialisation_path)
-
-        kr_rdf_graph_path = os.path.join(
-            os.getenv("RESULTS_PATH"), "llm_pipeline", "llm_pipeline_kr_rdf_graph.ttl"
-        )
->>>>>>> 08137ae (added a demo with only lllm based components)
         self.pipeline.kr.rdf_graph.serialize(kr_rdf_graph_path, format="ttl")
 
         print(f"Nb concepts: {len(self.pipeline.kr.concepts)}")
