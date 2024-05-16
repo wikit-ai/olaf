@@ -27,14 +27,24 @@ load_dotenv()
 
 
 class PipelineRunner(Runner):
-    def __init__(self, model_name="en_core_web_md", corpus_file=""):
-        """Initialise a pipeline Runner."""
+    """
+    Attributes
+    ----------
+    pipeline : Pipeline
+        The pipeline to build and run.
+    """
+
+    def __init__(self, model_name="en_core_web_md", corpus_path=""):
+        """Initialise a pipeline Runner.
+        Parameters
+        ----------
+        spacy_model: spacy.language.Language
+            The spacy model used to represent text corpus.
+        corpus_path : str
+            Path of the text corpus to use.
+            It can be a folder or a file."""
         spacy_model = spacy.load(model_name)
-        if os.path.isfile(corpus_file):
-            corpus_loader = TextCorpusLoader(corpus_path=corpus_file)
-        elif corpus_path := os.path.isfile(
-            os.path.join(os.getenv("DATA_PATH"), corpus_file)
-        ):
+        if os.path.isfile(corpus_path) or os.path.isdir(corpus_path):
             corpus_loader = TextCorpusLoader(corpus_path=corpus_path)
         else:
             corpus_loader = TextCorpusLoader(
@@ -78,7 +88,7 @@ class PipelineRunner(Runner):
         self.pipeline.add_pipeline_component(owl_axiom_extraction)
 
     def run(self) -> None:
-        """LLM pipeline execution."""
+        """Pipeline execution."""
 
         self.add_pipeline_components()
         self.pipeline.run()

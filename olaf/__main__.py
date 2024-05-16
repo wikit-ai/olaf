@@ -43,11 +43,11 @@ def list_pipeline_names(module_name):
     return pipelines
 
 
-def run_pipeline(args):
-    print(f"Running pipeline: {args.pipeline} \n")
+def run_pipeline(pipeline_name):
+    print(f"Running pipeline: {pipeline_name} \n")
 
     try:
-        module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
+        module = importlib.import_module(f"olaf.scripts.{pipeline_name}")
     except ModuleNotFoundError:
         print("Invalid pipeline")
         sys.exit(1)
@@ -61,11 +61,11 @@ def list_pipeline(args):
         print("\t", pipeline)
 
 
-def show_pipeline(args):
-    print("Showing pipeline:", args.pipeline)
+def show_pipeline(pipeline_name):
+    print("Showing pipeline:", pipeline_name)
     try:
-        print(f"olaf.scripts.{args.pipeline}")
-        module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
+        print(f"olaf.scripts.{pipeline_name}")
+        module = importlib.import_module(f"olaf.scripts.{pipeline_name}")
     except ModuleNotFoundError:
         print("Invalid pipeline")
         sys.exit(1)
@@ -99,7 +99,7 @@ def main():
             for pipeline in list_pipeline_names("olaf.scripts"):
                 run_pipeline(pipeline)
         else:
-            run_pipeline(args)
+            run_pipeline(args.pipeline)
     elif args.command == "list":
         list_pipeline(args)
     elif args.command == "show":
@@ -107,7 +107,7 @@ def main():
             for pipeline in list_pipeline_names("olaf.scripts"):
                 show_pipeline(pipeline)
         else:
-            show_pipeline(args)
+            show_pipeline(args.pipeline)
 
 
 if __name__ == "__main__":
