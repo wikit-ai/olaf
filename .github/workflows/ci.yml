@@ -37,8 +37,8 @@ jobs:
 
       - name: Rebase gh-pages onto main
         run: |
-          git config --global user.email "omarba2015@gmail.com"
-          git config --global user.name "ba-talibe"
+          git config --global user.email "${{ env.USER_MAIL }}"
+          git config --global user.name "${{ env.USER_NAME }}"
           git pull --rebase origin main
           git push --force origin gh-pages
 
