@@ -281,8 +281,11 @@ Generate documentation :
 - generate sphinx markdown `sphinx-apidocs -o docs olaf/`
 - and then generate html pages `cd docs && make html`
 
-Update documentation hosted with github-pages :
+To host the documentation with with github-pages :
 
-- move to gh-pages `git checkout gh-pages`
-- rebase gh-pages to the main `git rebase main`
-- and then push `git push origin gh-pages`
+- create a branch named `gh-pages`
+- enable github pages and set the working branch as `gh-pages`
+- create an acces-token
+- add an environment secret named `TOKEN` with the generated acces token as value
+- add an environment variable called `USER_MAIL` with your email address as value
+- add an environment variable called `USER_NAME` with your github username as value
