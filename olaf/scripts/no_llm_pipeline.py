@@ -84,14 +84,11 @@ class PipelineRunner(Runner):
         self.pipeline.run()
 
         kr_serialiser = KRJSONSerialiser()
-        kr_serialisation_path = os.path.join(
-            os.getenv("RESULTS_PATH"), "no_llm_pipeline", "no_llm_pipeline_kr.json"
-        )
+        kr_serialisation_path = os.path.join(os.getcwd(), "no_llm_pipeline_kr.json")
         kr_serialiser.serialise(kr=self.pipeline.kr, file_path=kr_serialisation_path)
 
         kr_rdf_graph_path = os.path.join(
-            os.getenv("RESULTS_PATH"),
-            "no_llm_pipeline",
+            os.getcwd(),
             "no_llm_pipeline_kr_rdf_graph.ttl",
         )
         self.pipeline.kr.rdf_graph.serialize(kr_rdf_graph_path, format="ttl")
