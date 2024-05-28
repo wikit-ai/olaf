@@ -99,9 +99,7 @@ class PipelineRunner(Runner):
             corpus_loader = TextCorpusLoader(corpus_path=corpus_path)
         else:
             corpus_loader = TextCorpusLoader(
-                corpus_path=os.path.join(
-                    os.getenv("DATA_PATH"), "pizza_description.txt"
-                )
+                corpus_path=os.path.join(os.getenv("DATA_PATH"), "demo.txt")
             )
         self.pipeline = Pipeline(spacy_model=spacy_model, corpus_loader=corpus_loader)
 
