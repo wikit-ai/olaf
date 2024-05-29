@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional
 
+from ...pipeline_schema import Pipeline
 from ....commons.logging_config import logger
 from ....commons.relation_tools import crs_to_relation, cts_to_crs
 from ..pipeline_component_schema import PipelineComponent
@@ -89,7 +90,7 @@ class CTsToRelationExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the relation extraction directly from existing candidate terms.
         Candidate terms are first converted into candidate relations.
         Then the candidate relations are converted into relations.

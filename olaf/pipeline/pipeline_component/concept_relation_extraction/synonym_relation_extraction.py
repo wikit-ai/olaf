@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional
 
+from ...pipeline_schema import Pipeline
 from ....commons.candidate_term_tools import group_cts_on_synonyms
 from ....commons.logging_config import logger
 from ....commons.relation_tools import crs_to_relation, cts_to_crs
@@ -89,7 +90,7 @@ class SynonymRelationExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the synonyms grouping for relation extraction on candidate terms.
         Candidate terms are converted into candidate relations.
         Candidate relations with same synonyms, source and destination concepts are grouped

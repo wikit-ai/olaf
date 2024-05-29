@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, List, Optional, Set
 import spacy.language
 from spacy.matcher import PhraseMatcher
 
+from ...pipeline_schema import Pipeline
 from ....commons.errors import ParameterError
 from ....commons.logging_config import logger
 from ....data_container.candidate_term_schema import CandidateTerm
@@ -117,7 +118,7 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
 
         return matcher
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the candidate term extraction based manually provided strings.
 
         Parameters

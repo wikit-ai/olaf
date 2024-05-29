@@ -1,5 +1,6 @@
 from typing import Any, Dict, Set, Optional
 
+from ...pipeline_schema import Pipeline
 from ....commons.candidate_term_tools import cts_to_concept, group_cts_on_synonyms
 from ....data_container.candidate_term_schema import CandidateTerm
 from ..pipeline_component_schema import PipelineComponent
@@ -90,7 +91,7 @@ class KnowledgeBasedConceptExtraction(PipelineComponent):
 
         return c_term_texts
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

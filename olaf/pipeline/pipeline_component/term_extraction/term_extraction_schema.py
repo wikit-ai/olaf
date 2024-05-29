@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from typing import Any, Callable, Dict, List, Optional, Set
 
+from ...pipeline_schema import Pipeline
 from ....commons.errors import NotCallableError
 from ....data_container.candidate_term_schema import CandidateTerm
 from ..pipeline_component_schema import PipelineComponent
@@ -87,7 +88,7 @@ class TermExtractionPipelineComponent(PipelineComponent):
         return candidate_terms
 
     @abstractmethod
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

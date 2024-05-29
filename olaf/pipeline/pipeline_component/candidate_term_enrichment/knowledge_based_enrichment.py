@@ -1,5 +1,6 @@
 from typing import Any, Dict, Set, Optional
 
+from ...pipeline_schema import Pipeline
 from ....commons.logging_config import logger
 from ....data_container.enrichment_schema import Enrichment
 from ....repository.knowledge_source.knowledge_source_schema import KnowledgeSource
@@ -75,7 +76,7 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

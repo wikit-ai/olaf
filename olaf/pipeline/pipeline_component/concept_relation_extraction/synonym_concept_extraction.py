@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from ...pipeline_schema import Pipeline
 from ....commons.candidate_term_tools import cts_to_concept, group_cts_on_synonyms
 from ....commons.logging_config import logger
 from ..pipeline_component_schema import PipelineComponent
@@ -39,7 +40,7 @@ class SynonymConceptExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the synonyms grouping for concept extraction on candidate terms.
         Concepts are created and candidate terms are purged.
 

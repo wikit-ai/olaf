@@ -1,5 +1,6 @@
 from typing import Any, Dict, Set, Optional
 
+from ...pipeline_schema import Pipeline
 from ....commons.candidate_term_tools import group_cts_on_synonyms
 from ....commons.logging_config import logger
 from ....commons.relation_tools import crs_to_relation, cts_to_crs
@@ -134,7 +135,7 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
 
         return c_term_texts
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

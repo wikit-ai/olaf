@@ -1,6 +1,7 @@
 import ast
 from typing import Any, Callable, Dict, List, Optional, Set
 
+from ...pipeline_schema import Pipeline
 from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
 from ....commons.prompts import hf_prompt_term_enrichment
@@ -111,7 +112,7 @@ class LLMBasedTermEnrichment(PipelineComponent):
             )
             enrichment = None
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

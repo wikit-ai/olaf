@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, List, Optional, Set
 
 from spacy.tokens import Doc
 
+from ...pipeline_schema import Pipeline
 from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
 from ....commons.prompts import hf_prompt_relation_extraction
@@ -208,7 +209,7 @@ class LLMBasedRelationExtraction(PipelineComponent):
             )
         return relation_candidates
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
         Relations are created and candidate terms are purged.
 

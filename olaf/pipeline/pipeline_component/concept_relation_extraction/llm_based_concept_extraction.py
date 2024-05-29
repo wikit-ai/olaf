@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, List, Optional, Set
 
 from spacy.tokens import Doc
 
+from ...pipeline_schema import Pipeline
 from ....commons.candidate_term_tools import cts_to_concept
 from ....commons.llm_tools import HuggingFaceGenerator, LLMGenerator
 from ....commons.logging_config import logger
@@ -162,7 +163,7 @@ class LLMBasedConceptExtraction(PipelineComponent):
             )
         return concept_candidates
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
         Concepts are created and candidate terms are purged.
 

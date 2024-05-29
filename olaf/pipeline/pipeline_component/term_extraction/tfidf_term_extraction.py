@@ -6,6 +6,7 @@ import spacy.tokens.doc
 import spacy.tokens.span
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from ...pipeline_schema import Pipeline
 from ....commons.errors import OptionError
 from ....commons.logging_config import logger
 from ....commons.spacy_processing_tools import spacy_span_ngrams
@@ -348,7 +349,7 @@ class TFIDFTermExtraction(TermExtractionPipelineComponent):
 
         return candidate_terms
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

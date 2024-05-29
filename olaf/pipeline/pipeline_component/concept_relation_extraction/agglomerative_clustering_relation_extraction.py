@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+from ...pipeline_schema import Pipeline
 from ....algorithm.agglomerative_clustering import AgglomerativeClustering
 from ....commons.embedding_tools import sbert_embeddings
 from ....commons.errors import ParameterError
