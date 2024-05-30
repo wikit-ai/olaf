@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.commons.candidate_term_tools</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.commons.candidate_term_tools</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.commons.candidate_term_tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">spacy.matcher</span> <span class="kn">import</span> <span class="n">PhraseMatcher</span>
+
+<span class="kn">from</span> <span class="nn">..commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">..data_container.candidate_term_schema</span> <span class="kn">import</span> <span class="n">CandidateRelation</span><span class="p">,</span> <span class="n">CandidateTerm</span>
+<span class="kn">from</span> <span class="nn">..data_container.concept_schema</span> <span class="kn">import</span> <span class="n">Concept</span>
+<span class="kn">from</span> <span class="nn">..data_container.linguistic_realisation_schema</span> <span class="kn">import</span> <span class="n">ConceptLR</span>
+
+
+<div class="viewcode-block" id="group_cts_on_synonyms">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.group_cts_on_synonyms">[docs]</a>
+<span class="k">def</span> <span class="nf">group_cts_on_synonyms</span><span class="p">(</span>
+    <span class="n">candidate_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Group candidate terms with commons labels or synonyms.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_terms: Set[CandidateTerm]</span>
+<span class="sd">        Candidate terms to group by commons labels and synonyms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Set[CandidateTerm]]</span>
+<span class="sd">        Candidate terms grouped.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ct_labels</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">candidate_terms</span><span class="p">:</span>
+        <span class="n">ct_labels</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">ct</span><span class="o">.</span><span class="n">label</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">ct</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ct_labels</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">)</span>
+
+    <span class="n">cts_groups</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">candidate_terms</span><span class="p">:</span>
+        <span class="n">match_cts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">match_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">ct_g</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">cts_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">check_ct_belongs_to_group</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">ct_labels</span><span class="p">[</span><span class="n">ct</span><span class="p">],</span> <span class="n">ct_g</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+                <span class="n">match_cts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ct_g</span><span class="p">)</span>
+                <span class="n">match_labels</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_cts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cts_groups</span><span class="p">[</span><span class="nb">tuple</span><span class="p">([</span><span class="n">ct</span><span class="p">])]</span> <span class="o">=</span> <span class="n">ct_labels</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_key</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">match_cts</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">cts_groups</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+                <span class="n">new_key</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+            <span class="n">match_labels</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ct_labels</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
+            <span class="n">cts_groups</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">match_labels</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">cts_group</span><span class="p">)</span> <span class="k">for</span> <span class="n">cts_group</span> <span class="ow">in</span> <span class="n">cts_groups</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></div>
+
+
+
+<div class="viewcode-block" id="check_ct_belongs_to_group">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.check_ct_belongs_to_group">[docs]</a>
+<span class="k">def</span> <span class="nf">check_ct_belongs_to_group</span><span class="p">(</span>
+    <span class="n">candidate_term</span><span class="p">:</span> <span class="n">CandidateTerm</span><span class="p">,</span>
+    <span class="n">ct_labels</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">group_cts</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">],</span>
+    <span class="n">group_label</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a candidate term belongs to a group of candidate terms.</span>
+<span class="sd">    Candidate must have common label or synonyms with the group.</span>
+<span class="sd">    If the candidate is a candidate relation,</span>
+<span class="sd">    it should have the same source and destination concept as well.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_term: CandidateTerm</span>
+<span class="sd">        Candidate term to check.</span>
+<span class="sd">    ct_labels: Set[str]</span>
+<span class="sd">        Candidate term label and synonyms.</span>
+<span class="sd">    group_cts: Tuple[CandidateTerm]</span>
+<span class="sd">        Tuple of candidate terms to compare with.</span>
+<span class="sd">    group_label: Set[str]</span>
+<span class="sd">        Group of candidate terms labels and synonyms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the candidate term belongs to the group, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candidate_term</span><span class="p">,</span> <span class="n">CandidateRelation</span><span class="p">):</span>
+        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_term</span><span class="o">.</span><span class="n">source_concept</span> <span class="o">==</span> <span class="n">group_cts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">source_concept</span><span class="p">)</span>
+        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">candidate_term</span><span class="o">.</span><span class="n">destination_concept</span> <span class="o">==</span> <span class="n">group_cts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">destination_concept</span>
+        <span class="p">)</span>
+    <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ct_labels</span> <span class="o">&amp;</span> <span class="n">group_label</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cts_have_common_synonyms">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.cts_have_common_synonyms">[docs]</a>
+<span class="k">def</span> <span class="nf">cts_have_common_synonyms</span><span class="p">(</span><span class="n">c_term_1</span><span class="p">:</span> <span class="n">CandidateTerm</span><span class="p">,</span> <span class="n">c_term_2</span><span class="p">:</span> <span class="n">CandidateTerm</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if two terms have common synonyms.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c_term_1 : CandidateTerm</span>
+<span class="sd">        First candidate term to compare.</span>
+<span class="sd">    c_term_2 : CandidateTerm</span>
+<span class="sd">        Second candidate term to compare.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the two candidate terms have common synonyms, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_term_1</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">c_term_2</span><span class="o">.</span><span class="n">label</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">c_term_1</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">c_term_2</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">conditions</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">c_term_1</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">c_term_2</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">,</span>
+                <span class="n">c_term_2</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">c_term_1</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">,</span>
+                <span class="n">c_term_1</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span> <span class="o">&amp;</span> <span class="n">c_term_2</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">c_term_1</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">c_term_2</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_term_1</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">c_term_2</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">c_term_2</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">c_term_1</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_term_2</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">c_term_1</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cts_to_concept">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.cts_to_concept">[docs]</a>
+<span class="k">def</span> <span class="nf">cts_to_concept</span><span class="p">(</span><span class="n">concept_candidates</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Concept</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a concept out of a set of candidate terms.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    concept_candidates : Set[CandidateTerm]</span>
+<span class="sd">        Set of candidate terms to be merged in a same concept.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Concept</span>
+<span class="sd">        The created concept.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">concept_candidates</span><span class="p">)</span>
+    <span class="n">new_concept</span> <span class="o">=</span> <span class="n">Concept</span><span class="p">(</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="n">candidate_lr</span> <span class="o">=</span> <span class="n">ConceptLR</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">candidate</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">corpus_occurrences</span><span class="o">=</span><span class="n">candidate</span><span class="o">.</span><span class="n">corpus_occurrences</span>
+        <span class="p">)</span>
+        <span class="n">new_concept</span><span class="o">.</span><span class="n">add_linguistic_realisation</span><span class="p">(</span><span class="n">candidate_lr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">enrichment</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">synonym</span> <span class="ow">in</span> <span class="n">candidate</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">synonyms</span><span class="p">:</span>
+                <span class="n">syn_lr</span> <span class="o">=</span> <span class="n">ConceptLR</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">synonym</span><span class="p">)</span>
+                <span class="n">new_concept</span><span class="o">.</span><span class="n">add_linguistic_realisation</span><span class="p">(</span><span class="n">syn_lr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_concept</span></div>
+
+
+
+<div class="viewcode-block" id="filter_cts_on_token_in_term">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.filter_cts_on_token_in_term">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_cts_on_token_in_term</span><span class="p">(</span>
+    <span class="n">candidate_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">],</span> <span class="n">filtering_tokens</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a set of candidate terms based on tokens appearing in them.</span>
+
+<span class="sd">    Note: this function acts only at the candidate term label level.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_terms: Set[CandidateTerm]</span>
+<span class="sd">        Set of candidate terms to filter.</span>
+<span class="sd">    filtering_tokens: Set[str]</span>
+<span class="sd">        The set of token strings to use for filtering the candidate terms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[CandidateTerm]</span>
+<span class="sd">        The set of filtered candidate terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtering_tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;The set of tokens to use for filtering out</span>
+<span class="sd">            candidate terms is empty. This function have no effect.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">selected_candidate_terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">candidate_terms</span><span class="p">:</span>
+        <span class="n">ct_tokens_to_check</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">ct_tokens_to_check</span> <span class="o">&amp;</span> <span class="n">filtering_tokens</span><span class="p">):</span>
+            <span class="n">selected_candidate_terms</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">selected_candidate_terms</span></div>
+
+
+
+<div class="viewcode-block" id="filter_cts_on_last_token_in_term">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.filter_cts_on_last_token_in_term">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_cts_on_last_token_in_term</span><span class="p">(</span>
+    <span class="n">candidate_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">],</span> <span class="n">filtering_tokens</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a set of candidate terms based on their last token.</span>
+
+<span class="sd">    Note: this function acts only at the candidate term label level.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_terms: Set[CandidateTerm]</span>
+<span class="sd">        Set of candidate terms to filter.</span>
+<span class="sd">    filtering_tokens: Set[str]</span>
+<span class="sd">        The set of token strings to use for filtering the candidate terms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[CandidateTerm]</span>
+<span class="sd">        The set of filtered candidate terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtering_tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;The set of tokens to use for filtering out</span>
+<span class="sd">            candidate terms is empty. This function have no effect.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">selected_candidate_terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">candidate_terms</span><span class="p">:</span>
+        <span class="n">ct_token_to_check</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">ct_token_to_check</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filtering_tokens</span><span class="p">:</span>
+            <span class="n">selected_candidate_terms</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">selected_candidate_terms</span></div>
+
+
+
+<div class="viewcode-block" id="filter_cts_on_first_token_in_term">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.filter_cts_on_first_token_in_term">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_cts_on_first_token_in_term</span><span class="p">(</span>
+    <span class="n">candidate_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">],</span> <span class="n">filtering_tokens</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a set of candidate terms based on their first token.</span>
+
+<span class="sd">    Note: this function acts only at the candidate term label level.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_terms: Set[CandidateTerm]</span>
+<span class="sd">        Set of candidate terms to filter.</span>
+<span class="sd">    filtering_tokens: Set[str]</span>
+<span class="sd">        The set of token strings to use for filtering the candidate terms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[CandidateTerm]</span>
+<span class="sd">        The set of filtered candidate terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtering_tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;The set of tokens to use for filtering out</span>
+<span class="sd">             candidate terms is empty. This function have no effect.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">selected_candidate_terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">candidate_terms</span><span class="p">:</span>
+        <span class="n">ct_token_to_check</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">ct_token_to_check</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filtering_tokens</span><span class="p">:</span>
+            <span class="n">selected_candidate_terms</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">selected_candidate_terms</span></div>
+
+
+
+<div class="viewcode-block" id="build_cts_from_strings">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.build_cts_from_strings">[docs]</a>
+<span class="k">def</span> <span class="nf">build_cts_from_strings</span><span class="p">(</span>
+    <span class="n">ct_label_strings</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">spacy_model</span><span class="p">:</span> <span class="n">spacy</span><span class="o">.</span><span class="n">language</span><span class="o">.</span><span class="n">Language</span><span class="p">,</span>
+    <span class="n">docs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Doc</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create candidate terms from a set of strings label.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ct_label_strings : Set[str]</span>
+<span class="sd">        The set of strings to use for candidate terms labels.</span>
+<span class="sd">    spacy_model : spacy.language.Language</span>
+<span class="sd">        The spaCy model to retrieve the corpus occurrences.</span>
+<span class="sd">    docs : List[spacy.tokens.Doc]</span>
+<span class="sd">        The corpus in which to find the corpus occurrences.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[CandidateTerm]</span>
+<span class="sd">        The set of created candidate terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">phrase_matcher</span> <span class="o">=</span> <span class="n">PhraseMatcher</span><span class="p">(</span><span class="n">spacy_model</span><span class="o">.</span><span class="n">vocab</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;LOWER&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">ct_label_strings</span><span class="p">:</span>
+        <span class="n">phrase_matcher</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">[</span><span class="n">spacy_model</span><span class="p">(</span><span class="n">label</span><span class="p">)])</span>
+
+    <span class="n">candidate_terms_index</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">:</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">phrase_matcher</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">as_spans</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">candidate_terms_index</span><span class="p">:</span>
+                <span class="n">candidate_terms_index</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">CandidateTerm</span><span class="p">(</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">spacy_model</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">strings</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">label</span><span class="p">],</span>
+                    <span class="n">corpus_occurrences</span><span class="o">=</span><span class="p">{</span><span class="n">match</span><span class="p">},</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">candidate_terms_index</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">add_corpus_occurrences</span><span class="p">({</span><span class="n">match</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">candidate_terms_index</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="split_cts_on_token">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.candidate_term_tools.split_cts_on_token">[docs]</a>
+<span class="k">def</span> <span class="nf">split_cts_on_token</span><span class="p">(</span>
+    <span class="n">candidate_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">],</span>
+    <span class="n">splitting_tokens</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">spacy_model</span><span class="p">:</span> <span class="n">spacy</span><span class="o">.</span><span class="n">language</span><span class="o">.</span><span class="n">Language</span><span class="p">,</span>
+    <span class="n">docs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Doc</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split candidate terms based on a set of token strings.</span>
+
+<span class="sd">    Note: this function acts only at the candidate term label level.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_terms: Set[CandidateTerm]</span>
+<span class="sd">        The set of candidate terms to split.</span>
+<span class="sd">    splitting_tokens: Set[str]</span>
+<span class="sd">        The token strings to split candidate terms on.</span>
+<span class="sd">    spacy_model : spacy.language.Language</span>
+<span class="sd">        The spaCy model to retrieve the candidate terms&#39; corpus occurrences.</span>
+<span class="sd">    docs : List[spacy.tokens.Doc]</span>
+<span class="sd">        The corpus in which to find the candidate terms&#39; corpus occurrences.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[CandidateTerm]</span>
+<span class="sd">        The new set of candidate terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitting_tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;The set of tokens to use for candidate terms splitting is empty. </span>
+<span class="sd">            This function have not effect.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">new_candidate_terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">new_ct_to_construct_strings</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">candidate_terms</span><span class="p">:</span>
+        <span class="n">tokenized_ct_label</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="n">splitting_token_found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tokenized_ct_label</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">splitting_tokens</span>
+
+        <span class="k">if</span> <span class="n">splitting_token_found</span><span class="p">:</span>
+            <span class="n">token_accumulator</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenized_ct_label</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">splitting_tokens</span><span class="p">:</span>
+                    <span class="n">token_accumulator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">token_accumulator</span><span class="p">:</span>  <span class="c1"># to avoid empty string</span>
+                    <span class="n">new_ct_to_construct_strings</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">token_accumulator</span><span class="p">))</span>
+                    <span class="n">token_accumulator</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">token_accumulator</span><span class="p">:</span>
+                <span class="c1"># flush the accumulator before next candidate term</span>
+                <span class="n">new_ct_to_construct_strings</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">token_accumulator</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_candidate_terms</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_ct_to_construct_strings</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">new_candidate_terms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">build_cts_from_strings</span><span class="p">(</span>
+                <span class="n">ct_label_strings</span><span class="o">=</span><span class="n">new_ct_to_construct_strings</span><span class="p">,</span>
+                <span class="n">spacy_model</span><span class="o">=</span><span class="n">spacy_model</span><span class="p">,</span>
+                <span class="n">docs</span><span class="o">=</span><span class="n">docs</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_candidate_terms</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

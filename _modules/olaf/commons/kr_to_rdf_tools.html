@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.commons.kr_to_rdf_tools</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.commons.kr_to_rdf_tools</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.commons.kr_to_rdf_tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">URIRef</span>
+<span class="kn">from</span> <span class="nn">rdflib.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
+
+<span class="kn">from</span> <span class="nn">..data_container</span> <span class="kn">import</span> <span class="n">KnowledgeRepresentation</span>
+<span class="kn">from</span> <span class="nn">..data_container.metarelation_schema</span> <span class="kn">import</span> <span class="n">METARELATION_RDFS_OWL_MAP</span>
+
+
+<div class="viewcode-block" id="owl_class_uri">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.owl_class_uri">[docs]</a>
+<span class="k">def</span> <span class="nf">owl_class_uri</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">URIRef</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an OWL class URI.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The label to use in the URI.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    URIRef</span>
+<span class="sd">        The OWL class URI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">class_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">token</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
+    <span class="n">concept_uri</span> <span class="o">=</span> <span class="n">base_uri</span> <span class="o">+</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">class_label</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">concept_uri</span></div>
+
+
+
+<div class="viewcode-block" id="owl_obj_prop_uri">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.owl_obj_prop_uri">[docs]</a>
+<span class="k">def</span> <span class="nf">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">URIRef</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an OWL object property URI.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The label to use in the URI.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    URIRef</span>
+<span class="sd">        The OWL object property URI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">relation_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">token</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
+    <span class="n">relation_label</span> <span class="o">=</span> <span class="n">relation_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="n">relation_label</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">relation_uri</span> <span class="o">=</span> <span class="n">base_uri</span> <span class="o">+</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">relation_label</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">relation_uri</span></div>
+
+
+
+<div class="viewcode-block" id="owl_instance_uri">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.owl_instance_uri">[docs]</a>
+<span class="k">def</span> <span class="nf">owl_instance_uri</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">URIRef</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an OWL named instance URI.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The label to use in the URI.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    URIRef</span>
+<span class="sd">        The OWL named instance URI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instance_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">token</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
+    <span class="n">instance_label</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">instance_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="n">instance_label</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">instance_uri</span> <span class="o">=</span> <span class="n">base_uri</span> <span class="o">+</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">instance_label</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">instance_uri</span></div>
+
+
+
+<div class="viewcode-block" id="kr_concepts_to_owl_classes">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_concepts_to_owl_classes">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_concepts_to_owl_classes</span><span class="p">(</span><span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to making each KR concepts an OWL class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">:</span>
+        <span class="n">concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="kr_relations_to_owl_obj_props">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_relations_to_owl_obj_props">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_relations_to_owl_obj_props</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to making each KR relations an OWL object property.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="kr_metarelations_to_owl">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_metarelations_to_owl">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_metarelations_to_owl</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to mapping the KR metarelations with OWL vocabulary.</span>
+
+<span class="sd">    The mapping depends on the providing dictionary.</span>
+<span class="sd">    The KR metarelations not matching any keys in the mapping dictionary is created as an OWL object property.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">metarelations</span><span class="p">:</span>
+
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">METARELATION_RDFS_OWL_MAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">rel_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+            <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="kr_relations_to_domain_range_obj_props">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_relations_to_domain_range_obj_props">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_relations_to_domain_range_obj_props</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to making each KR relations OWL object properties with domain and range</span>
+<span class="sd">    their source and destination concepts.</span>
+
+<span class="sd">    Source and destination concepts will be created as OWL classes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">:</span>
+            <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">src_concept_uri</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">range</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="kr_concepts_to_disjoint_classes">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_concepts_to_disjoint_classes">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_concepts_to_disjoint_classes</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to making each KR concepts an OWL class and making each classes disjoint.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="n">concept_uris</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">:</span>
+        <span class="n">concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">concept_uris</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">concept_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+    <span class="n">rdf_collection</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">rdf_graph</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">BNode</span><span class="p">(),</span> <span class="n">seq</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">concept_uris</span><span class="p">))</span>
+    <span class="n">b_node</span> <span class="o">=</span> <span class="n">BNode</span><span class="p">()</span>
+
+    <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">AllDisjointClasses</span><span class="p">))</span>
+    <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">members</span><span class="p">,</span> <span class="n">rdf_collection</span><span class="o">.</span><span class="n">uri</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+<div class="viewcode-block" id="create_obj_prop_some_restriction_triples">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.create_obj_prop_some_restriction_triples">[docs]</a>
+<span class="k">def</span> <span class="nf">create_obj_prop_some_restriction_triples</span><span class="p">(</span>
+        <span class="n">rel_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">URIRef</span><span class="p">,</span> <span class="n">Graph</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the triples corresponding to an existential OWL property restriction part</span>
+<span class="sd">    of the graph.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rel_uri : URIRef</span>
+<span class="sd">        The URI or the relation the OWL property restriction is focusing on.</span>
+<span class="sd">    dest_concept_uri : URIRef</span>
+<span class="sd">        The URI of the concept (i.e., OWL class) involved in the OWL property restriction.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[URIRef, Graph]</span>
+<span class="sd">        The blank node ID origin of the OWL property restriction and the corresponding graph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obj_prop_restriction_g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="n">b_node</span> <span class="o">=</span> <span class="n">BNode</span><span class="p">()</span>
+    <span class="n">obj_prop_restriction_g</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Restriction</span><span class="p">))</span>
+    <span class="n">obj_prop_restriction_g</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">onProperty</span><span class="p">,</span> <span class="n">rel_uri</span><span class="p">))</span>
+    <span class="n">obj_prop_restriction_g</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">someValuesFrom</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">b_node</span><span class="p">,</span> <span class="n">obj_prop_restriction_g</span></div>
+
+
+<div class="viewcode-block" id="create_obj_prop_all_restriction_triples">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.create_obj_prop_all_restriction_triples">[docs]</a>
+<span class="k">def</span> <span class="nf">create_obj_prop_all_restriction_triples</span><span class="p">(</span>
+        <span class="n">rel_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">URIRef</span><span class="p">,</span> <span class="n">Graph</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the triples corresponding to an universal OWL property restriction part</span>
+<span class="sd">    of the graph.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rel_uri : URIRef</span>
+<span class="sd">        The URI or the relation the OWL property restriction is focusing on.</span>
+<span class="sd">    dest_concept_uri : URIRef</span>
+<span class="sd">        The URI of the concept (i.e., OWL class) involved in the OWL property restriction.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[URIRef, Graph]</span>
+<span class="sd">        The blank node ID origin of the OWL property restriction and the corresponding graph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obj_prop_restriction_g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="n">b_node</span> <span class="o">=</span> <span class="n">BNode</span><span class="p">()</span>
+    <span class="n">obj_prop_restriction_g</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Restriction</span><span class="p">))</span>
+    <span class="n">obj_prop_restriction_g</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">onProperty</span><span class="p">,</span> <span class="n">rel_uri</span><span class="p">))</span>
+    <span class="n">obj_prop_restriction_g</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">allValuesFrom</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">b_node</span><span class="p">,</span> <span class="n">obj_prop_restriction_g</span></div>
+
+
+<div class="viewcode-block" id="kr_relations_to_anonymous_some_parent">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_some_parent">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_relations_to_anonymous_some_parent</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create RDF triples corresponding to saying in plain english:</span>
+<span class="sd">        &#39;Each source concept is A SUBSET OF the set of all the things that are related to SOME instances</span>
+<span class="sd">        of the destination concept by the relation.&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts and relations.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">:</span>
+            <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span> <span class="ow">and</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">restriction_b_node</span><span class="p">,</span> <span class="n">restriction_g</span> <span class="o">=</span> <span class="n">create_obj_prop_some_restriction_triples</span><span class="p">(</span>
+                <span class="n">rel_uri</span><span class="o">=</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="o">=</span><span class="n">dest_concept_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span> <span class="o">+=</span> <span class="n">restriction_g</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="n">restriction_b_node</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+<div class="viewcode-block" id="kr_relations_to_anonymous_only_parent">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_only_parent">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_relations_to_anonymous_only_parent</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create RDF triples corresponding to said in plain english:</span>
+<span class="sd">        &#39;Each source concept is A SUBSET OF the set of all the things that are related to ONLY</span>
+<span class="sd">        instances of the destination concept by the relation.&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts and relations.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+        
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">:</span>
+            <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+        
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span> <span class="ow">and</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">restriction_b_node</span><span class="p">,</span> <span class="n">restriction_g</span> <span class="o">=</span> <span class="n">create_obj_prop_all_restriction_triples</span><span class="p">(</span>
+                <span class="n">rel_uri</span><span class="o">=</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="o">=</span><span class="n">dest_concept_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span> <span class="o">+=</span> <span class="n">restriction_g</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="n">restriction_b_node</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="kr_relations_to_anonymous_some_equivalent">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_some_equivalent">[docs]</a>
+<span class="k">def</span> <span class="nf">kr_relations_to_anonymous_some_equivalent</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create RDF triples corresponding to said in plain english:</span>
+<span class="sd">        &#39;Each source concept is EQUIVALENT TO the set of all the things that are related to SOME</span>
+<span class="sd">        instances of the destination concept by the relation.&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts and relations.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">:</span>
+            <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">dest_concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span> <span class="ow">and</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+            <span class="n">restriction_b_node</span><span class="p">,</span> <span class="n">restriction_g</span> <span class="o">=</span> <span class="n">create_obj_prop_some_restriction_triples</span><span class="p">(</span>
+                <span class="n">rel_uri</span><span class="o">=</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="o">=</span><span class="n">dest_concept_uri</span>
+            <span class="p">)</span>
+            <span class="n">rdf_graph</span> <span class="o">+=</span> <span class="n">restriction_g</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">equivalentClass</span><span class="p">,</span> <span class="n">restriction_b_node</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="concept_lrs_to_owl_individuals">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.concept_lrs_to_owl_individuals">[docs]</a>
+<span class="k">def</span> <span class="nf">concept_lrs_to_owl_individuals</span><span class="p">(</span>
+    <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to making each KR concepts an OWL class with each</span>
+<span class="sd">    concept linguistic representations instances of the concept class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">:</span>
+
+        <span class="n">concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">c_lr</span> <span class="ow">in</span> <span class="n">concept</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+            <span class="n">instance_uri</span> <span class="o">=</span> <span class="n">owl_instance_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">c_lr</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">instance_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">concept_uri</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">instance_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">NamedIndividual</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">instance_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">c_lr</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+    <span class="n">concepts_lrs_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+        <span class="n">rel_uri</span> <span class="o">=</span> <span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">concepts_lrs_map</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c_lr</span> <span class="ow">in</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+                <span class="n">concepts_lrs_map</span><span class="p">[</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="n">owl_instance_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">c_lr</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">concepts_lrs_map</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c_lr</span> <span class="ow">in</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+                <span class="n">concepts_lrs_map</span><span class="p">[</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="n">owl_instance_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">c_lr</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="n">concepts_product</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span>
+            <span class="n">concepts_lrs_map</span><span class="p">[</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">],</span>
+            <span class="n">concepts_lrs_map</span><span class="p">[</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">source_uri</span><span class="p">,</span> <span class="n">dest_uri</span> <span class="ow">in</span> <span class="n">concepts_product</span><span class="p">:</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">source_uri</span><span class="p">,</span> <span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_uri</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+
+
+<div class="viewcode-block" id="all_individuals_different">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.kr_to_rdf_tools.all_individuals_different">[docs]</a>
+<span class="k">def</span> <span class="nf">all_individuals_different</span><span class="p">(</span><span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the RDF triples corresponding to making each KR concepts linguistic representation an</span>
+<span class="sd">    OWL named instance and making each instance different.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr : KnowledgeRepresentation</span>
+<span class="sd">        The Knowledge Representation containing the concepts.</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to use when creating the class URIs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Graph</span>
+<span class="sd">        The constructed RDF triples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+    <span class="n">instance_uris</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">:</span>
+        <span class="n">concept_uri</span> <span class="o">=</span> <span class="n">owl_class_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+        <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">c_lr</span> <span class="ow">in</span> <span class="n">concept</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+            <span class="n">instance_uri</span> <span class="o">=</span> <span class="n">owl_instance_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">c_lr</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="n">base_uri</span><span class="p">)</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">instance_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">concept_uri</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">instance_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">NamedIndividual</span><span class="p">))</span>
+            <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">instance_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">c_lr</span><span class="o">.</span><span class="n">label</span><span class="p">)))</span>
+            <span class="n">instance_uris</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">instance_uri</span><span class="p">)</span>
+
+    <span class="n">rdf_collection</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">rdf_graph</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">BNode</span><span class="p">(),</span> <span class="n">seq</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">instance_uris</span><span class="p">))</span>
+    <span class="n">b_node</span> <span class="o">=</span> <span class="n">BNode</span><span class="p">()</span>
+
+    <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">AllDifferent</span><span class="p">))</span>
+    <span class="n">rdf_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">b_node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">distinctMembers</span><span class="p">,</span> <span class="n">rdf_collection</span><span class="o">.</span><span class="n">uri</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">rdf_graph</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction</title>
+    
+          <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">URIRef</span>
+
+
+<span class="kn">from</span> <span class="nn">...pipeline_schema</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">....commons.errors</span> <span class="kn">import</span> <span class="n">MissingEnvironmentVariable</span>
+<span class="kn">from</span> <span class="nn">....commons.kr_to_rdf_tools</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">all_individuals_different</span><span class="p">,</span>
+    <span class="n">concept_lrs_to_owl_individuals</span><span class="p">,</span>
+    <span class="n">owl_class_uri</span><span class="p">,</span>
+    <span class="n">owl_obj_prop_uri</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">....commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">....data_container</span> <span class="kn">import</span> <span class="n">KnowledgeRepresentation</span>
+<span class="kn">from</span> <span class="nn">....data_container.metarelation_schema</span> <span class="kn">import</span> <span class="n">METARELATION_RDFS_OWL_MAP</span>
+<span class="kn">from</span> <span class="nn">..pipeline_component_schema</span> <span class="kn">import</span> <span class="n">PipelineComponent</span>
+
+
+<div class="viewcode-block" id="OWLAxiomExtraction">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction">[docs]</a>
+<span class="k">class</span> <span class="nc">OWLAxiomExtraction</span><span class="p">(</span><span class="n">PipelineComponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The OWL axiom extraction component inductively construct OWL axioms from the knowledge</span>
+<span class="sd">    representation based on some OWL ontology modeling patterns.</span>
+
+<span class="sd">    The component generates the OWL ontology based on the provided patterns, test its semantic</span>
+<span class="sd">    consistence with an OWL reasoner and remove axioms until the ontology is consistent.</span>
+
+<span class="sd">    This component requires the environment variables:</span>
+<span class="sd">    - &quot;JAVA_EXE&quot;</span>
+<span class="sd">    - &quot;ROBOT_JAR&quot;</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    owl_axiom_generators : Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]</span>
+<span class="sd">        The function to generate the OWL axioms.</span>
+<span class="sd">    base_uri : Union[str, URIRef], optional</span>
+<span class="sd">        The base URI to use when creating the concepts and relations URIs,</span>
+<span class="sd">        by default &quot;http://www.ms2.org/o/example#&quot;.</span>
+<span class="sd">    reasoner : str, optional</span>
+<span class="sd">        The reasoner to use, by default &quot;ELK&quot;.</span>
+<span class="sd">        Reasoning is performed using the ROBOT CLI: &lt;https://robot.obolibrary.org/reason&gt;.</span>
+<span class="sd">        Hence, possible values are: &quot;hermit&quot;, &quot;jfact&quot;, &quot;whelk&quot;, &quot;emr&quot;, &quot;structural&quot;</span>
+<span class="sd">    java_exe: str</span>
+<span class="sd">        Environment variable path to the Java executable.</span>
+<span class="sd">    robot_jar: str</span>
+<span class="sd">        Environment variable path to the ROBOT CLI .jar file.</span>
+<span class="sd">    graph_to_test_temp_file: PathLike</span>
+<span class="sd">        Temporary file path to store intermediate RDF graphs for consistency check.</span>
+<span class="sd">    tested_graph_temp_file: PathLike</span>
+<span class="sd">        Temporary file path for the inferred triples.</span>
+<span class="sd">    _pattern_nb_classes: str</span>
+<span class="sd">        Regex pattern to match the number of unsatisfiable classes in the ROBOT CLI error message.</span>
+<span class="sd">    _pattern_unsatisfiable_classes: str</span>
+<span class="sd">        Regex pattern to match the unsatisfiable classes URIs in the ROBOT CLI error message.</span>
+<span class="sd">    individuals_axiom_generators: Set[Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]]</span>
+<span class="sd">        A set of the possible OWL axiom generators creating OWL named individuals.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">owl_axiom_generators</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">],</span> <span class="n">Graph</span><span class="p">]],</span>
+        <span class="n">base_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">reasoner</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ELK&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialiser for the OWL axiom extraction component.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        owl_axiom_generators : Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]</span>
+<span class="sd">            The function to generate the OWL axioms.</span>
+<span class="sd">        base_uri : Union[str, URIRef], optional</span>
+<span class="sd">            The base URI to use when creating the concepts and relations URIs,</span>
+<span class="sd">            by default &quot;http://www.ms2.org/o/example#&quot;.</span>
+<span class="sd">        reasoner : str, optional</span>
+<span class="sd">            The reasoner to use, by default &quot;ELK&quot;.</span>
+<span class="sd">            Reasoning is performed using the ROBOT CLI: &lt;https://robot.obolibrary.org/reason&gt;.</span>
+<span class="sd">            Hence, possible values are: &quot;ELK&quot;, &quot;hermit&quot;, &quot;jfact&quot;, &quot;whelk&quot;, &quot;emr&quot;, &quot;structural&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">owl_axiom_generators</span> <span class="o">=</span> <span class="n">owl_axiom_generators</span>
+
+        <span class="k">if</span> <span class="n">base_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="s2">&quot;http://www.ms2.org/o/example#&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;No value given for base_uri parameter, default will be set to http://www.ms2.org/o/example#.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_uri</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span> <span class="o">=</span> <span class="n">base_uri</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">base_uri</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span> <span class="o">=</span> <span class="n">reasoner</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">java_exe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;JAVA_EXE&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robot_jar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ROBOT_JAR&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_to_test_temp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DATA_PATH&quot;</span><span class="p">),</span> <span class="s2">&quot;kr_owl_to_check.owl&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tested_graph_temp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DATA_PATH&quot;</span><span class="p">),</span> <span class="s2">&quot;kr_owl_consistency_check.owl&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_resources</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_nb_classes</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="s2">&quot;There are (?P&lt;nb_classes&gt;</span><span class="se">\\</span><span class="s2">d+) unsatisfiable classes in the ontology</span><span class="se">\\</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_unsatisfiable_classes</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="s2">&quot;unsatisfiable: (?P&lt;class_uri&gt;.+)</span><span class="se">\\</span><span class="s2">n&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">individuals_axiom_generators</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">concept_lrs_to_owl_individuals</span><span class="p">,</span>
+            <span class="n">all_individuals_different</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="OWLAxiomExtraction.check_resources">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.</span>
+
+<span class="sd">        The OWL axiom extraction component requires the environment variables:</span>
+<span class="sd">        - &quot;JAVA_EXE&quot;</span>
+<span class="sd">        - &quot;ROBOT_JAR&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">java_exe</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MissingEnvironmentVariable</span><span class="p">(</span>
+                <span class="n">component_name</span><span class="o">=</span><span class="s2">&quot;OWLaxiomExtraction&quot;</span><span class="p">,</span> <span class="n">env_var_name</span><span class="o">=</span><span class="s2">&quot;JAVA_EXE&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">robot_jar</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MissingEnvironmentVariable</span><span class="p">(</span>
+                <span class="n">component_name</span><span class="o">=</span><span class="s2">&quot;OWLaxiomExtraction&quot;</span><span class="p">,</span> <span class="n">env_var_name</span><span class="o">=</span><span class="s2">&quot;ROBOT_JAR&quot;</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OWLAxiomExtraction.optimise">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.optimise">[docs]</a>
+    <span class="k">def</span> <span class="nf">optimise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">validation_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">option_values_map</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO: how far in the grid search do we go?</span>
+        <span class="c1"># scikitlearn grid search</span>
+        <span class="c1"># default to grid search and log a warning</span>
+        <span class="c1"># enable user defined optimisation function alternative</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to optimise the pipeline component by tuning the options.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to compute component performance metrics.</span>
+<span class="sd">        It is used by the optimise method to update the options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="OWLAxiomExtraction.get_performance_report">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.get_performance_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_performance_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A getter for the pipeline component performance report.</span>
+<span class="sd">            If the component has been optimised, it only returns the best performance.</span>
+<span class="sd">            Otherwise, it returns the results obtained with the set parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The pipeline component performance report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="OWLAxiomExtraction.build_graph_without_owl_instances">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_graph_without_owl_instances">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_graph_without_owl_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the RDF graph based on the provided OWL axiom generators omitting</span>
+<span class="sd">        the ones creating OWL named instances.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kr : KnowledgeRepresentation</span>
+<span class="sd">            _description_</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Graph</span>
+<span class="sd">            _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">axiom_generator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">owl_axiom_generators</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">axiom_generator</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">individuals_axiom_generators</span><span class="p">:</span>
+                <span class="n">graph</span> <span class="o">+=</span> <span class="n">axiom_generator</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">graph</span></div>
+
+
+<div class="viewcode-block" id="OWLAxiomExtraction.build_full_graph">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_full_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_full_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the complete RDF graph based on the provided OWL axiom generators.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kr : KnowledgeRepresentation</span>
+<span class="sd">            The knowledge representation to use when build the graph.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Graph</span>
+<span class="sd">            The constructed RDF graph.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="n">full_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_graph_without_owl_instances</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">axiom_generator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">owl_axiom_generators</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">axiom_generator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">individuals_axiom_generators</span><span class="p">:</span>
+                <span class="n">full_graph</span> <span class="o">+=</span> <span class="n">axiom_generator</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">full_graph</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_check_owl_graph_consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check the generated OWL ontology consistency.</span>
+<span class="sd">            To validate the ontology, we use the robot CLI (http://robot.obolibrary.org/reason).</span>
+<span class="sd">            Java must be installed on the local machine along with the robot.jar file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        graph: Graph</span>
+<span class="sd">            The RDF graph to check.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[str, None]</span>
+<span class="sd">            The ROBOT CLI error message if any, else None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_to_test_temp_file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
+
+        <span class="n">robot_command</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">java_exe</span><span class="p">,</span>
+            <span class="s2">&quot;-jar&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">robot_jar</span><span class="p">,</span>
+            <span class="s2">&quot;reason&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--reasoner&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span><span class="p">,</span>
+            <span class="s2">&quot;--input&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_to_test_temp_file</span><span class="p">,</span>
+            <span class="s2">&quot;--output&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tested_graph_temp_file</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">error_output</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">robot_command</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error_output</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">error_output</span>
+
+    <span class="k">def</span> <span class="nf">_get_concept_uris_from_error_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_output</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the concept URIs from the robot CLI error message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        error_output : str</span>
+<span class="sd">            The robot CLI error message</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The extracted concept URIs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nb_unsatisfiable_concepts</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_nb_classes</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">error_output</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;nb_classes&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">unsatisfiable_concept_uris</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_unsatisfiable_classes</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">error_output</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unsatisfiable_concept_uris</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nb_unsatisfiable_concepts</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;OWL axiom extraction: Something might have gone wrong while extracting unsatisfiable concept IDs.</span>
+<span class="sd">                                We found %i unsatisfiable concepts but only got %i concept IDs.</span>
+<span class="sd">                            &quot;&quot;&quot;</span><span class="p">,</span>
+                <span class="n">nb_unsatisfiable_concepts</span><span class="p">,</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">unsatisfiable_concept_uris</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">unsatisfiable_concept_uris</span>
+
+    <span class="k">def</span> <span class="nf">_update_unsatisfiable_kr_owl_graph</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">,</span> <span class="n">unsatisfiable_concept_uris</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the Knowledge Representation OWL graph inconsistencies.</span>
+<span class="sd">            The strategy adopted here is to skip OWL axioms generation for concepts leading</span>
+<span class="sd">            to unsatisfiable classes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unsatisfiable_concept_uris : Set[str]</span>
+<span class="sd">            The concept URIs of the concepts identified as generating the unsatisfiable classes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_relations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">new_meta_relations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">new_concepts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+            <span class="c1"># Potential danger there:</span>
+            <span class="c1"># URIs should be generated exactly the same as it is done in OWl axiom generators</span>
+            <span class="n">source_concept_uri</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span>
+                    <span class="n">owl_class_uri</span><span class="p">(</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span>
+                <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span>
+                    <span class="n">owl_class_uri</span><span class="p">(</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span>
+                <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+
+            <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">source_concept_uri</span> <span class="ow">in</span> <span class="n">unsatisfiable_concept_uris</span><span class="p">,</span>
+                <span class="n">dest_concept_uri</span> <span class="ow">in</span> <span class="n">unsatisfiable_concept_uris</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">conditions</span><span class="p">):</span>
+                <span class="n">new_relations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">:</span>
+                    <span class="n">new_concepts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">:</span>
+                    <span class="n">new_concepts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">metarelations</span><span class="p">:</span>
+            <span class="c1"># Potential danger there:</span>
+            <span class="c1"># URIs should be generated exactly the same as it is done in OWl axiom generators</span>
+            <span class="n">source_concept_uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">owl_class_uri</span><span class="p">(</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">owl_class_uri</span><span class="p">(</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">source_concept_uri</span> <span class="ow">in</span> <span class="n">unsatisfiable_concept_uris</span><span class="p">,</span>
+                <span class="n">dest_concept_uri</span> <span class="ow">in</span> <span class="n">unsatisfiable_concept_uris</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">conditions</span><span class="p">):</span>
+                <span class="n">new_meta_relations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="p">)</span>
+                <span class="n">new_concepts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">source_concept</span><span class="p">)</span>
+                <span class="n">new_concepts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">)</span>
+
+        <span class="n">kr_for_owl_graph</span> <span class="o">=</span> <span class="n">KnowledgeRepresentation</span><span class="p">(</span>
+            <span class="n">concepts</span><span class="o">=</span><span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">new_concepts</span><span class="p">),</span>
+            <span class="n">relations</span><span class="o">=</span><span class="n">new_relations</span><span class="p">,</span>
+            <span class="n">metarelations</span><span class="o">=</span><span class="n">new_meta_relations</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">updated_kr_owl_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_full_graph</span><span class="p">(</span><span class="n">kr</span><span class="o">=</span><span class="n">kr_for_owl_graph</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">updated_kr_owl_graph</span>
+
+    <span class="k">def</span> <span class="nf">_update_kr_external_uris</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the knowledge representation to add the created RDF graph concept</span>
+<span class="sd">        and relations URIs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kr : KnowledgeRepresentation</span>
+<span class="sd">            The knowledge representation to update.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">:</span>
+            <span class="n">concept</span><span class="o">.</span><span class="n">external_uids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">owl_class_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span><span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">:</span>
+            <span class="n">relation</span><span class="o">.</span><span class="n">external_uids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span><span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">relation</span> <span class="ow">in</span> <span class="n">kr</span><span class="o">.</span><span class="n">metarelations</span><span class="p">:</span>
+            <span class="n">metarel_uri</span> <span class="o">=</span> <span class="n">METARELATION_RDFS_OWL_MAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">owl_obj_prop_uri</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">base_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span><span class="p">)),</span>
+            <span class="p">)</span>
+            <span class="n">relation</span><span class="o">.</span><span class="n">external_uids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">metarel_uri</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OWLAxiomExtraction.run">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the OWL file containing the valid axiomatised Knowledge Representation instance.&quot;&quot;&quot;</span>
+        <span class="n">reasoner_output</span> <span class="o">=</span> <span class="s2">&quot;start testing&quot;</span>
+
+        <span class="n">kr_owl_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_full_graph</span><span class="p">(</span><span class="n">kr</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="p">)</span>
+
+        <span class="n">kr_graph_trial</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">reasoner_output</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">kr_graph_trial</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">):</span>
+
+            <span class="n">kr_graph_trial</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">reasoner_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_owl_graph_consistency</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">kr_owl_graph</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">reasoner_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># An OWL ontology is either inconsistent or it contains some unsatisfiable classes.</span>
+                <span class="k">if</span> <span class="s2">&quot;The ontology is inconsistent.&quot;</span> <span class="ow">in</span> <span class="n">reasoner_output</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Inconsistent ontology&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                                    Reasoner output: </span>
+<span class="sd">                                   %s.</span>
+<span class="sd">                                &quot;&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">reasoner_output</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="c1"># An inconsistent OWL ontology is often due to instances of unsatisfiable classes.</span>
+                    <span class="n">kr_owl_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_graph_without_owl_instances</span><span class="p">(</span>
+                        <span class="n">kr</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span>
+                    <span class="p">)</span>
+
+                <span class="k">elif</span> <span class="s2">&quot;unsatisfiable classes in the ontology.&quot;</span> <span class="ow">in</span> <span class="n">reasoner_output</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Unsatisfiable ontology&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                                    Reasoner output: </span>
+<span class="sd">                                   %s.</span>
+<span class="sd">                                &quot;&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">reasoner_output</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">unsatisfiable_concept_uris</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_get_concept_uris_from_error_output</span><span class="p">(</span><span class="n">reasoner_output</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">kr_owl_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_unsatisfiable_kr_owl_graph</span><span class="p">(</span>
+                        <span class="n">kr</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="p">,</span>
+                        <span class="n">unsatisfiable_concept_uris</span><span class="o">=</span><span class="n">unsatisfiable_concept_uris</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kr_graph_trial</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                        The OWL axiom extractor did not manage to make the ontology consistent.</span>
+<span class="s2">                        We will create the full inconsistent ontology.</span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">kr_owl_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_full_graph</span><span class="p">(</span><span class="n">kr</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The constructed ontology is consistent.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_kr_external_uris</span><span class="p">(</span><span class="n">kr</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="p">)</span>
+        <span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="o">.</span><span class="n">rdf_graph</span> <span class="o">=</span> <span class="n">kr_owl_graph</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_to_test_temp_file</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_to_test_temp_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tested_graph_temp_file</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tested_graph_temp_file</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

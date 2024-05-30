@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.pipeline.pipeline_component.concept_relation_extraction package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.pipeline.pipeline_component.concept_relation_hierarchy package" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html" />
+  <link rel="prev" title="olaf.pipeline.pipeline_component.candidate_term_enrichment package" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.html">olaf.pipeline package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.pipeline_component.html">olaf.pipeline.pipeline_component package</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.concept_relation_extraction package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html"
+       title="previous chapter">← olaf.pipeline.pipeline_component.candidate_term_enrichment package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html"
+       title="next chapter">olaf.pipeline.pipeline_component.concept_relation_hierarchy package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-pipeline-pipeline-component-concept-relation-extraction-package">
+<h1>olaf.pipeline.pipeline_component.concept_relation_extraction package<a class="headerlink" href="#olaf-pipeline-pipeline-component-concept-relation-extraction-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-agglomerative-clustering-concept-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.</span></span><span class="sig-name descname"><span class="pre">AgglomerativeClusteringConceptExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linkage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_concept_extraction.html#AgglomerativeClusteringConceptExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>Extract concept based candidate terms with agglomerative clustering.</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms: List[CandidateTerm]</dt><dd><p>List of candidate terms to extract concepts from.</p>
+</dd>
+<dt>nb_clusters: int, optional</dt><dd><p>Number of clusters to find with the agglomerative clustering algorithm.
+It must be None if distance_threshold is not None, by default 2.</p>
+</dd>
+<dt>metric: str, optional</dt><dd><p>Metric used to compute the linkage.
+Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default “cosine”.</p>
+</dd>
+<dt>linkage: str, optional</dt><dd><p>Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.
+Can be “ward”, “complete”, “average”, “single”, by default “average”.</p>
+</dd>
+<dt>distance_threshold: float, optional</dt><dd><p>The linkage distance threshold at or above which clusters will not be merged.
+If not None, n_clusters must be None, by default None.</p>
+</dd>
+<dt>embedding_model: str, optional</dt><dd><p>Name of the embedding model to use.
+The list of available models can be found here : <a class="reference external" href="https://www.sbert.net/docs/pretrained_models.html">https://www.sbert.net/docs/pretrained_models.html</a>,
+by default None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_concept_extraction.html#AgglomerativeClusteringConceptExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_concept_extraction.html#AgglomerativeClusteringConceptExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_concept_extraction.html#AgglomerativeClusteringConceptExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_concept_extraction.html#AgglomerativeClusteringConceptExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the agglomerative clustering algorithm on candidate terms embedded.
+Concepts creation and candidate terms purge.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-agglomerative-clustering-relation-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.</span></span><span class="sig-name descname"><span class="pre">AgglomerativeClusteringRelationExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linkage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concept_max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'doc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_relation_extraction.html#AgglomerativeClusteringRelationExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>Extract relation based on candidate terms with agglomerative clustering.</p>
+<section id="id1">
+<h3>Attributes<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_relations: List[CandidateRelations], optional</dt><dd><p>List of candidate relations to extract relations from, by default None.</p>
+</dd>
+<dt>nb_clusters: int, optional</dt><dd><p>Number of clusters to find with the agglomerative clustering algorithm.
+It must be None if distance_threshold is not None, by default 2.</p>
+</dd>
+<dt>metric: str, optional</dt><dd><p>Metric used to compute the linkage.
+Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default cosine.</p>
+</dd>
+<dt>linkage: str, optional</dt><dd><p>Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.
+Can be “ward”, “complete”, “average”, “single”, by default “average”.</p>
+</dd>
+<dt>distance_threshold: float, optional</dt><dd><p>The linkage distance threshold at or above which clusters will not be merged.
+If not None, n_clusters must be None, by default None.</p>
+</dd>
+<dt>embedding_model: str, optional</dt><dd><p>Name of the embedding model to use.
+The list of available models can be found here : <a class="reference external" href="https://www.sbert.net/docs/pretrained_models.html">https://www.sbert.net/docs/pretrained_models.html</a>,
+by default None.</p>
+</dd>
+<dt>concept_max_distance: int, optional</dt><dd><p>The maximum distance between the candidate term and the concept sought, by defautl 5.</p>
+</dd>
+<dt>scope: str, optional</dt><dd><p>Scope used to search concepts. Can be “doc” for the entire document or “sent” for the
+candidate term “sentence”, by default “doc”.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_relation_extraction.html#AgglomerativeClusteringRelationExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_relation_extraction.html#AgglomerativeClusteringRelationExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_relation_extraction.html#AgglomerativeClusteringRelationExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/agglomerative_clustering_relation_extraction.html#AgglomerativeClusteringRelationExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the agglomerative clustering algorithm on
+candidate terms embedded.
+Relations creation and candidate terms purge.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-candidate-terms-to-concepts-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.</span></span><span class="sig-name descname"><span class="pre">CTsToConceptExtraction</span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_concepts.html#CTsToConceptExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>A pipeline component to create concepts directly from the candidate terms.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_concepts.html#CTsToConceptExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_concepts.html#CTsToConceptExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_concepts.html#CTsToConceptExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_concepts.html#CTsToConceptExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the concept extraction directly from existing candidate terms.
+The pipeline candidate terms are consumed.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-candidate-terms-to-relations-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.</span></span><span class="sig-name descname"><span class="pre">CTsToRelationExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concept_max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'doc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_relations.html#CTsToRelationExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>A pipeline component to create relations directly from the candidate terms.</p>
+<section id="id6">
+<h3>Attributes<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>concept_max_distance: int, optional</dt><dd><p>The maximum distance between the candidate term and the concept sought,
+by default 5.</p>
+</dd>
+<dt>scope: str, optional</dt><dd><p>Scope used to search concepts. Can be “doc” for the entire document or “sent” for
+the candidate term “sentence”, by default “doc”.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_relations.html#CTsToRelationExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_relations.html#CTsToRelationExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id7">
+<h4>Returns<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_relations.html#CTsToRelationExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/candidate_terms_to_relations.html#CTsToRelationExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the relation extraction directly from existing candidate terms.
+Candidate terms are first converted into candidate relations.
+Then the candidate relations are converted into relations.
+The pipeline candidate terms are consumed.</p>
+<section id="id8">
+<h4>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-concept-cooc-metarelation-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.</span></span><span class="sig-name descname"><span class="pre">ConceptCoocMetarelationExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_metarelation_creation_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'doc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metarelation_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'RELATED_TO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_symmetric_metarelation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/concept_cooc_metarelation_extraction.html#ConceptCoocMetarelationExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>A pipeline component to extract metarelations based on concept co-occurrence.</p>
+<section id="id9">
+<h3>Attributes<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>metarelation_creation_metric: Callable[[int], bool], optional</dt><dd><p>The function to define based on the concept co-occurrence count whether or not to create a
+metarelation, by default co-occurrence count &gt; self.threshold.</p>
+</dd>
+<dt>window_size: int, optional</dt><dd><p>The token window size to consider for concept co-occurrence. Minimum is 2, by default None.</p>
+</dd>
+<dt>threshold: int, optional</dt><dd><p>The co-occurrence minimum count threshold for metarelation construction, by default 0.</p>
+</dd>
+<dt>scope: str, optional</dt><dd><p>The corpus scope to consider. Either ‘doc’ or ‘sent’, by default ‘doc’.</p>
+</dd>
+<dt>metarelation_label: str, optional</dt><dd><p>The metarelation label to use, by default ‘RELATED_TO’.</p>
+</dd>
+<dt>create_symmetric_metarelation: bool, optional</dt><dd><p>Whether to create the symmetric metarelation, by default False.
+WARNING! this option can create a lot of metarelation that can easily be created in a later
+process.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/concept_cooc_metarelation_extraction.html#ConceptCoocMetarelationExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/concept_cooc_metarelation_extraction.html#ConceptCoocMetarelationExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id10">
+<h4>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/concept_cooc_metarelation_extraction.html#ConceptCoocMetarelationExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/concept_cooc_metarelation_extraction.html#ConceptCoocMetarelationExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the metarelation extraction based on concept co-occurrence.
+Metarelations are created and added to the pipeline knowledge representation.</p>
+<section id="id11">
+<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-knowledge-based-concept-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.</span></span><span class="sig-name descname"><span class="pre">KnowledgeBasedConceptExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">knowledge_source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource" title="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource"><span class="pre">KnowledgeSource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_ct_on_synonyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_concept_extraction.html#KnowledgeBasedConceptExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>Pipeline component to extract concepts based on an external source of knowledge,
+e.g., a KG.</p>
+<section id="id12">
+<h3>Attributes<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>knowledge_source<span class="classifier">KnowledgeSource</span></dt><dd><p>The source of knowledge to use for concept matching.</p>
+</dd>
+<dt>group_ct_on_synonyms: bool, optional</dt><dd><p>Wether or not to group the candidate terms on synonyms before proceeding to the
+concept matching with the external source of knowledge, by default True.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.c_terms_texts_to_match">
+<span class="sig-name descname"><span class="pre">c_terms_texts_to_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ct_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_concept_extraction.html#KnowledgeBasedConceptExtraction.c_terms_texts_to_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.c_terms_texts_to_match" title="Link to this definition">¶</a></dt>
+<dd><p>Extract from a set of candidate terms the strings to use for concept matching.</p>
+<section id="id13">
+<h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>ct_group<span class="classifier">Set[CandidateTerm]</span></dt><dd><p>The set of candidate terms.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h4>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of strings to use for concept matching.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_concept_extraction.html#KnowledgeBasedConceptExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_concept_extraction.html#KnowledgeBasedConceptExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="id15">
+<h4>Returns<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_concept_extraction.html#KnowledgeBasedConceptExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_concept_extraction.html#KnowledgeBasedConceptExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="id16">
+<h4>Parameters<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-knowledge-based-relation-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.</span></span><span class="sig-name descname"><span class="pre">KnowledgeBasedRelationExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">knowledge_source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource" title="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource"><span class="pre">KnowledgeSource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_ct_on_synonyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concept_max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'doc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_relation_extraction.html#KnowledgeBasedRelationExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>Pipeline component to extract relations based on an external source of knowledge,
+e.g., a KG.
+Candidate terms are converted into candidate relations.
+Then, candidate relations are validated as relations if their labels match the external
+source of knowledge.</p>
+<section id="id17">
+<h3>Attributes<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>knowledge_source<span class="classifier">KnowledgeSource</span></dt><dd><p>The source of knowledge to use for relation matching.</p>
+</dd>
+<dt>group_ct_on_synonyms: bool, optional</dt><dd><p>Whether or not to group the candidate terms on synonyms before proceeding to the
+relation matching with the external source of knowledge, by default True.</p>
+</dd>
+<dt>concept_max_distance: int, optional</dt><dd><p>The maximum distance between the candidate term and the concept sought,
+by default 5.</p>
+</dd>
+<dt>scope: str</dt><dd><p>Scope used to search concepts. Can be “doc” for the entire document or “sent” for the
+candidate term “sentence”, by default “doc”.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.c_terms_texts_to_match">
+<span class="sig-name descname"><span class="pre">c_terms_texts_to_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cr_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateRelation" title="olaf.data_container.candidate_term_schema.CandidateRelation"><span class="pre">CandidateRelation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_relation_extraction.html#KnowledgeBasedRelationExtraction.c_terms_texts_to_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.c_terms_texts_to_match" title="Link to this definition">¶</a></dt>
+<dd><p>Extract from a set of candidate relations the strings to use for concept matching.</p>
+<section id="id18">
+<h4>Parameters<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>cr_group<span class="classifier">Set[CandidateRelation]</span></dt><dd><p>The set of candidate relations.</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h4>Returns<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of strings to use for relation matching.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_relation_extraction.html#KnowledgeBasedRelationExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_relation_extraction.html#KnowledgeBasedRelationExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="id20">
+<h4>Returns<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_relation_extraction.html#KnowledgeBasedRelationExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/knowledge_based_relation_extraction.html#KnowledgeBasedRelationExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="id21">
+<h4>Parameters<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-llm-based-concept-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.</span></span><span class="sig-name descname"><span class="pre">LLMBasedConceptExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.commons.html#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><span class="pre">LLMGenerator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc_context_max_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_concept_extraction.html#LLMBasedConceptExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>LLM based concept extraction.</p>
+<section id="id22">
+<h3>Attributes<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>prompt_template: Callable[[str], List[Dict[str, str]]]</dt><dd><p>Prompt template used to give instructions and context to the LLM.</p>
+</dd>
+<dt>llm_generator: LLMGenerator</dt><dd><p>The LLM model used to generate the concepts.</p>
+</dd>
+<dt>doc_context_max_len: int</dt><dd><p>Maximum number of characters for the document context in the prompt.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_concept_extraction.html#LLMBasedConceptExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_concept_extraction.html#LLMBasedConceptExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><p>A getter for the pipeline component performance report.
+If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+<section id="id23">
+<h4>Returns<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_concept_extraction.html#LLMBasedConceptExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_concept_extraction.html#LLMBasedConceptExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.
+Concepts are created and candidate terms are purged.</p>
+<section id="id24">
+<h4>Parameters<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline: Pipeline</dt><dd><p>The pipeline to run the component with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-llm-based-relation-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.</span></span><span class="sig-name descname"><span class="pre">LLMBasedRelationExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.commons.html#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><span class="pre">LLMGenerator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc_context_max_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concept_max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'doc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_relation_extraction.html#LLMBasedRelationExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>LLM based relation extraction.</p>
+<section id="id25">
+<h3>Attributes<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>prompt_template: Callable[[str], List[Dict[str, str]]], optional</dt><dd><p>Prompt template used to give instructions and context to the LLM, by default None.</p>
+</dd>
+<dt>llm_generator: LLMGenerator, optional</dt><dd><p>The LLM model used to generate the relation, by default None.</p>
+</dd>
+<dt>doc_context_max_len: int, optional</dt><dd><p>Maximum number of characters for the document context in the prompt, by default 4000.</p>
+</dd>
+<dt>concept_max_distance: int, optional</dt><dd><p>The maximum distance between the candidate term and the concept sought,
+by default 5.</p>
+</dd>
+<dt>scope: str, optional</dt><dd><p>Scope used to search concepts. Can be “doc” for the entire document or “sent” for
+the candidate term “sentence”, by default “doc”.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_relation_extraction.html#LLMBasedRelationExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_relation_extraction.html#LLMBasedRelationExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><p>A getter for the pipeline component performance report.
+If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+<section id="id26">
+<h4>Returns<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_relation_extraction.html#LLMBasedRelationExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/llm_based_relation_extraction.html#LLMBasedRelationExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.
+Relations are created and candidate terms are purged.</p>
+<section id="id27">
+<h4>Parameters<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline: Pipeline</dt><dd><p>The pipeline to run the component with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-synonym-concept-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.</span></span><span class="sig-name descname"><span class="pre">SynonymConceptExtraction</span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_concept_extraction.html#SynonymConceptExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>Extract concepts based on synonyms grouping.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_concept_extraction.html#SynonymConceptExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_concept_extraction.html#SynonymConceptExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id28">
+<h3>Returns<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_concept_extraction.html#SynonymConceptExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_concept_extraction.html#SynonymConceptExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the synonyms grouping for concept extraction on candidate terms.
+Concepts are created and candidate terms are purged.</p>
+<section id="id29">
+<h3>Parameters<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction">
+<span id="olaf-pipeline-pipeline-component-concept-relation-extraction-synonym-relation-extraction-module"></span><h2>olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.</span></span><span class="sig-name descname"><span class="pre">SynonymRelationExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concept_max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'doc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_relation_extraction.html#SynonymRelationExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>Extract relations based on synonyms grouping.</p>
+<section id="id30">
+<h3>Attributes<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>concept_max_distance: int, optional</dt><dd><p>The maximum distance between the candidate term and the concept sought,
+by default 5.</p>
+</dd>
+<dt>scope: str</dt><dd><p>Scope used to search concepts. Can be “doc” for the entire document or “sent” for the
+candidate term “sentence”, by default “doc”.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_relation_extraction.html#SynonymRelationExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_relation_extraction.html#SynonymRelationExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id31">
+<h4>Returns<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_relation_extraction.html#SynonymRelationExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/concept_relation_extraction/synonym_relation_extraction.html#SynonymRelationExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the synonyms grouping for relation extraction on candidate terms.
+Candidate terms are converted into candidate relations.
+Candidate relations with same synonyms, source and destination concepts are grouped
+together as a new relation. Candidate terms are purged.</p>
+<section id="id32">
+<h4>Parameters<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.concept_relation_extraction">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.concept_relation_extraction" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html"
+       title="previous chapter">← olaf.pipeline.pipeline_component.candidate_term_enrichment package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html"
+       title="next chapter">olaf.pipeline.pipeline_component.concept_relation_hierarchy package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.commons package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.data_container package" href="olaf.data_container.html" />
+  <link rel="prev" title="olaf.algorithm package" href="olaf.algorithm.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+    <li>olaf.commons package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.algorithm.html"
+       title="previous chapter">← olaf.algorithm package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.data_container.html"
+       title="next chapter">olaf.data_container package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-commons-package">
+<h1>olaf.commons package<a class="headerlink" href="#olaf-commons-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.commons.candidate_term_tools">
+<span id="olaf-commons-candidate-term-tools-module"></span><h2>olaf.commons.candidate_term_tools module<a class="headerlink" href="#module-olaf.commons.candidate_term_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.build_cts_from_strings">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">build_cts_from_strings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ct_label_strings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Doc</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#build_cts_from_strings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.build_cts_from_strings" title="Link to this definition">¶</a></dt>
+<dd><p>Create candidate terms from a set of strings label.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ct_label_strings<span class="classifier">Set[str]</span></dt><dd><p>The set of strings to use for candidate terms labels.</p>
+</dd>
+<dt>spacy_model<span class="classifier">spacy.language.Language</span></dt><dd><p>The spaCy model to retrieve the corpus occurrences.</p>
+</dd>
+<dt>docs<span class="classifier">List[spacy.tokens.Doc]</span></dt><dd><p>The corpus in which to find the corpus occurrences.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[CandidateTerm]</dt><dd><p>The set of created candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.check_ct_belongs_to_group">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">check_ct_belongs_to_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_term</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_cts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#check_ct_belongs_to_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.check_ct_belongs_to_group" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a candidate term belongs to a group of candidate terms.
+Candidate must have common label or synonyms with the group.
+If the candidate is a candidate relation,
+it should have the same source and destination concept as well.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_term: CandidateTerm</dt><dd><p>Candidate term to check.</p>
+</dd>
+<dt>ct_labels: Set[str]</dt><dd><p>Candidate term label and synonyms.</p>
+</dd>
+<dt>group_cts: Tuple[CandidateTerm]</dt><dd><p>Tuple of candidate terms to compare with.</p>
+</dd>
+<dt>group_label: Set[str]</dt><dd><p>Group of candidate terms labels and synonyms.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>True if the candidate term belongs to the group, False otherwise.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.cts_have_common_synonyms">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">cts_have_common_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c_term_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_term_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#cts_have_common_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.cts_have_common_synonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Check if two terms have common synonyms.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>c_term_1<span class="classifier">CandidateTerm</span></dt><dd><p>First candidate term to compare.</p>
+</dd>
+<dt>c_term_2<span class="classifier">CandidateTerm</span></dt><dd><p>Second candidate term to compare.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>True if the two candidate terms have common synonyms, False otherwise.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.cts_to_concept">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">cts_to_concept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concept_candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#cts_to_concept"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.cts_to_concept" title="Link to this definition">¶</a></dt>
+<dd><p>Create a concept out of a set of candidate terms.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>concept_candidates<span class="classifier">Set[CandidateTerm]</span></dt><dd><p>Set of candidate terms to be merged in a same concept.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Concept</dt><dd><p>The created concept.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.filter_cts_on_first_token_in_term">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">filter_cts_on_first_token_in_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtering_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#filter_cts_on_first_token_in_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.filter_cts_on_first_token_in_term" title="Link to this definition">¶</a></dt>
+<dd><p>Filter a set of candidate terms based on their first token.</p>
+<p>Note: this function acts only at the candidate term label level.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms: Set[CandidateTerm]</dt><dd><p>Set of candidate terms to filter.</p>
+</dd>
+<dt>filtering_tokens: Set[str]</dt><dd><p>The set of token strings to use for filtering the candidate terms.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[CandidateTerm]</dt><dd><p>The set of filtered candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.filter_cts_on_last_token_in_term">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">filter_cts_on_last_token_in_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtering_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#filter_cts_on_last_token_in_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.filter_cts_on_last_token_in_term" title="Link to this definition">¶</a></dt>
+<dd><p>Filter a set of candidate terms based on their last token.</p>
+<p>Note: this function acts only at the candidate term label level.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms: Set[CandidateTerm]</dt><dd><p>Set of candidate terms to filter.</p>
+</dd>
+<dt>filtering_tokens: Set[str]</dt><dd><p>The set of token strings to use for filtering the candidate terms.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[CandidateTerm]</dt><dd><p>The set of filtered candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.filter_cts_on_token_in_term">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">filter_cts_on_token_in_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtering_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#filter_cts_on_token_in_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.filter_cts_on_token_in_term" title="Link to this definition">¶</a></dt>
+<dd><p>Filter a set of candidate terms based on tokens appearing in them.</p>
+<p>Note: this function acts only at the candidate term label level.</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms: Set[CandidateTerm]</dt><dd><p>Set of candidate terms to filter.</p>
+</dd>
+<dt>filtering_tokens: Set[str]</dt><dd><p>The set of token strings to use for filtering the candidate terms.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[CandidateTerm]</dt><dd><p>The set of filtered candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.group_cts_on_synonyms">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">group_cts_on_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#group_cts_on_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.group_cts_on_synonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Group candidate terms with commons labels or synonyms.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms: Set[CandidateTerm]</dt><dd><p>Candidate terms to group by commons labels and synonyms.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Set[CandidateTerm]]</dt><dd><p>Candidate terms grouped.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.candidate_term_tools.split_cts_on_token">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.candidate_term_tools.</span></span><span class="sig-name descname"><span class="pre">split_cts_on_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitting_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Doc</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/candidate_term_tools.html#split_cts_on_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.candidate_term_tools.split_cts_on_token" title="Link to this definition">¶</a></dt>
+<dd><p>Split candidate terms based on a set of token strings.</p>
+<p>Note: this function acts only at the candidate term label level.</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms: Set[CandidateTerm]</dt><dd><p>The set of candidate terms to split.</p>
+</dd>
+<dt>splitting_tokens: Set[str]</dt><dd><p>The token strings to split candidate terms on.</p>
+</dd>
+<dt>spacy_model<span class="classifier">spacy.language.Language</span></dt><dd><p>The spaCy model to retrieve the candidate terms’ corpus occurrences.</p>
+</dd>
+<dt>docs<span class="classifier">List[spacy.tokens.Doc]</span></dt><dd><p>The corpus in which to find the candidate terms’ corpus occurrences.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h3>Returns<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[CandidateTerm]</dt><dd><p>The new set of candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.embedding_tools">
+<span id="olaf-commons-embedding-tools-module"></span><h2>olaf.commons.embedding_tools module<a class="headerlink" href="#module-olaf.commons.embedding_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.embedding_tools.sbert_embeddings">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.embedding_tools.</span></span><span class="sig-name descname"><span class="pre">sbert_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">words</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/olaf/commons/embedding_tools.html#sbert_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.embedding_tools.sbert_embeddings" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-olaf.commons.errors">
+<span id="olaf-commons-errors-module"></span><h2>olaf.commons.errors module<a class="headerlink" href="#module-olaf.commons.errors" title="Link to this heading">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.EmptyCorpusError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">EmptyCorpusError</span></span><a class="reference internal" href="_modules/olaf/commons/errors.html#EmptyCorpusError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.EmptyCorpusError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when the text corpus represented as spacy documents is empty.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.FileOrDirectoryNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">FileOrDirectoryNotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/errors.html#FileOrDirectoryNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.FileOrDirectoryNotFoundError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when the corpus path is not a directory or a file.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.MissingEnvironmentVariable">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">MissingEnvironmentVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_var_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/errors.html#MissingEnvironmentVariable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.MissingEnvironmentVariable" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when an environment variable is missing.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.NotCallableError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">NotCallableError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/errors.html#NotCallableError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.NotCallableError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when the argument passed as a function is not callable.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.OptionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">OptionError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/errors.html#OptionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.OptionError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when a required option is missing for a pipeline component to function.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.ParameterError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">ParameterError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/errors.html#ParameterError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.ParameterError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when a required parameter is missing for a pipeline component to function.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.PipelineCorpusInitialisationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">PipelineCorpusInitialisationError</span></span><a class="reference internal" href="_modules/olaf/commons/errors.html#PipelineCorpusInitialisationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.PipelineCorpusInitialisationError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when a pipeline is initialised without corpus nor corpus loader.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="olaf.commons.errors.ResourcesCheckFailError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.errors.</span></span><span class="sig-name descname"><span class="pre">ResourcesCheckFailError</span></span><a class="reference internal" href="_modules/olaf/commons/errors.html#ResourcesCheckFailError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.errors.ResourcesCheckFailError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when a resource is missing to run a component of the pipeline.</p>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.kr_to_rdf_tools">
+<span id="olaf-commons-kr-to-rdf-tools-module"></span><h2>olaf.commons.kr_to_rdf_tools module<a class="headerlink" href="#module-olaf.commons.kr_to_rdf_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.all_individuals_different">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">all_individuals_different</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#all_individuals_different"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.all_individuals_different" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to making each KR concepts linguistic representation an
+OWL named instance and making each instance different.</p>
+<section id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Returns<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.concept_lrs_to_owl_individuals">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">concept_lrs_to_owl_individuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#concept_lrs_to_owl_individuals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.concept_lrs_to_owl_individuals" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to making each KR concepts an OWL class with each
+concept linguistic representations instances of the concept class.</p>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h3>Returns<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.create_obj_prop_all_restriction_triples">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">create_obj_prop_all_restriction_triples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rel_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_concept_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">URIRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Graph</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#create_obj_prop_all_restriction_triples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.create_obj_prop_all_restriction_triples" title="Link to this definition">¶</a></dt>
+<dd><p>Create the triples corresponding to an universal OWL property restriction part
+of the graph.</p>
+<section id="id21">
+<h3>Parameters<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>rel_uri<span class="classifier">URIRef</span></dt><dd><p>The URI or the relation the OWL property restriction is focusing on.</p>
+</dd>
+<dt>dest_concept_uri<span class="classifier">URIRef</span></dt><dd><p>The URI of the concept (i.e., OWL class) involved in the OWL property restriction.</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h3>Returns<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Tuple[URIRef, Graph]</dt><dd><p>The blank node ID origin of the OWL property restriction and the corresponding graph.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.create_obj_prop_some_restriction_triples">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">create_obj_prop_some_restriction_triples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rel_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_concept_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">URIRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Graph</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#create_obj_prop_some_restriction_triples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.create_obj_prop_some_restriction_triples" title="Link to this definition">¶</a></dt>
+<dd><p>Create the triples corresponding to an existential OWL property restriction part
+of the graph.</p>
+<section id="id23">
+<h3>Parameters<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>rel_uri<span class="classifier">URIRef</span></dt><dd><p>The URI or the relation the OWL property restriction is focusing on.</p>
+</dd>
+<dt>dest_concept_uri<span class="classifier">URIRef</span></dt><dd><p>The URI of the concept (i.e., OWL class) involved in the OWL property restriction.</p>
+</dd>
+</dl>
+</section>
+<section id="id24">
+<h3>Returns<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Tuple[URIRef, Graph]</dt><dd><p>The blank node ID origin of the OWL property restriction and the corresponding graph.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_concepts_to_disjoint_classes">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_concepts_to_disjoint_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_concepts_to_disjoint_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_concepts_to_disjoint_classes" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to making each KR concepts an OWL class and making each classes disjoint.</p>
+<section id="id25">
+<h3>Parameters<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h3>Returns<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_concepts_to_owl_classes">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_concepts_to_owl_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_concepts_to_owl_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_concepts_to_owl_classes" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to making each KR concepts an OWL class.</p>
+<section id="id27">
+<h3>Parameters<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h3>Returns<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_metarelations_to_owl">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_metarelations_to_owl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_metarelations_to_owl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_metarelations_to_owl" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to mapping the KR metarelations with OWL vocabulary.</p>
+<p>The mapping depends on the providing dictionary.
+The KR metarelations not matching any keys in the mapping dictionary is created as an OWL object property.</p>
+<section id="id29">
+<h3>Parameters<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id30">
+<h3>Returns<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_only_parent">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_relations_to_anonymous_only_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_relations_to_anonymous_only_parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_only_parent" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Create RDF triples corresponding to said in plain english:</dt><dd><p>‘Each source concept is A SUBSET OF the set of all the things that are related to ONLY
+instances of the destination concept by the relation.’</p>
+</dd>
+</dl>
+<section id="id31">
+<h3>Parameters<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts and relations.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id32">
+<h3>Returns<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_some_equivalent">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_relations_to_anonymous_some_equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_relations_to_anonymous_some_equivalent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_some_equivalent" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Create RDF triples corresponding to said in plain english:</dt><dd><p>‘Each source concept is EQUIVALENT TO the set of all the things that are related to SOME
+instances of the destination concept by the relation.’</p>
+</dd>
+</dl>
+<section id="id33">
+<h3>Parameters<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts and relations.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id34">
+<h3>Returns<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_some_parent">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_relations_to_anonymous_some_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_relations_to_anonymous_some_parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_relations_to_anonymous_some_parent" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Create RDF triples corresponding to saying in plain english:</dt><dd><p>‘Each source concept is A SUBSET OF the set of all the things that are related to SOME instances
+of the destination concept by the relation.’</p>
+</dd>
+</dl>
+<section id="id35">
+<h3>Parameters<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts and relations.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id36">
+<h3>Returns<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_relations_to_domain_range_obj_props">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_relations_to_domain_range_obj_props</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_relations_to_domain_range_obj_props"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_relations_to_domain_range_obj_props" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to making each KR relations OWL object properties with domain and range
+their source and destination concepts.</p>
+<p>Source and destination concepts will be created as OWL classes.</p>
+<section id="id37">
+<h3>Parameters<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h3>Returns<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.kr_relations_to_owl_obj_props">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">kr_relations_to_owl_obj_props</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#kr_relations_to_owl_obj_props"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.kr_relations_to_owl_obj_props" title="Link to this definition">¶</a></dt>
+<dd><p>Create the RDF triples corresponding to making each KR relations an OWL object property.</p>
+<section id="id39">
+<h3>Parameters<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The Knowledge Representation containing the concepts.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use when creating the class URIs.</p>
+</dd>
+</dl>
+</section>
+<section id="id40">
+<h3>Returns<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.owl_class_uri">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">owl_class_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#owl_class_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.owl_class_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build an OWL class URI.</p>
+<section id="id41">
+<h3>Parameters<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The label to use in the URI.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use.</p>
+</dd>
+</dl>
+</section>
+<section id="id42">
+<h3>Returns<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The OWL class URI.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.owl_instance_uri">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">owl_instance_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#owl_instance_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.owl_instance_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build an OWL named instance URI.</p>
+<section id="id43">
+<h3>Parameters<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The label to use in the URI.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use.</p>
+</dd>
+</dl>
+</section>
+<section id="id44">
+<h3>Returns<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The OWL named instance URI.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.kr_to_rdf_tools.owl_obj_prop_uri">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.kr_to_rdf_tools.</span></span><span class="sig-name descname"><span class="pre">owl_obj_prop_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URIRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/commons/kr_to_rdf_tools.html#owl_obj_prop_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.kr_to_rdf_tools.owl_obj_prop_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build an OWL object property URI.</p>
+<section id="id45">
+<h3>Parameters<a class="headerlink" href="#id45" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The label to use in the URI.</p>
+</dd>
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to use.</p>
+</dd>
+</dl>
+</section>
+<section id="id46">
+<h3>Returns<a class="headerlink" href="#id46" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The OWL object property URI.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.llm_tools">
+<span id="olaf-commons-llm-tools-module"></span><h2>olaf.commons.llm_tools module<a class="headerlink" href="#module-olaf.commons.llm_tools" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.HuggingFaceGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.llm_tools.</span></span><span class="sig-name descname"><span class="pre">HuggingFaceGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#HuggingFaceGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.HuggingFaceGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLMGenerator</span></code></a></p>
+<p>Text generator base on Hugging Face inference API.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.HuggingFaceGenerator.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#HuggingFaceGenerator.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.HuggingFaceGenerator.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Check that the resources needed to use the HuggingFace Generator are available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.HuggingFaceGenerator.generate_text">
+<span class="sig-name descname"><span class="pre">generate_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#HuggingFaceGenerator.generate_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.HuggingFaceGenerator.generate_text" title="Link to this definition">¶</a></dt>
+<dd><p>Generate text based on a chat completion prompt for an hugging face model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.LLMGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.llm_tools.</span></span><span class="sig-name descname"><span class="pre">LLMGenerator</span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#LLMGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.LLMGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Text generator based on LLM.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.LLMGenerator.check_resources">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#LLMGenerator.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.LLMGenerator.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Check that the resources needed to use the LLM Generator are available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.LLMGenerator.generate_text">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#LLMGenerator.generate_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.LLMGenerator.generate_text" title="Link to this definition">¶</a></dt>
+<dd><p>Method that generates a textual output based on a prompt with a LLM.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.MistralAIGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.llm_tools.</span></span><span class="sig-name descname"><span class="pre">MistralAIGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mistral-tiny'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#MistralAIGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.MistralAIGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLMGenerator</span></code></a></p>
+<p>Text generator based on MiastralAI models.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.MistralAIGenerator.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#MistralAIGenerator.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.MistralAIGenerator.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Check that the resources needed to use the MistralAI Generator are available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.MistralAIGenerator.generate_text">
+<span class="sig-name descname"><span class="pre">generate_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#MistralAIGenerator.generate_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.MistralAIGenerator.generate_text" title="Link to this definition">¶</a></dt>
+<dd><p>Generate text based on a chat completion prompt for MistralAI model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.OpenAIGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.commons.llm_tools.</span></span><span class="sig-name descname"><span class="pre">OpenAIGenerator</span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#OpenAIGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.OpenAIGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLMGenerator</span></code></a></p>
+<p>Text generator based on OpenAI gpt-3.5-turbo model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.OpenAIGenerator.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#OpenAIGenerator.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.OpenAIGenerator.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Check that the resources needed to use the OpenAI Generator are available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.commons.llm_tools.OpenAIGenerator.generate_text">
+<span class="sig-name descname"><span class="pre">generate_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/llm_tools.html#OpenAIGenerator.generate_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.llm_tools.OpenAIGenerator.generate_text" title="Link to this definition">¶</a></dt>
+<dd><p>Generate text based on a chat completion prompt for the OpenAI gtp-3.5-turbo model.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.logging_config">
+<span id="olaf-commons-logging-config-module"></span><h2>olaf.commons.logging_config module<a class="headerlink" href="#module-olaf.commons.logging_config" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.commons.prompts">
+<span id="olaf-commons-prompts-module"></span><h2>olaf.commons.prompts module<a class="headerlink" href="#module-olaf.commons.prompts" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_concept_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_concept_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_concept_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_concept_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for concept extraction with Hugging Face inference API.</p>
+<section id="id47">
+<h3>Parameters<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>doc_context: str</dt><dd><p>Extract of document contents to use as context.</p>
+</dd>
+<dt>ct_labels: str</dt><dd><p>The candidate terms to group into concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id48">
+<h3>Returns<a class="headerlink" href="#id48" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_concept_term_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_concept_term_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_concept_term_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_concept_term_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for concept term extraction with Hugging Face inference API.</p>
+<section id="id49">
+<h3>Parameters<a class="headerlink" href="#id49" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>context: str</dt><dd><p>The context to add in the prompt template.</p>
+</dd>
+</dl>
+</section>
+<section id="id50">
+<h3>Returns<a class="headerlink" href="#id50" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_hierarchisation">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_hierarchisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepts_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_hierarchisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_hierarchisation" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for hierarchisation with Hugging Face inference API.</p>
+<section id="id51">
+<h3>Parameters<a class="headerlink" href="#id51" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>doc_context: str</dt><dd><p>Extract of document contents where concepts appear to use as context.</p>
+</dd>
+<dt>concepts_description: str</dt><dd><p>Textual description of the concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id52">
+<h3>Returns<a class="headerlink" href="#id52" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_owl_axiom_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_owl_axiom_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_owl_axiom_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_owl_axiom_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for axiom extraction with Hugging Face inference API.</p>
+<section id="id53">
+<h3>Parameters<a class="headerlink" href="#id53" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr_description: str</dt><dd><p>Textual description of the knowledge representation.</p>
+</dd>
+<dt>namespace: str</dt><dd><p>The name space used for axiom generation.</p>
+</dd>
+</dl>
+</section>
+<section id="id54">
+<h3>Returns<a class="headerlink" href="#id54" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_relation_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_relation_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_relation_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_relation_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for relation extraction with Hugging Face inference API.</p>
+<section id="id55">
+<h3>Parameters<a class="headerlink" href="#id55" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>doc_context: str</dt><dd><p>Extract of document contents to use as context.</p>
+</dd>
+<dt>ct_labels: str</dt><dd><p>The candidate terms to group into relations.</p>
+</dd>
+</dl>
+</section>
+<section id="id56">
+<h3>Returns<a class="headerlink" href="#id56" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_relation_term_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_relation_term_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_relation_term_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_relation_term_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for relation term extraction with Hugging Face inference API.</p>
+<section id="id57">
+<h3>Parameters<a class="headerlink" href="#id57" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>context: str</dt><dd><p>The context to add in the prompt template.</p>
+</dd>
+</dl>
+</section>
+<section id="id58">
+<h3>Returns<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.hf_prompt_term_enrichment">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">hf_prompt_term_enrichment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#hf_prompt_term_enrichment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.hf_prompt_term_enrichment" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for term enrichment with Hugging Face inference API.</p>
+<section id="id59">
+<h3>Parameters<a class="headerlink" href="#id59" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>context: str</dt><dd><p>The context to add in the prompt template.</p>
+</dd>
+</dl>
+</section>
+<section id="id60">
+<h3>Returns<a class="headerlink" href="#id60" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>Completion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_concept_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_concept_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_concept_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_concept_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for concept extraction with ChatCompletion OpenAI model.</p>
+<section id="id61">
+<h3>Parameters<a class="headerlink" href="#id61" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>doc_context: str</dt><dd><p>Extract of document contents to use as context.</p>
+</dd>
+<dt>ct_labels: str</dt><dd><p>The candidate terms to group into concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id62">
+<h3>Returns<a class="headerlink" href="#id62" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_concept_term_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_concept_term_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_concept_term_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_concept_term_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for concept term extraction with ChatCompletion OpenAI model.</p>
+<section id="id63">
+<h3>Parameters<a class="headerlink" href="#id63" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>context: str</dt><dd><p>The context to add in the prompt template.</p>
+</dd>
+</dl>
+</section>
+<section id="id64">
+<h3>Returns<a class="headerlink" href="#id64" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_hierarchisation">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_hierarchisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepts_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_hierarchisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_hierarchisation" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for hierarchisation with ChatCompletion OpenAI model.</p>
+<section id="id65">
+<h3>Parameters<a class="headerlink" href="#id65" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>doc_context: str</dt><dd><p>Extract of document contents where concepts appear to use as context.</p>
+</dd>
+<dt>concepts_description: str</dt><dd><p>Textual description of the concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id66">
+<h3>Returns<a class="headerlink" href="#id66" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_owl_axiom_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_owl_axiom_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_owl_axiom_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_owl_axiom_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for axiom extraction with ChatCompletion OpenAI model.</p>
+<section id="id67">
+<h3>Parameters<a class="headerlink" href="#id67" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr_description: str</dt><dd><p>Textual description of the knowledge representation.</p>
+</dd>
+<dt>namespace: str</dt><dd><p>The name space used for axiom generation.</p>
+</dd>
+</dl>
+</section>
+<section id="id68">
+<h3>Returns<a class="headerlink" href="#id68" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_relation_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_relation_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_relation_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_relation_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for relation extraction with ChatCompletion OpenAI model.</p>
+<section id="id69">
+<h3>Parameters<a class="headerlink" href="#id69" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>doc_context: str</dt><dd><p>Extract of document contents to use as context.</p>
+</dd>
+<dt>ct_labels: str</dt><dd><p>The candidate terms to group as relations.</p>
+</dd>
+</dl>
+</section>
+<section id="id70">
+<h3>Returns<a class="headerlink" href="#id70" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_relation_term_extraction">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_relation_term_extraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_relation_term_extraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_relation_term_extraction" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for relation term extraction with ChatCompletion OpenAI model.</p>
+<section id="id71">
+<h3>Parameters<a class="headerlink" href="#id71" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>context: str</dt><dd><p>The context to add in the prompt template.</p>
+</dd>
+</dl>
+</section>
+<section id="id72">
+<h3>Returns<a class="headerlink" href="#id72" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.prompts.openai_prompt_term_enrichment">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.prompts.</span></span><span class="sig-name descname"><span class="pre">openai_prompt_term_enrichment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/prompts.html#openai_prompt_term_enrichment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.prompts.openai_prompt_term_enrichment" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt template for term enrichment with ChatCompletion OpenAI model.</p>
+<section id="id73">
+<h3>Parameters<a class="headerlink" href="#id73" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>context: str</dt><dd><p>The context to add in the prompt template.</p>
+</dd>
+</dl>
+</section>
+<section id="id74">
+<h3>Returns<a class="headerlink" href="#id74" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Dict[str, str]]</dt><dd><p>ChatCompletion prompt template.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.relation_tools">
+<span id="olaf-commons-relation-tools-module"></span><h2>olaf.commons.relation_tools module<a class="headerlink" href="#module-olaf.commons.relation_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.relation_tools.crs_to_relation">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.relation_tools.</span></span><span class="sig-name descname"><span class="pre">crs_to_relation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_relations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateRelation" title="olaf.data_container.candidate_term_schema.CandidateRelation"><span class="pre">CandidateRelation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.relation_schema.Relation" title="olaf.data_container.relation_schema.Relation"><span class="pre">Relation</span></a></span></span><a class="reference internal" href="_modules/olaf/commons/relation_tools.html#crs_to_relation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.relation_tools.crs_to_relation" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a set of candidate relations to a new relation.
+Each candidate relation represents a different linguistic realisation in the relation created.</p>
+<section id="id75">
+<h3>Parameters<a class="headerlink" href="#id75" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_relations<span class="classifier">Set[CandidateRelation]</span></dt><dd><p>Set of candidate relations to convert into a relation.</p>
+</dd>
+</dl>
+</section>
+<section id="id76">
+<h3>Returns<a class="headerlink" href="#id76" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Relation</dt><dd><p>The relation created from the candidate relations.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.relation_tools.cts_to_crs">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.relation_tools.</span></span><span class="sig-name descname"><span class="pre">cts_to_crs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepts_labels_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concept_max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateRelation" title="olaf.data_container.candidate_term_schema.CandidateRelation"><span class="pre">CandidateRelation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/relation_tools.html#cts_to_crs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.relation_tools.cts_to_crs" title="Link to this definition">¶</a></dt>
+<dd><p>Convert candidate terms into candidate relations.
+Concepts are searched around the candidate term within a given distance.
+If source and destination concepts are found, candidate relation as triple is created.
+Otherwise, candidate relation has no source and destination concepts.</p>
+<section id="id77">
+<h3>Parameters<a class="headerlink" href="#id77" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidate_terms<span class="classifier">Set[CandidateTerm]</span></dt><dd><p>Set of candidate terms to convert into candidate relations.</p>
+</dd>
+<dt>concepts_labels_map<span class="classifier">Dict[str,Concept]</span></dt><dd><p>Dictionary with concept labels as keys and concepts corresponding as values.</p>
+</dd>
+<dt>spacy_model<span class="classifier">spacy.language.Language</span></dt><dd><p>SpaCy model to use.</p>
+</dd>
+<dt>concept_max_distance<span class="classifier">int</span></dt><dd><p>The maximum distance between the candidate term and the concept sought.</p>
+</dd>
+<dt>scope<span class="classifier">str</span></dt><dd><p>Scope used to search concepts. Can be “doc” for the entire document or “sent” for
+the candidate term sentence.</p>
+</dd>
+</dl>
+</section>
+<section id="id78">
+<h3>Returns<a class="headerlink" href="#id78" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[CandidateRelation]</dt><dd><p>Set of candidate relations found from the candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.relation_tools.group_cr_by_concepts">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.relation_tools.</span></span><span class="sig-name descname"><span class="pre">group_cr_by_concepts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_relations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateRelation" title="olaf.data_container.candidate_term_schema.CandidateRelation"><span class="pre">CandidateRelation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateRelation" title="olaf.data_container.candidate_term_schema.CandidateRelation"><span class="pre">CandidateRelation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/relation_tools.html#group_cr_by_concepts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.relation_tools.group_cr_by_concepts" title="Link to this definition">¶</a></dt>
+<dd><p>Group relation candidates with same source and destination concepts
+Parameters
+———-
+candidate_relations: List[CandidateRelation]</p>
+<blockquote>
+<div><p>Candidate relations to group by their concepts</p>
+</div></blockquote>
+<section id="id79">
+<h3>Returns<a class="headerlink" href="#id79" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[Set[CandidateRelation]]</dt><dd><p>Groups of candidate relations with same source and destination concepts.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.spacy_processing_tools">
+<span id="olaf-commons-spacy-processing-tools-module"></span><h2>olaf.commons.spacy_processing_tools module<a class="headerlink" href="#module-olaf.commons.spacy_processing_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.is_not_num">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">is_not_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Token</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#is_not_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.is_not_num" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the Spacy Token is NOT a numerical value.</p>
+<section id="id80">
+<h3>Parameters<a class="headerlink" href="#id80" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>token<span class="classifier">spacy.tokens.Token</span></dt><dd><p>The Spacy token to test.</p>
+</dd>
+</dl>
+</section>
+<section id="id81">
+<h3>Returns<a class="headerlink" href="#id81" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether the Token Shape is NOT a numerical value or it is.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.is_not_punct">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">is_not_punct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Token</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#is_not_punct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.is_not_punct" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the Spacy Token is NOT a punctuation symbol.</p>
+<section id="id82">
+<h3>Parameters<a class="headerlink" href="#id82" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>token<span class="classifier">spacy.tokens.Token</span></dt><dd><p>The Spacy token to test.</p>
+</dd>
+</dl>
+</section>
+<section id="id83">
+<h3>Returns<a class="headerlink" href="#id83" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether the Token Shape is NOT a punctuation symbol or it is.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.is_not_stopword">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">is_not_stopword</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Token</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#is_not_stopword"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.is_not_stopword" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the Spacy Token is NOT a stopword.</p>
+<section id="id84">
+<h3>Parameters<a class="headerlink" href="#id84" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>token<span class="classifier">spacy.tokens.Token</span></dt><dd><p>The Spacy token to test.</p>
+</dd>
+</dl>
+</section>
+<section id="id85">
+<h3>Returns<a class="headerlink" href="#id85" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether the Token Shape is NOT a stopword or it is.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.is_not_url">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">is_not_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Token</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#is_not_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.is_not_url" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the Spacy Token is NOT a url.</p>
+<section id="id86">
+<h3>Parameters<a class="headerlink" href="#id86" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>token<span class="classifier">spacy.tokens.Token</span></dt><dd><p>The Spacy token to test.</p>
+</dd>
+</dl>
+</section>
+<section id="id87">
+<h3>Returns<a class="headerlink" href="#id87" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether the Token Shape is NOT a url or it is.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.select_on_pos">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">select_on_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_to_select</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#select_on_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.select_on_pos" title="Link to this definition">¶</a></dt>
+<dd><p>Return true if the Spacy Token POS string is in the pos_to_select list.</p>
+<section id="id88">
+<h3>Parameters<a class="headerlink" href="#id88" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>token<span class="classifier">spacy.tokens.Token</span></dt><dd><p>The Spacy token to test</p>
+</dd>
+<dt>pos_to_select<span class="classifier">List[str]</span></dt><dd><p>The list of strings corresponding to the POS tags to keep.</p>
+</dd>
+</dl>
+</section>
+<section id="id89">
+<h3>Returns<a class="headerlink" href="#id89" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether the Token POS tag is in pos_to_select or not</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.spacy_span_ngrams">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">spacy_span_ngrams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gram_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#spacy_span_ngrams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.spacy_span_ngrams" title="Link to this definition">¶</a></dt>
+<dd><p>Adapt the NTLK ngrams function to work with spaCy Span objects.</p>
+<section id="id90">
+<h3>Parameters<a class="headerlink" href="#id90" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>span<span class="classifier">spacy.tokens.span.Span</span></dt><dd><p>The spaCy Span object to extract the ngrams from.</p>
+</dd>
+<dt>gram_size<span class="classifier">int</span></dt><dd><p>The gram size.</p>
+</dd>
+</dl>
+</section>
+<section id="id91">
+<h3>Returns<a class="headerlink" href="#id91" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[spacy.tokens.span.Span]</dt><dd><p>The list of ngrams as spaCy Span objects.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.spacy_processing_tools.spans_overlap">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.spacy_processing_tools.</span></span><span class="sig-name descname"><span class="pre">spans_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">span1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">span2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Span</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/olaf/commons/spacy_processing_tools.html#spans_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.spacy_processing_tools.spans_overlap" title="Link to this definition">¶</a></dt>
+<dd><p>Return true is the spans are overlapping, else False.</p>
+<section id="id92">
+<h3>Parameters<a class="headerlink" href="#id92" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>span1<span class="classifier">spacy.tokens.Span</span></dt><dd><p>The first spaCy span.</p>
+</dd>
+<dt>span2<span class="classifier">spacy.tokens.Span</span></dt><dd><p>The second spaCy span.</p>
+</dd>
+</dl>
+</section>
+<section id="id93">
+<h3>Returns<a class="headerlink" href="#id93" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether or not the spans are overlapping.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.string_tools">
+<span id="olaf-commons-string-tools-module"></span><h2>olaf.commons.string_tools module<a class="headerlink" href="#module-olaf.commons.string_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.string_tools.space_to_underscore_str">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.string_tools.</span></span><span class="sig-name descname"><span class="pre">space_to_underscore_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_with_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/string_tools.html#space_to_underscore_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.string_tools.space_to_underscore_str" title="Link to this definition">¶</a></dt>
+<dd><p>Tool function to replace spaces by underscores in a text.</p>
+<section id="id94">
+<h3>Parameters<a class="headerlink" href="#id94" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>text_with_space<span class="classifier">str</span></dt><dd><p>The text containing spaces</p>
+</dd>
+</dl>
+</section>
+<section id="id95">
+<h3>Returns<a class="headerlink" href="#id95" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>the text with underscores</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.string_tools.underscore_to_space_str">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.string_tools.</span></span><span class="sig-name descname"><span class="pre">underscore_to_space_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_with_underscore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/string_tools.html#underscore_to_space_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.string_tools.underscore_to_space_str" title="Link to this definition">¶</a></dt>
+<dd><p>Tool function to replace underscores by spaces in a text.</p>
+<section id="id96">
+<h3>Parameters<a class="headerlink" href="#id96" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>text_with_underscore<span class="classifier">str</span></dt><dd><p>The text containing underscores</p>
+</dd>
+</dl>
+</section>
+<section id="id97">
+<h3>Returns<a class="headerlink" href="#id97" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>the text with spaces</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons.wordnet_tools">
+<span id="olaf-commons-wordnet-tools-module"></span><h2>olaf.commons.wordnet_tools module<a class="headerlink" href="#module-olaf.commons.wordnet_tools" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.wordnet_tools.fetch_wordnet_lang">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.wordnet_tools.</span></span><span class="sig-name descname"><span class="pre">fetch_wordnet_lang</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/olaf/commons/wordnet_tools.html#fetch_wordnet_lang"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.wordnet_tools.fetch_wordnet_lang" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Tool function to map a Spacy language tag to the corresponding WordNet one.</dt><dd><p>Return None if no mapping is found.
+Adapted from project &lt;<a class="reference external" href="https://github.com/argilla-io/spacy-wordnet">https://github.com/argilla-io/spacy-wordnet</a>&gt;.</p>
+</dd>
+</dl>
+<section id="id98">
+<h3>Parameters<a class="headerlink" href="#id98" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>lang<span class="classifier">str</span></dt><dd><p>The spaCy language tag.</p>
+</dd>
+</dl>
+</section>
+<section id="id99">
+<h3>Returns<a class="headerlink" href="#id99" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str</dt><dd><p>The WordNet language tag.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Exception</dt><dd><p>An exception to spot a language not existing.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.wordnet_tools.load_enrichment_wordnet_domains_from_file">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.wordnet_tools.</span></span><span class="sig-name descname"><span class="pre">load_enrichment_wordnet_domains_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enrichment_domains_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/wordnet_tools.html#load_enrichment_wordnet_domains_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.wordnet_tools.load_enrichment_wordnet_domains_from_file" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Load a set of domains (strings) from a file.</dt><dd><p>The file is expected to contain one domain string per line.</p>
+</dd>
+</dl>
+<section id="id100">
+<h3>Parameters<a class="headerlink" href="#id100" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>enrichment_domains_path<span class="classifier">str</span></dt><dd><p>The full or relative path to the file containing wordnet domains to use for enrichment.</p>
+</dd>
+</dl>
+</section>
+<section id="id101">
+<h3>Returns<a class="headerlink" href="#id101" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of domains.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.wordnet_tools.load_wordnet_domains">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.wordnet_tools.</span></span><span class="sig-name descname"><span class="pre">load_wordnet_domains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wordnet_domains_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/commons/wordnet_tools.html#load_wordnet_domains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.wordnet_tools.load_wordnet_domains" title="Link to this definition">¶</a></dt>
+<dd><p>Load the mapping of WordNet Synsets to domains from a file.
+The file should have the structure: <cite>synset_code    domain1 domain2</cite>.
+Function inspired from project &lt;<a class="reference external" href="https://github.com/argilla-io/spacy-wordnet">https://github.com/argilla-io/spacy-wordnet</a>&gt;</p>
+<section id="id102">
+<h3>Parameters<a class="headerlink" href="#id102" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>wordnet_domains_path<span class="classifier">str</span></dt><dd><p>The full or relative path to wordnet domains synsets mapping file.</p>
+</dd>
+</dl>
+</section>
+<section id="id103">
+<h3>Returns<a class="headerlink" href="#id103" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Dict[str, List[str]]</dt><dd><p>The mapping of WordNet Synsets to domains.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="olaf.commons.wordnet_tools.spacy2wordnet_pos">
+<span class="sig-prename descclassname"><span class="pre">olaf.commons.wordnet_tools.</span></span><span class="sig-name descname"><span class="pre">spacy2wordnet_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spacy_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/commons/wordnet_tools.html#spacy2wordnet_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.commons.wordnet_tools.spacy2wordnet_pos" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Tool function to map a spaCy POS tag to the corresponding WordNet one.</dt><dd><p>Return None if no mapping is found.
+Adapted from project &lt;<a class="reference external" href="https://github.com/argilla-io/spacy-wordnet">https://github.com/argilla-io/spacy-wordnet</a>&gt;.</p>
+</dd>
+</dl>
+<section id="id104">
+<h3>Parameters<a class="headerlink" href="#id104" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>spacy_pos<span class="classifier">str</span></dt><dd><p>The spaCy POS tag.</p>
+</dd>
+</dl>
+</section>
+<section id="id105">
+<h3>Returns<a class="headerlink" href="#id105" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>str, optional</dt><dd><p>The WordNet POS tag.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.commons">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.commons" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.algorithm.html"
+       title="previous chapter">← olaf.algorithm package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.data_container.html"
+       title="next chapter">olaf.data_container package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

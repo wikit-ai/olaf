@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.algorithm package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.commons package" href="olaf.commons.html" />
+  <link rel="prev" title="olaf package" href="olaf.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+    <li>olaf.algorithm package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.html"
+       title="previous chapter">← olaf package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.commons.html"
+       title="next chapter">olaf.commons package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-algorithm-package">
+<h1>olaf.algorithm package<a class="headerlink" href="#olaf-algorithm-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.algorithm.agglomerative_clustering">
+<span id="olaf-algorithm-agglomerative-clustering-module"></span><h2>olaf.algorithm.agglomerative_clustering module<a class="headerlink" href="#module-olaf.algorithm.agglomerative_clustering" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.algorithm.agglomerative_clustering.AgglomerativeClustering">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.algorithm.agglomerative_clustering.</span></span><span class="sig-name descname"><span class="pre">AgglomerativeClustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_instances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cosine'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linkage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/algorithm/agglomerative_clustering.html#AgglomerativeClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.algorithm.agglomerative_clustering.AgglomerativeClustering" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implementation of agglomerative clustering algorithm.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="olaf.algorithm.agglomerative_clustering.AgglomerativeClustering.clustering_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clustering_labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.algorithm.agglomerative_clustering.AgglomerativeClustering.clustering_labels" title="Link to this definition">¶</a></dt>
+<dd><p>Getter to return the labels found for each training instance.</p>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>List[int]</dt><dd><p>List of cluster labels found for each training instance.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.algorithm.agglomerative_clustering.AgglomerativeClustering.compute_agglomerative_clustering">
+<span class="sig-name descname"><span class="pre">compute_agglomerative_clustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/algorithm/agglomerative_clustering.html#AgglomerativeClustering.compute_agglomerative_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.algorithm.agglomerative_clustering.AgglomerativeClustering.compute_agglomerative_clustering" title="Link to this definition">¶</a></dt>
+<dd><p>Method used to compute the agglomerative clustering on the training instances.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.algorithm.c_value">
+<span id="olaf-algorithm-c-value-module"></span><h2>olaf.algorithm.c_value module<a class="headerlink" href="#module-olaf.algorithm.c_value" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.algorithm.c_value.Cvalue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.algorithm.c_value.</span></span><span class="sig-name descname"><span class="pre">Cvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_term_token_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_value_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/algorithm/c_value.html#Cvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.algorithm.c_value.Cvalue" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="simple">
+<dt>A class to extract terms form a list of strings and compute the C-values of those.</dt><dd><p>The C-values are computed based on &lt;<a class="reference external" href="https://doi.org/10.1007/s007999900023">https://doi.org/10.1007/s007999900023</a>&gt;.</p>
+</dd>
+</dl>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>corpus_terms: List[str]</dt><dd><p>The list of strings extracted from the corpus to extract the terms from.
+The strings should be space-tokenised.</p>
+</dd>
+<dt>max_term_token_length: int</dt><dd><p>The maximum number of tokens a term can have.</p>
+</dd>
+<dt>stop_list: Set[str]</dt><dd><p>A set of stop words that should not appear in a term.</p>
+</dd>
+<dt>_terms_string_tokens: Tuple[Tuple[str]]</dt><dd><p>Tuple of terms string tokens to compute the C-values with.</p>
+</dd>
+<dt>c_value_threshold: float</dt><dd><p>A threshold to decide wether or not a term should be added to the candidate terms.</p>
+</dd>
+<dt>candidate_terms: Tuple[str]</dt><dd><p>The tuple of selected candidate terms.</p>
+</dd>
+<dt>_terms_counter: Counter</dt><dd><p>A mapping of terms to their occurrences in the corpus.</p>
+</dd>
+<dt>_term_stat_triples: Dict[str, Tuple[int, int, int]]</dt><dd><p>Tuple of term occurrences values used for computing C-values.</p>
+</dd>
+<dt>c_values: Tuple[Tuple[float, str]]</dt><dd><p>An ordered tuple of candidate terms with their C-values.</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="olaf.algorithm.c_value.Cvalue.c_values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">c_values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.algorithm.c_value.Cvalue.c_values" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Getter for the c_values attribute.</dt><dd><p>Should log a warning in case the user forgot to run the C-value computation.</p>
+</dd>
+</dl>
+<section id="id1">
+<h4>Returns<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Tuple[Tuple[float, str]]</dt><dd><p>The tuple of terms and their C-values.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="olaf.algorithm.c_value.Cvalue.candidate_terms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">candidate_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.algorithm.c_value.Cvalue.candidate_terms" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Getter for the candidate_terms attribute.</dt><dd><p>Should log a warning in case the user forgot to run the C-value computation.</p>
+</dd>
+</dl>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Tuple[str]</dt><dd><p>The tuple of candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.algorithm.c_value.Cvalue.compute_c_values">
+<span class="sig-name descname"><span class="pre">compute_c_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/algorithm/c_value.html#Cvalue.compute_c_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.algorithm.c_value.Cvalue.compute_c_values" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the C-value scores.</p>
+<p>The method sets the following attributes:
+- self._c_values
+- self._candidate_terms</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="olaf.algorithm.c_value.Cvalue.max_term_token_length">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_term_token_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#olaf.algorithm.c_value.Cvalue.max_term_token_length" title="Link to this definition">¶</a></dt>
+<dd><p>Getter for the max token length of terms.</p>
+<section id="id3">
+<h4>Returns<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>int</dt><dd><p>The terms max token length.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.algorithm">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.algorithm" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.html"
+       title="previous chapter">← olaf package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.commons.html"
+       title="next chapter">olaf.commons package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

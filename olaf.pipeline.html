@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.pipeline package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.pipeline.data_preprocessing package" href="olaf.pipeline.data_preprocessing.html" />
+  <link rel="prev" title="olaf.data_container package" href="olaf.data_container.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+    <li>olaf.pipeline package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.data_container.html"
+       title="previous chapter">← olaf.data_container package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.data_preprocessing.html"
+       title="next chapter">olaf.pipeline.data_preprocessing package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-pipeline-package">
+<h1>olaf.pipeline package<a class="headerlink" href="#olaf-pipeline-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html">olaf.pipeline.data_preprocessing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#module-olaf.pipeline.data_preprocessing.data_preprocessing_schema">olaf.pipeline.data_preprocessing.data_preprocessing_schema module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing"><code class="docutils literal notranslate"><span class="pre">DataPreprocessing</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing.run"><code class="docutils literal notranslate"><span class="pre">DataPreprocessing.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#module-olaf.pipeline.data_preprocessing.token_selector_data_preprocessing">olaf.pipeline.data_preprocessing.token_selector_data_preprocessing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.token_selector_data_preprocessing.TokenSelectorDataPreprocessing"><code class="docutils literal notranslate"><span class="pre">TokenSelectorDataPreprocessing</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.token_selector_data_preprocessing.TokenSelectorDataPreprocessing.run"><code class="docutils literal notranslate"><span class="pre">TokenSelectorDataPreprocessing.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#module-olaf.pipeline.data_preprocessing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.pipeline_component.html">olaf.pipeline.pipeline_component package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html">olaf.pipeline.pipeline_component.axiom_extraction package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#module-olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction">olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#module-olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction">olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#module-olaf.pipeline.pipeline_component.axiom_extraction">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html">olaf.pipeline.pipeline_component.candidate_term_enrichment package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment">olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment">olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment">olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html">olaf.pipeline.pipeline_component.concept_relation_extraction package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts">olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations">olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html">olaf.pipeline.pipeline_component.concept_relation_hierarchy package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation">olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation">olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html">olaf.pipeline.pipeline_component.term_extraction package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction">olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction">olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms">olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction">olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema">olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction">olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#module-olaf.pipeline.pipeline_component.pipeline_component_schema">olaf.pipeline.pipeline_component.pipeline_component_schema module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.check_resources"><code class="docutils literal notranslate"><span class="pre">PipelineComponent.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.get_performance_report"><code class="docutils literal notranslate"><span class="pre">PipelineComponent.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.optimise"><code class="docutils literal notranslate"><span class="pre">PipelineComponent.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.run"><code class="docutils literal notranslate"><span class="pre">PipelineComponent.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#module-olaf.pipeline.pipeline_component">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.pipeline.pipeline_schema">
+<span id="olaf-pipeline-pipeline-schema-module"></span><h2>olaf.pipeline.pipeline_schema module<a class="headerlink" href="#module-olaf.pipeline.pipeline_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_schema.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spacy_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_components</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><span class="pre">PipelineComponent</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessing_components</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing" title="olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing"><span class="pre">DataPreprocessing</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_loader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.repository.corpus_loader.html#olaf.repository.corpus_loader.corpus_loader_schema.CorpusLoader" title="olaf.repository.corpus_loader.corpus_loader_schema.CorpusLoader"><span class="pre">CorpusLoader</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Doc</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed_kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Pipeline is the library main class. It orchestrates the pipeline starting
+from raw texts to build the final knowledge representation.</p>
+<p>The corpus loader is responsible for the conversion for raw text to spacy document.
+We separate data preprocessing to explicitly enable pipelines without preprocessing.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>spacy_model: spacy.language.Language</dt><dd><p>The spacy model used to represent text corpus.</p>
+</dd>
+<dt>pipeline_components: List[PipelineComponent]</dt><dd><p>The ontology learning pipeline components that build the knowledge representation from the corpus.</p>
+</dd>
+<dt>preprocessing_components: List[DataPreprocessing]</dt><dd><p>The pipeline components specific to preprocessing.</p>
+</dd>
+<dt>corpus_loader: CorpusLoader</dt><dd><p>The component that loads the text corpus in the format used by the framework, i.e., a List[spacy.tokens.doc.Doc].</p>
+</dd>
+<dt>corpus: List[spacy.tokens.doc.Doc]</dt><dd><p>The preprocessed corpus the knowledge representation is built from.</p>
+</dd>
+<dt>kr: KnowledgeRepresentation</dt><dd><p>The knowledge extracted from the corpus.</p>
+</dd>
+<dt>candidate_terms: Set[CandidateTerms]</dt><dd><p>The candidate terms extracted and processed to create concept and relations.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline.add_pipeline_component">
+<span class="sig-name descname"><span class="pre">add_pipeline_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><span class="pre">PipelineComponent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline.add_pipeline_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline.add_pipeline_component" title="Link to this definition">¶</a></dt>
+<dd><p>Add a component to the pipeline.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline_component<span class="classifier">PipelineComponent</span></dt><dd><p>The pipeline component to add.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline.add_preprocessing_component">
+<span class="sig-name descname"><span class="pre">add_preprocessing_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocessing_component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing" title="olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing"><span class="pre">DataPreprocessing</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline.add_preprocessing_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline.add_preprocessing_component" title="Link to this definition">¶</a></dt>
+<dd><p>Add a preprocessing component to the pipeline.</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>preprocessing_component<span class="classifier">DataPreprocessing</span></dt><dd><p>The preprocessing pipeline component to add.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline.build" title="Link to this definition">¶</a></dt>
+<dd><p>Effectively build the pipeline, making the instance runnable.
+This method check each components and the constrained order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline.remove_pipeline_component">
+<span class="sig-name descname"><span class="pre">remove_pipeline_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><span class="pre">PipelineComponent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline.remove_pipeline_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline.remove_pipeline_component" title="Link to this definition">¶</a></dt>
+<dd><p>Remove a component from the pipeline.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline_component<span class="classifier">PipelineComponent</span></dt><dd><p>The pipeline component to remove.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline.remove_preprocessing_component">
+<span class="sig-name descname"><span class="pre">remove_preprocessing_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocessing_component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing" title="olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing"><span class="pre">DataPreprocessing</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline.remove_preprocessing_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline.remove_preprocessing_component" title="Link to this definition">¶</a></dt>
+<dd><p>Remove a preprocessing component from the pipeline.</p>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>preprocessing_component<span class="classifier">DataPreprocessing</span></dt><dd><p>The preprocessing pipeline component to remove.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_schema.Pipeline.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_schema.html#Pipeline.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_schema.Pipeline.run" title="Link to this definition">¶</a></dt>
+<dd><p>Run the pipeline. The method hence run each pipeline components in
+the determined order filling the Knowledge Representation.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.pipeline" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.data_container.html"
+       title="previous chapter">← olaf.data_container package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.data_preprocessing.html"
+       title="next chapter">olaf.pipeline.data_preprocessing package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

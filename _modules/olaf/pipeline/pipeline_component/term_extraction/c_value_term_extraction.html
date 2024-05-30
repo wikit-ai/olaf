@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction</title>
+    
+          <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">spacy.tokens.span</span>
+
+<span class="kn">from</span> <span class="nn">...pipeline_schema</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">....algorithm.c_value</span> <span class="kn">import</span> <span class="n">Cvalue</span>
+<span class="kn">from</span> <span class="nn">....commons.errors</span> <span class="kn">import</span> <span class="n">OptionError</span>
+<span class="kn">from</span> <span class="nn">....commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">....commons.spacy_processing_tools</span> <span class="kn">import</span> <span class="n">spacy_span_ngrams</span>
+<span class="kn">from</span> <span class="nn">....data_container.candidate_term_schema</span> <span class="kn">import</span> <span class="n">CandidateTerm</span>
+<span class="kn">from</span> <span class="nn">.term_extraction_schema</span> <span class="kn">import</span> <span class="n">TermExtractionPipelineComponent</span>
+
+
+<div class="viewcode-block" id="CvalueTermExtraction">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction">[docs]</a>
+<span class="k">class</span> <span class="nc">CvalueTermExtraction</span><span class="p">(</span><span class="n">TermExtractionPipelineComponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract candidate terms using C-value scores computed based on the corpus.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</span>
+<span class="sd">        A list of candidate term post processing functions to run after candidate term extraction</span>
+<span class="sd">        and before assigning the extracted candidate terms to the pipeline, by default None.</span>
+<span class="sd">    _token_sequences_doc_attribute : str, optional</span>
+<span class="sd">        The name of the spaCy doc custom attribute containing the sequences of tokens to</span>
+<span class="sd">        form the corpus for the c-value computation. Default is None which default to the full doc.</span>
+<span class="sd">    _candidate_term_threshold : float, optional</span>
+<span class="sd">        The c-value score threshold below which terms will be ignored.</span>
+<span class="sd">    _c_value_threshold : float, optional</span>
+<span class="sd">        The threshold used during the c-value scores computation process, by defaut 0.0.</span>
+<span class="sd">    _max_term_token_length : int, optional</span>
+<span class="sd">        The maximum number of tokens a term can have, by defaut 5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">candidate_term_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">max_term_token_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">token_sequences_doc_attribute</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">c_value_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">cts_post_processing_functions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+            <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]],</span> <span class="n">Set</span><span class="p">[</span><span class="n">CandidateTerm</span><span class="p">]]]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">stop_token_list</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise C-value term extraction pipeline component instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        candidate_term_threshold : float, optional</span>
+<span class="sd">            The c-value score threshold below which terms will be ignored, by defaut 0.0.</span>
+<span class="sd">        max_term_token_length : int, optional</span>
+<span class="sd">            The maximum number of tokens a term can have, by defaut 5.</span>
+<span class="sd">        token_sequences_doc_attribute : str, optional</span>
+<span class="sd">            The name of the spaCy doc custom attribute containing the sequences of tokens to</span>
+<span class="sd">            form the corpus for the c-value computation. Default is None which default to the full doc.</span>
+<span class="sd">        c_value_threshold : float, optional</span>
+<span class="sd">            The threshold used during the c-value scores computation process.</span>
+<span class="sd">            Default is None which default to the candidate_term_threshold.</span>
+<span class="sd">        cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</span>
+<span class="sd">            A list of candidate term post processing functions to run after candidate term extraction</span>
+<span class="sd">            and before assigning the extracted candidate terms to the pipeline, by default None.</span>
+<span class="sd">        stop_token_list: Set[str], optional</span>
+<span class="sd">            A set of stop words that should not appear in a term.</span>
+<span class="sd">            _terms_string_tokens: Tuple[Tuple[str]], by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cts_post_processing_functions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span> <span class="o">=</span> <span class="n">token_sequences_doc_attribute</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_term_threshold</span> <span class="o">=</span> <span class="n">candidate_term_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_c_value_threshold</span> <span class="o">=</span> <span class="n">c_value_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_term_token_length</span> <span class="o">=</span> <span class="n">max_term_token_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop_token_list</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">stop_token_list</span> <span class="k">if</span> <span class="n">stop_token_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_check_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;C-value token sequence attribute not set by the user.</span>
+<span class="sd">                By default the system will use the entire content of the document.&quot;&quot;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Doc</span><span class="o">.</span><span class="n">has_extension</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;User defined c-value token sequence attribute %s not set on spaCy Doc.</span>
+<span class="sd">                    By default the system will use the entire content of the document.&quot;&quot;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_candidate_term_threshold</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">OptionError</span><span class="p">(</span>
+                <span class="n">component_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span>
+                <span class="n">option_name</span><span class="o">=</span><span class="s2">&quot;threshold&quot;</span><span class="p">,</span>
+                <span class="n">error_type</span><span class="o">=</span><span class="s2">&quot;Wrong value type&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_term_token_length</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">OptionError</span><span class="p">(</span>
+                <span class="n">component_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span>
+                <span class="n">option_name</span><span class="o">=</span><span class="s2">&quot;max_term_token_length&quot;</span><span class="p">,</span>
+                <span class="n">error_type</span><span class="o">=</span><span class="s2">&quot;Wrong value type&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_c_value_threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_c_value_threshold</span><span class="p">,</span> <span class="nb">float</span>
+        <span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;No Correct value provided for the C-value algorithm threshold. </span>
+<span class="sd">                The system will default to the provided C-value candidate term extraction threshold.&quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_c_value_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_term_threshold</span>
+
+<div class="viewcode-block" id="CvalueTermExtraction.optimise">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.optimise">[docs]</a>
+    <span class="k">def</span> <span class="nf">optimise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">validation_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">option_values_map</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO: how far in the grid search do we go?</span>
+        <span class="c1"># scikitlearn grid search</span>
+        <span class="c1"># default to grid search and log a warning</span>
+        <span class="c1"># enable user defined optimisation function alternative</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to optimise the pipeline component by tuning the options.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="CvalueTermExtraction.check_resources">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.</span>
+
+<span class="sd">        This pipeline component does not need any access to any external resource.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;C-value term extraction pipeline component has no external resource to check.&quot;</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to compute component performance metrics.</span>
+<span class="sd">        It is used by the optimise method to update the options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="CvalueTermExtraction.get_performance_report">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.get_performance_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_performance_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A getter for the pipeline component performance report.</span>
+<span class="sd">            If the component has been optimised, it only returns the best performance.</span>
+<span class="sd">            Otherwise, it returns the results obtained with the set parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The pipeline component performance report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_create_max_length_spans</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">token_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract spans of size limited to the self._max_term_token_length.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        token_sequences : List[spacy.tokens.Span]</span>
+<span class="sd">            The spans to extract the max length spans from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[spacy.tokens.Span]</span>
+<span class="sd">            The max length spans</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_length_spans</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">span</span> <span class="ow">in</span> <span class="n">token_sequences</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">span</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_term_token_length</span><span class="p">:</span>
+                <span class="n">span_ngrams</span> <span class="o">=</span> <span class="n">spacy_span_ngrams</span><span class="p">(</span>
+                    <span class="n">span</span><span class="o">=</span><span class="n">span</span><span class="p">,</span> <span class="n">gram_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_term_token_length</span>
+                <span class="p">)</span>
+                <span class="n">max_length_spans</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">span_ngrams</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">max_length_spans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">span</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">max_length_spans</span>
+
+    <span class="k">def</span> <span class="nf">_extract_token_sequences</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Doc</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract token sequences for the C-value algorithm to process them.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[spacy.tokens.Span]</span>
+<span class="sd">            The list of extracted sequences.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token_sequences</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">corpus</span><span class="p">:</span>
+                <span class="n">doc_token_sequences</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_token_sequences_doc_attribute</span><span class="p">)</span>
+                <span class="n">max_length_spans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_max_length_spans</span><span class="p">(</span><span class="n">doc_token_sequences</span><span class="p">)</span>
+                <span class="n">token_sequences</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">max_length_spans</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">corpus</span><span class="p">:</span>
+                <span class="c1"># Extract the document tokens in a span instance for consistency.</span>
+                <span class="n">doc_span</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[:]</span>
+                <span class="n">max_length_spans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_max_length_spans</span><span class="p">([</span><span class="n">doc_span</span><span class="p">])</span>
+                <span class="n">token_sequences</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">max_length_spans</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">token_sequences</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_spaced_term_corpus_occ_map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">token_seqs_spans</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a mapping between term string processed by the c-value algorithm</span>
+<span class="sd">        and the spaCy spans they were extracted from.</span>
+
+<span class="sd">        We extract all the substring in each token sequence because the C-value</span>
+<span class="sd">        algorithm will create them and return scores for each. Hence, some candidate</span>
+<span class="sd">        terms might be substrings of the initial token sequences. We pre-generate all</span>
+<span class="sd">        of them to make sure to have the mapping with a spaCy span to construct the</span>
+<span class="sd">        Candidate Term instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        token_seqs_spans : Tuple[spacy.tokens.Span]</span>
+<span class="sd">            The spaCy spans of the token sequences to extract the candidate terms from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, List[spacy.tokens.Span]]</span>
+<span class="sd">            The mapping between term string processed by the c-value algorithm and the</span>
+<span class="sd">            spaCy spans they were extracted from.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">term_corpus_occ_mapping</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">token_seqs_span</span> <span class="ow">in</span> <span class="n">token_seqs_spans</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">token_seqs_span</span><span class="p">)):</span>
+                <span class="n">spans</span> <span class="o">=</span> <span class="n">spacy_span_ngrams</span><span class="p">(</span><span class="n">token_seqs_span</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">term_span</span> <span class="ow">in</span> <span class="n">spans</span><span class="p">:</span>
+                    <span class="n">spaced_term</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">term_span</span><span class="p">])</span>
+                    <span class="n">term_corpus_occ_mapping</span><span class="p">[</span><span class="n">spaced_term</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term_span</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">term_corpus_occ_mapping</span>
+
+    <span class="k">def</span> <span class="nf">_extract_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the C-value score for each term and filter out the ones with a</span>
+<span class="sd">        score below the threshold.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : List[str]</span>
+<span class="sd">            The list of terms to process.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[str]</span>
+<span class="sd">            The list the selected terms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c_value</span> <span class="o">=</span> <span class="n">Cvalue</span><span class="p">(</span>
+            <span class="n">corpus_terms</span><span class="o">=</span><span class="n">terms</span><span class="p">,</span>
+            <span class="n">max_term_token_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_term_token_length</span><span class="p">,</span>
+            <span class="n">stop_list</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_stop_token_list</span><span class="p">,</span>
+            <span class="n">c_value_threshold</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_c_value_threshold</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">c_value</span><span class="o">.</span><span class="n">compute_c_values</span><span class="p">()</span>
+
+        <span class="n">candidate_terms</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">c_value_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">c_value_tuple</span> <span class="ow">in</span> <span class="n">c_value</span><span class="o">.</span><span class="n">c_values</span>
+                <span class="k">if</span> <span class="n">c_value_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_term_threshold</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">candidate_terms</span>
+
+    <span class="k">def</span> <span class="nf">_get_corpus_occurrences</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">term_corpus_occ_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve spaCy spans corresponding to term.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term : str</span>
+<span class="sd">            The term to retrieve the corpus occurrences from.</span>
+<span class="sd">        term_corpus_occ_mapping : Dict[str, List[spacy.tokens.Span]]</span>
+<span class="sd">            The mapping of term to corpus occurrences.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[spacy.tokens.Span]</span>
+<span class="sd">            The list of corpus occurrences.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">term_corpus_occurrences</span> <span class="o">=</span> <span class="n">term_corpus_occ_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="k">return</span> <span class="n">term_corpus_occurrences</span>
+
+<div class="viewcode-block" id="CvalueTermExtraction.run">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method that is responsible for the execution of the component.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline: Pipeline</span>
+<span class="sd">            The pipeline to run the component with.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">token_sequences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_token_sequences</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
+
+        <span class="n">spaced_term_corpus_occ_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spaced_term_corpus_occ_map</span><span class="p">(</span><span class="n">token_sequences</span><span class="p">)</span>
+
+        <span class="n">corpus_spaced_token_sequences</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">token_sequence</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">token_sequence</span> <span class="ow">in</span> <span class="n">token_sequences</span>
+        <span class="p">]</span>
+
+        <span class="n">extracted_terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_terms</span><span class="p">(</span><span class="n">terms</span><span class="o">=</span><span class="n">corpus_spaced_token_sequences</span><span class="p">)</span>
+
+        <span class="n">candidate_terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">extracted_term</span> <span class="ow">in</span> <span class="n">extracted_terms</span><span class="p">:</span>
+            <span class="n">term_corpus_occurrences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_corpus_occurrences</span><span class="p">(</span>
+                <span class="n">term</span><span class="o">=</span><span class="n">extracted_term</span><span class="p">,</span> <span class="n">term_corpus_occ_mapping</span><span class="o">=</span><span class="n">spaced_term_corpus_occ_map</span>
+            <span class="p">)</span>
+            <span class="n">candidate_term</span> <span class="o">=</span> <span class="n">CandidateTerm</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">extracted_term</span><span class="p">,</span> <span class="n">corpus_occurrences</span><span class="o">=</span><span class="n">term_corpus_occurrences</span>
+            <span class="p">)</span>
+
+            <span class="n">candidate_terms</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">candidate_term</span><span class="p">)</span>
+
+        <span class="n">candidate_terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_post_processing</span><span class="p">(</span><span class="n">candidate_terms</span><span class="p">)</span>
+
+        <span class="n">pipeline</span><span class="o">.</span><span class="n">candidate_terms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">candidate_terms</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,22 @@
+olaf package
+============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   olaf.algorithm
+   olaf.commons
+   olaf.data_container
+   olaf.pipeline
+   olaf.repository
+
+Module contents
+---------------
+
+.. automodule:: olaf
+   :members:
+   :undoc-members:
+   :show-inheritance:

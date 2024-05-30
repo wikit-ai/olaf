@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.data_container.relation_schema</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.data_container.relation_schema</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.data_container.relation_schema</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">.concept_schema</span> <span class="kn">import</span> <span class="n">Concept</span>
+<span class="kn">from</span> <span class="nn">.data_container_schema</span> <span class="kn">import</span> <span class="n">DataContainer</span>
+<span class="kn">from</span> <span class="nn">.linguistic_realisation_schema</span> <span class="kn">import</span> <span class="n">LinguisticRealisation</span>
+
+
+<div class="viewcode-block" id="Relation">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.relation_schema.Relation">[docs]</a>
+<span class="k">class</span> <span class="nc">Relation</span><span class="p">(</span><span class="n">DataContainer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Relation is the explicit link between two concepts which is the result of an action or</span>
+<span class="sd">    a state and which could itself be a concept.</span>
+<span class="sd">    It is oriented and has a label.</span>
+<span class="sd">    The relation is defined by its triple (source, label, destination).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The relation human readable label</span>
+<span class="sd">    source_concept : Concept, optional</span>
+<span class="sd">        The source concept in the relation triple, by default None.</span>
+<span class="sd">    destination_concept : Concept, optional</span>
+<span class="sd">        The destination concept in the relation triple, by default None.</span>
+<span class="sd">    external_uids : Set[str], optional</span>
+<span class="sd">        External unique identifiers found for the relation, by default None.</span>
+<span class="sd">    linguistic_realisations : Set[LinguisticRealisation], optional</span>
+<span class="sd">        The relation linguistic realisations, i.e. instances of the relation in the text corpus,</span>
+<span class="sd">        by default None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">source_concept</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Concept</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">destination_concept</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Concept</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">external_uids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">linguistic_realisations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">LinguisticRealisation</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise Relation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The relation human readable label.</span>
+<span class="sd">        source_concept : Concept, optional</span>
+<span class="sd">            The source concept in the relation triple, by default None.</span>
+<span class="sd">        destination_concept : Concept, optional</span>
+<span class="sd">            The destination concept in the relation triple, by default None.</span>
+<span class="sd">        external_uids : Set[str], optional</span>
+<span class="sd">            External unique identifiers found for the relation., by default None.</span>
+<span class="sd">        linguistic_realisations : Set[LinguisticRealisation], optional</span>
+<span class="sd">            The relation linguistic realisations, by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">external_uids</span><span class="o">=</span><span class="n">external_uids</span><span class="p">,</span>
+            <span class="n">linguistic_realisations</span><span class="o">=</span><span class="n">linguistic_realisations</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_concept</span> <span class="o">=</span> <span class="n">source_concept</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destination_concept</span> <span class="o">=</span> <span class="n">destination_concept</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_concept</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">destination_concept</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Relation.add_linguistic_realisation">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.relation_schema.Relation.add_linguistic_realisation">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_linguistic_realisation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">linguistic_realisation</span><span class="p">:</span> <span class="n">LinguisticRealisation</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a new linguistic realisation to the relation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        linguistic_realisation : LinguisticRealisation</span>
+<span class="sd">            The linguistic realisation instance to add.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">linguistic_realisation</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Relation.add_linguistic_realisations">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.relation_schema.Relation.add_linguistic_realisations">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_linguistic_realisations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">linguistic_realisations</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">LinguisticRealisation</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new linguistic realisations to the relation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        linguistic_realisations : Set[LinguisticRealisation]</span>
+<span class="sd">            The set of linguistic realisation instances to add.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">linguistic_realisations</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Relation.remove_linguistic_realisation">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.relation_schema.Relation.remove_linguistic_realisation">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_linguistic_realisation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">linguistic_realisation</span><span class="p">:</span> <span class="n">LinguisticRealisation</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a linguistic realisation of the relation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        linguistic_realisation : LinguisticRealisation</span>
+<span class="sd">            The LinguisticRealisation instance to remove.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">linguistic_realisation</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

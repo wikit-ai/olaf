@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment</title>
+    
+          <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">...pipeline_schema</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">....commons.llm_tools</span> <span class="kn">import</span> <span class="n">HuggingFaceGenerator</span><span class="p">,</span> <span class="n">LLMGenerator</span>
+<span class="kn">from</span> <span class="nn">....commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">....commons.prompts</span> <span class="kn">import</span> <span class="n">hf_prompt_term_enrichment</span>
+<span class="kn">from</span> <span class="nn">....data_container</span> <span class="kn">import</span> <span class="n">CandidateTerm</span><span class="p">,</span> <span class="n">Enrichment</span>
+<span class="kn">from</span> <span class="nn">..pipeline_component_schema</span> <span class="kn">import</span> <span class="n">PipelineComponent</span>
+
+
+<div class="viewcode-block" id="LLMBasedTermEnrichment">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment">[docs]</a>
+<span class="k">class</span> <span class="nc">LLMBasedTermEnrichment</span><span class="p">(</span><span class="n">PipelineComponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrich candidate terms using LLM knowledge.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    prompt_template: Callable[[str], List[Dict[str, str]]]</span>
+<span class="sd">        Prompt template used to give instructions and context to the LLM.</span>
+<span class="sd">    llm_generator: LLMGenerator</span>
+<span class="sd">        The LLM model used to enrich the candidate terms.</span>
+<span class="sd">        By default, the zephyr-7b-beta HuggingFace model is used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">prompt_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">llm_generator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LLMGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise LLM term enrichment pipeline component instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        prompt_template: Callable[[str], List[Dict[str, str]]], optional</span>
+<span class="sd">            Prompt template used to give instructions and context to the LLM.</span>
+<span class="sd">            By default the term enrichment prompt is used.</span>
+<span class="sd">        llm_generator: LLMGenerator, optional</span>
+<span class="sd">            The LLM model used to generate the enrichment.</span>
+<span class="sd">            By default, the zephyr-7b-beta HuggingFace model is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">prompt_template</span>
+            <span class="k">if</span> <span class="n">prompt_template</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="n">hf_prompt_term_enrichment</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_generator</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">llm_generator</span> <span class="k">if</span> <span class="n">llm_generator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">HuggingFaceGenerator</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_resources</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LLMBasedTermEnrichment.optimise">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.optimise">[docs]</a>
+    <span class="k">def</span> <span class="nf">optimise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">validation_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">option_values_map</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to optimise the pipeline component by tuning the configuration.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="LLMBasedTermEnrichment.check_resources">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_generator</span><span class="o">.</span><span class="n">check_resources</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to compute component performance metrics.</span>
+<span class="sd">        It is used by the optimise method to update the options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="LLMBasedTermEnrichment.get_performance_report">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.get_performance_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_performance_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A getter for the pipeline component performance report.</span>
+<span class="sd">        If the component has been optimised, it only returns the best performance.</span>
+<span class="sd">        Otherwise, it returns the results obtained with the set parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The pipeline component performance report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_enrich_cterm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cterm</span><span class="p">:</span> <span class="n">CandidateTerm</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enrich a candidate term based on the LLM knowledge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cterm: CandidateTerm</span>
+<span class="sd">            The candidate term to enrich.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cterm_prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">(</span><span class="n">cterm</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">llm_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_generator</span><span class="o">.</span><span class="n">generate_text</span><span class="p">(</span><span class="n">cterm_prompt</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">enrichment</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">llm_output</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">enrichment</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">cterm</span><span class="o">.</span><span class="n">enrichment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">cterm</span><span class="o">.</span><span class="n">enrichment</span> <span class="o">=</span> <span class="n">Enrichment</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s2">&quot;synonyms&quot;</span> <span class="ow">in</span> <span class="n">enrichment</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">cterm</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">add_synonyms</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">enrichment</span><span class="p">[</span><span class="s2">&quot;synonyms&quot;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="s2">&quot;hypernyms&quot;</span> <span class="ow">in</span> <span class="n">enrichment</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">cterm</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">add_hypernyms</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">enrichment</span><span class="p">[</span><span class="s2">&quot;hypernyms&quot;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="s2">&quot;hyponyms&quot;</span> <span class="ow">in</span> <span class="n">enrichment</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">cterm</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">add_hyponyms</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">enrichment</span><span class="p">[</span><span class="s2">&quot;hyponyms&quot;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="s2">&quot;antonyms&quot;</span> <span class="ow">in</span> <span class="n">enrichment</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">cterm</span><span class="o">.</span><span class="n">enrichment</span><span class="o">.</span><span class="n">add_antonyms</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">enrichment</span><span class="p">[</span><span class="s2">&quot;antonyms&quot;</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;LLM generator output is not in the expected format. The candidate term %s can not be enriched.&quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">cterm</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">enrichment</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;LLM generator output is not in the expected format. The candidate term %s can not be enriched.&quot;&quot;&quot;</span><span class="p">,</span>
+                <span class="n">cterm</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">enrichment</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="LLMBasedTermEnrichment.run">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method that is responsible for the execution of the component.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline : Pipeline</span>
+<span class="sd">            The pipeline running.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">cterm</span> <span class="ow">in</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">candidate_terms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enrich_cterm</span><span class="p">(</span><span class="n">cterm</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

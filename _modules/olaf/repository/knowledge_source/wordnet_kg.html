@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.repository.knowledge_source.wordnet_kg</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.repository.knowledge_source.wordnet_kg</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.repository.knowledge_source.wordnet_kg</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">wordnet</span> <span class="k">as</span> <span class="n">wn</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus.reader.wordnet</span> <span class="kn">import</span> <span class="n">Lemma</span><span class="p">,</span> <span class="n">Synset</span>
+
+<span class="kn">from</span> <span class="nn">...commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">...commons.string_tools</span> <span class="kn">import</span> <span class="n">space_to_underscore_str</span><span class="p">,</span> <span class="n">underscore_to_space_str</span>
+<span class="kn">from</span> <span class="nn">...commons.wordnet_tools</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">WORDNET_DOMAINS_SSID_NUM_SIZE</span><span class="p">,</span>
+    <span class="n">fetch_wordnet_lang</span><span class="p">,</span>
+    <span class="n">load_enrichment_wordnet_domains_from_file</span><span class="p">,</span>
+    <span class="n">load_wordnet_domains</span><span class="p">,</span>
+    <span class="n">spacy2wordnet_pos</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.knowledge_source_schema</span> <span class="kn">import</span> <span class="n">KnowledgeSource</span>
+
+
+<div class="viewcode-block" id="WordNetKnowledgeResource">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource">[docs]</a>
+<span class="k">class</span> <span class="nc">WordNetKnowledgeResource</span><span class="p">(</span><span class="n">KnowledgeSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapter for the WordNet linguistic knowledge base: .</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lang: str, optional</span>
+<span class="sd">        Language ISO code for the terms to find concepts and terms for, by default &#39;en&#39;.</span>
+<span class="sd">    use_domains: bool, optional</span>
+<span class="sd">        Wether or not to filter the matchings on provided domains, by default False.</span>
+<span class="sd">    use_pos: bool, optional</span>
+<span class="sd">        Wether or not to filter the matchings on provided part of speech tags, by default False.</span>
+<span class="sd">    wordnet_domains_map: Dict[str, Set[str]], optional</span>
+<span class="sd">        The mapping between WordNet synsets ids and domains ids, by default None.</span>
+<span class="sd">        The expected file can be found at</span>
+<span class="sd">        &lt;https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt&gt;</span>
+<span class="sd">    enrichment_domains: Set[str], optional</span>
+<span class="sd">        The set of enrichment domains strings to use for matching.</span>
+<span class="sd">        Mandatory when use_domains is True, by default to None.</span>
+<span class="sd">    wordnet_pos: Set[str], optional</span>
+<span class="sd">        The set of part of speech tags to use for matching.</span>
+<span class="sd">        Mandatory when use_pos is True, by default to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lang</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_domains</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">use_pos</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">wordnet_domains_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">wordnet_domains_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">enrichment_domains</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">enrichment_domains_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">wordnet_pos</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise WordNet knowledge resource instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lang: str, optional</span>
+<span class="sd">            Language ISO code for the terms to find concepts and terms for, by default &#39;en&#39;.</span>
+<span class="sd">        use_domains: bool, optional</span>
+<span class="sd">            Wether or not to filter the matchings on provided domains, by default False.</span>
+<span class="sd">        use_pos: bool, optional</span>
+<span class="sd">            Wether or not to filter the matchings on provided part of speech tags, by default False.</span>
+<span class="sd">        wordnet_domains_path : str, optional</span>
+<span class="sd">            The full or relative path to wordnet domains synsets mapping file, by default None.</span>
+<span class="sd">        wordnet_domains_map: Dict[str, Set[str]], optional</span>
+<span class="sd">            The mapping between WordNet synsets ids and domains ids, by default None.</span>
+<span class="sd">            The expected file can be found at</span>
+<span class="sd">            &lt;https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt&gt;</span>
+<span class="sd">        wordnet_domains_path : str, optional</span>
+<span class="sd">            The full or relative path to wordnet domains synsets mapping file, by default None.</span>
+<span class="sd">        enrichment_domains: Set[str], optional</span>
+<span class="sd">            The set of enrichment domains strings to use for matching.</span>
+<span class="sd">            Mandatory when use_domains is True, by default to None.</span>
+<span class="sd">        enrichment_domains_path : str, optional</span>
+<span class="sd">            The full or relative path to the file containing wordnet domains to use for enrichment,</span>
+<span class="sd">            by default None.</span>
+<span class="sd">        wordnet_pos: Set[str], optional</span>
+<span class="sd">            The set of part of speech tags to use for matching.</span>
+<span class="sd">            Mandatory when use_pos is True, by default to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="o">=</span> <span class="n">use_domains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_pos</span> <span class="o">=</span> <span class="n">use_pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_map</span> <span class="o">=</span> <span class="n">wordnet_domains_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_path</span> <span class="o">=</span> <span class="n">wordnet_domains_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span> <span class="o">=</span> <span class="n">enrichment_domains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains_path</span> <span class="o">=</span> <span class="n">enrichment_domains_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_pos</span> <span class="o">=</span> <span class="n">wordnet_pos</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_lang</span> <span class="o">=</span> <span class="n">fetch_wordnet_lang</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check wether required parameters are given and correct. If this is not the case,</span>
+<span class="sd">        suitable default ones are set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lang</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;No value given for lang parameter, default will be set to &#39;en&#39;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="s2">&quot;en&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;Using enrichment wordnet domains but file path not provided in parameters (key `enrichment_domains`). </span>
+<span class="sd">                                Defaulting to NOT using wordnet domains.</span>
+<span class="sd">                            &quot;&quot;&quot;</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span> <span class="o">=</span> <span class="n">load_enrichment_wordnet_domains_from_file</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains_path</span>
+                    <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Using enrichment wordnet domains (use_domains = True) but could not find in the </span>
+<span class="sd">                        parameters nor load from file any enrichment domain.</span>
+<span class="sd">                        See parameters &#39;enrichment_domains_path&#39; or &#39;enrichment_domains&#39;.</span>
+<span class="sd">                        Defaulting to NOT using wordnet domains.</span>
+<span class="sd">                        &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_extracted_from__check_parameters_35</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Using enrichment wordnet domains (use_domains = True) but config parameter</span>
+<span class="sd">                        `wordnet_domains_path` is not provided.</span>
+<span class="sd">                        Defaulting to not using wordnet domains.</span>
+<span class="sd">                        &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_map</span> <span class="o">=</span> <span class="n">load_wordnet_domains</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_path</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_map</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_extracted_from__check_parameters_35</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Using enrichment wordnet domains (use_domains = True) but could not find in the </span>
+<span class="sd">                        parameters nor load from file any wordNet domains mapping.</span>
+<span class="sd">                        See parameter &#39;wordnet_domains_path&#39;.</span>
+<span class="sd">                        Defaulting to not using wordnet domains.</span>
+<span class="sd">                        &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_enrichment_domains_exist</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;Some Wordnet domains have not been found in the mappings.&quot;&quot;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pos</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">spacy_pos</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_pos</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_pos</span> <span class="o">=</span> <span class="p">{</span><span class="n">spacy2wordnet_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">spacy_pos</span><span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Using POS tags (use_pos = True) but parameter `wordnet_pos` is not provided.</span>
+<span class="sd">                        Defaulting to not using pos.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_pos</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wordnet_pos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Using specified POS but parameter `wordnet_pos` is an empty set or list.  </span>
+<span class="sd">                        Defaulting to not using pos.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_pos</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># TODO Rename this here and in `_check_parameters`</span>
+    <span class="k">def</span> <span class="nf">_extracted_from__check_parameters_35</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg0</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">arg0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="WordNetKnowledgeResource.check_resources">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.&quot;&quot;&quot;</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_check_enrichment_domains_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to test wether all the WordNet domains provided for enrichment</span>
+<span class="sd">            exist in the mapping of WordNet Synsets to domains.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Wether or not all the WordNet domains provided for enrichment exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_wordnet_domains</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">synset_domains</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">all_wordnet_domains</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">synset_domains</span><span class="p">)</span>
+
+        <span class="n">domains_exist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">all_wordnet_domains</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">domains_exist</span>
+
+<div class="viewcode-block" id="WordNetKnowledgeResource.match_external_concepts">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.match_external_concepts">[docs]</a>
+    <span class="k">def</span> <span class="nf">match_external_concepts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matching_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch external concepts matching the set of terms.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        matching_terms : Set[str]</span>
+<span class="sd">            The term texts to use for matching concepts.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The UIDs of the external concepts found matching the term texts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_fetch_synsets_lemmas_texts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synsets</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch the texts of synsets&#39; lemmas.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        synsets : Set[Synset]</span>
+<span class="sd">            The synsets to extract the text lemmas from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The synsets&#39; lemmas texts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
+            <span class="n">synset_lemmas</span> <span class="o">=</span> <span class="n">synset</span><span class="o">.</span><span class="n">lemmas</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wordnet_lang</span><span class="p">)</span>
+            <span class="n">synset_lemmas_texts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lemmas_texts</span><span class="p">(</span><span class="n">synset_lemmas</span><span class="p">)</span>
+            <span class="n">texts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">synset_lemmas_texts</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">texts</span>
+
+<div class="viewcode-block" id="WordNetKnowledgeResource.fetch_terms_synonyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_synonyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_synonyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch synonyms of a set of terms from WordNet.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find synonyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms synonyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">terms_synsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_terms_synsets</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+
+        <span class="n">terms_synonyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_synsets_lemmas_texts</span><span class="p">(</span><span class="n">terms_synsets</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">terms_synonyms</span></div>
+
+
+<div class="viewcode-block" id="WordNetKnowledgeResource.fetch_terms_antonyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_antonyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_antonyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch antonyms of a set of terms from WordNet.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find antonyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms antonyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">terms_synsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_terms_synsets</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+
+        <span class="n">term_antonyms_lemmas</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="n">terms_synsets</span><span class="p">:</span>
+            <span class="c1"># antonyms are linked with Lemmas in WordNet</span>
+            <span class="c1"># extract synsets lemmas</span>
+            <span class="n">synset_lemmas</span> <span class="o">=</span> <span class="n">synset</span><span class="o">.</span><span class="n">lemmas</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wordnet_lang</span><span class="p">)</span>
+            <span class="n">synset_antonyms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+            <span class="c1"># Extract lemmas antonyms</span>
+            <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">synset_lemmas</span><span class="p">:</span>
+                <span class="n">synset_antonyms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lemma</span><span class="o">.</span><span class="n">antonyms</span><span class="p">()))</span>
+
+            <span class="n">term_antonyms_lemmas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">synset_antonyms</span><span class="p">)</span>
+
+        <span class="n">terms_antonyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lemmas_texts</span><span class="p">(</span><span class="n">term_antonyms_lemmas</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">terms_antonyms</span></div>
+
+
+<div class="viewcode-block" id="WordNetKnowledgeResource.fetch_terms_hypernyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_hypernyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_hypernyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch hypernyms of a set of terms from WordNet.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find hypernyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms hypernyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">terms_synsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_terms_synsets</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+
+        <span class="n">terms_hypernyms_synsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="n">terms_synsets</span><span class="p">:</span>
+            <span class="n">synset_hypernyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_synset_hypernyms</span><span class="p">(</span><span class="n">synset</span><span class="p">)</span>
+            <span class="n">terms_hypernyms_synsets</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">synset_hypernyms</span><span class="p">)</span>
+
+        <span class="c1"># extract lemmas texts from hypernyms Synsets</span>
+        <span class="n">terms_hypernyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_synsets_lemmas_texts</span><span class="p">(</span><span class="n">terms_hypernyms_synsets</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">terms_hypernyms</span></div>
+
+
+<div class="viewcode-block" id="WordNetKnowledgeResource.fetch_terms_hyponyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_hyponyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_hyponyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch hyponyms of a set of terms according to the knowledge source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find hyponyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms hyponyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">terms_synsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_terms_synsets</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+
+        <span class="c1"># extract hyponyms Synsets</span>
+        <span class="n">terms_hyponyms_synsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="n">terms_synsets</span><span class="p">:</span>
+            <span class="n">synset_hyponyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_synset_hyponyms</span><span class="p">(</span><span class="n">synset</span><span class="p">)</span>
+            <span class="n">terms_hyponyms_synsets</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">synset_hyponyms</span><span class="p">)</span>
+
+        <span class="c1"># extract lemmas texts from hyponyms Synsets</span>
+        <span class="n">terms_hyponyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_synsets_lemmas_texts</span><span class="p">(</span><span class="n">terms_hyponyms_synsets</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">terms_hyponyms</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_fetch_terms_synsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch terms corresponding WordNet synsets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to fetch the WordNet synsets for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[Synset]</span>
+<span class="sd">            The set of corresponding WordNet synsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">terms_wordnet_texts</span> <span class="o">=</span> <span class="p">{</span><span class="n">space_to_underscore_str</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">}</span>
+
+        <span class="n">terms_synsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">term_wordnet_text</span> <span class="ow">in</span> <span class="n">terms_wordnet_texts</span><span class="p">:</span>
+            <span class="n">terms_synsets</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_term_wordnet_synsets</span><span class="p">(</span><span class="n">term_wordnet_text</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">terms_synsets</span>
+
+    <span class="k">def</span> <span class="nf">_get_domains_for_synset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synset</span><span class="p">:</span> <span class="n">Synset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to extract the domains associated with a WordNet Sysnset.</span>
+<span class="sd">            Adapted from project &lt;https://github.com/argilla-io/spacy-wordnet&gt;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        synset : Synset</span>
+<span class="sd">            The WordNet Synset to extract the domains from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of domains associated with the synset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ssid</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">offset</span><span class="p">())</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">WORDNET_DOMAINS_SSID_NUM_SIZE</span><span class="p">)</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">synset</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">synset_domains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_domains_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ssid</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">synset_domains</span>
+
+    <span class="k">def</span> <span class="nf">_filter_synsets_on_domains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synsets</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to filter out synsets not associated with the WordNet domains</span>
+<span class="sd">            to use for term enrichment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        synsets : Set[Synset]</span>
+<span class="sd">            The set of WordNet synsets to filter.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[Synset]</span>
+<span class="sd">            The filtered set of synsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kept_synsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">synset</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
+            <span class="n">synset_domains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_domains_for_synset</span><span class="p">(</span><span class="n">synset</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enrichment_domains</span> <span class="o">&amp;</span> <span class="n">synset_domains</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">kept_synsets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">synset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">kept_synsets</span>
+
+    <span class="k">def</span> <span class="nf">_get_term_wordnet_synsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to get WordNet Synsets associated with a term string.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term_text : str</span>
+<span class="sd">            The term string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[Synset]</span>
+<span class="sd">            The corresponding WordNet Synsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">term_synsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pos</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordnet_pos</span><span class="p">:</span>
+                <span class="n">term_synsets</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="nb">set</span><span class="p">(</span><span class="n">wn</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">term_text</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wordnet_lang</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">term_synsets</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">wn</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">term_text</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wordnet_lang</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span><span class="p">:</span>
+            <span class="n">term_synsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_synsets_on_domains</span><span class="p">(</span><span class="n">synsets</span><span class="o">=</span><span class="n">term_synsets</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">term_synsets</span>
+
+    <span class="k">def</span> <span class="nf">_get_lemmas_texts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lemmas</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Lemma</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to extract the strings associated with a set of WordNet Lemmas.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lemmas : Set[Lemma]</span>
+<span class="sd">            The set of Lemmas to extract the strings from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of extracted strings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lemmas_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">lemmas</span><span class="p">:</span>
+            <span class="n">lemmas_names</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lemma</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+
+            <span class="k">for</span> <span class="n">derived_lemma</span> <span class="ow">in</span> <span class="n">lemma</span><span class="o">.</span><span class="n">derivationally_related_forms</span><span class="p">():</span>
+                <span class="n">lemmas_names</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">derived_lemma</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+
+        <span class="n">lemmas_texts</span> <span class="o">=</span> <span class="p">{</span><span class="n">underscore_to_space_str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">lemmas_names</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">lemmas_texts</span>
+
+    <span class="k">def</span> <span class="nf">_get_synset_hypernyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synset</span><span class="p">:</span> <span class="n">Synset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to get WordNet hypernyms Synsets associated with a Synset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        synset : Synset</span>
+<span class="sd">            The Synset to extract the hypernyms from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[Synset]</span>
+<span class="sd">            The hypernyms Synsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">synset_hypernyms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">hypernyms</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span><span class="p">:</span>
+            <span class="n">synset_hypernyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_synsets_on_domains</span><span class="p">(</span><span class="n">synsets</span><span class="o">=</span><span class="n">synset_hypernyms</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">synset_hypernyms</span>
+
+    <span class="k">def</span> <span class="nf">_get_synset_hyponyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synset</span><span class="p">:</span> <span class="n">Synset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Synset</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Private method to get WordNet hyponyms Synsets associated with a Synset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        synset : Synset</span>
+<span class="sd">            The Synset to extract the hyponyms from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[Synset]</span>
+<span class="sd">            The hyponyms Synsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">synset_hyponyms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">synset</span><span class="o">.</span><span class="n">hyponyms</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_domains</span><span class="p">:</span>
+            <span class="n">synset_hyponyms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_synsets_on_domains</span><span class="p">(</span><span class="n">synsets</span><span class="o">=</span><span class="n">synset_hyponyms</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">synset_hyponyms</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

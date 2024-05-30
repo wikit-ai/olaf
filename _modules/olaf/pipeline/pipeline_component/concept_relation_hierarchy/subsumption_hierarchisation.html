@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation</title>
+    
+          <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">...pipeline_schema</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">....commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">....data_container.concept_schema</span> <span class="kn">import</span> <span class="n">Concept</span>
+<span class="kn">from</span> <span class="nn">....data_container.metarelation_schema</span> <span class="kn">import</span> <span class="n">Metarelation</span>
+<span class="kn">from</span> <span class="nn">..pipeline_component_schema</span> <span class="kn">import</span> <span class="n">PipelineComponent</span>
+
+
+<div class="viewcode-block" id="SubsumptionHierarchisation">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation">[docs]</a>
+<span class="k">class</span> <span class="nc">SubsumptionHierarchisation</span><span class="p">(</span><span class="n">PipelineComponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract hierarchisation metarelations based on subsumption.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    threshold : float, optional</span>
+<span class="sd">        Threshold used to validate the subsumption relation or not, by default 0.5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise subsumption hierarchisation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        threshold : float, optional</span>
+<span class="sd">            Threshold used to validate the subsumption relation or not, by default 0.5.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_check_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether required parameters are given and correct.</span>
+<span class="sd">        If this is not the case, suitable default ones are set or errors are raised.</span>
+
+<span class="sd">        This method affects the self.scope attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;No value given for threshold parameter, default will be set to 0.5.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect value given for threshold parameter, default will be set to 0.5.&quot;</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="SubsumptionHierarchisation.optimise">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.optimise">[docs]</a>
+    <span class="k">def</span> <span class="nf">optimise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">validation_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">option_values_map</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to optimise the pipeline component by tuning the options.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="SubsumptionHierarchisation.check_resources">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.</span>
+
+<span class="sd">        This pipeline component does not need any access to any external resource.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Subsumption hierarchisation pipeline component has no external resource to check.&quot;</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to compute component performance metrics.</span>
+<span class="sd">        It is used by the optimise method to update the options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SubsumptionHierarchisation.get_performance_report">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.get_performance_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_performance_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A getter for the pipeline component performance report.</span>
+<span class="sd">            If the component has been optimised, it only returns the best performance.</span>
+<span class="sd">            Otherwise, it returns the results obtained with the set parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The pipeline component performance report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_concept_occurrence_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concept</span><span class="p">:</span> <span class="n">Concept</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Count the total number of corpus occurrences of the concepts by adding the number of corpus occurrences for each linguistic realisation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        concept : Concept</span>
+<span class="sd">            Concept to count corpus occurrences from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Total number of corpus occurrences of the concept.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">concept_occurrences</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">lr</span> <span class="ow">in</span> <span class="n">concept</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+            <span class="n">concept_occurrences</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">corpus_occurrences</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">concept_occurrences</span>
+
+    <span class="k">def</span> <span class="nf">_concepts_cooccurrence_count</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">concept_1</span><span class="p">:</span> <span class="n">Concept</span><span class="p">,</span> <span class="n">concept_2</span><span class="p">:</span> <span class="n">Concept</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Count number of concepts cooccurrences in the corpus.</span>
+<span class="sd">        Original corpus occurrences sentences are used.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        concept_1 : Concept</span>
+<span class="sd">            First concept to use for cooccurrence count.</span>
+<span class="sd">        concept_2 : Concept</span>
+<span class="sd">            Second concept to use for cooccurrence count.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Number of cooccurrence between the two concepts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">concept_1_sent</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">lr</span> <span class="ow">in</span> <span class="n">concept_1</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">co</span> <span class="ow">in</span> <span class="n">lr</span><span class="o">.</span><span class="n">corpus_occurrences</span><span class="p">:</span>
+                <span class="n">concept_1_sent</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">sent</span><span class="p">)</span>
+
+        <span class="n">concept_2_sent</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">lr</span> <span class="ow">in</span> <span class="n">concept_2</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">co</span> <span class="ow">in</span> <span class="n">lr</span><span class="o">.</span><span class="n">corpus_occurrences</span><span class="p">:</span>
+                <span class="n">concept_2_sent</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">sent</span><span class="p">)</span>
+
+        <span class="n">concepts_cooccurrence</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">concept_1_sent</span> <span class="o">&amp;</span> <span class="n">concept_2_sent</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">concepts_cooccurrence</span>
+
+    <span class="k">def</span> <span class="nf">_compute_subsumption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_cooccurrence</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nb_occurrence</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computation of the subsumption score.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_cooccurrence : int</span>
+<span class="sd">            Number of cooccurrences between concepts.</span>
+<span class="sd">        nb_occurrence : int</span>
+<span class="sd">            Number of general concept occurrence.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Subsumption score.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nb_occurrence</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">subsumption_score</span> <span class="o">=</span> <span class="n">nb_cooccurrence</span> <span class="o">/</span> <span class="n">nb_occurrence</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subsumption_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">subsumption_score</span>
+
+    <span class="k">def</span> <span class="nf">_is_sub_hierarchy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">inv_sub_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test if there is a subsumption relation.</span>
+<span class="sd">        The subsumption score must be higher than the threshold defined.</span>
+<span class="sd">        The subsumption score must be higher than the one calculated by the subsumption in the opposite order.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sub_score : float</span>
+<span class="sd">            Subsumption score.</span>
+<span class="sd">        inv_sub_score : float</span>
+<span class="sd">            Subsumption score in the opposite order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True is there is a subsumption and False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sub_hierarchy</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sub_score</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sub_score</span> <span class="o">&gt;</span> <span class="n">inv_sub_score</span><span class="p">):</span>
+            <span class="n">sub_hierarchy</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">sub_hierarchy</span>
+
+<div class="viewcode-block" id="SubsumptionHierarchisation.run">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execution of the subsumption hierarchisation process on pipeline concepts.</span>
+<span class="sd">        Generalisation metarelations are created.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline : Pipeline</span>
+<span class="sd">            The pipeline running.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">concept_pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">concept_1</span><span class="p">,</span> <span class="n">concept_2</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">concept_pairs</span><span class="p">):</span>
+            <span class="n">concept_1_occ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_concept_occurrence_count</span><span class="p">(</span><span class="n">concept_1</span><span class="p">)</span>
+            <span class="n">concept_2_occ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_concept_occurrence_count</span><span class="p">(</span><span class="n">concept_2</span><span class="p">)</span>
+            <span class="n">concepts_cooc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_concepts_cooccurrence_count</span><span class="p">(</span><span class="n">concept_1</span><span class="p">,</span> <span class="n">concept_2</span><span class="p">)</span>
+            <span class="n">sub_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_subsumption</span><span class="p">(</span><span class="n">concepts_cooc</span><span class="p">,</span> <span class="n">concept_1_occ</span><span class="p">)</span>
+            <span class="n">inv_sub_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_subsumption</span><span class="p">(</span><span class="n">concepts_cooc</span><span class="p">,</span> <span class="n">concept_2_occ</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_sub_hierarchy</span><span class="p">(</span><span class="n">sub_score</span><span class="p">,</span> <span class="n">inv_sub_score</span><span class="p">):</span>
+                <span class="n">metarelation</span> <span class="o">=</span> <span class="n">Metarelation</span><span class="p">(</span>
+                    <span class="n">source_concept</span><span class="o">=</span><span class="n">concept_1</span><span class="p">,</span>
+                    <span class="n">destination_concept</span><span class="o">=</span><span class="n">concept_2</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;is_generalised_by&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="o">.</span><span class="n">metarelations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">metarelation</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_sub_hierarchy</span><span class="p">(</span><span class="n">inv_sub_score</span><span class="p">,</span> <span class="n">sub_score</span><span class="p">):</span>
+                <span class="n">metarelation</span> <span class="o">=</span> <span class="n">Metarelation</span><span class="p">(</span>
+                    <span class="n">source_concept</span><span class="o">=</span><span class="n">concept_2</span><span class="p">,</span>
+                    <span class="n">destination_concept</span><span class="o">=</span><span class="n">concept_1</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;is_generalised_by&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="o">.</span><span class="n">metarelations</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">metarelation</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

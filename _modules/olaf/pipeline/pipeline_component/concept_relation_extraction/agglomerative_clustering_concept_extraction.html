@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction</title>
+    
+          <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">...pipeline_schema</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">....algorithm.agglomerative_clustering</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<span class="kn">from</span> <span class="nn">....commons.candidate_term_tools</span> <span class="kn">import</span> <span class="n">cts_to_concept</span>
+<span class="kn">from</span> <span class="nn">....commons.embedding_tools</span> <span class="kn">import</span> <span class="n">sbert_embeddings</span>
+<span class="kn">from</span> <span class="nn">....commons.errors</span> <span class="kn">import</span> <span class="n">ParameterError</span>
+<span class="kn">from</span> <span class="nn">....commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">....data_container.knowledge_representation_schema</span> <span class="kn">import</span> <span class="n">KnowledgeRepresentation</span>
+<span class="kn">from</span> <span class="nn">..pipeline_component_schema</span> <span class="kn">import</span> <span class="n">PipelineComponent</span>
+
+
+<div class="viewcode-block" id="AgglomerativeClusteringConceptExtraction">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction">[docs]</a>
+<span class="k">class</span> <span class="nc">AgglomerativeClusteringConceptExtraction</span><span class="p">(</span><span class="n">PipelineComponent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract concept based candidate terms with agglomerative clustering.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    candidate_terms: List[CandidateTerm]</span>
+<span class="sd">        List of candidate terms to extract concepts from.</span>
+<span class="sd">    nb_clusters: int, optional</span>
+<span class="sd">        Number of clusters to find with the agglomerative clustering algorithm.</span>
+<span class="sd">        It must be None if distance_threshold is not None, by default 2.</span>
+<span class="sd">    metric: str, optional</span>
+<span class="sd">        Metric used to compute the linkage.</span>
+<span class="sd">        Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default &quot;cosine&quot;.</span>
+<span class="sd">    linkage: str, optional</span>
+<span class="sd">        Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.</span>
+<span class="sd">        Can be “ward”, “complete”, “average”, “single”, by default &quot;average&quot;.</span>
+<span class="sd">    distance_threshold: float, optional</span>
+<span class="sd">        The linkage distance threshold at or above which clusters will not be merged.</span>
+<span class="sd">        If not None, n_clusters must be None, by default None.</span>
+<span class="sd">    embedding_model: str, optional</span>
+<span class="sd">        Name of the embedding model to use.</span>
+<span class="sd">        The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,</span>
+<span class="sd">        by default None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">nb_clusters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">metric</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">linkage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="n">distance_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">embedding_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise agglomerative clustering-based concept extraction instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_clusters: int, optional</span>
+<span class="sd">            Number of clusters to find with the agglomerative clustering algorithm.</span>
+<span class="sd">            It must be None if distance_threshold is not None, by default 2.</span>
+<span class="sd">        metric: str, optional</span>
+<span class="sd">            Metric used to compute the linkage.</span>
+<span class="sd">            Can be “euclidean”, “l1”, “l2”, “manhattan”, “cosine”, or “precomputed”, by default &quot;cosine&quot;.</span>
+<span class="sd">        linkage: str, optional</span>
+<span class="sd">            Distance to use between sets of observation. The algorithm will merge the pairs of cluster that minimize this criterion.</span>
+<span class="sd">            Can be “ward”, “complete”, “average”, “single”, by default &quot;average&quot;.</span>
+<span class="sd">        distance_threshold: float, optional</span>
+<span class="sd">            The linkage distance threshold at or above which clusters will not be merged.</span>
+<span class="sd">            If not None, n_clusters must be None, by default None.</span>
+<span class="sd">        embedding_model: str, optional</span>
+<span class="sd">            Name of the embedding model to use.</span>
+<span class="sd">            The list of available models can be found here : https://www.sbert.net/docs/pretrained_models.html,</span>
+<span class="sd">            by default all-mpnet-base-v2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_terms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_clusters</span> <span class="o">=</span> <span class="n">nb_clusters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metric</span> <span class="o">=</span> <span class="n">metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_linkage</span> <span class="o">=</span> <span class="n">linkage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distance_threshold</span> <span class="o">=</span> <span class="n">distance_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_model</span> <span class="o">=</span> <span class="n">embedding_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_check_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check wether required parameters are given and correct. If this is not the case,</span>
+<span class="sd">        suitable default ones are set or errors are raised.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ParameterError</span>
+<span class="sd">            Exception raised when a required parameter is missing or a wrong value is provided.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_model</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedding_model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">ParameterError</span><span class="p">(</span>
+                    <span class="n">component_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span>
+                    <span class="n">param_name</span><span class="o">=</span><span class="s2">&quot;embedding_model&quot;</span><span class="p">,</span>
+                    <span class="n">error_type</span><span class="o">=</span><span class="s2">&quot;Wrong value type&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;No value given for embedding_model parameter, default will be set to all-mpnet-base-v2.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_model</span> <span class="o">=</span> <span class="s2">&quot;all-mpnet-base-v2&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nb_clusters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_threshold</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;No value given for nb_clusters or distance_threshold, default to nb_clusters=2&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_nb_clusters</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_threshold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distance_threshold</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Both nb_clusters and distance_threshold options cannot be set together, distance_threshold is ignored&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metric</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;No value given for metric option, default will be set to cosine.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metric</span> <span class="o">=</span> <span class="s2">&quot;cosine&quot;</span>
+
+<div class="viewcode-block" id="AgglomerativeClusteringConceptExtraction.optimise">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.optimise">[docs]</a>
+    <span class="k">def</span> <span class="nf">optimise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to optimise the pipeline component by tuning the options.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="AgglomerativeClusteringConceptExtraction.check_resources">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Agglomerative clustering-based concept extraction pipeline component has no external resources to check.&quot;</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method to compute component performance metrics. It is used by the optimise method to update the options.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="AgglomerativeClusteringConceptExtraction.get_performance_report">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.get_performance_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_performance_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A getter for the pipeline component performance report.</span>
+<span class="sd">            If the component has been optimised, it only returns the best performance.</span>
+<span class="sd">            Otherwise, it returns the results obtained with the parameters set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The pipeline component performance report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_create_concepts</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">clustering_labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create concepts based on clusters produced by the agglomerative clustering.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        clustering_labels : List[int]</span>
+<span class="sd">            Labels of the clusters produced.</span>
+<span class="sd">        kr : KnowledgeRepresentation</span>
+<span class="sd">            Existing knowledge representation to update.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">clustering_labels</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="n">concept_indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">clustering_labels</span> <span class="o">==</span> <span class="n">label</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">concept_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">candidate_terms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">concept_indexes</span><span class="p">]</span>
+            <span class="n">concept</span> <span class="o">=</span> <span class="n">cts_to_concept</span><span class="p">(</span><span class="n">concept_candidates</span><span class="p">)</span>
+            <span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">concept</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AgglomerativeClusteringConceptExtraction.run">
+<a class="viewcode-back" href="../../../../../olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execution of the agglomerative clustering algorithm on candidate terms embedded.</span>
+<span class="sd">        Concepts creation and candidate terms purge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline : Pipeline</span>
+<span class="sd">            The pipeline running.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">candidate_terms</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;No enough candidate terms to run this component :</span>
+<span class="sd">                agglomerative clustering-based concept extraction ignored.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">candidate_terms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">candidate_terms</span><span class="p">)</span>
+
+            <span class="n">embeddings</span> <span class="o">=</span> <span class="n">sbert_embeddings</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_model</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">candidate</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_terms</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">agglo_clustering</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
+                <span class="n">embeddings</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_nb_clusters</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_metric</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_linkage</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_distance_threshold</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">agglo_clustering</span><span class="o">.</span><span class="n">compute_agglomerative_clustering</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_concepts</span><span class="p">(</span><span class="n">agglo_clustering</span><span class="o">.</span><span class="n">clustering_labels</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">kr</span><span class="p">)</span>
+
+            <span class="n">pipeline</span><span class="o">.</span><span class="n">candidate_terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

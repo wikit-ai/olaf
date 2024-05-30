@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.commons.wordnet_tools</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.commons.wordnet_tools</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.commons.wordnet_tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">nltk.corpus.reader.wordnet</span> <span class="kn">import</span> <span class="n">ADJ</span> <span class="k">as</span> <span class="n">WN_ADJ</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus.reader.wordnet</span> <span class="kn">import</span> <span class="n">ADV</span> <span class="k">as</span> <span class="n">WN_ADV</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus.reader.wordnet</span> <span class="kn">import</span> <span class="n">NOUN</span> <span class="k">as</span> <span class="n">WN_NOUN</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus.reader.wordnet</span> <span class="kn">import</span> <span class="n">VERB</span> <span class="k">as</span> <span class="n">WN_VERB</span>
+
+<span class="kn">from</span> <span class="nn">.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+
+
+<div class="viewcode-block" id="load_wordnet_domains">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.wordnet_tools.load_wordnet_domains">[docs]</a>
+<span class="k">def</span> <span class="nf">load_wordnet_domains</span><span class="p">(</span><span class="n">wordnet_domains_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the mapping of WordNet Synsets to domains from a file.</span>
+<span class="sd">    The file should have the structure: `synset_code\tdomain1 domain2`.</span>
+<span class="sd">    Function inspired from project &lt;https://github.com/argilla-io/spacy-wordnet&gt;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wordnet_domains_path : str</span>
+<span class="sd">        The full or relative path to wordnet domains synsets mapping file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, List[str]]</span>
+<span class="sd">        The mapping of WordNet Synsets to domains.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">domain_file_path</span> <span class="o">=</span> <span class="n">wordnet_domains_path</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">wordnet_domains_path</span><span class="p">):</span>
+        <span class="n">domain_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DATA_PATH&quot;</span><span class="p">),</span> <span class="n">domain_file_path</span><span class="p">)</span>
+
+    <span class="n">domains_map</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">domain_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">):</span>
+            <span class="n">ssid</span><span class="p">,</span> <span class="n">domains</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">domains_map</span><span class="p">[</span><span class="n">ssid</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">domains</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+            <span class="s2">&quot;Could not load wordnet domains from file </span><span class="si">%s</span><span class="s2">. Trace : </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">domain_file_path</span><span class="p">,</span>
+            <span class="n">e</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wordnet domains loaded.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">domains_map</span></div>
+
+
+
+<div class="viewcode-block" id="load_enrichment_wordnet_domains_from_file">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.wordnet_tools.load_enrichment_wordnet_domains_from_file">[docs]</a>
+<span class="k">def</span> <span class="nf">load_enrichment_wordnet_domains_from_file</span><span class="p">(</span><span class="n">enrichment_domains_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a set of domains (strings) from a file.</span>
+<span class="sd">        The file is expected to contain one domain string per line.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    enrichment_domains_path : str</span>
+<span class="sd">        The full or relative path to the file containing wordnet domains to use for enrichment.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[str]</span>
+<span class="sd">        The set of domains.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">enrichment_domains_path</span><span class="p">):</span>
+        <span class="n">enrichment_domains_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DATA_PATH&quot;</span><span class="p">),</span> <span class="n">enrichment_domains_path</span><span class="p">)</span>
+
+    <span class="n">enrichment_domains</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">enrichment_domains_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">):</span>
+            <span class="n">enrichment_domains</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+            <span class="s2">&quot;Could not load enrichment wordnet domains from file </span><span class="si">%s</span><span class="s2">. Trace : </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">enrichment_domains_path</span><span class="p">,</span>
+            <span class="n">e</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Enrichment Wordnet domains loaded.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">enrichment_domains</span></div>
+
+
+
+<span class="c1"># Adapted from &lt;https://github.com/argilla-io/spacy-wordnet/tree/b9efd800e02d55e848d56ce7acfacafb2089f587&gt;</span>
+<span class="c1"># The Open Multi Wordnet corpus contains the following languages:</span>
+<span class="c1">#   als arb bul cat cmn dan ell eus fas fin fra glg heb hrv ind ita jpn nld nno nob pol por qcn slv spa swe tha zsm</span>
+<span class="c1">#   (&#39;deu&#39; can be found in Extended Open Multi Wordnet)</span>
+<span class="c1"># the available spaCy languages are:</span>
+<span class="c1"># af am ar bg bn ca cs da de el en es et eu fa fi fr ga gu he hi hr hu hy id is it ja kn ko ky lb lij</span>
+<span class="c1"># lt lv mk ml mr nb ne nl pl pt ro ru sa si sk sl sq sr sv ta te th ti tl tn tr tt uk ur vi xx yo zh</span>
+<span class="c1"># then the full mapping is</span>
+
+<span class="n">WORDNET_DOMAINS_SSID_NUM_SIZE</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="n">_WN_LANGUAGES_MAPPING</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">es</span><span class="o">=</span><span class="s2">&quot;spa&quot;</span><span class="p">,</span>
+    <span class="n">en</span><span class="o">=</span><span class="s2">&quot;eng&quot;</span><span class="p">,</span>
+    <span class="n">fr</span><span class="o">=</span><span class="s2">&quot;fra&quot;</span><span class="p">,</span>
+    <span class="n">it</span><span class="o">=</span><span class="s2">&quot;ita&quot;</span><span class="p">,</span>
+    <span class="n">pt</span><span class="o">=</span><span class="s2">&quot;por&quot;</span><span class="p">,</span>
+    <span class="n">de</span><span class="o">=</span><span class="s2">&quot;deu&quot;</span><span class="p">,</span>
+    <span class="c1"># other languages from omw</span>
+    <span class="n">sq</span><span class="o">=</span><span class="s2">&quot;als&quot;</span><span class="p">,</span>  <span class="c1"># Albanian</span>
+    <span class="n">ar</span><span class="o">=</span><span class="s2">&quot;arb&quot;</span><span class="p">,</span>  <span class="c1"># Arabic</span>
+    <span class="n">bg</span><span class="o">=</span><span class="s2">&quot;bul&quot;</span><span class="p">,</span>  <span class="c1"># Bulgarian</span>
+    <span class="n">ca</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span>  <span class="c1"># Catalan</span>
+    <span class="n">zh</span><span class="o">=</span><span class="s2">&quot;cmn&quot;</span><span class="p">,</span>  <span class="c1"># Chinese Open Wordnet</span>
+    <span class="n">da</span><span class="o">=</span><span class="s2">&quot;dan&quot;</span><span class="p">,</span>  <span class="c1"># Danish</span>
+    <span class="n">el</span><span class="o">=</span><span class="s2">&quot;ell&quot;</span><span class="p">,</span>  <span class="c1"># Greek</span>
+    <span class="n">eu</span><span class="o">=</span><span class="s2">&quot;eus&quot;</span><span class="p">,</span>  <span class="c1"># Basque</span>
+    <span class="n">fa</span><span class="o">=</span><span class="s2">&quot;fas&quot;</span><span class="p">,</span>  <span class="c1"># Persian</span>
+    <span class="n">fi</span><span class="o">=</span><span class="s2">&quot;fin&quot;</span><span class="p">,</span>  <span class="c1"># Finnish</span>
+    <span class="c1"># ?? =&#39;glg&#39;,  # Galician</span>
+    <span class="n">he</span><span class="o">=</span><span class="s2">&quot;heb&quot;</span><span class="p">,</span>  <span class="c1"># Hebrew</span>
+    <span class="n">hr</span><span class="o">=</span><span class="s2">&quot;hrv&quot;</span><span class="p">,</span>  <span class="c1"># Croatian</span>
+    <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;ind&quot;</span><span class="p">,</span>  <span class="c1"># Indonesian</span>
+    <span class="n">ja</span><span class="o">=</span><span class="s2">&quot;jpn&quot;</span><span class="p">,</span>  <span class="c1"># Japanese</span>
+    <span class="n">nl</span><span class="o">=</span><span class="s2">&quot;nld&quot;</span><span class="p">,</span>  <span class="c1"># Dutch</span>
+    <span class="c1"># no =&#39;nno&#39;, # Norwegian</span>
+    <span class="c1"># nb =&#39;nob&#39;, # Norwegian Bokmal</span>
+    <span class="n">pl</span><span class="o">=</span><span class="s2">&quot;pol&quot;</span><span class="p">,</span>  <span class="c1"># Polish</span>
+    <span class="c1"># ?? =&#39;qcn&#39;, # Chinese (Taiwan)</span>
+    <span class="n">sl</span><span class="o">=</span><span class="s2">&quot;slv&quot;</span><span class="p">,</span>  <span class="c1"># Slovenian</span>
+    <span class="n">sv</span><span class="o">=</span><span class="s2">&quot;swe&quot;</span><span class="p">,</span>  <span class="c1"># Swedish</span>
+    <span class="n">th</span><span class="o">=</span><span class="s2">&quot;tha&quot;</span><span class="p">,</span>  <span class="c1"># Thai</span>
+    <span class="n">ml</span><span class="o">=</span><span class="s2">&quot;zsm&quot;</span><span class="p">,</span>  <span class="c1"># Malayalam</span>
+<span class="p">)</span>
+
+<span class="n">_WN_POS_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ADJ&quot;</span><span class="p">:</span> <span class="n">WN_ADJ</span><span class="p">,</span>
+    <span class="s2">&quot;NOUN&quot;</span><span class="p">:</span> <span class="n">WN_NOUN</span><span class="p">,</span>
+    <span class="s2">&quot;ADV&quot;</span><span class="p">:</span> <span class="n">WN_ADV</span><span class="p">,</span>
+    <span class="s2">&quot;VERB&quot;</span><span class="p">:</span> <span class="n">WN_VERB</span><span class="p">,</span>
+    <span class="s2">&quot;AUX&quot;</span><span class="p">:</span> <span class="n">WN_VERB</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="spacy2wordnet_pos">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.wordnet_tools.spacy2wordnet_pos">[docs]</a>
+<span class="k">def</span> <span class="nf">spacy2wordnet_pos</span><span class="p">(</span><span class="n">spacy_pos</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool function to map a spaCy POS tag to the corresponding WordNet one.</span>
+<span class="sd">        Return None if no mapping is found.</span>
+<span class="sd">        Adapted from project &lt;https://github.com/argilla-io/spacy-wordnet&gt;.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spacy_pos : str</span>
+<span class="sd">        The spaCy POS tag.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str, optional</span>
+<span class="sd">        The WordNet POS tag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_WN_POS_MAPPING</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">spacy_pos</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fetch_wordnet_lang">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.wordnet_tools.fetch_wordnet_lang">[docs]</a>
+<span class="k">def</span> <span class="nf">fetch_wordnet_lang</span><span class="p">(</span><span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool function to map a Spacy language tag to the corresponding WordNet one.</span>
+<span class="sd">        Return None if no mapping is found.</span>
+<span class="sd">        Adapted from project &lt;https://github.com/argilla-io/spacy-wordnet&gt;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lang : str</span>
+<span class="sd">        The spaCy language tag.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The WordNet language tag.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    Exception</span>
+<span class="sd">        An exception to spot a language not existing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">language</span> <span class="o">=</span> <span class="n">_WN_LANGUAGES_MAPPING</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">language</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Language </span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2"> not supported&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">language</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

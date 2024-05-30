@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.commons.prompts</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.commons.prompts</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.commons.prompts</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="openai_prompt_concept_term_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_concept_term_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_concept_term_extraction</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for concept term extraction with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: str</span>
+<span class="sd">        The context to add in the prompt template.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an helpful assistant helping building an ontology.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Extract the most meaningful keywords of the following text. Keep only keywords that could be concepts and not relations. Write them as a python list of string with double quotes.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s1">&#39;Here is an example. Text: This python package is about ontology learning. I do not know a lot about this field.</span><span class="se">\n</span><span class="s1">[&quot;python package&quot;, &quot;ontology learning&quot;, &quot;field&quot;]&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Text: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_concept_term_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_concept_term_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_concept_term_extraction</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for concept term extraction with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: str</span>
+<span class="sd">        The context to add in the prompt template.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an helpful assistant helping building an ontology.</span>
+<span class="s2">    Extract the most meaningful keywords of the following text. Keep only keywords that could be concepts and not relations. Write them as a python list of string with double quotes.</span>
+<span class="s2">    Here is an example. Text: This python package is about ontology learning. I do not know a lot about this field.</span>
+<span class="s2">    [&quot;python package&quot;, &quot;ontology learning&quot;, &quot;field&quot;]</span>
+<span class="s2">    Text: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="openai_prompt_relation_term_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_relation_term_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_relation_term_extraction</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for relation term extraction with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: str</span>
+<span class="sd">        The context to add in the prompt template.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an helpful assistant helping building an ontology.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Extract the most meaningful words describing actions or states in the following text. Keep only words that could be relations and not concepts. Write them as a python list of string with double quotes.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s1">&#39;Here is an example. Text: I plan to eat pizza tonight. I am looking for advice.</span><span class="se">\n</span><span class="s1">[&quot;plan&quot;, &quot;eat&quot;, &quot;looking for&quot;]&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Text: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_relation_term_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_relation_term_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_relation_term_extraction</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for relation term extraction with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: str</span>
+<span class="sd">        The context to add in the prompt template.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an helpful assistant helping building an ontology.</span>
+<span class="s2">    Extract the most meaningful words describing actions or states in the following text. Keep only words that could be relations and not concepts. Write them as a python list of string with double quotes.</span>
+<span class="s2">    Here is an example. Text: I plan to eat pizza tonight. I am looking for advice.</span>
+<span class="s2">    [&quot;plan&quot;, &quot;eat&quot;, &quot;looking for&quot;]</span>
+<span class="s2">    Text: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="openai_prompt_term_enrichment">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_term_enrichment">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_term_enrichment</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for term enrichment with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: str</span>
+<span class="sd">        The context to add in the prompt template.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an helpful assistant helping building an ontology.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s1">&#39;Give synonyms, hypernyms, hyponyms and antonyms of the following term. The output should be in json format with &quot;synonyms&quot;, &quot;hypernyms&quot;, &quot;hyponyms&quot; and &quot;antonyms&quot; as keys and a list a string as values. &#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Here is an example. Term : dog</span>
+<span class="s2">            {&quot;synonyms&quot;: [&quot;hound&quot;, &quot;mutt&quot;], &quot;hypernyms&quot;:[&quot;animal&quot;, &quot;mammal&quot;, &quot;canine&quot;], &quot;hyponyms&quot;: [&quot;labrador&quot;, &quot;dalmatian&quot;],&quot;antonyms&quot;: []}&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Term: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_term_enrichment">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_term_enrichment">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_term_enrichment</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for term enrichment with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: str</span>
+<span class="sd">        The context to add in the prompt template.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an helpful assistant helping building an ontology.</span>
+<span class="s2">    Give synonyms, hypernyms, hyponyms and antonyms of the given term. The output should be in json format with &quot;synonyms&quot;, &quot;hypernyms&quot;, &quot;hyponyms&quot; and &quot;antonyms&quot; as keys and a list a string as values.</span>
+<span class="s2">    Do it only for one term, do not add other ones.</span>
+<span class="s2">    Here is an example. Term : dog</span>
+<span class="s2">    </span><span class="se">{{</span><span class="s2">&quot;synonyms&quot;: [&quot;hound&quot;, &quot;mutt&quot;], &quot;hypernyms&quot;:[&quot;animal&quot;, &quot;mammal&quot;, &quot;canine&quot;], &quot;hyponyms&quot;: [&quot;labrador&quot;, &quot;dalmatian&quot;],&quot;antonyms&quot;: []</span><span class="se">}}</span>
+<span class="s2">    Term: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="openai_prompt_concept_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_concept_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_concept_extraction</span><span class="p">(</span>
+    <span class="n">doc_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ct_labels</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for concept extraction with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doc_context: str</span>
+<span class="sd">        Extract of document contents to use as context.</span>
+<span class="sd">    ct_labels: str</span>
+<span class="sd">        The candidate terms to group into concepts.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an helpful assistant helping building an ontology.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Based on the context given, group together the words listed below where each group should correspond to one concept. The result should be given as a python list of list of string with double quotes.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Context: </span><span class="si">{</span><span class="n">doc_context</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">Words : </span><span class="si">{</span><span class="n">ct_labels</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_concept_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_concept_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_concept_extraction</span><span class="p">(</span><span class="n">doc_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ct_labels</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for concept extraction with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doc_context: str</span>
+<span class="sd">        Extract of document contents to use as context.</span>
+<span class="sd">    ct_labels: str</span>
+<span class="sd">        The candidate terms to group into concepts.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an helpful assistant helping building an ontology.</span>
+<span class="s2">    Based on the context given, group together the words listed below where each group should correspond to one concept.</span>
+<span class="s2">    The result should be given as a python list of list of string with double quotes.</span>
+<span class="s2">    Context: </span><span class="si">{</span><span class="n">doc_context</span><span class="si">}</span>
+<span class="s2">    Words : </span><span class="si">{</span><span class="n">ct_labels</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="openai_prompt_relation_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_relation_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_relation_extraction</span><span class="p">(</span>
+    <span class="n">doc_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ct_labels</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for relation extraction with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doc_context: str</span>
+<span class="sd">        Extract of document contents to use as context.</span>
+<span class="sd">    ct_labels: str</span>
+<span class="sd">        The candidate terms to group as relations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an helpful assistant helping building an ontology.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Based on the context given, group together the words listed below where each group should express the same relation. The result should be given as a python list of list of string with double quotes.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Context: </span><span class="si">{</span><span class="n">doc_context</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">Words : </span><span class="si">{</span><span class="n">ct_labels</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_relation_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_relation_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_relation_extraction</span><span class="p">(</span><span class="n">doc_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ct_labels</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for relation extraction with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doc_context: str</span>
+<span class="sd">        Extract of document contents to use as context.</span>
+<span class="sd">    ct_labels: str</span>
+<span class="sd">        The candidate terms to group into relations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an helpful assistant helping building an ontology.</span>
+<span class="s2">    Based on the context given, group together the words listed below where each group should express the same relation.</span>
+<span class="s2">    The result should be given as a python list of list of string with double quotes.</span>
+<span class="s2">    Context: </span><span class="si">{</span><span class="n">doc_context</span><span class="si">}</span>
+<span class="s2">    Words : </span><span class="si">{</span><span class="n">ct_labels</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="openai_prompt_hierarchisation">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_hierarchisation">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_hierarchisation</span><span class="p">(</span>
+    <span class="n">doc_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">concepts_description</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for hierarchisation with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doc_context: str</span>
+<span class="sd">        Extract of document contents where concepts appear to use as context.</span>
+<span class="sd">    concepts_description: str</span>
+<span class="sd">        Textual description of the concepts.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an helpful assistant helping building an ontology.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Based on the context given, define if there is a hierarchy between the listed concepts.</span>
+<span class="s2">            The result should be given as a python list of list of string with double quotes.&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Here is an example. Concepts: animal, mammal, dog(canine), flower</span>
+<span class="s2">            [[&quot;mammal&quot;,&quot;is_generalised_by&quot;,&quot;animal&quot;], [&quot;dog&quot;,&quot;is_generalised_by&quot;,&quot;mammal&quot;], [&quot;dog&quot;,&quot;is_generalised_by&quot;,&quot;animal&quot;]]&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Context: </span><span class="si">{</span><span class="n">doc_context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">concepts_description</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_hierarchisation">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_hierarchisation">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_hierarchisation</span><span class="p">(</span><span class="n">doc_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">concepts_description</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for hierarchisation with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doc_context: str</span>
+<span class="sd">        Extract of document contents where concepts appear to use as context.</span>
+<span class="sd">    concepts_description: str</span>
+<span class="sd">        Textual description of the concepts.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are an helpful assistant helping building an ontology.</span>
+<span class="s2">    Based on the context given, define if there is a hierarchy between the listed concepts.</span>
+<span class="s2">    The result should be given as a python list of list of string with double quotes.</span>
+
+<span class="s2">    Here is an example. Concepts: animal, mammal, dog(canine), flower</span>
+<span class="s2">    [[&quot;mammal&quot;,&quot;is_generalised_by&quot;,&quot;animal&quot;], [&quot;dog&quot;,&quot;is_generalised_by&quot;,&quot;mammal&quot;], [&quot;dog&quot;,&quot;is_generalised_by&quot;,&quot;animal&quot;]]</span>
+<span class="s2"> </span>
+<span class="s2">    Context: </span><span class="si">{</span><span class="n">doc_context</span><span class="si">}</span>
+<span class="s2">    </span><span class="si">{</span><span class="n">concepts_description</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="hf_prompt_owl_axiom_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.hf_prompt_owl_axiom_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">hf_prompt_owl_axiom_extraction</span><span class="p">(</span><span class="n">kr_description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for axiom extraction with Hugging Face inference API.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr_description: str</span>
+<span class="sd">        Textual description of the knowledge representation.</span>
+<span class="sd">    namespace: str</span>
+<span class="sd">        The name space used for axiom generation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Completion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.</span>
+<span class="s2">    Use the following classes, individuals and relations to construct an OWL ontology in the Turtle format.</span>
+<span class="s2">    Use the following namespace: </span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">.</span>
+<span class="s2">    Include the RDF, RDFS, and OWL prefixes.</span>
+<span class="s2">    Return only the turtle file.</span>
+
+
+<span class="s2">    </span><span class="si">{</span><span class="n">kr_description</span><span class="si">}</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+
+
+<div class="viewcode-block" id="openai_prompt_owl_axiom_extraction">
+<a class="viewcode-back" href="../../../olaf.commons.html#olaf.commons.prompts.openai_prompt_owl_axiom_extraction">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_prompt_owl_axiom_extraction</span><span class="p">(</span>
+    <span class="n">kr_description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt template for axiom extraction with ChatCompletion OpenAI model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kr_description: str</span>
+<span class="sd">        Textual description of the knowledge representation.</span>
+<span class="sd">    namespace: str</span>
+<span class="sd">        The name space used for axiom generation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Dict[str, str]]</span>
+<span class="sd">        ChatCompletion prompt template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt_template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant in building an ontology. You are fluent in the W3C Semantic Web stack and in the RDF, RDFS, and OWL languages.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Use the following classes, individuals and relations to construct an OWL ontology in the Turtle format.</span>
+<span class="s2">            Use the following namespace: </span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">.</span>
+<span class="s2">            Include the RDF, RDFS, and OWL prefixes.</span>
+<span class="s2">            Return only the turtle file.&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">kr_description</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">prompt_template</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.repository.serialiser.rdf_owl_serialisers package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="prev" title="olaf.repository.serialiser package" href="olaf.repository.serialiser.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.repository.html">olaf.repository package</a> &raquo;</li>
+    
+      <li><a href="olaf.repository.serialiser.html">olaf.repository.serialiser package</a> &raquo;</li>
+    
+    <li>olaf.repository.serialiser.rdf_owl_serialisers package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.repository.serialiser.html"
+       title="previous chapter">← olaf.repository.serialiser package</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-repository-serialiser-rdf-owl-serialisers-package">
+<h1>olaf.repository.serialiser.rdf_owl_serialisers package<a class="headerlink" href="#olaf-repository-serialiser-rdf-owl-serialisers-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser">
+<span id="olaf-repository-serialiser-rdf-owl-serialisers-base-owl-serialiser-module"></span><h2>olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser module<a class="headerlink" href="#module-olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.</span></span><span class="sig-name descname"><span class="pre">BaseOWLSerialiser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metarelation_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Namespace</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_all_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_owl_serialiser.html#BaseOWLSerialiser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Serialize KnowledgeRepresentation data into an RDF graph following the OWL language.</p>
+<p>This class provides methods to build an RDF graph following the OWL language from a
+KnowledgeRepresentation (KR) instance and export it in various RDF formats. It allows users to
+represent concepts, relations, and metarelations as RDF triples based on a specified base URI.</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to be used for constructing RDF URIs.</p>
+</dd>
+<dt>graph<span class="classifier">Graph</span></dt><dd><p>An RDFlib Graph for storing the RDF triples.</p>
+</dd>
+<dt>metarelation_map<span class="classifier">Dict[str, Namespace], optional</span></dt><dd><p>A dictionary mapping metarelation labels to RDF namespaces, by default None.
+If not provided, it uses a default mapping for “is_generalised_by” metarelations.</p>
+</dd>
+<dt>keep_all_labels<span class="classifier">bool, optional</span></dt><dd><p>A boolean indicating whether to to include all labels for concepts and their different
+linguistic realisations as SKOS altLabels, by default True.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h3>
+<p>This class is designed to serialize KR data into RDF following the OWL language as follow:
+- All concepts will be considered OWL classes.
+- All relations will be considered OWL object properties.
+- All metarelations will be considered OWL object properties unless they have a mapping</p>
+<blockquote>
+<div><p>specified in the metarelation_map attribute.</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_concept_uri">
+<span class="sig-name descname"><span class="pre">build_concept_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_owl_serialiser.html#BaseOWLSerialiser.build_concept_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_concept_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build a URI for a concept based on its label.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>concept<span class="classifier">Concept</span></dt><dd><p>The concept instance for which to build a URI.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The constructed URI for the concept.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_graph">
+<span class="sig-name descname"><span class="pre">build_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_owl_serialiser.html#BaseOWLSerialiser.build_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Build the RDF graph from a KnowledgeRepresentation instance.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The KnowledgeRepresentation instance containing concepts, relations, and metarelations.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_metarelation_uri">
+<span class="sig-name descname"><span class="pre">build_metarelation_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metarelation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.metarelation_schema.Metarelation" title="olaf.data_container.metarelation_schema.Metarelation"><span class="pre">Metarelation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_owl_serialiser.html#BaseOWLSerialiser.build_metarelation_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_metarelation_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build a URI for a metarelation based on its label.</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>metarelation<span class="classifier">Metarelation</span></dt><dd><p>The metarelation instance for which to build a URI.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h4>Returns<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The constructed URI for the metarelation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_relation_uri">
+<span class="sig-name descname"><span class="pre">build_relation_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.relation_schema.Relation" title="olaf.data_container.relation_schema.Relation"><span class="pre">Relation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_owl_serialiser.html#BaseOWLSerialiser.build_relation_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_relation_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build a URI for a relation based on its label.</p>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>relation<span class="classifier">Relation</span></dt><dd><p>The relation instance for which to build a URI.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The constructed URI for the relation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.export_graph">
+<span class="sig-name descname"><span class="pre">export_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdf_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'turtle'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_owl_serialiser.html#BaseOWLSerialiser.export_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.export_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Export the RDF graph to a specified file path and RDF format.
+Available formats are the ones defined in RDFlib,
+see: &lt;<a class="reference external" href="https://rdflib.readthedocs.io/en/stable/plugin_serializers.html">https://rdflib.readthedocs.io/en/stable/plugin_serializers.html</a>&gt;</p>
+<section id="id6">
+<h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>file_path<span class="classifier">str</span></dt><dd><p>The file path where the RDF graph will be exported.</p>
+</dd>
+<dt>rdf_format<span class="classifier">str, optional</span></dt><dd><p>The RDF serialization format, e.g., ‘turtle’, ‘xml’, ‘json-ld’, by default ‘turtle’.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.graph">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Graph</span></em><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.graph" title="Link to this definition">¶</a></dt>
+<dd><p>Get the RDF graph. If not built yet, it will issue a warning.</p>
+<section id="id7">
+<h4>Returns<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Graph</dt><dd><p>An RDFlib Graph containing RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser">
+<span id="olaf-repository-serialiser-rdf-owl-serialisers-base-rdf-serialiser-module"></span><h2>olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser module<a class="headerlink" href="#module-olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.</span></span><span class="sig-name descname"><span class="pre">BaseRDFserialiser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_rdf_serialiser.html#BaseRDFserialiser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Serialize KnowledgeRepresentation data into RDF graph.</p>
+<p>This class provides methods to build an RDF graph from a KnowledgeRepresentation (KR) instance
+and export it in various RDF formats. It allows users to represent concepts, relations, and
+metarelations as RDF triples based on a specified base URI.</p>
+<section id="id8">
+<h3>Attributes<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to be used for constructing RDF URIs.</p>
+</dd>
+<dt>graph<span class="classifier">Graph</span></dt><dd><p>An RDFlib Graph for storing the RDF triples.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_concept_uri">
+<span class="sig-name descname"><span class="pre">build_concept_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_rdf_serialiser.html#BaseRDFserialiser.build_concept_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_concept_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build a URI for a concept based on its label.</p>
+<section id="id9">
+<h4>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>concept<span class="classifier">Concept</span></dt><dd><p>The concept instance for which to build a URI.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h4>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The constructed URI for the concept.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_graph">
+<span class="sig-name descname"><span class="pre">build_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_rdf_serialiser.html#BaseRDFserialiser.build_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Build the RDF graph from a KnowledgeRepresentation instance.</p>
+<section id="id11">
+<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The KnowledgeRepresentation instance containing concepts, relations, and metarelations.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_metarelation_uri">
+<span class="sig-name descname"><span class="pre">build_metarelation_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metarelation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.metarelation_schema.Metarelation" title="olaf.data_container.metarelation_schema.Metarelation"><span class="pre">Metarelation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_rdf_serialiser.html#BaseRDFserialiser.build_metarelation_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_metarelation_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build a URI for a metarelation based on its label.</p>
+<section id="id12">
+<h4>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>metarelation<span class="classifier">Metarelation</span></dt><dd><p>The metarelation instance for which to build a URI.</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h4>Returns<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The constructed URI for the metarelation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_relation_uri">
+<span class="sig-name descname"><span class="pre">build_relation_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.relation_schema.Relation" title="olaf.data_container.relation_schema.Relation"><span class="pre">Relation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">URIRef</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_rdf_serialiser.html#BaseRDFserialiser.build_relation_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_relation_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Build a URI for a relation based on its label.</p>
+<section id="id14">
+<h4>Parameters<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>relation<span class="classifier">Relation</span></dt><dd><p>The relation instance for which to build a URI.</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h4>Returns<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>URIRef</dt><dd><p>The constructed URI for the relation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.export_graph">
+<span class="sig-name descname"><span class="pre">export_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdf_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'turtle'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/base_rdf_serialiser.html#BaseRDFserialiser.export_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.export_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Export the RDF graph to a specified file path and RDF format.
+Available formats are the ones defined in RDFlib,
+see: &lt;<a class="reference external" href="https://rdflib.readthedocs.io/en/stable/plugin_serializers.html">https://rdflib.readthedocs.io/en/stable/plugin_serializers.html</a>&gt;</p>
+<section id="id16">
+<h4>Parameters<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>file_path<span class="classifier">str</span></dt><dd><p>The file path where the RDF graph will be exported.</p>
+</dd>
+<dt>rdf_format<span class="classifier">str, optional</span></dt><dd><p>The RDF serialization format, e.g., ‘turtle’, ‘xml’, ‘json-ld’, by default ‘turtle’.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.graph">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Graph</span></em><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.graph" title="Link to this definition">¶</a></dt>
+<dd><p>Get the RDF graph. If not built yet, it will issue a warning.</p>
+<section id="id17">
+<h4>Returns<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Graph</dt><dd><p>An RDFlib Graph containing RDF triples.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser">
+<span id="olaf-repository-serialiser-rdf-owl-serialisers-domain-range-owl-serialiser-module"></span><h2>olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser module<a class="headerlink" href="#module-olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser.DomainRangeOWLSerialiser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser.</span></span><span class="sig-name descname"><span class="pre">DomainRangeOWLSerialiser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metarelation_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Namespace</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_all_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/repository/serialiser/rdf_owl_serialisers/domain_range_owl_serialiser.html#DomainRangeOWLSerialiser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser.DomainRangeOWLSerialiser" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser" title="olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOWLSerialiser</span></code></a></p>
+<p>Serialize KnowledgeRepresentation data into an RDF graph following the OWL language.</p>
+<p>This class provides methods to build an RDF graph following the OWL language from a
+KnowledgeRepresentation (KR) instance and export it in various RDF formats. It allows users to
+represent concepts, relations, and metarelations as RDF triples based on a specified base URI.
+This serialiser makes sure relations have source and destination concepts as domain and range.</p>
+<section id="id18">
+<h3>Attributes<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>base_uri<span class="classifier">URIRef</span></dt><dd><p>The base URI to be used for constructing RDF URIs.</p>
+</dd>
+<dt>graph<span class="classifier">Graph</span></dt><dd><p>An RDFlib Graph for storing the RDF triples.</p>
+</dd>
+<dt>metarelation_map<span class="classifier">Dict[str, Namespace], optional</span></dt><dd><p>A dictionary mapping metarelation labels to RDF namespaces, by default None.
+If not provided, it uses a default mapping for “is_generalised_by” metarelations.</p>
+</dd>
+<dt>keep_all_labels<span class="classifier">bool, optional</span></dt><dd><p>A boolean indicating whether to to include all labels for concepts and their different
+linguistic realisations as SKOS altLabels, by default True.</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h3>Notes<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>This class is designed to serialize KR data into RDF following the OWL language as follow:
+- All concepts will be considered OWL classes.
+- All relations will be considered OWL object properties.
+- All relations will have the source concept class as RDFS domain
+- All relations will have the destination concept class as RDFS range
+- All metarelations will be considered OWL object properties unless they have a mapping</p>
+<blockquote>
+<div><p>specified in the metarelation_map attribute.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.serialiser.rdf_owl_serialisers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.repository.serialiser.rdf_owl_serialisers" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.repository.serialiser.html"
+       title="previous chapter">← olaf.repository.serialiser package</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

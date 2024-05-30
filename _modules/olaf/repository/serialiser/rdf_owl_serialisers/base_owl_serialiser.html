@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser</title>
+    
+          <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">URIRef</span>
+<span class="kn">from</span> <span class="nn">rdflib.namespace</span> <span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span><span class="p">,</span> <span class="n">SKOS</span><span class="p">,</span> <span class="n">XSD</span><span class="p">,</span> <span class="n">Namespace</span>
+
+<span class="kn">from</span> <span class="nn">....commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">....data_container.concept_schema</span> <span class="kn">import</span> <span class="n">Concept</span>
+<span class="kn">from</span> <span class="nn">....data_container.knowledge_representation_schema</span> <span class="kn">import</span> <span class="n">KnowledgeRepresentation</span>
+<span class="kn">from</span> <span class="nn">....data_container.metarelation_schema</span> <span class="kn">import</span> <span class="n">Metarelation</span>
+<span class="kn">from</span> <span class="nn">....data_container.relation_schema</span> <span class="kn">import</span> <span class="n">Relation</span>
+
+
+<div class="viewcode-block" id="BaseOWLSerialiser">
+<a class="viewcode-back" href="../../../../../olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseOWLSerialiser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serialize KnowledgeRepresentation data into an RDF graph following the OWL language.</span>
+
+<span class="sd">    This class provides methods to build an RDF graph following the OWL language from a</span>
+<span class="sd">    KnowledgeRepresentation (KR) instance and export it in various RDF formats. It allows users to</span>
+<span class="sd">    represent concepts, relations, and metarelations as RDF triples based on a specified base URI.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base_uri : URIRef</span>
+<span class="sd">        The base URI to be used for constructing RDF URIs.</span>
+<span class="sd">    graph : Graph</span>
+<span class="sd">        An RDFlib Graph for storing the RDF triples.</span>
+<span class="sd">    metarelation_map : Dict[str, Namespace], optional</span>
+<span class="sd">        A dictionary mapping metarelation labels to RDF namespaces, by default None.</span>
+<span class="sd">        If not provided, it uses a default mapping for &quot;is_generalised_by&quot; metarelations.</span>
+<span class="sd">    keep_all_labels : bool, optional</span>
+<span class="sd">        A boolean indicating whether to to include all labels for concepts and their different</span>
+<span class="sd">        linguistic realisations as SKOS altLabels, by default True.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This class is designed to serialize KR data into RDF following the OWL language as follow:</span>
+<span class="sd">    - All concepts will be considered OWL classes.</span>
+<span class="sd">    - All relations will be considered OWL object properties.</span>
+<span class="sd">    - All metarelations will be considered OWL object properties unless they have a mapping</span>
+<span class="sd">        specified in the metarelation_map attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">base_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">metarelation_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">keep_all_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a BaseOWLSerialiser instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base_uri : str</span>
+<span class="sd">            The base URI to be used for constructing RDF URIs.</span>
+<span class="sd">        metarelation_map : Dict[str, Namespace], optional</span>
+<span class="sd">            A dictionary mapping metarelation labels to RDF namespaces, by default None.</span>
+<span class="sd">            If not provided, it uses a default mapping for &quot;is_generalised_by&quot; metarelations.</span>
+<span class="sd">        keep_all_labels : bool, optional</span>
+<span class="sd">            A boolean indicating whether to include all labels as SKOS altLabels, by default True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span><span class="p">:</span> <span class="n">URIRef</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">base_uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metarelation_map</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">metarelation_map</span>
+            <span class="k">if</span> <span class="n">metarelation_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;is_generalised_by&quot;</span><span class="p">:</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_all_labels</span> <span class="o">=</span> <span class="n">keep_all_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="p">:</span> <span class="n">Graph</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the RDF graph. If not built yet, it will issue a warning.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Graph</span>
+<span class="sd">            An RDFlib Graph containing RDF triples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;The graph has not been built yet. Did you forget to build it?</span>
+<span class="sd">                &gt;&gt;&gt; my_serialiser.build_graph(kr)</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<div class="viewcode-block" id="BaseOWLSerialiser.build_concept_uri">
+<a class="viewcode-back" href="../../../../../olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_concept_uri">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_concept_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concept</span><span class="p">:</span> <span class="n">Concept</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">URIRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a URI for a concept based on its label.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        concept : Concept</span>
+<span class="sd">            The concept instance for which to build a URI.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        URIRef</span>
+<span class="sd">            The constructed URI for the concept.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">concept_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="p">)</span>
+        <span class="n">concept_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span> <span class="o">+</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">concept_label</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">concept_uri</span></div>
+
+
+<div class="viewcode-block" id="BaseOWLSerialiser.build_relation_uri">
+<a class="viewcode-back" href="../../../../../olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_relation_uri">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_relation_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relation</span><span class="p">:</span> <span class="n">Relation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">URIRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a URI for a relation based on its label.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        relation : Relation</span>
+<span class="sd">            The relation instance for which to build a URI.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        URIRef</span>
+<span class="sd">            The constructed URI for the relation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">relation_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">relation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="p">)</span>
+        <span class="n">relation_label</span> <span class="o">=</span> <span class="n">relation_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="n">relation_label</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="n">relation_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span> <span class="o">+</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">relation_label</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">relation_uri</span></div>
+
+
+<div class="viewcode-block" id="BaseOWLSerialiser.build_metarelation_uri">
+<a class="viewcode-back" href="../../../../../olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_metarelation_uri">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_metarelation_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metarelation</span><span class="p">:</span> <span class="n">Metarelation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">URIRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a URI for a metarelation based on its label.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metarelation : Metarelation</span>
+<span class="sd">            The metarelation instance for which to build a URI.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        URIRef</span>
+<span class="sd">            The constructed URI for the metarelation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">metarelation_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metarelation_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metarelation</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">metarelation_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">metarelation_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">metarelation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="p">)</span>
+            <span class="n">metarelation_label</span> <span class="o">=</span> <span class="n">metarelation_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="n">metarelation_label</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">metarelation_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_uri</span> <span class="o">+</span> <span class="n">URIRef</span><span class="p">(</span>
+                <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">metarelation_label</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">metarelation_uri</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_add_concept_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concepts</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Concept</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add RDF triples for concepts to the RDF graph.</span>
+<span class="sd">        This method consider each concept an OWL class and will create the triples accordingly.</span>
+<span class="sd">        It will also add the concept label as OWL class label.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        concepts : Set[Concept]</span>
+<span class="sd">            The set of concept instances to add as RDF triples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">concepts</span><span class="p">:</span>
+            <span class="n">concept_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_concept_uri</span><span class="p">(</span><span class="n">concept</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">concept_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">concept</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">XSD</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_relation_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relations</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Relation</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add RDF triples for relations to the RDF graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        relations : Set[Relation]</span>
+<span class="sd">            The set of relation instances to add as RDF triples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
+            <span class="n">rel_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_relation_uri</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">XSD</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_metarelation_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metarelations</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Metarelation</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add RDF triples for metarelations to the RDF graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metarelations : Set[Metarelation]</span>
+<span class="sd">            The set of metarelation instances to add as RDF triples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">metarelations</span><span class="p">:</span>
+            <span class="n">rel_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_metarelation_uri</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">rel</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metarelation_map</span><span class="p">:</span>
+                <span class="n">src_concept_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_concept_uri</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">source_concept</span><span class="p">)</span>
+                <span class="n">dest_concept_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_concept_uri</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">destination_concept</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">src_concept_uri</span><span class="p">,</span> <span class="n">rel_uri</span><span class="p">,</span> <span class="n">dest_concept_uri</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">rel_uri</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">XSD</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_concepts_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concepts</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Concept</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add SKOS altLabels for concepts to the RDF graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        concepts : Set[Concept]</span>
+<span class="sd">            The set of concept instances to add as SKOS altLabels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">concepts</span><span class="p">:</span>
+            <span class="n">concept_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_concept_uri</span><span class="p">(</span><span class="n">concept</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">lr</span> <span class="ow">in</span> <span class="n">concept</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">concept_uri</span><span class="p">,</span>
+                        <span class="n">SKOS</span><span class="o">.</span><span class="n">altLabel</span><span class="p">,</span>
+                        <span class="n">Literal</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">XSD</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_relations_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relations</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Relation</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add SKOS altLabels for relations to the RDF graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        relations : Set[Relation]</span>
+<span class="sd">            The set of relation instances to add as SKOS altLabels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">:</span>
+            <span class="n">rel_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_relation_uri</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">lr</span> <span class="ow">in</span> <span class="n">rel</span><span class="o">.</span><span class="n">linguistic_realisations</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">rel_uri</span><span class="p">,</span>
+                        <span class="n">SKOS</span><span class="o">.</span><span class="n">altLabel</span><span class="p">,</span>
+                        <span class="n">Literal</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">XSD</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+<div class="viewcode-block" id="BaseOWLSerialiser.build_graph">
+<a class="viewcode-back" href="../../../../../olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kr</span><span class="p">:</span> <span class="n">KnowledgeRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the RDF graph from a KnowledgeRepresentation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kr : KnowledgeRepresentation</span>
+<span class="sd">            The KnowledgeRepresentation instance containing concepts, relations, and metarelations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_concept_triples</span><span class="p">(</span><span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_relation_triples</span><span class="p">(</span><span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_metarelation_triples</span><span class="p">(</span><span class="n">kr</span><span class="o">.</span><span class="n">metarelations</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_all_labels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_concepts_labels</span><span class="p">(</span><span class="n">kr</span><span class="o">.</span><span class="n">concepts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_relations_labels</span><span class="p">(</span><span class="n">kr</span><span class="o">.</span><span class="n">relations</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseOWLSerialiser.export_graph">
+<a class="viewcode-back" href="../../../../../olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.export_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rdf_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;turtle&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the RDF graph to a specified file path and RDF format.</span>
+<span class="sd">        Available formats are the ones defined in RDFlib,</span>
+<span class="sd">        see: &lt;https://rdflib.readthedocs.io/en/stable/plugin_serializers.html&gt;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            The file path where the RDF graph will be exported.</span>
+<span class="sd">        rdf_format : str, optional</span>
+<span class="sd">            The RDF serialization format, e.g., &#39;turtle&#39;, &#39;xml&#39;, &#39;json-ld&#39;, by default &#39;turtle&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;The graph has not been built yet. The exported graph will be empty. </span>
+<span class="sd">                Did you forget to build it? &gt;&gt;&gt; my_serialiser.build_graph(kr)</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">destination</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">rdf_format</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

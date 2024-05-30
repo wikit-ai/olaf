@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.repository.knowledge_source.conceptnet_kg</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.repository.knowledge_source.conceptnet_kg</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.repository.knowledge_source.conceptnet_kg</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">...commons.logging_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">...commons.string_tools</span> <span class="kn">import</span> <span class="n">space_to_underscore_str</span><span class="p">,</span> <span class="n">underscore_to_space_str</span>
+<span class="kn">from</span> <span class="nn">.knowledge_source_schema</span> <span class="kn">import</span> <span class="n">KnowledgeSource</span>
+
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource">[docs]</a>
+<span class="k">class</span> <span class="nc">ConceptNetKnowledgeResource</span><span class="p">(</span><span class="n">KnowledgeSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapter for the ConceptNet KG: https://conceptnet.io/.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lang: str, optional</span>
+<span class="sd">        Language ISO code for the terms to find concepts for, by default &#39;en&#39;.</span>
+<span class="sd">    api_resp_batch_size: int, optional</span>
+<span class="sd">        Batch size for the ConceptNet API when fetching data, by default 1000.</span>
+<span class="sd">    check_sources: bool, optional</span>
+<span class="sd">        Wether or not to filter the concepts based on provided sources, default False.</span>
+<span class="sd">    validation_sources: Set[str], optional</span>
+<span class="sd">        The sources to use to filter the concepts, default set().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lang</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">api_resp_batch_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">check_sources</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">validation_sources</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise ConceptNet knowledge resource instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lang: str, optional</span>
+<span class="sd">            Language ISO code for the terms to find concepts for, by default &#39;en&#39;.</span>
+<span class="sd">        api_resp_batch_size: int, optional</span>
+<span class="sd">            Batch size for the ConceptNet API when fetching data, by default 1000.</span>
+<span class="sd">        check_sources: bool, optional</span>
+<span class="sd">            Wether or not to filter the concepts based on provided sources, default False.</span>
+<span class="sd">        validation_sources: Set[str], optional</span>
+<span class="sd">            The sources to use to filter the concepts, default set().</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_resp_batch_size</span> <span class="o">=</span> <span class="n">api_resp_batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_sources</span> <span class="o">=</span> <span class="n">check_sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validation_sources</span> <span class="o">=</span> <span class="n">validation_sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_check_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check wether required parameters are given and correct. If this is not the case,</span>
+<span class="sd">        suitable default ones are set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lang</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;No value given for lang parameter, default will be set to &#39;en&#39;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="s2">&quot;en&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_sources</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">validation_sources</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;Using sources checking (check_sources = True) but no source tags provided in parameter `validation_sources`.</span>
+<span class="sd">                Defaulting to not checking sources.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_sources</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource.check_resources">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.check_resources">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to check that the component has access to all its required resources.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource.match_external_concepts">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.match_external_concepts">[docs]</a>
+    <span class="k">def</span> <span class="nf">match_external_concepts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matching_terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch external concepts matching the set of terms.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        matching_terms : Set[str]</span>
+<span class="sd">            The term texts to use for matching concepts.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The UIDs of the external concepts found matching the term texts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">term_conceptnet_uris</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">matching_terms</span><span class="p">:</span>
+            <span class="n">term_conceptnet_uris</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_term_conceptnet_external_uris</span><span class="p">(</span><span class="n">space_to_underscore_str</span><span class="p">(</span><span class="n">term</span><span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">term_conceptnet_uris</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_term_conceptnet_external_uris</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term_conceptnet_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch term related data from ConceptNet api and extract the term related external URIs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term_conceptnet_text : str</span>
+<span class="sd">            The ConceptNet formatted term string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The ConceptNet term related external uris.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conceptnet_external_uris</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">conceptnet_term_edges</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">conceptnet_term_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conceptnet_api_fetch_term</span><span class="p">(</span>
+            <span class="n">term_conceptnet_text</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_resp_batch_size</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">conceptnet_term_res</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>  <span class="c1"># The term is not in ConceptNet data.</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;No match in ConceptNet for term </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">underscore_to_space_str</span><span class="p">(</span><span class="n">term_conceptnet_text</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conceptnet_term_edges</span> <span class="o">=</span> <span class="n">conceptnet_term_res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;view&quot;</span> <span class="ow">in</span> <span class="n">conceptnet_term_res</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>  <span class="c1"># Get rest of the edges.</span>
+                <span class="n">conceptnet_term_edges</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_get_paginated_conceptnet_edges</span><span class="p">(</span>
+                        <span class="n">conceptnet_term_res</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_resp_batch_size</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_sources</span><span class="p">:</span>
+                <span class="n">conceptnet_term_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_edges_on_sources</span><span class="p">(</span>
+                    <span class="n">conceptnet_term_edges</span>
+                <span class="p">)</span>
+
+            <span class="n">conceptnet_external_uris</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_concept_uris_from_edges</span><span class="p">(</span>
+                <span class="n">conceptnet_term_edges</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">conceptnet_external_uris</span>
+
+    <span class="k">def</span> <span class="nf">_filter_edges_on_sources</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">conceptnet_edges_obj</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter ConceptNet edges to keep only the ones coming from provided trusted sources.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conceptnet_edges_obj : List[Dict[str, Any]].</span>
+<span class="sd">            The list of ConceptNet edge objects to be updated</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Dict[str, Any]]</span>
+<span class="sd">            List of selected ConceptNet edges.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">selected_edges</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">edge_object</span> <span class="ow">in</span> <span class="n">conceptnet_edges_obj</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">edge_object</span><span class="p">[</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@id&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;/r/ExternalURL&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">edge_object</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">][</span><span class="s2">&quot;site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">validation_sources</span><span class="p">:</span>
+                    <span class="n">selected_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge_object</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected_edges</span>
+
+    <span class="k">def</span> <span class="nf">_get_concept_uris_from_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract ConceptNet Node external URIs from a list of ConceptNet edges.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        edges : List[str, Any]</span>
+<span class="sd">            The list of ConceptNet &quot;/r/ExternalURL&quot; edges.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The ConceptNet Node external URIs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">concept_uris</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">edge_object</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">edge_object</span><span class="p">[</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@id&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;/r/ExternalURL&quot;</span><span class="p">:</span>
+                <span class="n">concept_uri</span> <span class="o">=</span> <span class="n">edge_object</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@id&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">concept_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">concept_uris</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge_object</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@id&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">concept_uris</span>
+
+    <span class="k">def</span> <span class="nf">_get_paginated_conceptnet_edges</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">conceptnet_view_res</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch paginated edges from the ConceptNet api. The api return results by batch.</span>
+<span class="sd">            This method iterate over the batches to fetch all of them.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conceptnet_view_res : Dict[str, str]</span>
+<span class="sd">            The &quot;view&quot; section of the ConceptNet api first results response.</span>
+<span class="sd">            It contains the information to iterate over the result pages.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Dict[str, Any]]</span>
+<span class="sd">            The list of fetched ConceptNet edge objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">last_page</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">page_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">paginated_edges</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">last_page</span><span class="p">:</span>
+            <span class="n">page_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">next_page_url</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;http://api.conceptnet.io&quot;</span>
+                <span class="o">+</span> <span class="n">conceptnet_view_res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nextPage&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;?offset=</span><span class="si">{</span><span class="n">page_count</span><span class="o">*</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">&amp;limit=</span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+            <span class="n">conceptnet_res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">next_page_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+            <span class="n">paginated_edges</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">conceptnet_res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+
+            <span class="n">last_page</span> <span class="o">=</span> <span class="n">conceptnet_res</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nextPage&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">paginated_edges</span>
+
+    <span class="k">def</span> <span class="nf">_conceptnet_api_fetch_term</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">term_conceptnet_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper to hit the ConceptNet API.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term_conceptnet_text : str</span>
+<span class="sd">            Term to fetch the ConceptNet data from (spaces are replaced by underscores).</span>
+<span class="sd">        lang : str</span>
+<span class="sd">            The term language.</span>
+<span class="sd">        batch_size : int</span>
+<span class="sd">            The number of edges to fetch.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The ConceptNet API result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">term_conceptnet_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://api.conceptnet.io/c/</span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">term_conceptnet_text</span><span class="si">}</span><span class="s2">?limit=</span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">conceptnet_term_res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term_conceptnet_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">conceptnet_term_res</span>
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource.fetch_terms_synonyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_synonyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_synonyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch synonyms of a set of terms according to the knowledge source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find synonyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms synonyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource.fetch_terms_antonyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_antonyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_antonyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch antonyms of a set of terms according to the knowledge source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find antonyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms antonyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource.fetch_terms_hypernyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_hypernyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_hypernyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch hypernyms of a set of terms according to the knowledge source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find hypernyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms hypernyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="ConceptNetKnowledgeResource.fetch_terms_hyponyms">
+<a class="viewcode-back" href="../../../../olaf.repository.knowledge_source.html#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_hyponyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetch_terms_hyponyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to fetch hyponyms of a set of terms according to the knowledge source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        terms : Set[str]</span>
+<span class="sd">            The set of terms to find hyponyms of.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            The set of terms hyponyms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

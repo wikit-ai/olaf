@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.repository.serialiser package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.repository.serialiser.rdf_owl_serialisers package" href="olaf.repository.serialiser.rdf_owl_serialisers.html" />
+  <link rel="prev" title="olaf.repository.knowledge_source package" href="olaf.repository.knowledge_source.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.repository.html">olaf.repository package</a> &raquo;</li>
+    
+    <li>olaf.repository.serialiser package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.repository.knowledge_source.html"
+       title="previous chapter">← olaf.repository.knowledge_source package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.repository.serialiser.rdf_owl_serialisers.html"
+       title="next chapter">olaf.repository.serialiser.rdf_owl_serialisers package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-repository-serialiser-package">
+<h1>olaf.repository.serialiser package<a class="headerlink" href="#olaf-repository-serialiser-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html">olaf.repository.serialiser.rdf_owl_serialisers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#module-olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser">olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_concept_uri"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser.build_concept_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_graph"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser.build_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_metarelation_uri"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser.build_metarelation_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.build_relation_uri"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser.build_relation_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.export_graph"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser.export_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_owl_serialiser.BaseOWLSerialiser.graph"><code class="docutils literal notranslate"><span class="pre">BaseOWLSerialiser.graph</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#module-olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser">olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_concept_uri"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser.build_concept_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_graph"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser.build_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_metarelation_uri"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser.build_metarelation_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.build_relation_uri"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser.build_relation_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.export_graph"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser.export_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.base_rdf_serialiser.BaseRDFserialiser.graph"><code class="docutils literal notranslate"><span class="pre">BaseRDFserialiser.graph</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#module-olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser">olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser.DomainRangeOWLSerialiser"><code class="docutils literal notranslate"><span class="pre">DomainRangeOWLSerialiser</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.repository.serialiser.rdf_owl_serialisers.html#module-olaf.repository.serialiser.rdf_owl_serialisers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.repository.serialiser.kr_serialisers">
+<span id="olaf-repository-serialiser-kr-serialisers-module"></span><h2>olaf.repository.serialiser.kr_serialisers module<a class="headerlink" href="#module-olaf.repository.serialiser.kr_serialisers" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.serialiser.kr_serialisers.</span></span><span class="sig-name descname"><span class="pre">KRJSONSerialiser</span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>JSON serialiser for KR objects.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.build_cos_from_strings">
+<span class="sig-name descname"><span class="pre">build_cos_from_strings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">co_texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Doc</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.build_cos_from_strings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.build_cos_from_strings" title="Link to this definition">¶</a></dt>
+<dd><p>Create corpus occurrences from a set of strings label and a corpus.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>co_texts<span class="classifier">Iterable[str]</span></dt><dd><p>The strings to use for corpus occurrences extraction.</p>
+</dd>
+<dt>spacy_model<span class="classifier">spacy.language.Language</span></dt><dd><p>The spaCy model to retrieve the corpus occurrences.</p>
+</dd>
+<dt>docs<span class="classifier">list[spacy.tokens.Doc]</span></dt><dd><p>The corpus in which to find the corpus occurrences.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>set[CandidateTerm]</dt><dd><p>The set of corpus occurrences.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.get_concepts_json">
+<span class="sig-name descname"><span class="pre">get_concepts_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.get_concepts_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.get_concepts_json" title="Link to this definition">¶</a></dt>
+<dd><p>Construct the JSON serialisation of KR concepts.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The KR to serialise the concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[dict[str]]</dt><dd><p>The serialised concepts JSON-like object.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.get_metarelations_json">
+<span class="sig-name descname"><span class="pre">get_metarelations_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.get_metarelations_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.get_metarelations_json" title="Link to this definition">¶</a></dt>
+<dd><p>Construct the JSON serialisation of KR metarelations.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The KR to serialise the metarelations.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[dict[str]]</dt><dd><p>The serialised metarelations JSON-like object.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.get_relations_json">
+<span class="sig-name descname"><span class="pre">get_relations_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.get_relations_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.get_relations_json" title="Link to this definition">¶</a></dt>
+<dd><p>Construct the JSON serialisation of KR relations.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The KR to serialise the relations.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[dict[str]]</dt><dd><p>The serialised relations JSON-like object.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PathLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load a KR object from a JSON serialisation.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline to use when loading the KR.
+It is used to access the corpus and spacy model
+to reconstruct the linguistic realisations.</p>
+</dd>
+<dt>file_path<span class="classifier">PathLike</span></dt><dd><p>The path to the file containing the JSON serialised KR object.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load_concepts_from_json">
+<span class="sig-name descname"><span class="pre">load_concepts_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concepts_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepts_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.load_concepts_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load_concepts_from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Load concepts from the concepts portion of the KR JSON serialisation.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>concepts_json<span class="classifier">list[dict[str]]</span></dt><dd><p>The concepts portion of the KR JSON serialisation.</p>
+</dd>
+<dt>concepts_idx<span class="classifier">dict[int, Concept]</span></dt><dd><p>A dictionary object to store the concept index.</p>
+</dd>
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline to use for reconstructing the linguistic realisations.</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>set[Concept]</dt><dd><p>The set of Concepts.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load_metarelations_from_json">
+<span class="sig-name descname"><span class="pre">load_metarelations_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metarelations_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepts_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.metarelation_schema.Metarelation" title="olaf.data_container.metarelation_schema.Metarelation"><span class="pre">Metarelation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.load_metarelations_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load_metarelations_from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Load metarelations from the metarelations portion of the KR JSON serialisation.</p>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>metarelations_json<span class="classifier">list[dict[str]]</span></dt><dd><p>The metarelations portion of the KR JSON serialisation.</p>
+</dd>
+<dt>concepts_idx<span class="classifier">dict[int, Concept]</span></dt><dd><p>The concept index mapping concept IDs to concept instances.</p>
+</dd>
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline to use for reconstructing the linguistic realisations.</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>set[Metarelation]</dt><dd><p>The set of metarelations.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load_relations_from_json">
+<span class="sig-name descname"><span class="pre">load_relations_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relations_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepts_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.relation_schema.Relation" title="olaf.data_container.relation_schema.Relation"><span class="pre">Relation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.load_relations_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.load_relations_from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Load relations from the relations portion of the KR JSON serialisation.</p>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>relations_json<span class="classifier">list[dict[str]]</span></dt><dd><p>The relations portion of the KR JSON serialisation.</p>
+</dd>
+<dt>concepts_idx<span class="classifier">dict[int, Concept]</span></dt><dd><p>The concept index mapping concept IDs to concept instances.</p>
+</dd>
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline to use for reconstructing the linguistic realisations.</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>set[Relation]</dt><dd><p>The set of Relations.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.serialise">
+<span class="sig-name descname"><span class="pre">serialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PathLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/serialiser/kr_serialisers.html#KRJSONSerialiser.serialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.serialiser.kr_serialisers.KRJSONSerialiser.serialise" title="Link to this definition">¶</a></dt>
+<dd><p>Serialise the KR object into a JSON formatted file.</p>
+<section id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The KR object to serialise.</p>
+</dd>
+<dt>file_path<span class="classifier">PathLike</span></dt><dd><p>The path to the file to save the serialised KR object.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.serialiser">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.repository.serialiser" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.repository.knowledge_source.html"
+       title="previous chapter">← olaf.repository.knowledge_source package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.repository.serialiser.rdf_owl_serialisers.html"
+       title="next chapter">olaf.repository.serialiser.rdf_owl_serialisers package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.pipeline.pipeline_component package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.pipeline.pipeline_component.axiom_extraction package" href="olaf.pipeline.pipeline_component.axiom_extraction.html" />
+  <link rel="prev" title="olaf.pipeline.data_preprocessing package" href="olaf.pipeline.data_preprocessing.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.html">olaf.pipeline package</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.data_preprocessing.html"
+       title="previous chapter">← olaf.pipeline.data_preprocessing package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.pipeline_component.axiom_extraction.html"
+       title="next chapter">olaf.pipeline.pipeline_component.axiom_extraction package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-pipeline-pipeline-component-package">
+<h1>olaf.pipeline.pipeline_component package<a class="headerlink" href="#olaf-pipeline-pipeline-component-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html">olaf.pipeline.pipeline_component.axiom_extraction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#module-olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction">olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction"><code class="docutils literal notranslate"><span class="pre">LLMBasedOWLAxiomExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">LLMBasedOWLAxiomExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">LLMBasedOWLAxiomExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">LLMBasedOWLAxiomExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.run"><code class="docutils literal notranslate"><span class="pre">LLMBasedOWLAxiomExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#module-olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction">olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_full_graph"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction.build_full_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_graph_without_owl_instances"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction.build_graph_without_owl_instances()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.run"><code class="docutils literal notranslate"><span class="pre">OWLAxiomExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.axiom_extraction.html#module-olaf.pipeline.pipeline_component.axiom_extraction">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html">olaf.pipeline.pipeline_component.candidate_term_enrichment package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment">olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment.KnowledgeBasedCTermEnrichment"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedCTermEnrichment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment.KnowledgeBasedCTermEnrichment.check_resources"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedCTermEnrichment.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment.KnowledgeBasedCTermEnrichment.get_performance_report"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedCTermEnrichment.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment.KnowledgeBasedCTermEnrichment.optimise"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedCTermEnrichment.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.knowledge_based_enrichment.KnowledgeBasedCTermEnrichment.run"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedCTermEnrichment.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment">olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment"><code class="docutils literal notranslate"><span class="pre">LLMBasedTermEnrichment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.check_resources"><code class="docutils literal notranslate"><span class="pre">LLMBasedTermEnrichment.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.get_performance_report"><code class="docutils literal notranslate"><span class="pre">LLMBasedTermEnrichment.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.optimise"><code class="docutils literal notranslate"><span class="pre">LLMBasedTermEnrichment.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.llm_based_enrichment.LLMBasedTermEnrichment.run"><code class="docutils literal notranslate"><span class="pre">LLMBasedTermEnrichment.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment">olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment.SemanticBasedEnrichment"><code class="docutils literal notranslate"><span class="pre">SemanticBasedEnrichment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment.SemanticBasedEnrichment.check_resources"><code class="docutils literal notranslate"><span class="pre">SemanticBasedEnrichment.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment.SemanticBasedEnrichment.enrich_term"><code class="docutils literal notranslate"><span class="pre">SemanticBasedEnrichment.enrich_term()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment.SemanticBasedEnrichment.get_performance_report"><code class="docutils literal notranslate"><span class="pre">SemanticBasedEnrichment.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment.SemanticBasedEnrichment.optimise"><code class="docutils literal notranslate"><span class="pre">SemanticBasedEnrichment.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#olaf.pipeline.pipeline_component.candidate_term_enrichment.semantic_based_enrichment.SemanticBasedEnrichment.run"><code class="docutils literal notranslate"><span class="pre">SemanticBasedEnrichment.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html#module-olaf.pipeline.pipeline_component.candidate_term_enrichment">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html">olaf.pipeline.pipeline_component.concept_relation_extraction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringConceptExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringConceptExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringConceptExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringConceptExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_concept_extraction.AgglomerativeClusteringConceptExtraction.run"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringConceptExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringRelationExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringRelationExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringRelationExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringRelationExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.agglomerative_clustering_relation_extraction.AgglomerativeClusteringRelationExtraction.run"><code class="docutils literal notranslate"><span class="pre">AgglomerativeClusteringRelationExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts">olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction"><code class="docutils literal notranslate"><span class="pre">CTsToConceptExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">CTsToConceptExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">CTsToConceptExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">CTsToConceptExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_concepts.CTsToConceptExtraction.run"><code class="docutils literal notranslate"><span class="pre">CTsToConceptExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations">olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction"><code class="docutils literal notranslate"><span class="pre">CTsToRelationExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">CTsToRelationExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">CTsToRelationExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">CTsToRelationExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.candidate_terms_to_relations.CTsToRelationExtraction.run"><code class="docutils literal notranslate"><span class="pre">CTsToRelationExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction"><code class="docutils literal notranslate"><span class="pre">ConceptCoocMetarelationExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">ConceptCoocMetarelationExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">ConceptCoocMetarelationExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">ConceptCoocMetarelationExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.concept_cooc_metarelation_extraction.ConceptCoocMetarelationExtraction.run"><code class="docutils literal notranslate"><span class="pre">ConceptCoocMetarelationExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedConceptExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.c_terms_texts_to_match"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedConceptExtraction.c_terms_texts_to_match()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedConceptExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedConceptExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedConceptExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_concept_extraction.KnowledgeBasedConceptExtraction.run"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedConceptExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedRelationExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.c_terms_texts_to_match"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedRelationExtraction.c_terms_texts_to_match()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedRelationExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedRelationExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedRelationExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.knowledge_based_relation_extraction.KnowledgeBasedRelationExtraction.run"><code class="docutils literal notranslate"><span class="pre">KnowledgeBasedRelationExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction"><code class="docutils literal notranslate"><span class="pre">LLMBasedConceptExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">LLMBasedConceptExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">LLMBasedConceptExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">LLMBasedConceptExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_concept_extraction.LLMBasedConceptExtraction.run"><code class="docutils literal notranslate"><span class="pre">LLMBasedConceptExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction"><code class="docutils literal notranslate"><span class="pre">LLMBasedRelationExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">LLMBasedRelationExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">LLMBasedRelationExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">LLMBasedRelationExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.llm_based_relation_extraction.LLMBasedRelationExtraction.run"><code class="docutils literal notranslate"><span class="pre">LLMBasedRelationExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction"><code class="docutils literal notranslate"><span class="pre">SynonymConceptExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">SynonymConceptExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">SynonymConceptExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">SynonymConceptExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction.SynonymConceptExtraction.run"><code class="docutils literal notranslate"><span class="pre">SynonymConceptExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction">olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction"><code class="docutils literal notranslate"><span class="pre">SynonymRelationExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">SynonymRelationExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">SynonymRelationExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">SynonymRelationExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction.SynonymRelationExtraction.run"><code class="docutils literal notranslate"><span class="pre">SynonymRelationExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html">olaf.pipeline.pipeline_component.concept_relation_hierarchy package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation">olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation.LLMBasedHierarchisation"><code class="docutils literal notranslate"><span class="pre">LLMBasedHierarchisation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation.LLMBasedHierarchisation.check_resources"><code class="docutils literal notranslate"><span class="pre">LLMBasedHierarchisation.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation.LLMBasedHierarchisation.get_performance_report"><code class="docutils literal notranslate"><span class="pre">LLMBasedHierarchisation.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation.LLMBasedHierarchisation.optimise"><code class="docutils literal notranslate"><span class="pre">LLMBasedHierarchisation.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation.LLMBasedHierarchisation.run"><code class="docutils literal notranslate"><span class="pre">LLMBasedHierarchisation.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation">olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation"><code class="docutils literal notranslate"><span class="pre">SubsumptionHierarchisation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.check_resources"><code class="docutils literal notranslate"><span class="pre">SubsumptionHierarchisation.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.get_performance_report"><code class="docutils literal notranslate"><span class="pre">SubsumptionHierarchisation.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.optimise"><code class="docutils literal notranslate"><span class="pre">SubsumptionHierarchisation.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#olaf.pipeline.pipeline_component.concept_relation_hierarchy.subsumption_hierarchisation.SubsumptionHierarchisation.run"><code class="docutils literal notranslate"><span class="pre">SubsumptionHierarchisation.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html">olaf.pipeline.pipeline_component.term_extraction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction">olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction"><code class="docutils literal notranslate"><span class="pre">CvalueTermExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">CvalueTermExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">CvalueTermExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">CvalueTermExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.run"><code class="docutils literal notranslate"><span class="pre">CvalueTermExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction">olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction"><code class="docutils literal notranslate"><span class="pre">LLMTermExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">LLMTermExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">LLMTermExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">LLMTermExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.run"><code class="docutils literal notranslate"><span class="pre">LLMTermExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms">olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction"><code class="docutils literal notranslate"><span class="pre">ManualCandidateTermExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">ManualCandidateTermExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">ManualCandidateTermExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">ManualCandidateTermExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.run"><code class="docutils literal notranslate"><span class="pre">ManualCandidateTermExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction">olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction"><code class="docutils literal notranslate"><span class="pre">POSTermExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">POSTermExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">POSTermExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">POSTermExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.run"><code class="docutils literal notranslate"><span class="pre">POSTermExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema">olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent"><code class="docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.apply_post_processing"><code class="docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent.apply_post_processing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.check_resources"><code class="docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.get_performance_report"><code class="docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.optimise"><code class="docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.run"><code class="docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction">olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction"><code class="docutils literal notranslate"><span class="pre">TFIDFTermExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.check_resources"><code class="docutils literal notranslate"><span class="pre">TFIDFTermExtraction.check_resources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.get_performance_report"><code class="docutils literal notranslate"><span class="pre">TFIDFTermExtraction.get_performance_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.optimise"><code class="docutils literal notranslate"><span class="pre">TFIDFTermExtraction.optimise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.run"><code class="docutils literal notranslate"><span class="pre">TFIDFTermExtraction.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olaf.pipeline.pipeline_component.term_extraction.html#module-olaf.pipeline.pipeline_component.term_extraction">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.pipeline.pipeline_component.pipeline_component_schema">
+<span id="olaf-pipeline-pipeline-component-pipeline-component-schema-module"></span><h2>olaf.pipeline.pipeline_component.pipeline_component_schema module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.pipeline_component_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.pipeline_component_schema.</span></span><span class="sig-name descname"><span class="pre">PipelineComponent</span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/pipeline_component_schema.html#PipelineComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>A pipeline component is part of a pipeline performing one specific task.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.check_resources">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/pipeline_component_schema.html#PipelineComponent.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.get_performance_report">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/pipeline_component_schema.html#PipelineComponent.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.optimise">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/pipeline_component_schema.html#PipelineComponent.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.run">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/pipeline_component_schema.html#PipelineComponent.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.pipeline.pipeline_component" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.data_preprocessing.html"
+       title="previous chapter">← olaf.pipeline.data_preprocessing package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.pipeline_component.axiom_extraction.html"
+       title="next chapter">olaf.pipeline.pipeline_component.axiom_extraction package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

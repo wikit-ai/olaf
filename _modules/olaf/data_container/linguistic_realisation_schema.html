@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.data_container.linguistic_realisation_schema</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.data_container.linguistic_realisation_schema</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.data_container.linguistic_realisation_schema</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">spacy.tokens</span>
+
+
+<div class="viewcode-block" id="LinguisticRealisation">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation">[docs]</a>
+<span class="k">class</span> <span class="nc">LinguisticRealisation</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;We distinguish between concept, relation and metarelation and their representations in text.</span>
+<span class="sd">    The text denoting a concept, relation or metarelation is referred to as a linguistic</span>
+<span class="sd">    realisation. The LinguisticRealisation class define a string (label) which is the text denoting</span>
+<span class="sd">    the concept, relation or meta relation and keep an index of all occurrences in the corpus, i.e.</span>
+<span class="sd">    corpus_occurrences.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The linguistic realisation human readable label.</span>
+<span class="sd">        The string should appear in one of the corpus occurrences or be a metarelation type.</span>
+<span class="sd">    corpus_occurrences : Any</span>
+<span class="sd">        The LinguisticRealisation occurrences in the corpus.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">corpus_occurrences</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise linguistic realisation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The linguistic realisation human readable label.</span>
+<span class="sd">            The string should appear in one of the corpus occurrences or be a metarelation type.</span>
+<span class="sd">        corpus_occurrences : Set[CORPUS_OCCURRENCE], optional</span>
+<span class="sd">            The linguistic realisation occurrences in the corpus, by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus_occurrences</span> <span class="o">=</span> <span class="n">corpus_occurrences</span> <span class="k">if</span> <span class="n">corpus_occurrences</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LinguisticRealisation.add_corpus_occurrences">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation.add_corpus_occurrences">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_corpus_occurrences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_corpus_occurrences</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new corpus occurrences for the linguistic realisation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_corpus_occurrences : Set[Any]</span>
+<span class="sd">            New corpus occurrences to add for the linguistic realisation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus_occurrences</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_corpus_occurrences</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinguisticRealisation.get_docs">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation.get_docs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_docs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Doc</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch all the corpus documents contained in the corpus occurrences.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[spacy.tokens.doc.Doc]</span>
+<span class="sd">            The set of corpus documents contained in the corpus occurrences.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">corpus_occurrences_docs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">corpus_occ</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus_occurrences</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">corpus_occ</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">corpus_occ</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">doc</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">corpus_occ</span><span class="o">.</span><span class="n">doc</span>
+
+            <span class="n">corpus_occurrences_docs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">corpus_occurrences_docs</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span></div>
+
+
+
+<div class="viewcode-block" id="ConceptLR">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.ConceptLR">[docs]</a>
+<span class="k">class</span> <span class="nc">ConceptLR</span><span class="p">(</span><span class="n">LinguisticRealisation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linguistic Realisation specific to a concept. Corpus occurrences are represented</span>
+<span class="sd">    as single span.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The linguistic realisation human readable label.</span>
+<span class="sd">        The string should appear in one of the corpus occurrences.</span>
+<span class="sd">    corpus_occurrences : Set[spacy.tokens.Span]</span>
+<span class="sd">        The concept linguistic realisation occurrences in the corpus which is a span.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">corpus_occurrences</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise concept linguistic realisation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The linguistic realisation human readable label.</span>
+<span class="sd">            The string should appear in one of the corpus occurrences.</span>
+<span class="sd">        corpus_occurrences : Set[spacy.tokens.Span], optional</span>
+<span class="sd">            The concept linguistic realisation occurrences in the corpus, by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">corpus_occurrences</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ConceptLR.add_corpus_occurrences">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.ConceptLR.add_corpus_occurrences">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_corpus_occurrences</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">new_corpus_occurrences</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new corpus occurrences for the linguistic realisation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_corpus_occurrences : Set[spacy.tokens.Span]</span>
+<span class="sd">            New corpus occurrences to add for the linguistic realisation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_corpus_occurrences</span><span class="p">(</span><span class="n">new_corpus_occurrences</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RelationLR">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.RelationLR">[docs]</a>
+<span class="k">class</span> <span class="nc">RelationLR</span><span class="p">(</span><span class="n">LinguisticRealisation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linguistic Realisation specific to a relation. Corpus occurrences are represented as tuple</span>
+<span class="sd">    of three spans.</span>
+<span class="sd">    One for the source concept at position 0.</span>
+<span class="sd">    One for the relation label at position 1.</span>
+<span class="sd">    One for the destination concept at position 2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The linguistic realisation human readable label.</span>
+<span class="sd">        The string should appear in one of the corpus occurrences.</span>
+<span class="sd">    corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]</span>
+<span class="sd">        The relation linguistic realisation occurrences in the corpus which is tuple of three spans.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">corpus_occurrences</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+            <span class="n">Set</span><span class="p">[</span>
+                <span class="n">Tuple</span><span class="p">[</span>
+                    <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span>
+                    <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span>
+                    <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise relation linguistic realisation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The linguistic realisation human readable label.</span>
+<span class="sd">            The string should appear in one of the corpus occurrences.</span>
+<span class="sd">        corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]], optional</span>
+<span class="sd">            The relation linguistic realisation occurrences in the corpus, by defautl None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">corpus_occurrences</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RelationLR.add_corpus_occurrences">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.RelationLR.add_corpus_occurrences">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_corpus_occurrences</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">new_corpus_occurrences</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span>
+            <span class="n">Tuple</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span> <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span> <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]</span>
+        <span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new corpus occurrences for the linguistic realisation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]</span>
+<span class="sd">            New corpus occurrences to add for the linguistic realisation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_corpus_occurrences</span><span class="p">(</span><span class="n">new_corpus_occurrences</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MetaRelationLR">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.MetaRelationLR">[docs]</a>
+<span class="k">class</span> <span class="nc">MetaRelationLR</span><span class="p">(</span><span class="n">LinguisticRealisation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linguistic Realisation specific to a metarelation. Corpus occurrences are represented as tuple</span>
+<span class="sd">    of two spans.</span>
+<span class="sd">    One for the source concept at position 0.</span>
+<span class="sd">    One for the destination concept at position 1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The linguistic realisation human readable label.</span>
+<span class="sd">        The string should be a metarelation type.</span>
+<span class="sd">    corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]</span>
+<span class="sd">        The metarelation linguistic realisation occurrences in the corpus which is tuple of</span>
+<span class="sd">        two spans.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">corpus_occurrences</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+            <span class="n">Set</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span> <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise metarelation linguistic realisation instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The linguistic realisation human readable label.</span>
+<span class="sd">            The string should be a metarelation type.</span>
+<span class="sd">        corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]], optional</span>
+<span class="sd">            The relation linguistic realisation occurrences in the corpus, by default None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">corpus_occurrences</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MetaRelationLR.add_corpus_occurrences">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.linguistic_realisation_schema.MetaRelationLR.add_corpus_occurrences">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_corpus_occurrences</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">new_corpus_occurrences</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span> <span class="n">spacy</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">Span</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new corpus occurrences for the linguistic realisation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_corpus_occurrences : Set[Tuple[spacy.tokens.Span, spacy.tokens.Span]]</span>
+<span class="sd">            New corpus occurrences to add for the linguistic realisation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_corpus_occurrences</span><span class="p">(</span><span class="n">new_corpus_occurrences</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>olaf.data_container.enrichment_schema</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>olaf.data_container.enrichment_schema</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for olaf.data_container.enrichment_schema</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Set</span>
+
+
+<div class="viewcode-block" id="Enrichment">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Enrichment</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A dataclass to contain any information enriching a candidate term.</span>
+<span class="sd">        Instances are typically created by the candidate term enrichment processes.</span>
+<span class="sd">        By default we define at minimum synonyms but we can extend the class with any possible</span>
+<span class="sd">        useful information, e.g., antonyms, or hypernyms.</span>
+
+<span class="sd">        Note that the definition given to synonyms here largely depends on the knowledge</span>
+<span class="sd">        representation application.It could be strict synonyms or closely related terms with</span>
+<span class="sd">        regards to a specific context domain.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    synonyms: Set[str]</span>
+<span class="sd">        The set of synonyms.</span>
+<span class="sd">        Empty set by default if it is initialised without terms.</span>
+<span class="sd">    hypernyms: Set[str]</span>
+<span class="sd">        The set of hypernyms.</span>
+<span class="sd">        Empty set by default if it is initialised without terms.</span>
+<span class="sd">    hyponyms: Set[str]</span>
+<span class="sd">        The set of hyponyms.</span>
+<span class="sd">        Empty set by default if it is initialised without terms.</span>
+<span class="sd">    antonyms: Set[str]</span>
+<span class="sd">        The set of antonyms.</span>
+<span class="sd">        Empty set by default if it is initialised without terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">synonyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">hypernyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">hyponyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">antonyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Enrichment.add_synonyms">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment.add_synonyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_synonyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synonyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new synonyms for the enrichment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        synonyms : Set[str]</span>
+<span class="sd">            New synonyms to add on the enrichment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synonyms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">synonyms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrichment.add_hypernyms">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment.add_hypernyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_hypernyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypernyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new hypernyms for the enrichment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hypernyms : Set[str]</span>
+<span class="sd">            New hypernyms to add on the enrichment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hypernyms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hypernyms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrichment.add_hyponyms">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment.add_hyponyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_hyponyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hyponyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new hyponyms for the enrichment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hyponyms : Set[str]</span>
+<span class="sd">            New hyponyms to add on the enrichment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hyponyms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hyponyms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrichment.add_antonyms">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment.add_antonyms">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_antonyms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">antonyms</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new antonyms for the enrichment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        antonyms : Set[str]</span>
+<span class="sd">            New antonyms to add on the enrichment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">antonyms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">antonyms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrichment.merge_with_enrichment">
+<a class="viewcode-back" href="../../../olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment.merge_with_enrichment">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_with_enrichment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enrichment_to_integrate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge the enrichment into another one.</span>
+<span class="sd">        The enrichment is updated in place with the enrichment provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enrichment_to_integrate : Enrichment</span>
+<span class="sd">            The enrichment to merge the current one with.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_synonyms</span><span class="p">(</span><span class="n">enrichment_to_integrate</span><span class="o">.</span><span class="n">synonyms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_antonyms</span><span class="p">(</span><span class="n">enrichment_to_integrate</span><span class="o">.</span><span class="n">antonyms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_hypernyms</span><span class="p">(</span><span class="n">enrichment_to_integrate</span><span class="o">.</span><span class="n">antonyms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_hyponyms</span><span class="p">(</span><span class="n">enrichment_to_integrate</span><span class="o">.</span><span class="n">hyponyms</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
