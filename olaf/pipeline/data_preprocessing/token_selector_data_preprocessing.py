@@ -87,7 +87,7 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
                     selected_tokens.append(token.doc[token.i : token.i + 1])
         return selected_tokens
 
-    def run(self, pipeline: "Pipeline") -> None:
+    def run(self, pipeline: 'Pipeline') -> None:
         """Method that is responsible for the execution of the component to preprocess all corpus
         documents based on a token selector.
 
