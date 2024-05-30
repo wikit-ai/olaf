@@ -110,7 +110,7 @@ class SemanticBasedEnrichment(PipelineComponent):
                 c_term.enrichment = Enrichment()
             c_term.enrichment.add_synonyms(synonyms)
 
-    def run(self, pipeline: "Pipeline") -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method responsible for the component execution.
 
         Parameters

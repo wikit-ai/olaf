@@ -195,13 +195,13 @@ class LLMBasedHierarchisation(PipelineComponent):
             )
         return metarelations
 
-    def run(self, pipeline: "Pipeline") -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
         Metarelations are created based on the concepts.
 
         Parameters
         ----------
-        pipeline: "Pipeline"
+        pipeline: Pipeline
             The pipeline to run the component with."""
 
         popular_docs = self._extract_popular_docs(pipeline.corpus)

@@ -118,7 +118,7 @@ class ManualCandidateTermExtraction(TermExtractionPipelineComponent):
 
         return matcher
 
-    def run(self, pipeline: "Pipeline") -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the candidate term extraction based manually provided strings.
 
         Parameters

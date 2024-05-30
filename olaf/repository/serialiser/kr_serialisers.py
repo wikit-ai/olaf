@@ -43,7 +43,7 @@ class KRJSONSerialiser:
         with open(file_path, "w", encoding="utf8") as json_file:
             json.dump(kr_json, json_file)
 
-    def load(self, pipeline: "Pipeline", file_path: PathLike) -> None:
+    def load(self, pipeline: Pipeline, file_path: PathLike) -> None:
         """Load a KR object from a JSON serialisation.
 
         Parameters
@@ -94,7 +94,7 @@ class KRJSONSerialiser:
         self,
         concepts_json: list[dict[str]],
         concepts_idx: dict[int, Concept],
-        pipeline: "Pipeline",
+        pipeline: Pipeline,
     ) -> set[Concept]:
         """Load concepts from the concepts portion of the KR JSON serialisation.
 
@@ -136,7 +136,7 @@ class KRJSONSerialiser:
         self,
         relations_json: list[dict[str]],
         concepts_idx: dict[int, Concept],
-        pipeline: "Pipeline",
+        pipeline: Pipeline,
     ) -> set[Relation]:
         """Load relations from the relations portion of the KR JSON serialisation.
 
@@ -195,7 +195,7 @@ class KRJSONSerialiser:
         self,
         metarelations_json: list[dict[str]],
         concepts_idx: dict[int, Concept],
-        pipeline: "Pipeline",
+        pipeline: Pipeline,
     ) -> set[Metarelation]:
         """Load metarelations from the metarelations portion of the KR JSON serialisation.
 

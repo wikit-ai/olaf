@@ -135,7 +135,7 @@ class KnowledgeBasedRelationExtraction(PipelineComponent):
 
         return c_term_texts
 
-    def run(self, pipeline: "Pipeline") -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

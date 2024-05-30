@@ -149,7 +149,7 @@ class TestKnowledgeBasedConceptExtraction:
     def test_pipeline_cts(
         self,
         kg_based_concept_extraction: KnowledgeBasedConceptExtraction,
-        pipeline: "Pipeline",
+        pipeline: Pipeline,
     ) -> None:
         kg_based_concept_extraction.run(pipeline)
 
@@ -184,7 +184,7 @@ class TestKnowledgeBasedConceptExtractionNoMerge:
     def test_pipeline_cts_empty(
         self,
         kg_based_concept_extraction_no_merge_syn: KnowledgeBasedConceptExtraction,
-        pipeline: "Pipeline",
+        pipeline: Pipeline,
     ) -> None:
         kg_based_concept_extraction_no_merge_syn.run(pipeline)
 

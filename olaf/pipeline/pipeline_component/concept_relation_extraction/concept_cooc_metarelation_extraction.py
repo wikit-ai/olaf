@@ -194,7 +194,7 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
 
         return concept_cooc_count
 
-    def run(self, pipeline: "Pipeline") -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the metarelation extraction based on concept co-occurrence.
         Metarelations are created and added to the pipeline knowledge representation.
 
