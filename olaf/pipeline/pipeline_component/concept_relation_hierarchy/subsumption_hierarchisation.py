@@ -3,6 +3,7 @@ from typing import Any, Dict, Set, Optional
 
 from tqdm import tqdm
 
+from ...pipeline_schema import Pipeline
 from ....commons.logging_config import logger
 from ....data_container.concept_schema import Concept
 from ....data_container.metarelation_schema import Metarelation
@@ -172,7 +173,7 @@ class SubsumptionHierarchisation(PipelineComponent):
             sub_hierarchy = True
         return sub_hierarchy
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the subsumption hierarchisation process on pipeline concepts.
         Generalisation metarelations are created.
 

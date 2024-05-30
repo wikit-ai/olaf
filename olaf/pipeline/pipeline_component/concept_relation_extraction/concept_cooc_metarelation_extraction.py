@@ -2,7 +2,7 @@ from itertools import combinations
 from typing import Any, Callable, Dict, Optional, Set
 
 import spacy
-
+from ...pipeline_schema import Pipeline
 from ....commons.logging_config import logger
 from ....commons.spacy_processing_tools import spacy_span_ngrams, spans_overlap
 from ....data_container.concept_schema import Concept
@@ -194,7 +194,7 @@ class ConceptCoocMetarelationExtraction(PipelineComponent):
 
         return concept_cooc_count
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the metarelation extraction based on concept co-occurrence.
         Metarelations are created and added to the pipeline knowledge representation.
 

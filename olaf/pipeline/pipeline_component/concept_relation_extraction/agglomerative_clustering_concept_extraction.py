@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+from ...pipeline_schema import Pipeline
 from ....algorithm.agglomerative_clustering import AgglomerativeClustering
 from ....commons.candidate_term_tools import cts_to_concept
 from ....commons.embedding_tools import sbert_embeddings
@@ -162,7 +163,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             concept = cts_to_concept(concept_candidates)
             kr.concepts.add(concept)
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the agglomerative clustering algorithm on candidate terms embedded.
         Concepts creation and candidate terms purge.
 

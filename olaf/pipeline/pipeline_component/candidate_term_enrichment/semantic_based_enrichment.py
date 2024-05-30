@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional
 import numpy as np
 from spacy.language import Language
 
+from ...pipeline_schema import Pipeline
 from ....commons.logging_config import logger
 from ....data_container.candidate_term_schema import CandidateTerm
 from ....data_container.enrichment_schema import Enrichment
@@ -109,7 +110,7 @@ class SemanticBasedEnrichment(PipelineComponent):
                 c_term.enrichment = Enrichment()
             c_term.enrichment.add_synonyms(synonyms)
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Method responsible for the component execution.
 
         Parameters

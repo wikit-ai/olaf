@@ -5,8 +5,8 @@ from typing import Any, Callable, Dict, Optional, Set, Union
 
 from rdflib import Graph, URIRef
 
-from olaf.pipeline.pipeline_schema import Pipeline
 
+from ...pipeline_schema import Pipeline
 from ....commons.errors import MissingEnvironmentVariable
 from ....commons.kr_to_rdf_tools import (
     all_individuals_different,

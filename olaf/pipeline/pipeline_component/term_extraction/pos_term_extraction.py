@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 import spacy
 
+from ...pipeline_schema import Pipeline
 from ....commons.logging_config import logger
 from ....commons.spacy_processing_tools import select_on_pos
 from ....data_container.candidate_term_schema import CandidateTerm
@@ -196,7 +197,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         return term_corpus_occ_mapping
 
-    def run(self, pipeline: Any) -> None:
+    def run(self, pipeline: Pipeline) -> None:
         """Execution of the POS term extraction on the corpus. Pipeline candidate terms are updated.
 
         Parameters
