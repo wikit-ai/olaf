@@ -1,12 +1,13 @@
 import os
 import re
 import subprocess
-from typing import Any, Callable, Dict, Optional, Set, Union
+from typing import Any, Callable, Dict, Optional, Set, Union, TYPE_CHECKING
 
 from rdflib import Graph, URIRef
 
-from olaf.pipeline.pipeline_schema import Pipeline
 
+if TYPE_CHECKING:
+    from ...pipeline_schema import Pipeline
 from ....commons.errors import MissingEnvironmentVariable
 from ....commons.kr_to_rdf_tools import (
     all_individuals_different,
@@ -388,7 +389,7 @@ class OWLAxiomExtraction(PipelineComponent):
             )
             relation.external_uids.add(metarel_uri)
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Create the OWL file containing the valid axiomatised Knowledge Representation instance."""
         reasoner_output = "start testing"
 

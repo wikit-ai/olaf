@@ -1,8 +1,11 @@
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, TYPE_CHECKING
 
 import spacy
 
-from ..pipeline_schema import Pipeline
+
+if TYPE_CHECKING:
+    from ..pipeline_schema import Pipeline
+
 from ...commons.errors import NotCallableError
 from ...commons.logging_config import logger
 from .data_preprocessing_schema import DataPreprocessing
@@ -84,7 +87,7 @@ class TokenSelectorDataPreprocessing(DataPreprocessing):
                     selected_tokens.append(token.doc[token.i : token.i + 1])
         return selected_tokens
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component to preprocess all corpus
         documents based on a token selector.
 

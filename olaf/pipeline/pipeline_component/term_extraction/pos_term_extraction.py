@@ -197,7 +197,7 @@ class POSTermExtraction(TermExtractionPipelineComponent):
 
         return term_corpus_occ_mapping
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the POS term extraction on the corpus. Pipeline candidate terms are updated.
 
         Parameters

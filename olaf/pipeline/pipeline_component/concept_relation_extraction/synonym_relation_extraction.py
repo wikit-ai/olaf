@@ -90,7 +90,7 @@ class SynonymRelationExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the synonyms grouping for relation extraction on candidate terms.
         Candidate terms are converted into candidate relations.
         Candidate relations with same synonyms, source and destination concepts are grouped

@@ -209,13 +209,13 @@ class LLMBasedRelationExtraction(PipelineComponent):
             )
         return relation_candidates
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component.
         Relations are created and candidate terms are purged.
 
         Parameters
         ----------
-        pipeline: Pipeline
+        pipeline: "Pipeline"
             The pipeline to run the component with."""
         cterm_index = {cterm.label: cterm for cterm in pipeline.candidate_terms}
         doc_count = self._create_doc_count(pipeline.candidate_terms)

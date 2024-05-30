@@ -76,7 +76,7 @@ class KnowledgeBasedCTermEnrichment(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

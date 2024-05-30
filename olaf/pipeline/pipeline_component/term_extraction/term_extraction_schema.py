@@ -88,7 +88,7 @@ class TermExtractionPipelineComponent(PipelineComponent):
         return candidate_terms
 
     @abstractmethod
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters

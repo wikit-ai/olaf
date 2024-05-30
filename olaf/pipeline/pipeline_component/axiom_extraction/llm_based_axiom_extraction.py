@@ -211,14 +211,14 @@ class LLMBasedOWLAxiomExtraction(PipelineComponent):
             )
         return owl_graph
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component.
         Axioms are created based on the knowledge representation.
         The RDF graph is set on the knowledge representation.
 
         Parameters
         ----------
-        pipeline: Pipeline
+        pipeline: "Pipeline"
             The pipeline to run the component with."""
 
         kr_owl_graph = Graph()

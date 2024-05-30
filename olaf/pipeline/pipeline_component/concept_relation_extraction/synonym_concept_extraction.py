@@ -40,7 +40,7 @@ class SynonymConceptExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the synonyms grouping for concept extraction on candidate terms.
         Concepts are created and candidate terms are purged.
 

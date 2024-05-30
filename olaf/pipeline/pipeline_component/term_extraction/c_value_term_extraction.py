@@ -293,12 +293,12 @@ class CvalueTermExtraction(TermExtractionPipelineComponent):
 
         return term_corpus_occurrences
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Method that is responsible for the execution of the component.
 
         Parameters
         ----------
-        pipeline: Pipeline
+        pipeline: "Pipeline"
             The pipeline to run the component with.
         """
 

@@ -199,7 +199,7 @@ class AgglomerativeClusteringRelationExtraction(PipelineComponent):
                 relation = crs_to_relation(cr_group)
                 kr.relations.add(relation)
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the agglomerative clustering algorithm on
         candidate terms embedded.
         Relations creation and candidate terms purge.

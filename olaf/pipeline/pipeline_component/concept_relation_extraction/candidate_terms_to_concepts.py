@@ -38,7 +38,7 @@ class CTsToConceptExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the concept extraction directly from existing candidate terms.
         The pipeline candidate terms are consumed.
 

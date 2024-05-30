@@ -90,7 +90,7 @@ class CTsToRelationExtraction(PipelineComponent):
         """
         raise NotImplementedError
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the relation extraction directly from existing candidate terms.
         Candidate terms are first converted into candidate relations.
         Then the candidate relations are converted into relations.

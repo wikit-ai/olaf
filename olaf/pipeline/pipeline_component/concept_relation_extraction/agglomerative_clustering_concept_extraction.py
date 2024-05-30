@@ -163,7 +163,7 @@ class AgglomerativeClusteringConceptExtraction(PipelineComponent):
             concept = cts_to_concept(concept_candidates)
             kr.concepts.add(concept)
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the agglomerative clustering algorithm on candidate terms embedded.
         Concepts creation and candidate terms purge.
 

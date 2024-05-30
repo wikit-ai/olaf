@@ -173,7 +173,7 @@ class SubsumptionHierarchisation(PipelineComponent):
             sub_hierarchy = True
         return sub_hierarchy
 
-    def run(self, pipeline: Pipeline) -> None:
+    def run(self, pipeline: "Pipeline") -> None:
         """Execution of the subsumption hierarchisation process on pipeline concepts.
         Generalisation metarelations are created.
 
