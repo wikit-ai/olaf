@@ -27,6 +27,13 @@ source venv/bin/activate
 pip install .
 ```
 
+For demonstration : 
+
+`olaf list` to display all pipeline demonstrations
+`olaf show pipeline_demo_name` to display all pipeline components
+`olaf run  all` to run all available pipeline demonstations
+`olaf run  pipeline_demo_name` to run the specified pipeline demonstration
+
 ## Quick-start
 
 Pipelines can be run with the following command: `olaf run demo_pipeline`.
