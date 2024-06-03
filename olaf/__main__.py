@@ -3,7 +3,7 @@ import os
 import re
 import sys
 import argparse
-import importlib
+import importlib.util
 
 
 def list_pipeline_names(module_name):
