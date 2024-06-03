@@ -27,9 +27,11 @@ load_dotenv()
 
 
 class PipelineRunner(Runner):
-    def __init__(self, model_name="en_core_web_md"):
+    def __init__(
+        self, model_name: str = "en_core_web_md", corpus_path: str = "data/demo.txt"
+    ):
         """Initialise a pipeline Runner."""
-        super().__init__(model_name)
+        super().__init__(model_name, corpus_path)
 
     def add_pipeline_components(self) -> None:
         """Create pipeline without LLM components."""

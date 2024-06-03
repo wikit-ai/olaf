@@ -80,7 +80,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available pipelines")
 
     # Subparser for the "run" pipeline
-    run_parser = subparsers.add_parser("turn", help="Run a pipeline")
+    run_parser = subparsers.add_parser("run", help="Run a pipeline")
     run_parser.add_argument("pipeline", help="The pipeline to run")
 
     # Subparser for the "list" pipeline
@@ -94,7 +94,7 @@ def main():
     args = parser.parse_args()
 
     # Execute the appropriate function based on the pipeline
-    if args.command == "turn":
+    if args.command == "run":
         if args.pipeline == "all":
             for pipeline in list_pipeline_names("olaf.scripts"):
                 run_pipeline(pipeline)
