@@ -26,14 +26,12 @@ source venv/bin/activate
 pip install .
 ```
 
-For demonstration : 
-
-`olaf run no_llm_pipeline` to run the no llm_pipeline
-`olaf show no_llm_pipeline` to show all components of the no llm_pipeline
-
 ## Quick-start
 
 A demo on how the library can be used is available in `demontrators/demo_test.ipynb`.
+Pipelines can be run with the following command: `olaf turn demo_pipeline`.
+Pipeline components are displayed with the following command: `olaf show demo_pipeline`.
+The text can be updated in the file `data/demo.txt`.
 
 One example of OLAF usage for LLM components evaluation is also available here : [https://github.com/wikit-ai/olaf-llm-eswc2024](https://github.com/wikit-ai/olaf-llm-eswc2024).
 
