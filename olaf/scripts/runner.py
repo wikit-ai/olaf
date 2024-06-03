@@ -6,7 +6,7 @@ from olaf.repository.corpus_loader import TextCorpusLoader
 
 
 class Runner(ABC):
-    def __init__(self, model_name="en_core_web_md", corpus_file=""):
+    def __init__(self, model_name="en_core_web_md"):
         """Initialise a pipeline Runner.
 
         Attributes
@@ -15,17 +15,10 @@ class Runner(ABC):
             The pipeline to execute.
         """
         spacy_model = spacy.load(model_name)
-        if os.path.isfile(corpus_file):
-            corpus_loader = TextCorpusLoader(corpus_path=corpus_file)
-        elif corpus_path := os.path.isfile(
-            os.path.join(os.getenv("DATA_PATH"), corpus_file)
-        ):
-            corpus_loader = TextCorpusLoader(corpus_path=corpus_path)
-        else:
-            corpus_path = os.path.isfile(
-                os.path.join(os.getenv("DATA_PATH"), "pizza_description.txt")
-            )
-            corpus_loader = TextCorpusLoader(corpus_path=corpus_path)
+
+        corpus_loader = TextCorpusLoader(
+            corpus_path=os.path.join(os.getenv("DATA_PATH"), "demo.txt")
+        )
         self.pipeline = Pipeline(spacy_model=spacy_model, corpus_loader=corpus_loader)
 
     @abstractmethod
