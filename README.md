@@ -26,6 +26,11 @@ source venv/bin/activate
 pip install .
 ```
 
+For demonstration : 
+
+`olaf run no_llm_pipeline` to run the no llm_pipeline
+`olaf show no_llm_pipeline` to show all components of the no llm_pipeline
+
 ## Quick-start
 
 A demo on how the library can be used is available in `demontrators/demo_test.ipynb`.
