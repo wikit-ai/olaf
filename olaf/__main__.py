@@ -55,7 +55,7 @@ def run_pipeline(args):
     getattr(module, "PipelineRunner")().run()
 
 
-def list_pipeline(args):
+def list_pipeline():
     print("Listing pipelines...")
     for pipeline in list_pipeline_names("olaf.scripts"):
         print("\t", pipeline)
@@ -80,7 +80,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available pipelines")
 
     # Subparser for the "run" pipeline
-    run_parser = subparsers.add_parser("run", help="Run a pipeline")
+    run_parser = subparsers.add_parser("turn", help="Run a pipeline")
     run_parser.add_argument("pipeline", help="The pipeline to run")
 
     # Subparser for the "list" pipeline
@@ -94,14 +94,14 @@ def main():
     args = parser.parse_args()
 
     # Execute the appropriate function based on the pipeline
-    if args.command == "run":
+    if args.command == "turn":
         if args.pipeline == "all":
             for pipeline in list_pipeline_names("olaf.scripts"):
                 run_pipeline(pipeline)
         else:
             run_pipeline(args)
     elif args.command == "list":
-        list_pipeline(args)
+        list_pipeline()
     elif args.command == "show":
         if args.pipeline == "all":
             for pipeline in list_pipeline_names("olaf.scripts"):
@@ -111,6 +111,4 @@ def main():
 
 
 if __name__ == "__main__":
-    from olaf.scripts.no_llm_pipeline import PipelineRunner
-
-    PipelineRunner().run()
+    main()
