@@ -67,23 +67,4 @@ class PipelineRunner(Runner):
         self.pipeline.add_pipeline_component(owl_axiom_extraction)
 
     def run(self) -> None:
-        """LLM pipeline execution."""
-
-        self.add_pipeline_components()
-        self.pipeline.run()
-
-        kr_serialiser = KRJSONSerialiser()
-        kr_serialisation_path = os.path.join(os.getcwd(), "demo_pipeline_kr.json")
-        kr_serialiser.serialise(kr=self.pipeline.kr, file_path=kr_serialisation_path)
-
-        kr_rdf_graph_path = os.path.join(
-            os.getcwd(),
-            "demo_pipeline_kr_rdf_graph.ttl",
-        )
-        self.pipeline.kr.rdf_graph.serialize(kr_rdf_graph_path, format="ttl")
-
-        print(f"Nb concepts: {len(self.pipeline.kr.concepts)}")
-        print(f"Nb relations: {len(self.pipeline.kr.relations)}")
-        print(f"Nb metarelations: {len(self.pipeline.kr.metarelations)}")
-        print(f"The KR object has been JSON serialised in : {kr_serialisation_path}")
-        print(f"The KR RDF graph has been serialised in : {kr_rdf_graph_path}")
+        return super().run(name=__name__)
