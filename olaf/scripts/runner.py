@@ -30,11 +30,11 @@ class Runner(ABC):
         self.pipeline.run()
 
         kr_serialiser = KRJSONSerialiser()
-        kr_serialisation_path = os.path.join(os.getcwd(), f"{name}_kr.json")
+        kr_serialisation_path = os.path.join("data/", f"{name}_kr.json")
         kr_serialiser.serialise(kr=self.pipeline.kr, file_path=kr_serialisation_path)
 
         kr_rdf_graph_path = os.path.join(
-            os.getcwd(),
+            "data/",
             f"{name}_kr_rdf_graph.ttl",
         )
         self.pipeline.kr.rdf_graph.serialize(kr_rdf_graph_path, format="ttl")

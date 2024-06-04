@@ -51,8 +51,7 @@ def run_pipeline(args):
     except ModuleNotFoundError:
         print("Invalid pipeline")
         sys.exit(1)
-
-    getattr(module, "PipelineRunner")().run()
+    getattr(module, "PipelineRunner")().run(args.pipeline)
 
 
 def list_pipeline():

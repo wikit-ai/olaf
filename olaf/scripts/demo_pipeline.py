@@ -65,6 +65,3 @@ class PipelineRunner(Runner):
             base_uri="https://github.com/wikit-ai/olaf/o/example#",
         )
         self.pipeline.add_pipeline_component(owl_axiom_extraction)
-
-    def run(self) -> None:
-        return super().run(name=__name__)
