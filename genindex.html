@@ -171,6 +171,12 @@
 </li>
       <li><a href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline.add_pipeline_component">add_pipeline_component() (olaf.pipeline.pipeline_schema.Pipeline method)</a>
 </li>
+      <li><a href="olaf.scripts.html#olaf.scripts.demo_pipeline.PipelineRunner.add_pipeline_components">add_pipeline_components() (olaf.scripts.demo_pipeline.PipelineRunner method)</a>
+
+      <ul>
+        <li><a href="olaf.scripts.html#olaf.scripts.runner.Runner.add_pipeline_components">(olaf.scripts.runner.Runner method)</a>
+</li>
+      </ul></li>
       <li><a href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline.add_preprocessing_component">add_preprocessing_component() (olaf.pipeline.pipeline_schema.Pipeline method)</a>
 </li>
       <li><a href="olaf.data_container.html#olaf.data_container.enrichment_schema.Enrichment.add_synonyms">add_synonyms() (olaf.data_container.enrichment_schema.Enrichment method)</a>
@@ -373,9 +379,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="olaf.data_container.html#olaf.data_container.data_container_schema.DataContainer">DataContainer (class in olaf.data_container.data_container_schema)</a>
 </li>
+      <li><a href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing">DataPreprocessing (class in olaf.pipeline.data_preprocessing.data_preprocessing_schema)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="olaf.pipeline.data_preprocessing.html#olaf.pipeline.data_preprocessing.data_preprocessing_schema.DataPreprocessing">DataPreprocessing (class in olaf.pipeline.data_preprocessing.data_preprocessing_schema)</a>
+      <li><a href="olaf.scripts.html#olaf.scripts.runner.Runner.describe">describe() (olaf.scripts.runner.Runner method)</a>
 </li>
       <li><a href="olaf.repository.serialiser.rdf_owl_serialisers.html#olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser.DomainRangeOWLSerialiser">DomainRangeOWLSerialiser (class in olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser)</a>
 </li>
@@ -849,6 +857,12 @@
 </li>
         <li><a href="olaf.repository.serialiser.rdf_owl_serialisers.html#module-olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser">olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser</a>
 </li>
+        <li><a href="olaf.scripts.html#module-olaf.scripts">olaf.scripts</a>
+</li>
+        <li><a href="olaf.scripts.html#module-olaf.scripts.demo_pipeline">olaf.scripts.demo_pipeline</a>
+</li>
+        <li><a href="olaf.scripts.html#module-olaf.scripts.runner">olaf.scripts.runner</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -1200,8 +1214,6 @@
         <li><a href="olaf.pipeline.pipeline_component.concept_relation_extraction.html#module-olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_concept_extraction">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     olaf.pipeline.pipeline_component.concept_relation_extraction.synonym_relation_extraction
 
@@ -1216,6 +1228,8 @@
         <li><a href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html#module-olaf.pipeline.pipeline_component.concept_relation_hierarchy">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     olaf.pipeline.pipeline_component.concept_relation_hierarchy.llm_based_hierarchisation
 
@@ -1405,6 +1419,27 @@
         <li><a href="olaf.repository.serialiser.rdf_owl_serialisers.html#module-olaf.repository.serialiser.rdf_owl_serialisers.domain_range_owl_serialiser">module</a>
 </li>
       </ul></li>
+      <li>
+    olaf.scripts
+
+      <ul>
+        <li><a href="olaf.scripts.html#module-olaf.scripts">module</a>
+</li>
+      </ul></li>
+      <li>
+    olaf.scripts.demo_pipeline
+
+      <ul>
+        <li><a href="olaf.scripts.html#module-olaf.scripts.demo_pipeline">module</a>
+</li>
+      </ul></li>
+      <li>
+    olaf.scripts.runner
+
+      <ul>
+        <li><a href="olaf.scripts.html#module-olaf.scripts.runner">module</a>
+</li>
+      </ul></li>
       <li><a href="olaf.commons.html#olaf.commons.prompts.openai_prompt_concept_extraction">openai_prompt_concept_extraction() (in module olaf.commons.prompts)</a>
 </li>
       <li><a href="olaf.commons.html#olaf.commons.prompts.openai_prompt_concept_term_extraction">openai_prompt_concept_term_extraction() (in module olaf.commons.prompts)</a>
@@ -1493,11 +1528,13 @@
 </li>
       <li><a href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline">Pipeline (class in olaf.pipeline.pipeline_schema)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent">PipelineComponent (class in olaf.pipeline.pipeline_component.pipeline_component_schema)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="olaf.commons.html#olaf.commons.errors.PipelineCorpusInitialisationError">PipelineCorpusInitialisationError</a>
+</li>
+      <li><a href="olaf.scripts.html#olaf.scripts.demo_pipeline.PipelineRunner">PipelineRunner (class in olaf.scripts.demo_pipeline)</a>
 </li>
       <li><a href="olaf.pipeline.pipeline_component.term_extraction.html#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction">POSTermExtraction (class in olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction)</a>
 </li>
@@ -1586,7 +1623,13 @@
 </li>
         <li><a href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline.run">(olaf.pipeline.pipeline_schema.Pipeline method)</a>
 </li>
+        <li><a href="olaf.scripts.html#olaf.scripts.runner.Runner.run">(olaf.scripts.runner.Runner method)</a>
+</li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="olaf.scripts.html#olaf.scripts.runner.Runner">Runner (class in olaf.scripts.runner)</a>
+</li>
   </ul></td>
 </tr></table>
 

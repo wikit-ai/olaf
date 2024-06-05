@@ -1,3 +1,0 @@
-from .conceptnet_kg import ConceptNetKnowledgeResource
-from .knowledge_source_schema import KnowledgeSource
-from .wordnet_kg import WordNetKnowledgeResource

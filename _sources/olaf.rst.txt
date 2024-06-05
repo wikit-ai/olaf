@@ -12,6 +12,7 @@ Subpackages
    olaf.data_container
    olaf.pipeline
    olaf.repository
+   olaf.scripts
 
 Module contents
 ---------------
