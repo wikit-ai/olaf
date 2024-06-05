@@ -4,6 +4,7 @@ import re
 import sys
 import argparse
 import importlib.util
+from olaf.commons.logging_config import logger
 
 
 def list_pipeline_names(module_name):
@@ -20,17 +21,6 @@ def list_pipeline_names(module_name):
     module_dir = os.path.dirname(module.__file__)
 
     # List files in the module directory
-    pipelines = []
-    for filename in os.listdir(module_dir):
-        # Check if the file is a Python module and doesn't match the pattern
-        if (
-            filename.endswith(".py")
-            and not re.match(r"(__\w+__|_\w+)\.py", filename)
-            and filename[:-3] != "runner"
-        ):
-            module_name = filename[:-3]  # Remove the ".py" extension
-        pipelines.append(module_name)
-
     pipelines = [
         filename[:-3]
         for filename in os.listdir(module_dir)
@@ -49,12 +39,15 @@ def run_pipeline(args):
     try:
         module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
     except ModuleNotFoundError:
-        print("Invalid pipeline")
+        logger.warning(
+            "Unknown pipeline name, type 'olaf list' to display available pipelines"
+        )
+        list_pipelines()
         sys.exit(1)
     getattr(module, "PipelineRunner")().run(args.pipeline)
 
 
-def list_pipeline():
+def list_pipelines():
     print("Listing pipelines...")
     for pipeline in list_pipeline_names("olaf.scripts"):
         print("\t", pipeline)
@@ -100,7 +93,7 @@ def main():
         else:
             run_pipeline(args)
     elif args.command == "list":
-        list_pipeline()
+        list_pipelines()
     elif args.command == "show":
         if args.pipeline == "all":
             for pipeline in list_pipeline_names("olaf.scripts"):
