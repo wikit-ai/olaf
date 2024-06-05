@@ -1,10 +1,10 @@
 #:/usr/bin/python
+import argparse
+import importlib.util
+import logging
 import os
 import re
 import sys
-import logging
-import argparse
-import importlib.util
 
 from olaf.commons.logging_config import logger
 
@@ -41,16 +41,14 @@ def run_pipeline(args):
     try:
         module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
     except ModuleNotFoundError:
-        logger.error(
-            "Unknown pipeline name, type 'olaf list' to display available pipelines"
-        )
+        logger.error("Unknown pipeline name.")
         list_pipelines()
         sys.exit(1)
     getattr(module, "PipelineRunner")().run(args.pipeline)
 
 
 def list_pipelines():
-    print("\nListing pipelines...")
+    print("\nListing existing pipelines...")
     for pipeline in list_pipeline_names("olaf.scripts"):
         print(f"\t {pipeline}")
 
@@ -61,9 +59,7 @@ def show_pipeline(args):
         print(f"olaf.scripts.{args.pipeline}")
         module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
     except ModuleNotFoundError:
-        logger.error(
-            "Unknown pipeline name, type 'olaf list' to display available pipelines"
-        )
+        logger.error("Unknown pipeline name.")
         list_pipelines()
         sys.exit(1)
 
@@ -71,21 +67,23 @@ def show_pipeline(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Your script description here")
+    parser = argparse.ArgumentParser(
+        description="Shortcuts for pipeline demonstration."
+    )
 
     # Adding subparsers for different pipelines
     subparsers = parser.add_subparsers(dest="command", help="Available pipelines")
 
     # Subparser for the "run" pipeline
-    run_parser = subparsers.add_parser("run", help="Run a pipeline")
-    run_parser.add_argument("pipeline", help="The pipeline to run")
+    run_parser = subparsers.add_parser("run", help="Run a pipeline.")
+    run_parser.add_argument("pipeline", help="The pipeline to run.")
 
     # Subparser for the "list" pipeline
     subparsers.add_parser("list", help="List pipelines")
 
     # Subparser for the "show" pipeline
-    show_parser = subparsers.add_parser("show", help="describe a pipeline")
-    show_parser.add_argument("pipeline", help="The pipeline to show")
+    show_parser = subparsers.add_parser("show", help="Describe a pipeline.")
+    show_parser.add_argument("pipeline", help="The pipeline to show.")
 
     # Parse the arguments
     args = parser.parse_args()
