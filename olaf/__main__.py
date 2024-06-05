@@ -2,8 +2,10 @@
 import os
 import re
 import sys
+import logging
 import argparse
 import importlib.util
+
 from olaf.commons.logging_config import logger
 
 
@@ -11,7 +13,7 @@ def list_pipeline_names(module_name):
     # Import the module
     spec = importlib.util.find_spec(module_name)
     if spec is None:
-        print("Module not found")
+        logger.error("Module not found")
         return
 
     module = importlib.util.module_from_spec(spec)
@@ -39,7 +41,7 @@ def run_pipeline(args):
     try:
         module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
     except ModuleNotFoundError:
-        logger.warning(
+        logger.error(
             "Unknown pipeline name, type 'olaf list' to display available pipelines"
         )
         list_pipelines()
@@ -48,18 +50,21 @@ def run_pipeline(args):
 
 
 def list_pipelines():
-    print("Listing pipelines...")
+    print("\nListing pipelines...")
     for pipeline in list_pipeline_names("olaf.scripts"):
-        print("\t", pipeline)
+        print(f"\t {pipeline}")
 
 
 def show_pipeline(args):
-    print("Showing pipeline:", args.pipeline)
+    print(f"\nShowing pipeline: {args.pipeline}")
     try:
         print(f"olaf.scripts.{args.pipeline}")
         module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
     except ModuleNotFoundError:
-        print("Invalid pipeline")
+        logger.error(
+            "Unknown pipeline name, type 'olaf list' to display available pipelines"
+        )
+        list_pipelines()
         sys.exit(1)
 
     getattr(module, "PipelineRunner")().describe()
@@ -84,6 +89,9 @@ def main():
 
     # Parse the arguments
     args = parser.parse_args()
+
+    # Config logger to display only errors logging
+    logger.setLevel(logging.ERROR)
 
     # Execute the appropriate function based on the pipeline
     if args.command == "run":
