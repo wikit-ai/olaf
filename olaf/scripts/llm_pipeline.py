@@ -85,23 +85,11 @@ class PipelineRunner(Runner):
         The pipeline to build and run.
     """
 
-    def __init__(self, model_name="en_core_web_md", corpus_path=""):
-        """Initialise a pipeline Runner.
-        Parameters
-        ----------
-        spacy_model: spacy.language.Language
-            The spacy model used to represent text corpus.
-        corpus_path : str
-            Path of the text corpus to use.
-            It can be a folder or a file."""
-        spacy_model = spacy.load(model_name)
-        if os.path.isfile(corpus_path) or os.path.isdir(corpus_path):
-            corpus_loader = TextCorpusLoader(corpus_path=corpus_path)
-        else:
-            corpus_loader = TextCorpusLoader(
-                corpus_path=os.path.join(os.getenv("DATA_PATH"), "demo.txt")
-            )
-        self.pipeline = Pipeline(spacy_model=spacy_model, corpus_loader=corpus_loader)
+    def __init__(
+        self, model_name: str = "en_core_web_md", corpus_path: str = "data/demo.txt"
+    ):
+        """Initialise a pipeline Runner."""
+        super().__init__(model_name, corpus_path)
 
     def add_pipeline_components(self) -> None:
         """Create pipeline with only LLM components."""
@@ -150,22 +138,3 @@ class PipelineRunner(Runner):
             namespace="https://github.com/wikit-ai/olaf/o/example#",
         )
         self.pipeline.add_pipeline_component(llm_axiom_extraction)
-
-    def run(self) -> None:
-        """Pipeline execution."""
-
-        self.add_pipeline_components()
-        self.pipeline.run()
-
-        kr_serialiser = KRJSONSerialiser()
-        kr_serialisation_path = os.path.join(os.getcwd(), "llm_pipeline_kr.json")
-        kr_serialiser.serialise(kr=self.pipeline.kr, file_path=kr_serialisation_path)
-
-        kr_rdf_graph_path = os.path.join(os.getcwd(), "llm_pipeline_kr_rdf_graph.ttl")
-        self.pipeline.kr.rdf_graph.serialize(kr_rdf_graph_path, format="ttl")
-
-        print(f"Nb concepts: {len(self.pipeline.kr.concepts)}")
-        print(f"Nb relations: {len(self.pipeline.kr.relations)}")
-        print(f"Nb metarelations: {len(self.pipeline.kr.metarelations)}")
-        print(f"The KR object has been JSON serialised in : {kr_serialisation_path}")
-        print(f"The KR RDF graph has been serialised in : {kr_rdf_graph_path}")
