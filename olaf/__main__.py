@@ -35,16 +35,16 @@ def list_pipeline_names(module_name):
     return pipelines
 
 
-def run_pipeline(args):
-    print(f"Running pipeline: {args.pipeline} \n")
+def run_pipeline(pipeline_name):
+    print(f"Running pipeline: {pipeline_name} \n")
 
     try:
-        module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
+        module = importlib.import_module(f"olaf.scripts.{pipeline_name}")
     except ModuleNotFoundError:
         logger.error("Unknown pipeline name.")
         list_pipelines()
         sys.exit(1)
-    getattr(module, "PipelineRunner")().run(args.pipeline)
+    getattr(module, "PipelineRunner")().run(pipeline_name)
 
 
 def list_pipelines():
@@ -53,11 +53,11 @@ def list_pipelines():
         print(f"\t {pipeline}")
 
 
-def show_pipeline(args):
-    print(f"\nShowing pipeline: {args.pipeline}")
+def show_pipeline(pipeline_name):
+    print(f"\nShowing pipeline: {pipeline_name}")
     try:
-        print(f"olaf.scripts.{args.pipeline}")
-        module = importlib.import_module(f"olaf.scripts.{args.pipeline}")
+        print(f"olaf.scripts.{pipeline_name}")
+        module = importlib.import_module(f"olaf.scripts.{pipeline_name}")
     except ModuleNotFoundError:
         logger.error("Unknown pipeline name.")
         list_pipelines()

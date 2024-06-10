@@ -29,8 +29,10 @@ pip install .
 
 ## Quick-start
 
+All available pipelines can be displayed with the following command: `olaf list`
 Pipelines can be run with the following command: `olaf run demo_pipeline`.
 Pipeline components are displayed with the following command: `olaf show demo_pipeline`.
+
 The text used can be updated in the file `data/demo.txt`.
 
 An example on how the library can be used is available in `demontrators/demo_test.ipynb`.
