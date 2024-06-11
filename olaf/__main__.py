@@ -97,7 +97,7 @@ def main():
             for pipeline in list_pipeline_names("olaf.scripts"):
                 run_pipeline(pipeline)
         else:
-            run_pipeline(args)
+            run_pipeline(args.pipeline)
     elif args.command == "list":
         list_pipelines()
     elif args.command == "show":
@@ -105,7 +105,7 @@ def main():
             for pipeline in list_pipeline_names("olaf.scripts"):
                 show_pipeline(pipeline)
         else:
-            show_pipeline(args)
+            show_pipeline(args.pipeline)
 
 
 if __name__ == "__main__":
