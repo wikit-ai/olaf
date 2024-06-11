@@ -61,7 +61,7 @@ class CustomLLMGenerator(LLMGenerator):
         llm_output = ""
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo-16k",
+                model="gpt-3.5-turbo",
                 temperature=0,
                 max_tokens=10000,
                 messages=prompt,
