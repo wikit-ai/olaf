@@ -169,3 +169,56 @@ class MistralAIGenerator(LLMGenerator):
             )
 
         return llm_output
+
+class DeepSeekGenerator(LLMGenerator):
+    """Text generator based on DeepSeek models."""
+
+    def __init__(self, model_name: Optional[str] = "deepseek-chat") -> None:
+        self.model_name = model_name 
+        self.api_url = "https://api.deepseek.com/chat/completions"
+
+    def check_resources(self) -> None:
+        """Check that the resources needed to use the DeepSeek Generator are available."""
+        if "DEEPSEEK_API_KEY" not in os.environ:
+            raise MissingEnvironmentVariable(self.__class__, "DEEPSEEK_API_KEY")
+
+    def generate_text(self, prompt: List[Dict[str, str]]) -> str:
+        """Generate text based on a chat completion prompt for DeepSeek model."""
+
+        @retry(
+            stop=stop_after_delay(15) | stop_after_attempt(3),
+            reraise=True,
+        )
+        def deepseek_call():
+            response = client.chat.completions.create(
+                model="deepseek-chat",
+                temperature=0,
+                messages=prompt,
+                stream=False
+            )
+            return response
+
+        llm_output = ""
+        client = openai.OpenAI(
+            base_url="https://api.deepseek.com",
+            api_key=os.getenv("DEEPSEEK_API_KEY")
+            )
+        try:
+            response = deepseek_call()
+
+        except Exception as e:
+            logger.error(
+                """Exception %s still occurred after retries on DeepSeek API.
+                         Skipping document %s...""",
+                e,
+                prompt[-1]["content"][5:100],
+            )
+        try:
+            llm_output = response.choices[0].message.content
+        except KeyError:
+            logger.error(
+                """Something went wrong the the DeepSeek API call.\n Message : %s""",
+                response.json()["message"],
+            )
+
+        return llm_output
