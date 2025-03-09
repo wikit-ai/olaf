@@ -1,4 +1,5 @@
 import os
+import re
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 
@@ -220,5 +221,18 @@ class DeepSeekGenerator(LLMGenerator):
                 """Something went wrong the the DeepSeek API call.\n Message : %s""",
                 response.json()["message"],
             )
-
+        deepseek_python_cell_pattern = r'```python\n(\[.*\])\n```'
+        deepseek_list_pattern = r'(\[.*\])'
+        deepseek_json_pattern = r'```json\n(\{.*\})\n```'
+        if match:=re.match(deepseek_python_cell_pattern, llm_output, re.DOTALL):
+           llm_output = match.group(1)
+        elif match:=re.match(deepseek_list_pattern, llm_output, re.DOTALL):
+            llm_output = match.group(1)
+        elif match:=re.match(deepseek_json_pattern, llm_output, re.DOTALL):
+            llm_output = match.group(1)
+        else :
+            logger.error(
+                """The DeepSeek API output is not in the expected format.\n Message : %s""",
+                llm_output,
+            )
         return llm_output
