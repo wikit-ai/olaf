@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.pipeline.pipeline_component.axiom_extraction package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.pipeline.pipeline_component.candidate_term_enrichment package" href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html" />
+  <link rel="prev" title="olaf.pipeline.pipeline_component package" href="olaf.pipeline.pipeline_component.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.html">olaf.pipeline package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.pipeline_component.html">olaf.pipeline.pipeline_component package</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.axiom_extraction package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.pipeline_component.html"
+       title="previous chapter">← olaf.pipeline.pipeline_component package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html"
+       title="next chapter">olaf.pipeline.pipeline_component.candidate_term_enrichment package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-pipeline-pipeline-component-axiom-extraction-package">
+<h1>olaf.pipeline.pipeline_component.axiom_extraction package<a class="headerlink" href="#olaf-pipeline-pipeline-component-axiom-extraction-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction">
+<span id="olaf-pipeline-pipeline-component-axiom-extraction-llm-based-axiom-extraction-module"></span><h2>olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.</span></span><span class="sig-name descname"><span class="pre">LLMBasedOWLAxiomExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.commons.html#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><span class="pre">LLMGenerator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/llm_based_axiom_extraction.html#LLMBasedOWLAxiomExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>LLM based OWL axiom extraction.</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>prompt_template: Callable[[str], List[Dict[str, str]]]</dt><dd><p>Prompt template used to give instructions and context to the LLM.</p>
+</dd>
+<dt>llm_generator: LLMGenerator</dt><dd><p>The LLM model used to generate axioms.</p>
+</dd>
+<dt>namespace: str</dt><dd><p>The name space used for axiom generation, by default “<a class="reference external" href="http://www.ms2.org/o">http://www.ms2.org/o</a>/example#”.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/llm_based_axiom_extraction.html#LLMBasedOWLAxiomExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/llm_based_axiom_extraction.html#LLMBasedOWLAxiomExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><p>A getter for the pipeline component performance report.
+If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/llm_based_axiom_extraction.html#LLMBasedOWLAxiomExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/llm_based_axiom_extraction.html#LLMBasedOWLAxiomExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.llm_based_axiom_extraction.LLMBasedOWLAxiomExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.
+Axioms are created based on the knowledge representation.
+The RDF graph is set on the knowledge representation.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline: Pipeline</dt><dd><p>The pipeline to run the component with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction">
+<span id="olaf-pipeline-pipeline-component-axiom-extraction-owl-axiom-extraction-module"></span><h2>olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.</span></span><span class="sig-name descname"><span class="pre">OWLAxiomExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owl_axiom_generators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">URIRef</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Graph</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">URIRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasoner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ELK'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>The OWL axiom extraction component inductively construct OWL axioms from the knowledge
+representation based on some OWL ontology modeling patterns.</p>
+<p>The component generates the OWL ontology based on the provided patterns, test its semantic
+consistence with an OWL reasoner and remove axioms until the ontology is consistent.</p>
+<p>This component requires the environment variables:
+- “JAVA_EXE”
+- “ROBOT_JAR”</p>
+<section id="id1">
+<h3>Attributes<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>owl_axiom_generators<span class="classifier">Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]</span></dt><dd><p>The function to generate the OWL axioms.</p>
+</dd>
+<dt>base_uri<span class="classifier">Union[str, URIRef], optional</span></dt><dd><p>The base URI to use when creating the concepts and relations URIs,
+by default “<a class="reference external" href="http://www.ms2.org/o">http://www.ms2.org/o</a>/example#”.</p>
+</dd>
+<dt>reasoner<span class="classifier">str, optional</span></dt><dd><p>The reasoner to use, by default “ELK”.
+Reasoning is performed using the ROBOT CLI: &lt;<a class="reference external" href="https://robot.obolibrary.org/reason">https://robot.obolibrary.org/reason</a>&gt;.
+Hence, possible values are: “hermit”, “jfact”, “whelk”, “emr”, “structural”</p>
+</dd>
+<dt>java_exe: str</dt><dd><p>Environment variable path to the Java executable.</p>
+</dd>
+<dt>robot_jar: str</dt><dd><p>Environment variable path to the ROBOT CLI .jar file.</p>
+</dd>
+<dt>graph_to_test_temp_file: PathLike</dt><dd><p>Temporary file path to store intermediate RDF graphs for consistency check.</p>
+</dd>
+<dt>tested_graph_temp_file: PathLike</dt><dd><p>Temporary file path for the inferred triples.</p>
+</dd>
+<dt>_pattern_nb_classes: str</dt><dd><p>Regex pattern to match the number of unsatisfiable classes in the ROBOT CLI error message.</p>
+</dd>
+<dt>_pattern_unsatisfiable_classes: str</dt><dd><p>Regex pattern to match the unsatisfiable classes URIs in the ROBOT CLI error message.</p>
+</dd>
+<dt>individuals_axiom_generators: Set[Set[Callable[[KnowledgeRepresentation, URIRef], Graph]]]</dt><dd><p>A set of the possible OWL axiom generators creating OWL named individuals.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_full_graph">
+<span class="sig-name descname"><span class="pre">build_full_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction.build_full_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_full_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Build the complete RDF graph based on the provided OWL axiom generators.</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>The knowledge representation to use when build the graph.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h4>Returns<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Graph</dt><dd><p>The constructed RDF graph.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_graph_without_owl_instances">
+<span class="sig-name descname"><span class="pre">build_graph_without_owl_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.data_container.html#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation"><span class="pre">KnowledgeRepresentation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction.build_graph_without_owl_instances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.build_graph_without_owl_instances" title="Link to this definition">¶</a></dt>
+<dd><p>Build the RDF graph based on the provided OWL axiom generators omitting
+the ones creating OWL named instances.</p>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>kr<span class="classifier">KnowledgeRepresentation</span></dt><dd><p>_description_</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Graph</dt><dd><p>_description_</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+<p>The OWL axiom extraction component requires the environment variables:
+- “JAVA_EXE”
+- “ROBOT_JAR”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="id6">
+<h4>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/axiom_extraction/owl_axiom_extraction.html#OWLAxiomExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.axiom_extraction.owl_axiom_extraction.OWLAxiomExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Create the OWL file containing the valid axiomatised Knowledge Representation instance.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.axiom_extraction">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.axiom_extraction" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.pipeline_component.html"
+       title="previous chapter">← olaf.pipeline.pipeline_component package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.pipeline_component.candidate_term_enrichment.html"
+       title="next chapter">olaf.pipeline.pipeline_component.candidate_term_enrichment package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

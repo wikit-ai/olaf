@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>Project</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Project</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="project">
+<h1>Project<a class="headerlink" href="#project" title="Link to this heading">¶</a></h1>
+<section id="project-specifications">
+<h2>Project specifications<a class="headerlink" href="#project-specifications" title="Link to this heading">¶</a></h2>
+<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>classDiagram
+	class DataContainer{
+    &lt;&lt;abstract&gt;&gt;
+		+UUID uid
+        +str external_uid
+		+str label
+        +set[LinguisticRealisation] linguistic_realisations
+
+		+add_linguistic_realisation(LinguisticRealisation)
+		+remove_linguistic_realisation()
+	}
+
+	class Concept {
+	}
+
+	class Relation{
+		+Concept source_concept
+		+Concept destination_concept
+	}
+
+	class MetaRelation{
+	}
+
+	class KnowledgeRepresentation{
+		+set[Concept] concepts
+		+set[Relation] relations
+		+set[MetaRelation] metarelations
+	}
+
+	class LinguisticRealisation {
+		+str label
+		+Enrichment enrichment
+		+set[Any] corpus_occurrences
+
+    +get_docs() set[Spacy.doc]
+	}
+
+    class ConceptLR{
+        +set[Spacy.span] corpus_occurrences
+
+    +add_corpus_occurrences(set[Spacy.span])
+    }
+
+    class RelationLR{
+        +set[tuple[Spacy.span, Spacy.span, Spacy.span]] corpus_occurrences
+
+    +add_corpus_occurrences(set[tuple[Spacy.span, Spacy.span, Spacy.span]])
+    }
+
+    class MetaRelationLR{
+        +set[tuple[Spacy.span, Spacy.span]] corpus_occurrences
+
+    +add_corpus_occurrences(set[tuple[Spacy.span, Spacy.span]])
+    }
+
+	class Enrichment {
+		+set[str] synonyms
+
+    +add_synonyms(Set[str])
+	}
+
+    class CandidateTerm {
+        +str label
+        +set[Spacy.span] corpus_occurrences
+        +Enrichment enrichment
+
+    +add_corpus_occurrences(set[Spacy.span])
+    }
+
+	class Pipeline{
+		&lt;&lt;abstract&gt;&gt;
+		+list[PipelineComponent] pipeline_components
+		+list[DataPreprocessing] preprocessing_components
+        +Spacy.lang spacy_model
+        +CorpusLoader corpus_loader
+		+list[Spacy.doc] corpus
+		+KnowledgeRepresentation kr
+        +set[CandidateTerm] candidate_terms
+
+        +add_pipeline_component(PipelineComponent)
+        +remove_pipeline_component(PipelineComponent)
+		+build()
+		+run()
+
+	}
+
+    class CorpusLoader{
+        &lt;&lt;abstract&gt;&gt;
+        +str corpus_path
+
+        -read_corpus() list[str]
+    }
+
+    class JsonCorpusLoader{
+        +str json_field
+    }
+
+    class CsvCorpusLoader{
+    }
+
+	class PipelineComponent{
+		&lt;&lt;abstract&gt;&gt;
+
+		+check_resources()
+		+optimise()
+		-compute_metrics()
+		+get_performance_report() Dict[str, Any]
+		+run(Pipeline)
+	}
+
+	class DataPreprocessing{
+		&lt;&lt;abstract&gt;&gt;
+		+dict[str, Any] parameters
+		+dict[str, Any] options
+
+		+run(Pipeline)
+	}
+	class ConceptRelationExtraction
+	class CandidateTermExtraction
+	class MetarelationExtraction
+	class CandidateTermEnrichment
+	class AxiomExtraction
+
+    class KnowledgeSource{
+		&lt;&lt;abstract&gt;&gt;
+        +dict[str, Any] parameters
+
+        +check_resources()
+        -check_parameters()
+		+match_external_concepts(term: CandidateTerm) Set[str]
+        +enrich_term(term: CandidateTerm)
+	}
+
+    ConceptRelationExtraction --&gt; KnowledgeSource : uses
+    CandidateTermEnrichment --&gt; KnowledgeSource : uses
+
+	PipelineComponent &lt;|--ConceptRelationExtraction
+	PipelineComponent &lt;|--CandidateTermExtraction
+	PipelineComponent &lt;|--MetarelationExtraction
+	PipelineComponent &lt;|--CandidateTermEnrichment
+	PipelineComponent &lt;|--AxiomExtraction
+
+	Pipeline &quot;1&quot; *-- &quot;0..n&quot; DataPreprocessing
+	Pipeline &quot;1&quot; *-- &quot;3..n&quot; PipelineComponent
+    Pipeline &quot;1&quot; o-- &quot;0..n&quot; CandidateTerm
+
+	Pipeline &quot;1&quot; *-- &quot;1&quot; KnowledgeRepresentation
+	Pipeline &quot;1&quot; o-- &quot;0..1&quot; CorpusLoader
+
+	CorpusLoader &lt;|-- JsonCorpusLoader
+	CorpusLoader &lt;|-- CsvCorpusLoader
+
+	KnowledgeRepresentation &quot;1&quot; *-- &quot;0..n&quot; Relation
+	KnowledgeRepresentation &quot;1&quot; *-- &quot;0..n&quot; Concept
+	KnowledgeRepresentation &quot;1&quot; *-- &quot;0..n&quot; MetaRelation
+	DataContainer &lt;|-- Concept
+	DataContainer &lt;|-- Relation
+	Relation &lt;|-- MetaRelation
+	DataContainer &quot;1&quot; o-- &quot;0..n&quot; LinguisticRealisation
+	LinguisticRealisation &quot;1&quot; o-- &quot;0..1&quot; Enrichment
+	CandidateTerm &quot;1&quot; o-- &quot;0..1&quot; Enrichment
+	Relation &quot;1&quot; o-- &quot;2&quot; Concept
+    LinguisticRealisation &lt;|-- ConceptLR
+    LinguisticRealisation &lt;|-- RelationLR
+    LinguisticRealisation &lt;|-- MetaRelationLR
+</pre></div>
+</div>
+</section>
+<section id="project-structure">
+<h2>Project structure<a class="headerlink" href="#project-structure" title="Link to this heading">¶</a></h2>
+<p>Here is how the architecture is made:</p>
+<ul class="simple">
+<li><p>The folder <code class="docutils literal notranslate"><span class="pre">src/</span></code> contains all of the functional code.</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">src/commons/</span></code> folder contains all the tools used by the different modules.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">src/data_container/</span></code> folder contains all the data structure needed for the framework.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">src/pipeline/</span></code> folder contains algorithms and pipeline structure to build and run an ontology learning model.</p></li>
+</ul>
+</li>
+<li><p>The folder <code class="docutils literal notranslate"><span class="pre">demonstrators/</span></code> contains demonstrators for specific pipeline components or different ontology learning processes.</p></li>
+</ul>
+<p>About the code structure:</p>
+<ul class="simple">
+<li><p>Generic data structure are identified with <code class="docutils literal notranslate"><span class="pre">schema.py</span></code> at the end of the filename.</p></li>
+<li><p>Each new class must be tested and the test file is identified with <code class="docutils literal notranslate"><span class="pre">test</span></code>at the beginning of the filename.</p></li>
+</ul>
+</section>
+</section>
+<section id="code">
+<h1>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h1>
+<section id="coding-style">
+<h2>Coding style<a class="headerlink" href="#coding-style" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://google.github.io/styleguide/pyguide.html">Google Python Style Guide</a></p></li>
+<li><p><a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html">Numpy docstrings style</a></p></li>
+</ul>
+</section>
+<section id="test">
+<h2>Test<a class="headerlink" href="#test" title="Link to this heading">¶</a></h2>
+<p>Every development must be tested.
+The tests are launched with the <code class="docutils literal notranslate"><span class="pre">pytest</span></code> command.</p>
+<p>As we want to be an open source library, we must have a test coverage percentage close to 100%.
+The following command should be used to evaluate:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov-report<span class="w"> </span>term-missing<span class="w"> </span>--cov<span class="o">=</span>.<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+</section>
+<section id="git-best-practices">
+<h2>Git best practices<a class="headerlink" href="#git-best-practices" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Main branch must always be functional</p></li>
+<li><p>When developing a new feature, a new branch named “feat/{feature_name}” must be created</p></li>
+<li><p>When fixing an issue, a new branch named “fix/{feature_name}” must be created and linked to the issue</p></li>
+<li><p>Create a merge/pull request to submit the code</p></li>
+</ul>
+<p>Start new developments</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>pull
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span><span class="o">{</span>new_branch<span class="o">}</span>
+</pre></div>
+</div>
+<p>Submit new developments</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span><span class="o">{</span>files<span class="o">}</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;{comment}&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span><span class="o">{</span>origin<span class="o">}</span><span class="w"> </span><span class="o">{</span>new_branch<span class="o">}</span>
+</pre></div>
+</div>
+<p>Amend commit and push after a review</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span><span class="o">{</span>branch_to_be_merged<span class="o">}</span>
+git<span class="w"> </span>add<span class="w"> </span><span class="o">{</span>modified_files<span class="o">}</span>
+git<span class="w"> </span>commit<span class="w"> </span>--amend
+git<span class="w"> </span>push<span class="w"> </span>--force-with-lease<span class="w"> </span><span class="o">{</span>origin<span class="o">}</span><span class="w"> </span><span class="o">{</span>branch_to_be_merged<span class="o">}</span>
+</pre></div>
+</div>
+<p>Update the code after an amend commit</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="p">{</span><span class="n">branch_to_be_merged</span><span class="p">}</span>
+<span class="n">git</span> <span class="n">fetch</span>
+<span class="n">git</span> <span class="n">reset</span> <span class="o">--</span><span class="n">hard</span> <span class="p">{</span><span class="n">origin</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="n">branch_to_be_merged</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="virtual-environment">
+<h2>Virtual environment<a class="headerlink" href="#virtual-environment" title="Link to this heading">¶</a></h2>
+<p>Setting up the virtual environment:</p>
+<ul class="simple">
+<li><p>go to the project root directory: <code class="docutils literal notranslate"><span class="pre">ontology-learning/</span></code></p></li>
+<li><p>create the virtual environment by running <code class="docutils literal notranslate"><span class="pre">virtualenv</span> <span class="pre">-p</span> <span class="pre">python3.10</span> <span class="pre">{env/path}</span></code> (virtualenv needs to be installed) or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">{env/path}</span></code>. As a result, you should have a new folder at your project root.</p></li>
+<li><p>activate the virtual environment by running</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">{env/path}/bin/activate</span></code> on Linux</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{env/path}\Scripts\activate</span></code> on Windows</p></li>
+</ul>
+</li>
+<li><p>check that the environment is properly installed by running the test from the project root directory with the command line <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">test</span></code>.</p></li>
+</ul>
+<p>Setting up the workspace :</p>
+<ul class="simple">
+<li><p>add the <code class="docutils literal notranslate"><span class="pre">src/</span></code> folder to the python paths by adding the full path <code class="docutils literal notranslate"><span class="pre">{path/to/the/project/}ontology-learning/src</span></code> to the file:</p>
+<ul>
+<li><p>on Linux add <code class="docutils literal notranslate"><span class="pre">{path/to/the/project/}ontology-learning/src</span></code> to the file <code class="docutils literal notranslate"><span class="pre">ontology-learning/venv/lib/python3.10/site-packages/_virtualenv.pth</span></code></p></li>
+<li><p>on Windows add <code class="docutils literal notranslate"><span class="pre">{C:\path\to\the\project\}ontology-learning\src</span></code> to the file <code class="docutils literal notranslate"><span class="pre">{path/to/the/project/}ontology-learning\venv\Lib\site-packages\_virtualenv.pth</span></code></p></li>
+</ul>
+</li>
+<li><p>instead, the following command can also be run each time the project is used : <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PYTHONPATH=&quot;${PYTHONPATH}:{path/to/the/project/}ontology-learning/src&quot;</span></code></p></li>
+</ul>
+<p>Setting up project dependencies :</p>
+<ul class="simple">
+<li><p>install the project dependencies by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> (from within the virtual environment)</p></li>
+<li><p>update the requirements after new downloads by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">freeze</span> <span class="pre">&gt;</span> <span class="pre">requirements.txt</span></code></p></li>
+</ul>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<p>Generate documentation :</p>
+<ul class="simple">
+<li><p>move to gh-pages <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">gh-pages</span></code></p></li>
+<li><p>install sphinx via pip <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sphinx</span></code></p></li>
+<li><p>move to docs folder <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">docs</span></code></p></li>
+<li><p>initialize docs <code class="docutils literal notranslate"><span class="pre">sphinx-quickstart</span></code></p></li>
+<li><p>go back to the root folder <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">..</span></code></p></li>
+<li><p>generate sphinx markdown <code class="docutils literal notranslate"><span class="pre">sphinx-apidocs</span> <span class="pre">-o</span> <span class="pre">docs</span> <span class="pre">olaf/</span></code></p></li>
+<li><p>and then generate html pages <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">docs</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">html</span></code></p></li>
+</ul>
+<p>To host the documentation with with github-pages :</p>
+<ul class="simple">
+<li><p>create a branch named <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code></p></li>
+<li><p>enable github pages and set the working branch as <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code></p></li>
+<li><p>create an acces-token</p></li>
+<li><p>add an environment secret named <code class="docutils literal notranslate"><span class="pre">TOKEN</span></code> with the generated acces token as value</p></li>
+<li><p>add an environment variable called <code class="docutils literal notranslate"><span class="pre">USER_MAIL</span></code> with your email address as value</p></li>
+<li><p>add an environment variable called <code class="docutils literal notranslate"><span class="pre">USER_NAME</span></code> with your github username as value</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

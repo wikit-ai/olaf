@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.pipeline.pipeline_component.term_extraction package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.repository package" href="olaf.repository.html" />
+  <link rel="prev" title="olaf.pipeline.pipeline_component.concept_relation_hierarchy package" href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.html">olaf.pipeline package</a> &raquo;</li>
+    
+      <li><a href="olaf.pipeline.pipeline_component.html">olaf.pipeline.pipeline_component package</a> &raquo;</li>
+    
+    <li>olaf.pipeline.pipeline_component.term_extraction package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html"
+       title="previous chapter">← olaf.pipeline.pipeline_component.concept_relation_hierarchy package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.repository.html"
+       title="next chapter">olaf.repository package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-pipeline-pipeline-component-term-extraction-package">
+<h1>olaf.pipeline.pipeline_component.term_extraction package<a class="headerlink" href="#olaf-pipeline-pipeline-component-term-extraction-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction">
+<span id="olaf-pipeline-pipeline-component-term-extraction-c-value-term-extraction-module"></span><h2>olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.</span></span><span class="sig-name descname"><span class="pre">CvalueTermExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_term_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_term_token_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_sequences_doc_attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_value_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cts_post_processing_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_token_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/c_value_term_extraction.html#CvalueTermExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent" title="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent</span></code></a></p>
+<p>Extract candidate terms using C-value scores computed based on the corpus.</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</dt><dd><p>A list of candidate term post processing functions to run after candidate term extraction
+and before assigning the extracted candidate terms to the pipeline, by default None.</p>
+</dd>
+<dt>_token_sequences_doc_attribute<span class="classifier">str, optional</span></dt><dd><p>The name of the spaCy doc custom attribute containing the sequences of tokens to
+form the corpus for the c-value computation. Default is None which default to the full doc.</p>
+</dd>
+<dt>_candidate_term_threshold<span class="classifier">float, optional</span></dt><dd><p>The c-value score threshold below which terms will be ignored.</p>
+</dd>
+<dt>_c_value_threshold<span class="classifier">float, optional</span></dt><dd><p>The threshold used during the c-value scores computation process, by defaut 0.0.</p>
+</dd>
+<dt>_max_term_token_length<span class="classifier">int, optional</span></dt><dd><p>The maximum number of tokens a term can have, by defaut 5.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/c_value_term_extraction.html#CvalueTermExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+<p>This pipeline component does not need any access to any external resource.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/c_value_term_extraction.html#CvalueTermExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/c_value_term_extraction.html#CvalueTermExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/c_value_term_extraction.html#CvalueTermExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.c_value_term_extraction.CvalueTermExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline: Pipeline</dt><dd><p>The pipeline to run the component with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction">
+<span id="olaf-pipeline-pipeline-component-term-extraction-llm-term-extraction-module"></span><h2>olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.</span></span><span class="sig-name descname"><span class="pre">LLMTermExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.commons.html#olaf.commons.llm_tools.LLMGenerator" title="olaf.commons.llm_tools.LLMGenerator"><span class="pre">LLMGenerator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cts_post_processing_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/llm_term_extraction.html#LLMTermExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent" title="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent</span></code></a></p>
+<p>Extract candidate terms using LLM based on the corpus.</p>
+<section id="id1">
+<h3>Attributes<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>prompt_template: Callable[[str], List[Dict[str, str]]]</dt><dd><p>Prompt template used to give instructions and context to the LLM.</p>
+</dd>
+<dt>llm_generator: LLMGenerator</dt><dd><p>The LLM model used to generate the candidate terms.</p>
+</dd>
+<dt>cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</dt><dd><p>A list of candidate term post processing functions to run after candidate term extraction
+and before assigning the extracted candidate terms to the pipeline. Default to None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/llm_term_extraction.html#LLMTermExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/llm_term_extraction.html#LLMTermExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><p>A getter for the pipeline component performance report.
+If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/llm_term_extraction.html#LLMTermExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/llm_term_extraction.html#LLMTermExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.llm_term_extraction.LLMTermExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline: Pipeline</dt><dd><p>The pipeline to run the component with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms">
+<span id="olaf-pipeline-pipeline-component-term-extraction-manual-candidate-terms-module"></span><h2>olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.</span></span><span class="sig-name descname"><span class="pre">ManualCandidateTermExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cts_post_processing_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct_label_strings_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phrase_matcher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PhraseMatcher</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/manual_candidate_terms.html#ManualCandidateTermExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent" title="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent</span></code></a></p>
+<p>A pipeline component to manually add candidate terms.</p>
+<section id="id4">
+<h3>Attributes<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</dt><dd><p>A list of candidate term post processing functions to run after candidate term extraction
+and before assigning the extracted candidate terms to the pipeline, by default None.</p>
+</dd>
+<dt>ct_label_strings_map: Dict[str, Set[str]], optional</dt><dd><p>The mapping of candidate term label and their matching strings.
+Optional only if a custom spaCy phrase matcher is provided.</p>
+</dd>
+<dt>phrase_matcher: PhraseMatcher, optional</dt><dd><p>The spaCy phrase matcher for new candidate term corpus occurrence matching.
+Default to matching the label provided strings.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/manual_candidate_terms.html#ManualCandidateTermExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/manual_candidate_terms.html#ManualCandidateTermExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the parameters set.</p>
+</dd>
+</dl>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/manual_candidate_terms.html#ManualCandidateTermExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/manual_candidate_terms.html#ManualCandidateTermExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.manual_candidate_terms.ManualCandidateTermExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the candidate term extraction based manually provided strings.</p>
+<section id="id6">
+<h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction">
+<span id="olaf-pipeline-pipeline-component-term-extraction-pos-term-extraction-module"></span><h2>olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.</span></span><span class="sig-name descname"><span class="pre">POSTermExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">span_processing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cts_post_processing_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_selection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['NOUN']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_sequences_doc_attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/pos_term_extraction.html#POSTermExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent" title="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent</span></code></a></p>
+<p>Extract candidate terms with part-of-speech (POS) tagging.</p>
+<section id="id7">
+<h3>Attributes<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</dt><dd><p>A list of candidate term post processing functions to run after candidate term extraction
+and before assigning the extracted candidate terms to the pipeline, by default None.</p>
+</dd>
+<dt>span_processing: Callable[[spacy.tokens.Span],str], optional</dt><dd><p>A function to process span, by default None.</p>
+</dd>
+<dt>_pos_selection: List[str]; optional</dt><dd><p>List of POS tags to select in the corpus, by default [“NOUN”].</p>
+</dd>
+<dt>_token_sequences_doc_attribute: str, optional</dt><dd><p>Attribute indicating which sequences to use for processing.
+If None, the entire doc is used.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/pos_term_extraction.html#POSTermExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+<p>This pipeline component does not need any access to any external resource.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/pos_term_extraction.html#POSTermExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="id8">
+<h4>Returns<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/pos_term_extraction.html#POSTermExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/pos_term_extraction.html#POSTermExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.pos_term_extraction.POSTermExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execution of the POS term extraction on the corpus. Pipeline candidate terms are updated.</p>
+<section id="id9">
+<h4>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema">
+<span id="olaf-pipeline-pipeline-component-term-extraction-term-extraction-schema-module"></span><h2>olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.</span></span><span class="sig-name descname"><span class="pre">TermExtractionPipelineComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cts_post_processing_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/term_extraction_schema.html#TermExtractionPipelineComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="olaf.pipeline.pipeline_component.html#olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent" title="olaf.pipeline.pipeline_component.pipeline_component_schema.PipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineComponent</span></code></a></p>
+<p>A pipeline component schema for term extraction tasks.</p>
+<section id="id10">
+<h3>Attributes<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</dt><dd><p>A list of candidate term post processing functions to run after candidate term extraction
+and before assigning the extracted candidate terms to the pipeline, by default None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.apply_post_processing">
+<span class="sig-name descname"><span class="pre">apply_post_processing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/term_extraction_schema.html#TermExtractionPipelineComponent.apply_post_processing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.apply_post_processing" title="Link to this definition">¶</a></dt>
+<dd><p>Apply candidate terms post processing functions.</p>
+<section id="id11">
+<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>candidate_terms<span class="classifier">Set[CandidateTerm]</span></dt><dd><p>The set of candidate terms to post process.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h4>Returns<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[CandidateTerm]</dt><dd><p>The post processed set of candidate terms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.check_resources">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/term_extraction_schema.html#TermExtractionPipelineComponent.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.get_performance_report">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/term_extraction_schema.html#TermExtractionPipelineComponent.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="id13">
+<h4>Returns<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.optimise">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/term_extraction_schema.html#TermExtractionPipelineComponent.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.run">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/term_extraction_schema.html#TermExtractionPipelineComponent.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="id14">
+<h4>Parameters<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline<span class="classifier">Pipeline</span></dt><dd><p>The pipeline running</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction">
+<span id="olaf-pipeline-pipeline-component-term-extraction-tfidf-term-extraction-module"></span><h2>olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction module<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.</span></span><span class="sig-name descname"><span class="pre">TFIDFTermExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_sequence_preprocessing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_sequences_doc_attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cts_post_processing_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="olaf.data_container.html#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><span class="pre">CandidateTerm</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_term_token_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tfidf_agg_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MEAN'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_term_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tfidf_vectorizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TfidfVectorizer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/tfidf_term_extraction.html#TFIDFTermExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent" title="olaf.pipeline.pipeline_component.term_extraction.term_extraction_schema.TermExtractionPipelineComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">TermExtractionPipelineComponent</span></code></a></p>
+<p>Extract candidate terms using TF-IDF based scores computed on the corpus.</p>
+<section id="id15">
+<h3>Attributes<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>cts_post_processing_functions: List[Callable[[Set[CandidateTerm]], Set[CandidateTerm]]], optional</dt><dd><p>A list of candidate term post processing functions to run after candidate term extraction
+and before assigning the extracted candidate terms to the pipeline, by default None.</p>
+</dd>
+<dt>token_sequence_preprocessing<span class="classifier">Callable[[spacy.tokens.span.Span],Tuple[str]], optional</span></dt><dd><p>By default None.</p>
+</dd>
+<dt>_token_sequences_doc_attribute<span class="classifier">str</span></dt><dd><p>The name of the spaCy doc custom attribute containing the sequences of tokens to
+form the corpus for the c-value computation. Default is None which default to the full doc.</p>
+</dd>
+<dt>_max_term_token_length<span class="classifier">int</span></dt><dd><p>The maximum number of tokens a term can have, by default 1.</p>
+</dd>
+<dt>tfidf_agg_type<span class="classifier">Union[“MEAN”, “MAX”]</span></dt><dd><p>The operation to use to aggregate TF-IDF values of candidate terms.
+can be “MEAN” to aggregate by mean values or “MAX” to aggregate by max values, by default “MEAN”.</p>
+</dd>
+<dt>candidate_term_threshold<span class="classifier">float</span></dt><dd><p>The TF-IDF score threshold below which terms will be ignored, by default 0.0.</p>
+</dd>
+<dt>_ngram_range<span class="classifier">Tuple[int, int]</span></dt><dd><p>The ngram range for the TF-IDF vectorizer.</p>
+</dd>
+<dt>_custom_tokenizer<span class="classifier">Callable[[str], List[str]]</span></dt><dd><p>Tokenizer for the TF-IDF vectorizer.</p>
+</dd>
+<dt>tfidf_vectorizer<span class="classifier">sklearn.feature_extraction.text.TfidfVectorizer, optional</span></dt><dd><p>The TF-IDF vectorizer to compute TF-IDF scores.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/tfidf_term_extraction.html#TFIDFTermExtraction.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+<p>This pipeline component does not need any access to any external resource.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.get_performance_report">
+<span class="sig-name descname"><span class="pre">get_performance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/tfidf_term_extraction.html#TFIDFTermExtraction.get_performance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.get_performance_report" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>A getter for the pipeline component performance report.</dt><dd><p>If the component has been optimised, it only returns the best performance.
+Otherwise, it returns the results obtained with the set parameters.</p>
+</dd>
+</dl>
+<section id="id16">
+<h4>Returns<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Dict[str, Any]</dt><dd><p>The pipeline component performance report.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.optimise">
+<span class="sig-name descname"><span class="pre">optimise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_values_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/tfidf_term_extraction.html#TFIDFTermExtraction.optimise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.optimise" title="Link to this definition">¶</a></dt>
+<dd><p>A method to optimise the pipeline component by tuning the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olaf.pipeline.html#olaf.pipeline.pipeline_schema.Pipeline" title="olaf.pipeline.pipeline_schema.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/pipeline/pipeline_component/term_extraction/tfidf_term_extraction.html#TFIDFTermExtraction.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.pipeline.pipeline_component.term_extraction.tfidf_term_extraction.TFIDFTermExtraction.run" title="Link to this definition">¶</a></dt>
+<dd><p>Method that is responsible for the execution of the component.</p>
+<section id="id17">
+<h4>Parameters<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>pipeline: Pipeline</dt><dd><p>The pipeline to run the component with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.pipeline.pipeline_component.term_extraction">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.pipeline.pipeline_component.term_extraction" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.pipeline.pipeline_component.concept_relation_hierarchy.html"
+       title="previous chapter">← olaf.pipeline.pipeline_component.concept_relation_hierarchy package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.repository.html"
+       title="next chapter">olaf.repository package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

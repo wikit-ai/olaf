@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.repository.knowledge_source package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.repository.serialiser package" href="olaf.repository.serialiser.html" />
+  <link rel="prev" title="olaf.repository.corpus_loader package" href="olaf.repository.corpus_loader.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+      <li><a href="olaf.repository.html">olaf.repository package</a> &raquo;</li>
+    
+    <li>olaf.repository.knowledge_source package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.repository.corpus_loader.html"
+       title="previous chapter">← olaf.repository.corpus_loader package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.repository.serialiser.html"
+       title="next chapter">olaf.repository.serialiser package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-repository-knowledge-source-package">
+<h1>olaf.repository.knowledge_source package<a class="headerlink" href="#olaf-repository-knowledge-source-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.repository.knowledge_source.conceptnet_kg">
+<span id="olaf-repository-knowledge-source-conceptnet-kg-module"></span><h2>olaf.repository.knowledge_source.conceptnet_kg module<a class="headerlink" href="#module-olaf.repository.knowledge_source.conceptnet_kg" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.knowledge_source.conceptnet_kg.</span></span><span class="sig-name descname"><span class="pre">ConceptNetKnowledgeResource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_resp_batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource" title="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">KnowledgeSource</span></code></a></p>
+<p>Adapter for the ConceptNet KG: <a class="reference external" href="https://conceptnet.io/">https://conceptnet.io/</a>.</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>lang: str, optional</dt><dd><p>Language ISO code for the terms to find concepts for, by default ‘en’.</p>
+</dd>
+<dt>api_resp_batch_size: int, optional</dt><dd><p>Batch size for the ConceptNet API when fetching data, by default 1000.</p>
+</dd>
+<dt>check_sources: bool, optional</dt><dd><p>Wether or not to filter the concepts based on provided sources, default False.</p>
+</dd>
+<dt>validation_sources: Set[str], optional</dt><dd><p>The sources to use to filter the concepts, default set().</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_antonyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_antonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource.fetch_terms_antonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_antonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch antonyms of a set of terms according to the knowledge source.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find antonyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms antonyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_hypernyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_hypernyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource.fetch_terms_hypernyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_hypernyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch hypernyms of a set of terms according to the knowledge source.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find hypernyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms hypernyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_hyponyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_hyponyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource.fetch_terms_hyponyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_hyponyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch hyponyms of a set of terms according to the knowledge source.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find hyponyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms hyponyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_synonyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource.fetch_terms_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.fetch_terms_synonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch synonyms of a set of terms according to the knowledge source.</p>
+<section id="id5">
+<h4>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find synonyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h4>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms synonyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.match_external_concepts">
+<span class="sig-name descname"><span class="pre">match_external_concepts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matching_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/conceptnet_kg.html#ConceptNetKnowledgeResource.match_external_concepts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.conceptnet_kg.ConceptNetKnowledgeResource.match_external_concepts" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch external concepts matching the set of terms.</p>
+<section id="id7">
+<h4>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>matching_terms<span class="classifier">Set[str]</span></dt><dd><p>The term texts to use for matching concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h4>Returns<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The UIDs of the external concepts found matching the term texts.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.knowledge_source.knowledge_source_schema">
+<span id="olaf-repository-knowledge-source-knowledge-source-schema-module"></span><h2>olaf.repository.knowledge_source.knowledge_source_schema module<a class="headerlink" href="#module-olaf.repository.knowledge_source.knowledge_source_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.knowledge_source.knowledge_source_schema.</span></span><span class="sig-name descname"><span class="pre">KnowledgeSource</span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Knowledge sources are any external sources of knowledge.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.check_resources">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_antonyms">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_terms_antonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource.fetch_terms_antonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_antonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch antonyms of a set of terms according to the knowledge source.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find antonyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms antonyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_hypernyms">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_terms_hypernyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource.fetch_terms_hypernyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_hypernyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch hypernyms of a set of terms according to the knowledge source.</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find hypernyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms hypernyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_hyponyms">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_terms_hyponyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource.fetch_terms_hyponyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_hyponyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch hyponyms of a set of terms according to the knowledge source.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find hyponyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms hyponyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_synonyms">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_terms_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource.fetch_terms_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.fetch_terms_synonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch synonyms of a set of terms according to the knowledge source.</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find synonyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h3>Returns<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms synonyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.match_external_concepts">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">match_external_concepts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matching_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/knowledge_source_schema.html#KnowledgeSource.match_external_concepts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource.match_external_concepts" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch external concepts matching the set of terms.</p>
+<section id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>matching_terms<span class="classifier">Set[str]</span></dt><dd><p>The term texts to use for matching concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Returns<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The UIDs of the external concepts found matching the term texts.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.knowledge_source.wordnet_kg">
+<span id="olaf-repository-knowledge-source-wordnet-kg-module"></span><h2>olaf.repository.knowledge_source.wordnet_kg module<a class="headerlink" href="#module-olaf.repository.knowledge_source.wordnet_kg" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.repository.knowledge_source.wordnet_kg.</span></span><span class="sig-name descname"><span class="pre">WordNetKnowledgeResource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_domains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wordnet_domains_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wordnet_domains_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enrichment_domains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enrichment_domains_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wordnet_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource" title="olaf.repository.knowledge_source.knowledge_source_schema.KnowledgeSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">KnowledgeSource</span></code></a></p>
+<p>Adapter for the WordNet linguistic knowledge base: .</p>
+<section id="id19">
+<h3>Attributes<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>lang: str, optional</dt><dd><p>Language ISO code for the terms to find concepts and terms for, by default ‘en’.</p>
+</dd>
+<dt>use_domains: bool, optional</dt><dd><p>Wether or not to filter the matchings on provided domains, by default False.</p>
+</dd>
+<dt>use_pos: bool, optional</dt><dd><p>Wether or not to filter the matchings on provided part of speech tags, by default False.</p>
+</dd>
+<dt>wordnet_domains_map: Dict[str, Set[str]], optional</dt><dd><p>The mapping between WordNet synsets ids and domains ids, by default None.
+The expected file can be found at
+&lt;<a class="reference external" href="https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt">https://github.com/argilla-io/spacy-wordnet/blob/master/spacy_wordnet/data/wordnet_domains.txt</a>&gt;</p>
+</dd>
+<dt>enrichment_domains: Set[str], optional</dt><dd><p>The set of enrichment domains strings to use for matching.
+Mandatory when use_domains is True, by default to None.</p>
+</dd>
+<dt>wordnet_pos: Set[str], optional</dt><dd><p>The set of part of speech tags to use for matching.
+Mandatory when use_pos is True, by default to None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.check_resources">
+<span class="sig-name descname"><span class="pre">check_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource.check_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.check_resources" title="Link to this definition">¶</a></dt>
+<dd><p>Method to check that the component has access to all its required resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_antonyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_antonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource.fetch_terms_antonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_antonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch antonyms of a set of terms from WordNet.</p>
+<section id="id20">
+<h4>Parameters<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find antonyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h4>Returns<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms antonyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_hypernyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_hypernyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource.fetch_terms_hypernyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_hypernyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch hypernyms of a set of terms from WordNet.</p>
+<section id="id22">
+<h4>Parameters<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find hypernyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h4>Returns<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms hypernyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_hyponyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_hyponyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource.fetch_terms_hyponyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_hyponyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch hyponyms of a set of terms according to the knowledge source.</p>
+<section id="id24">
+<h4>Parameters<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find hyponyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h4>Returns<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms hyponyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_synonyms">
+<span class="sig-name descname"><span class="pre">fetch_terms_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource.fetch_terms_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.fetch_terms_synonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch synonyms of a set of terms from WordNet.</p>
+<section id="id26">
+<h4>Parameters<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>terms<span class="classifier">Set[str]</span></dt><dd><p>The set of terms to find synonyms of.</p>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h4>Returns<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The set of terms synonyms.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.match_external_concepts">
+<span class="sig-name descname"><span class="pre">match_external_concepts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matching_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/repository/knowledge_source/wordnet_kg.html#WordNetKnowledgeResource.match_external_concepts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.repository.knowledge_source.wordnet_kg.WordNetKnowledgeResource.match_external_concepts" title="Link to this definition">¶</a></dt>
+<dd><p>Method to fetch external concepts matching the set of terms.</p>
+<section id="id28">
+<h4>Parameters<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>matching_terms<span class="classifier">Set[str]</span></dt><dd><p>The term texts to use for matching concepts.</p>
+</dd>
+</dl>
+</section>
+<section id="id29">
+<h4>Returns<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[str]</dt><dd><p>The UIDs of the external concepts found matching the term texts.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.repository.knowledge_source">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.repository.knowledge_source" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.repository.corpus_loader.html"
+       title="previous chapter">← olaf.repository.corpus_loader package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.repository.serialiser.html"
+       title="next chapter">olaf.repository.serialiser package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

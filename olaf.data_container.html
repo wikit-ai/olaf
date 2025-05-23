@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>olaf.data_container package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="olaf.pipeline package" href="olaf.pipeline.html" />
+  <link rel="prev" title="olaf.commons package" href="olaf.commons.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OLAF</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="modules.html#olaf">olaf</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="olaf.html" class="reference internal ">olaf package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">olaf</a> &raquo;</li>
+    
+      <li><a href="olaf.html">olaf package</a> &raquo;</li>
+    
+    <li>olaf.data_container package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.commons.html"
+       title="previous chapter">← olaf.commons package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.html"
+       title="next chapter">olaf.pipeline package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="olaf-data-container-package">
+<h1>olaf.data_container package<a class="headerlink" href="#olaf-data-container-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-olaf.data_container.candidate_term_schema">
+<span id="olaf-data-container-candidate-term-schema-module"></span><h2>olaf.data_container.candidate_term_schema module<a class="headerlink" href="#module-olaf.data_container.candidate_term_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.candidate_term_schema.CandidateRelation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.candidate_term_schema.</span></span><span class="sig-name descname"><span class="pre">CandidateRelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enrichment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.enrichment_schema.Enrichment" title="olaf.data_container.enrichment_schema.Enrichment"><span class="pre">Enrichment</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/candidate_term_schema.html#CandidateRelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.candidate_term_schema.CandidateRelation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.candidate_term_schema.CandidateTerm" title="olaf.data_container.candidate_term_schema.CandidateTerm"><code class="xref py py-class docutils literal notranslate"><span class="pre">CandidateTerm</span></code></a></p>
+<p>Candidate relations are created from candidate terms by the ct_to_cr function.
+They represent the words of interest for relation in the corpus.
+They are used by the relation extraction methods and transformed into
+linguistic realisations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.candidate_term_schema.CandidateRelation.add_corpus_occurrence">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/candidate_term_schema.html#CandidateRelation.add_corpus_occurrence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.candidate_term_schema.CandidateRelation.add_corpus_occurrence" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrence for the candidate relation.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>new_corpus_occurrence<span class="classifier">Tuple[spacy.tokens.Span]</span></dt><dd><p>New corpus occurrence to add for the candidate relation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.candidate_term_schema.CandidateRelation.add_corpus_occurrences">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/candidate_term_schema.html#CandidateRelation.add_corpus_occurrences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.candidate_term_schema.CandidateRelation.add_corpus_occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrences for the candidate relations.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>new_corpus_occurrences<span class="classifier">Set[Tuple[spacy.tokensSpan]]</span></dt><dd><p>New corpus occurrences to add for the candidate relation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.candidate_term_schema.CandidateTerm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.candidate_term_schema.</span></span><span class="sig-name descname"><span class="pre">CandidateTerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enrichment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.enrichment_schema.Enrichment" title="olaf.data_container.enrichment_schema.Enrichment"><span class="pre">Enrichment</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/candidate_term_schema.html#CandidateTerm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.candidate_term_schema.CandidateTerm" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Candidate terms are created by the term extraction methods.
+They represent the words of interest in the corpus.
+They are used by the concept and relation extraction methods and transformed into
+linguistic realisations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.candidate_term_schema.CandidateTerm.add_corpus_occurrences">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/candidate_term_schema.html#CandidateTerm.add_corpus_occurrences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.candidate_term_schema.CandidateTerm.add_corpus_occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrences for the candidate terms.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>new_corpus_occurrences<span class="classifier">Set[spacy.tokensSpan]</span></dt><dd><p>New corpus occurrences to add for the candidate term.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.concept_schema">
+<span id="olaf-data-container-concept-schema-module"></span><h2>olaf.data_container.concept_schema module<a class="headerlink" href="#module-olaf.data_container.concept_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.concept_schema.Concept">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.concept_schema.</span></span><span class="sig-name descname"><span class="pre">Concept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_uids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linguistic_realisations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/concept_schema.html#Concept"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.concept_schema.Concept" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.data_container_schema.DataContainer" title="olaf.data_container.data_container_schema.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
+<p>Concept is a particular DataContainer.
+It denotes a thing in the conceptual word and it is created by concept extraction processes.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>uid<span class="classifier">str</span></dt><dd><p>The concept unique identifier.</p>
+</dd>
+<dt>external_uids<span class="classifier">Set[str], optional</span></dt><dd><p>External unique identifiers found for the concept, by default None.</p>
+</dd>
+<dt>label<span class="classifier">str</span></dt><dd><p>The concept human readable label.</p>
+</dd>
+<dt>linguistic_realisations<span class="classifier">Set[LinguisticRealisation]</span></dt><dd><p>The concept linguistic realisations, i.e. instances of the concept in the text corpus,
+by default None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.concept_schema.Concept.add_linguistic_realisation">
+<span class="sig-name descname"><span class="pre">add_linguistic_realisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/concept_schema.html#Concept.add_linguistic_realisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.concept_schema.Concept.add_linguistic_realisation" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new linguistic realisation to the concept.</p>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisation<span class="classifier">LinguisticRealisation</span></dt><dd><p>The linguistic realisation instance to add.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.concept_schema.Concept.remove_linguistic_realisation">
+<span class="sig-name descname"><span class="pre">remove_linguistic_realisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/concept_schema.html#Concept.remove_linguistic_realisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.concept_schema.Concept.remove_linguistic_realisation" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a linguistic realisation of the concept.</p>
+<section id="id5">
+<h4>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisation<span class="classifier">LinguisticRealisation</span></dt><dd><p>The linguistic realisation instance to remove.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.data_container_schema">
+<span id="olaf-data-container-data-container-schema-module"></span><h2>olaf.data_container.data_container_schema module<a class="headerlink" href="#module-olaf.data_container.data_container_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.data_container_schema.DataContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.data_container_schema.</span></span><span class="sig-name descname"><span class="pre">DataContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_uids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linguistic_realisations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/data_container_schema.html#DataContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.data_container_schema.DataContainer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Data structure for Concept, Relation and Metarelation.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>uid<span class="classifier">str</span></dt><dd><p>The unique identifier for the container.</p>
+</dd>
+<dt>external_uids<span class="classifier">Set[str], optional</span></dt><dd><p>External unique identifiers found for the data container.</p>
+</dd>
+<dt>label<span class="classifier">str</span></dt><dd><p>The human readable label for the data container.</p>
+</dd>
+<dt>linguistic_realisations<span class="classifier">Set[LinguisticRealisation]</span></dt><dd><p>Instances or realisations of a concept or a relation in the text corpus.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.data_container_schema.DataContainer.add_linguistic_realisation">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_linguistic_realisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/data_container_schema.html#DataContainer.add_linguistic_realisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.data_container_schema.DataContainer.add_linguistic_realisation" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new linguistic realisation to the data container.</p>
+<section id="id7">
+<h4>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisation<span class="classifier">LinguisticRealisation</span></dt><dd><p>The linguistic realisation instance to add.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.data_container_schema.DataContainer.remove_linguistic_realisation">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_linguistic_realisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/data_container_schema.html#DataContainer.remove_linguistic_realisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.data_container_schema.DataContainer.remove_linguistic_realisation" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a linguistic realisation of the data container.</p>
+<section id="id8">
+<h4>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisation<span class="classifier">LinguisticRealisation</span></dt><dd><p>The linguistic realisation instance to remove.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.enrichment_schema">
+<span id="olaf-data-container-enrichment-schema-module"></span><h2>olaf.data_container.enrichment_schema module<a class="headerlink" href="#module-olaf.data_container.enrichment_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.enrichment_schema.</span></span><span class="sig-name descname"><span class="pre">Enrichment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">synonyms:</span> <span class="pre">~typing.Set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hypernyms:</span> <span class="pre">~typing.Set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyponyms:</span> <span class="pre">~typing.Set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antonyms:</span> <span class="pre">~typing.Set[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/enrichment_schema.html#Enrichment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl>
+<dt>A dataclass to contain any information enriching a candidate term.</dt><dd><p>Instances are typically created by the candidate term enrichment processes.
+By default we define at minimum synonyms but we can extend the class with any possible
+useful information, e.g., antonyms, or hypernyms.</p>
+<p>Note that the definition given to synonyms here largely depends on the knowledge
+representation application.It could be strict synonyms or closely related terms with
+regards to a specific context domain.</p>
+</dd>
+</dl>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>synonyms: Set[str]</dt><dd><p>The set of synonyms.
+Empty set by default if it is initialised without terms.</p>
+</dd>
+<dt>hypernyms: Set[str]</dt><dd><p>The set of hypernyms.
+Empty set by default if it is initialised without terms.</p>
+</dd>
+<dt>hyponyms: Set[str]</dt><dd><p>The set of hyponyms.
+Empty set by default if it is initialised without terms.</p>
+</dd>
+<dt>antonyms: Set[str]</dt><dd><p>The set of antonyms.
+Empty set by default if it is initialised without terms.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.add_antonyms">
+<span class="sig-name descname"><span class="pre">add_antonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">antonyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/enrichment_schema.html#Enrichment.add_antonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.add_antonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Add new antonyms for the enrichment.</p>
+<section id="id10">
+<h4>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>antonyms<span class="classifier">Set[str]</span></dt><dd><p>New antonyms to add on the enrichment.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.add_hypernyms">
+<span class="sig-name descname"><span class="pre">add_hypernyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypernyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/enrichment_schema.html#Enrichment.add_hypernyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.add_hypernyms" title="Link to this definition">¶</a></dt>
+<dd><p>Add new hypernyms for the enrichment.</p>
+<section id="id11">
+<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>hypernyms<span class="classifier">Set[str]</span></dt><dd><p>New hypernyms to add on the enrichment.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.add_hyponyms">
+<span class="sig-name descname"><span class="pre">add_hyponyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hyponyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/enrichment_schema.html#Enrichment.add_hyponyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.add_hyponyms" title="Link to this definition">¶</a></dt>
+<dd><p>Add new hyponyms for the enrichment.</p>
+<section id="id12">
+<h4>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>hyponyms<span class="classifier">Set[str]</span></dt><dd><p>New hyponyms to add on the enrichment.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.add_synonyms">
+<span class="sig-name descname"><span class="pre">add_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">synonyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/enrichment_schema.html#Enrichment.add_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.add_synonyms" title="Link to this definition">¶</a></dt>
+<dd><p>Add new synonyms for the enrichment.</p>
+<section id="id13">
+<h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>synonyms<span class="classifier">Set[str]</span></dt><dd><p>New synonyms to add on the enrichment.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.antonyms">
+<span class="sig-name descname"><span class="pre">antonyms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.antonyms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.hypernyms">
+<span class="sig-name descname"><span class="pre">hypernyms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.hypernyms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.hyponyms">
+<span class="sig-name descname"><span class="pre">hyponyms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.hyponyms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.merge_with_enrichment">
+<span class="sig-name descname"><span class="pre">merge_with_enrichment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enrichment_to_integrate</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/enrichment_schema.html#Enrichment.merge_with_enrichment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.merge_with_enrichment" title="Link to this definition">¶</a></dt>
+<dd><p>Merge the enrichment into another one.
+The enrichment is updated in place with the enrichment provided.</p>
+<section id="id14">
+<h4>Parameters<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>enrichment_to_integrate<span class="classifier">Enrichment</span></dt><dd><p>The enrichment to merge the current one with.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.enrichment_schema.Enrichment.synonyms">
+<span class="sig-name descname"><span class="pre">synonyms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.enrichment_schema.Enrichment.synonyms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.knowledge_representation_schema">
+<span id="olaf-data-container-knowledge-representation-schema-module"></span><h2>olaf.data_container.knowledge_representation_schema module<a class="headerlink" href="#module-olaf.data_container.knowledge_representation_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.knowledge_representation_schema.</span></span><span class="sig-name descname"><span class="pre">KnowledgeRepresentation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concepts:</span> <span class="pre">~typing.Set[~olaf.data_container.concept_schema.Concept]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relations:</span> <span class="pre">~typing.Set[~olaf.data_container.relation_schema.Relation]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metarelations:</span> <span class="pre">~typing.Set[~olaf.data_container.metarelation_schema.Metarelation]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdf_graph:</span> <span class="pre">~rdflib.graph.Graph</span> <span class="pre">=</span> <span class="pre">&lt;Graph</span> <span class="pre">identifier=Ne0e2204aea91418aaf3f7ea23627eff9</span> <span class="pre">(&lt;class</span> <span class="pre">'rdflib.graph.Graph'&gt;)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/knowledge_representation_schema.html#KnowledgeRepresentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The knowledge representation is the data structure that contains the information learned from the text corpus.
+It is composed of concepts, relations and metarelations.</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>concepts<span class="classifier">Set[Concept]</span></dt><dd><p>The set of concepts under interest.
+Empty set by default if it is initialised without concept.</p>
+</dd>
+<dt>relations<span class="classifier">Set[Relation]</span></dt><dd><p>The set of relations under interest.
+Empty set by default if it is initialised without relation.</p>
+</dd>
+<dt>metarelations<span class="classifier">Set[Metarelation]</span></dt><dd><p>The set of metarelations under interest.
+Empty set by default if it is initialised without metarelation.</p>
+</dd>
+<dt>rdf_graph: Graph</dt><dd><p>An RDF graph corresponding to the knowledge representation.
+Default to an empty graph.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.concepts">
+<span class="sig-name descname"><span class="pre">concepts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.concepts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.metarelations">
+<span class="sig-name descname"><span class="pre">metarelations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.metarelation_schema.Metarelation" title="olaf.data_container.metarelation_schema.Metarelation"><span class="pre">Metarelation</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.metarelations" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.rdf_graph">
+<span class="sig-name descname"><span class="pre">rdf_graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Graph</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Graph</span> <span class="pre">identifier=Ne0e2204aea91418aaf3f7ea23627eff9</span> <span class="pre">(&lt;class</span> <span class="pre">'rdflib.graph.Graph'&gt;)&gt;</span></em><a class="headerlink" href="#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.rdf_graph" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.relations">
+<span class="sig-name descname"><span class="pre">relations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.relation_schema.Relation" title="olaf.data_container.relation_schema.Relation"><span class="pre">Relation</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#olaf.data_container.knowledge_representation_schema.KnowledgeRepresentation.relations" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.linguistic_realisation_schema">
+<span id="olaf-data-container-linguistic-realisation-schema-module"></span><h2>olaf.data_container.linguistic_realisation_schema module<a class="headerlink" href="#module-olaf.data_container.linguistic_realisation_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.ConceptLR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.linguistic_realisation_schema.</span></span><span class="sig-name descname"><span class="pre">ConceptLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#ConceptLR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.ConceptLR" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinguisticRealisation</span></code></a></p>
+<p>Linguistic Realisation specific to a concept. Corpus occurrences are represented
+as single span.</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The linguistic realisation human readable label.
+The string should appear in one of the corpus occurrences.</p>
+</dd>
+<dt>corpus_occurrences<span class="classifier">Set[spacy.tokens.Span]</span></dt><dd><p>The concept linguistic realisation occurrences in the corpus which is a span.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.ConceptLR.add_corpus_occurrences">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#ConceptLR.add_corpus_occurrences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.ConceptLR.add_corpus_occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrences for the linguistic realisation.</p>
+<section id="id16">
+<h4>Parameters<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>new_corpus_occurrences<span class="classifier">Set[spacy.tokens.Span]</span></dt><dd><p>New corpus occurrences to add for the linguistic realisation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.linguistic_realisation_schema.</span></span><span class="sig-name descname"><span class="pre">LinguisticRealisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#LinguisticRealisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>We distinguish between concept, relation and metarelation and their representations in text.
+The text denoting a concept, relation or metarelation is referred to as a linguistic
+realisation. The LinguisticRealisation class define a string (label) which is the text denoting
+the concept, relation or meta relation and keep an index of all occurrences in the corpus, i.e.
+corpus_occurrences.</p>
+<section id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The linguistic realisation human readable label.
+The string should appear in one of the corpus occurrences or be a metarelation type.</p>
+</dd>
+<dt>corpus_occurrences<span class="classifier">Any</span></dt><dd><p>The LinguisticRealisation occurrences in the corpus.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation.add_corpus_occurrences">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#LinguisticRealisation.add_corpus_occurrences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation.add_corpus_occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrences for the linguistic realisation.</p>
+<section id="id18">
+<h4>Parameters<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>new_corpus_occurrences<span class="classifier">Set[Any]</span></dt><dd><p>New corpus occurrences to add for the linguistic realisation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation.get_docs">
+<span class="sig-name descname"><span class="pre">get_docs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Doc</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#LinguisticRealisation.get_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation.get_docs" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch all the corpus documents contained in the corpus occurrences.</p>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Set[spacy.tokens.doc.Doc]</dt><dd><p>The set of corpus documents contained in the corpus occurrences.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.MetaRelationLR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.linguistic_realisation_schema.</span></span><span class="sig-name descname"><span class="pre">MetaRelationLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#MetaRelationLR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.MetaRelationLR" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinguisticRealisation</span></code></a></p>
+<p>Linguistic Realisation specific to a metarelation. Corpus occurrences are represented as tuple
+of two spans.
+One for the source concept at position 0.
+One for the destination concept at position 1.</p>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The linguistic realisation human readable label.
+The string should be a metarelation type.</p>
+</dd>
+<dt>corpus_occurrences<span class="classifier">Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]</span></dt><dd><p>The metarelation linguistic realisation occurrences in the corpus which is tuple of
+two spans.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.MetaRelationLR.add_corpus_occurrences">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#MetaRelationLR.add_corpus_occurrences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.MetaRelationLR.add_corpus_occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrences for the linguistic realisation.</p>
+<section id="id20">
+<h4>Parameters<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>new_corpus_occurrences<span class="classifier">Set[Tuple[spacy.tokens.Span, spacy.tokens.Span]]</span></dt><dd><p>New corpus occurrences to add for the linguistic realisation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.RelationLR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.linguistic_realisation_schema.</span></span><span class="sig-name descname"><span class="pre">RelationLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Span</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#RelationLR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.RelationLR" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinguisticRealisation</span></code></a></p>
+<p>Linguistic Realisation specific to a relation. Corpus occurrences are represented as tuple
+of three spans.
+One for the source concept at position 0.
+One for the relation label at position 1.
+One for the destination concept at position 2.</p>
+<section id="id21">
+<h3>Parameters<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The linguistic realisation human readable label.
+The string should appear in one of the corpus occurrences.</p>
+</dd>
+<dt>corpus_occurrences<span class="classifier">Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]</span></dt><dd><p>The relation linguistic realisation occurrences in the corpus which is tuple of three spans.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.linguistic_realisation_schema.RelationLR.add_corpus_occurrences">
+<span class="sig-name descname"><span class="pre">add_corpus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_corpus_occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Span</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Span</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Span</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/linguistic_realisation_schema.html#RelationLR.add_corpus_occurrences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.linguistic_realisation_schema.RelationLR.add_corpus_occurrences" title="Link to this definition">¶</a></dt>
+<dd><p>Add new corpus occurrences for the linguistic realisation.</p>
+<section id="id22">
+<h4>Parameters<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>new_corpus_occurrences<span class="classifier">Set[Tuple[spacy.tokens.Span, spacy.tokens.Span, spacy.tokens.Span]]</span></dt><dd><p>New corpus occurrences to add for the linguistic realisation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.metarelation_schema">
+<span id="olaf-data-container-metarelation-schema-module"></span><h2>olaf.data_container.metarelation_schema module<a class="headerlink" href="#module-olaf.data_container.metarelation_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.metarelation_schema.Metarelation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.metarelation_schema.</span></span><span class="sig-name descname"><span class="pre">Metarelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_uids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linguistic_realisations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/metarelation_schema.html#Metarelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.metarelation_schema.Metarelation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.relation_schema.Relation" title="olaf.data_container.relation_schema.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a></p>
+<p>We distinguish between Relations and Metarelations.
+A Metarelation is a link between concepts that is not an action or a state,
+it is implicitly expressed thanks to syntax or particular formulations.
+Metarelations can correspond (but are not restricted to) to the common taxonomic
+hierarchical relations in  broad sense, i.e., including generic-specific, instance,
+and whole-part.
+It is a Relation and as such is oriented and its label is its type.
+The metarelation is defined by its triple (source, label, destination).</p>
+<section id="id23">
+<h3>Parameters<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>uid<span class="classifier">str</span></dt><dd><p>The metarelation unique identifier.</p>
+</dd>
+<dt>source_concept<span class="classifier">Concept</span></dt><dd><p>The source concept in the metarelation triple.</p>
+</dd>
+<dt>destination_concept<span class="classifier">Concept</span></dt><dd><p>The destination concept in the metarelation triple.</p>
+</dd>
+<dt>label<span class="classifier">METARELATION_TYPE</span></dt><dd><p>The metarelation type.</p>
+</dd>
+<dt>external_uids<span class="classifier">Set[str], optional</span></dt><dd><p>An external unique identifier for the metarelation, by default None.</p>
+</dd>
+<dt>linguistic_realisations<span class="classifier">Set[LinguisticRealisation], optional</span></dt><dd><p>The metarelation linguistic realisations, i.e. instances of the metarelation in the
+text corpus, by default None.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container.relation_schema">
+<span id="olaf-data-container-relation-schema-module"></span><h2>olaf.data_container.relation_schema module<a class="headerlink" href="#module-olaf.data_container.relation_schema" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="olaf.data_container.relation_schema.Relation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">olaf.data_container.relation_schema.</span></span><span class="sig-name descname"><span class="pre">Relation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_concept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.concept_schema.Concept" title="olaf.data_container.concept_schema.Concept"><span class="pre">Concept</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_uids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linguistic_realisations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/olaf/data_container/relation_schema.html#Relation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.relation_schema.Relation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#olaf.data_container.data_container_schema.DataContainer" title="olaf.data_container.data_container_schema.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
+<p>A Relation is the explicit link between two concepts which is the result of an action or
+a state and which could itself be a concept.
+It is oriented and has a label.
+The relation is defined by its triple (source, label, destination).</p>
+<section id="id24">
+<h3>Parameters<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>label<span class="classifier">str</span></dt><dd><p>The relation human readable label</p>
+</dd>
+<dt>source_concept<span class="classifier">Concept, optional</span></dt><dd><p>The source concept in the relation triple, by default None.</p>
+</dd>
+<dt>destination_concept<span class="classifier">Concept, optional</span></dt><dd><p>The destination concept in the relation triple, by default None.</p>
+</dd>
+<dt>external_uids<span class="classifier">Set[str], optional</span></dt><dd><p>External unique identifiers found for the relation, by default None.</p>
+</dd>
+<dt>linguistic_realisations<span class="classifier">Set[LinguisticRealisation], optional</span></dt><dd><p>The relation linguistic realisations, i.e. instances of the relation in the text corpus,
+by default None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.relation_schema.Relation.add_linguistic_realisation">
+<span class="sig-name descname"><span class="pre">add_linguistic_realisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/relation_schema.html#Relation.add_linguistic_realisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.relation_schema.Relation.add_linguistic_realisation" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new linguistic realisation to the relation.</p>
+<section id="id25">
+<h4>Parameters<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisation<span class="classifier">LinguisticRealisation</span></dt><dd><p>The linguistic realisation instance to add.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.relation_schema.Relation.add_linguistic_realisations">
+<span class="sig-name descname"><span class="pre">add_linguistic_realisations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/relation_schema.html#Relation.add_linguistic_realisations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.relation_schema.Relation.add_linguistic_realisations" title="Link to this definition">¶</a></dt>
+<dd><p>Add new linguistic realisations to the relation.</p>
+<section id="id26">
+<h4>Parameters<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisations<span class="classifier">Set[LinguisticRealisation]</span></dt><dd><p>The set of linguistic realisation instances to add.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="olaf.data_container.relation_schema.Relation.remove_linguistic_realisation">
+<span class="sig-name descname"><span class="pre">remove_linguistic_realisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linguistic_realisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#olaf.data_container.linguistic_realisation_schema.LinguisticRealisation" title="olaf.data_container.linguistic_realisation_schema.LinguisticRealisation"><span class="pre">LinguisticRealisation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/olaf/data_container/relation_schema.html#Relation.remove_linguistic_realisation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#olaf.data_container.relation_schema.Relation.remove_linguistic_realisation" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a linguistic realisation of the relation.</p>
+<section id="id27">
+<h4>Parameters<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>linguistic_realisation<span class="classifier">LinguisticRealisation</span></dt><dd><p>The LinguisticRealisation instance to remove.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-olaf.data_container">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-olaf.data_container" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="olaf.commons.html"
+       title="previous chapter">← olaf.commons package</a>
+  </li>
+  <li class="next">
+    <a href="olaf.pipeline.html"
+       title="next chapter">olaf.pipeline package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, WIKIT-AI.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
