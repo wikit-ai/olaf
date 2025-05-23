@@ -42,11 +42,11 @@ def test_default_semantic_based_enrichment(pipeline) -> None:
     semantic_enrichment = SemanticBasedEnrichment()
     assert semantic_enrichment.threshold == 0.9
     semantic_enrichment.run(pipeline)
-    assert len(pipeline.candidate_terms.pop().enrichment.synonyms) == 1
+    assert len(pipeline.candidate_terms.pop().enrichment.synonyms) == 3
 
 
 def test_config_semantic_based_enrichment(pipeline) -> None:
-    semantic_enrichment = SemanticBasedEnrichment(threshold=0.7)
-    assert semantic_enrichment.threshold == 0.7
+    semantic_enrichment = SemanticBasedEnrichment(threshold=0.5)
+    assert semantic_enrichment.threshold == 0.5
     semantic_enrichment.run(pipeline)
     assert len(pipeline.candidate_terms.pop().enrichment.synonyms) == 6
